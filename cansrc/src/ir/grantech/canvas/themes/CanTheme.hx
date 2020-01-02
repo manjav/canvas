@@ -10,6 +10,7 @@ import feathers.style.IStyleProvider;
 import feathers.themes.steel.BaseSteelTheme;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import ir.grantech.canvas.controls.groups.Bar;
 
 class CanTheme extends BaseSteelTheme {
 
@@ -21,9 +22,9 @@ class CanTheme extends BaseSteelTheme {
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
-		this.styleProvider = new ClassVariantStyleProvider();
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
+		this.styleProvider.setStyleFunction(Bar, null, setBarStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -36,18 +37,10 @@ class CanTheme extends BaseSteelTheme {
 	private var operationColor = 0xff9500;
 	private var padding = 6.0;
 
-	override public function getStyleProvider(target:IStyleObject):IStyleProvider {
-		return super.getStyleProvider(target);
-	}
-
 	private function getInputDisplayLabelTextFormat():TextFormat {
 		var result = this.getTextFormat();
 		result.align = TextFormatAlign.RIGHT;
 		return result;
-	}
-
-	override private function getTextFormat():TextFormat {
-		return super.getTextFormat();//new TextFormat(this.fontName, this.fontSize, this.textColor);
 	}
 
 	private function setApplicationStyles(app:Application):Void {
@@ -58,6 +51,13 @@ class CanTheme extends BaseSteelTheme {
 		}
 	}
 
+	public function setBarStyles(bar:Bar):Void {
+		if (bar.backgroundSkin == null) {
+			var skin = new RectSkin();
+			skin.fill = SolidColor(this.controlColor);
+			bar.backgroundSkin = skin;
+		}
+	}
 	private function setButtonStyles(button:Button):Void {
 		if (button.backgroundSkin == null) {
 			var skin = new RectangleSkin();

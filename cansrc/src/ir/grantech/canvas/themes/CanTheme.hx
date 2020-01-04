@@ -2,7 +2,7 @@ package ir.grantech.canvas.themes;
 
 import feathers.controls.Application;
 import feathers.controls.Button;
-import feathers.controls.ButtonState;
+import feathers.controls.LayoutGroup;
 import feathers.skins.RectangleSkin;
 import feathers.themes.steel.BaseSteelTheme;
 import ir.grantech.canvas.controls.groups.Bar;
@@ -48,7 +48,7 @@ class CanTheme extends BaseSteelTheme {
 		}
 	}
 
-	public function setBarStyles(bar:Bar):Void {
+	public function setBarStyles(bar:LayoutGroup):Void {
 		if (bar.backgroundSkin == null) {
 			var skin = new RectangleSkin();
 			skin.fill = SolidColor(this.controlColor);

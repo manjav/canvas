@@ -8,21 +8,22 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
 import ir.grantech.canvas.controls.groups.Bar;
+import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.events.Event;
 import openfl.system.Capabilities;
 
 class Main extends Application {
 	private var panel:Panel;
-	private var left:Bar;
+	private var left:ToolBar;
 	private var right:Bar;
 	public function new() {
 		Theme.setTheme(new CanTheme());
 		super();
 		this.layout = new AnchorLayout();
 
-		this.left = new Bar();
-		this.left.width = Capabilities.screenResolutionX * 0.04;
+		this.left = new ToolBar();
+		this.left.width = Capabilities.screenResolutionX * 0.03;
 		this.left.layoutData = new AnchorLayoutData(0, null, 0, 0);
 		this.addChild(this.left);
 

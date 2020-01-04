@@ -8,7 +8,7 @@
 	<!-- needed on Android to avoid hiding the back/home buttons -->
 	<window fullscreen="false"/>
 	<window allow-high-dpi="true"/>
-	<window background="#323232" />
+	<window background="#e4e4e4" />
 	<window fps="60" width="1200" height="800"/>
 	<window fps="0" if="html5"/>
 	

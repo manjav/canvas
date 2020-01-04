@@ -4,13 +4,10 @@ import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.skins.RectangleSkin;
-import feathers.style.ClassVariantStyleProvider;
-import feathers.style.IStyleObject;
-import feathers.style.IStyleProvider;
 import feathers.themes.steel.BaseSteelTheme;
+import ir.grantech.canvas.controls.groups.Bar;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import ir.grantech.canvas.controls.groups.Bar;
 
 class CanTheme extends BaseSteelTheme {
 
@@ -33,7 +30,7 @@ class CanTheme extends BaseSteelTheme {
 	// private var fontSize = 50;
 	// private var textColor = 0xf1f1f1;
 	private var activeColor = 0xff9500;
-	private var controlColor = 0x5f5f5f;
+	private var controlColor = 0xf5f5f5;
 	private var operationColor = 0xff9500;
 	private var padding = 6.0;
 
@@ -53,7 +50,7 @@ class CanTheme extends BaseSteelTheme {
 
 	public function setBarStyles(bar:Bar):Void {
 		if (bar.backgroundSkin == null) {
-			var skin = new RectSkin();
+			var skin = new RectangleSkin();
 			skin.fill = SolidColor(this.controlColor);
 			bar.backgroundSkin = skin;
 		}
@@ -61,14 +58,14 @@ class CanTheme extends BaseSteelTheme {
 	private function setButtonStyles(button:Button):Void {
 		if (button.backgroundSkin == null) {
 			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.controlColor);
+			skin.fill = SolidColor(this.controlColor, 0);
 			button.backgroundSkin = skin;
 		}
-		if (button.getSkinForState(ButtonState.DOWN) == null) {
-			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.activeColor);
-			button.setSkinForState(ButtonState.DOWN, skin);
-		}
+		// if (button.getSkinForState(ButtonState.DOWN) == null) {
+		// 	var skin = new RectangleSkin();
+		// 	skin.fill = SolidColor(this.activeColor);
+		// 	button.setSkinForState(ButtonState.DOWN, skin);
+		// }
 
 		if (button.textFormat == null)
 			button.textFormat = this.getTextFormat();

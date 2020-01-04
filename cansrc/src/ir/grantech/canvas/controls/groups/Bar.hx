@@ -1,11 +1,10 @@
 package ir.grantech.canvas.controls.groups;
 
-import openfl.utils.Assets;
-import openfl.display.Bitmap;
 import feathers.controls.Button;
-import ir.grantech.canvas.themes.CanTheme;
 import feathers.style.Theme;
-import feathers.skins.RectangleSkin;
+import ir.grantech.canvas.themes.CanTheme;
+import openfl.display.Bitmap;
+import openfl.utils.Assets;
 
 class Bar extends VGroup {
   
@@ -18,9 +17,9 @@ class Bar extends VGroup {
     super.initialize();
     Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
 
+    this.padding = 5;
     var button = new Button();
-    button.width = width;
-    // button.height = width;
+    button.height = width - padding * 2;
     button.icon = new Bitmap(Assets.getBitmapData("pen"));
     addChild(button);
   }

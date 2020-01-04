@@ -16,11 +16,6 @@ class Bar extends VGroup {
   override private function initialize() {
     super.initialize();
     Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
-
     this.padding = 5;
-    var button = new Button();
-    button.height = width - padding * 2;
-    button.icon = new Bitmap(Assets.getBitmapData("pen"));
-    addChild(button);
   }
 }

@@ -23,7 +23,7 @@
 	<!-- sync/embedded -->
 	<assets id="favicon" 	path="assets/img/favicon.png"/>
 	<assets id="pen"			path="assets/img/SP_Pen_Sm.png"/>
-	<assets id="pen_s"		path="assets/img/SP_Pen_Sm_R.png"/>
+	<assets id="pen_r"		path="assets/img/SP_Pen_Sm_R.png"/>
 
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

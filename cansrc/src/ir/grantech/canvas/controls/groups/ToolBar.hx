@@ -12,9 +12,9 @@ import ir.grantech.canvas.themes.CanTheme;
 import openfl.events.Event;
 
 class ToolBar extends LayoutGroup {
-  private var topList:ListView;
+	private var topList:ListView;
 
-  override private function initialize() {
+	override private function initialize() {
 		super.initialize();
 		Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
 
@@ -34,6 +34,19 @@ class ToolBar extends LayoutGroup {
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.topList.height = width * this.topList.dataProvider.length;
 		this.addChild(this.topList);
+
+		for (i in 0...3)
+			items[i] = {text: "pen"};
+		var bottomList = new ListView();
+		bottomList.dataProvider = new ArrayCollection(items);
+		bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
+		bottomList.itemToText = (item:Dynamic) -> {
+			return item.text;
+		};
+		bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
+		bottomList.addEventListener(Event.CHANGE, this.listView_changeHandler);
+		bottomList.height = width * bottomList.dataProvider.length;
+		this.addChild(bottomList);
 	}
 
 	private function listView_changeHandler(event:Event):Void {

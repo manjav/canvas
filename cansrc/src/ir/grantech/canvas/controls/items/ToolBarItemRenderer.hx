@@ -39,7 +39,7 @@ class ToolBarItemRenderer extends ItemRenderer {
 		icon.y = (this.height - icon.height) * 0.5;
 		this.icon = icon;
 
-		var selectedIcon = new Bitmap(Assets.getBitmapData(value + "_r"));
+		var selectedIcon = new Bitmap(Assets.getBitmapData(value + "_selected"));
 		selectedIcon.smoothing = true;
 		selectedIcon.width = selectedIcon.height = icon.width;
 		selectedIcon.x = icon.x;

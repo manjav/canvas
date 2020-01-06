@@ -1,5 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
+import haxe.ds.ArraySort;
+import openfl.utils.AssetType;
+import sys.FileSystem;
+import openfl.Assets;
 import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
 import feathers.data.ArrayCollection;
@@ -19,12 +23,14 @@ class ToolBar extends LayoutGroup {
 		Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
 
 		this.layout = new AnchorLayout();
+		var icons = Assets.list(AssetType.IMAGE);
+		ArraySort.sort(icons, (l, r)-> return l.toUpperCase() > r.toUpperCase() ? 1 : -1);
 		var items = [];
-		for (i in 0...4)
-			items[i] = {text: "pen"};
+		for (icon in icons)
+			if (icon.substr(0, 8) == "toolhead" && icon.indexOf("_selected") == -1)
+				items.push({text: icon});
 
 		this.topList = new ListView();
-		// this.topList.height
 		this.topList.dataProvider = new ArrayCollection(items);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.topList.itemToText = (item:Dynamic) -> {
@@ -35,8 +41,10 @@ class ToolBar extends LayoutGroup {
 		this.topList.height = width * this.topList.dataProvider.length;
 		this.addChild(this.topList);
 
-		for (i in 0...3)
-			items[i] = {text: "pen"};
+		var items = [];
+		for (icon in icons)
+			if (icon.substr(0, 8) == "toolfoot" && icon.indexOf("_selected") == -1)
+				items.push({text: icon});
 		var bottomList = new ListView();
 		bottomList.dataProvider = new ArrayCollection(items);
 		bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);

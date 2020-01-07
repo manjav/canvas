@@ -1,12 +1,14 @@
 package ir.grantech.canvas.controls.items;
 
-import feathers.themes.steel.BaseSteelTheme;
-import feathers.style.Theme;
-import feathers.skins.RectangleSkin;
+import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
+import feathers.skins.RectangleSkin;
+import feathers.style.Theme;
+import feathers.themes.steel.BaseSteelTheme;
+import ir.grantech.canvas.controls.events.CanEvent;
 import openfl.Assets;
 import openfl.display.Bitmap;
-import openfl.system.Capabilities;
+import openfl.events.Event;
 
 class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer  {
 	static public var SIZE:Float = 52; 
@@ -30,6 +32,17 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer  {
 	override private function initializeItemRendererTheme():Void {
 	}
 
+	@:isVar
+	public var data(get, set):Dynamic;
+	private function set_data(value:Dynamic):Dynamic {
+		if( this.data == value)
+			return this.data;
+		return this.data = value;
+	}
+	private function get_data():Dynamic {
+		return this.data;
+	}
+
 	override private function set_text(value:String):String {
 		if (this.text == value)
 			return this.text;
@@ -51,5 +64,10 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer  {
 	}
 
 	override private function refreshText():Void {
+	}
+
+	override private function basicToggleButton_triggeredHandler(event:Event):Void {
+		this.dispatchEvent(new CanEvent(Event.SELECT, this.data, true, false));
+		super.basicToggleButton_triggeredHandler(event);
 	}
 }

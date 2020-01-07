@@ -1,5 +1,6 @@
 package ir.grantech.canvas.themes;
 
+import openfl.system.Capabilities;
 import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.LayoutGroup;
@@ -14,6 +15,7 @@ class CanTheme extends BaseSteelTheme {
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
 	static public final DEFAULT_PADDING = 5;
+	static public final CONTROL_SIZE = 48 * 1;
 	public function new() {
 		super();
 		// this is a dark theme, set set the default theme to dark mode
@@ -32,7 +34,6 @@ class CanTheme extends BaseSteelTheme {
 	private var activeColor = 0xff9500;
 	private var controlColor = 0xf5f5f5;
 	private var operationColor = 0xff9500;
-	private var padding = 6.0;
 
 	private function getInputDisplayLabelTextFormat():TextFormat {
 		var result = this.getTextFormat();
@@ -70,10 +71,10 @@ class CanTheme extends BaseSteelTheme {
 		if (button.textFormat == null)
 			button.textFormat = this.getTextFormat();
 
-		button.paddingTop = this.padding;
-		button.paddingRight = this.padding;
-		button.paddingBottom = this.padding;
-		button.paddingLeft = this.padding;
-		button.gap = this.padding;
+		button.paddingTop = DEFAULT_PADDING;
+		button.paddingRight = DEFAULT_PADDING;
+		button.paddingBottom = DEFAULT_PADDING;
+		button.paddingLeft = DEFAULT_PADDING;
+		button.gap = DEFAULT_PADDING;
 	}
 }

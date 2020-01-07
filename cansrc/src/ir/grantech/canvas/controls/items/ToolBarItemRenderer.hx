@@ -8,10 +8,11 @@ import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.system.Capabilities;
 
-class ToolBarItemRenderer extends ItemRenderer {
+class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer  {
+	static public var SIZE:Float = 52; 
 	public function new() {
 		super();
-		this.height = this.width = Capabilities.screenResolutionX * 0.03;
+		this.height = this.width = SIZE;
 	}
 	
 	@:access(feathers.themes.steel.BaseSteelTheme)
@@ -34,7 +35,7 @@ class ToolBarItemRenderer extends ItemRenderer {
 			return this.text;
 		var icon = new Bitmap(Assets.getBitmapData(value));
 		icon.smoothing = true;
-		icon.width = icon.height = 42;
+		icon.width = icon.height = SIZE * 0.5;
 		icon.x = (this.width - icon.width) * 0.5;
 		icon.y = (this.height - icon.height) * 0.5;
 		this.icon = icon;

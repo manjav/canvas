@@ -1,9 +1,5 @@
 package ir.grantech.canvas.controls.groups;
 
-import haxe.ds.ArraySort;
-import openfl.utils.AssetType;
-import sys.FileSystem;
-import openfl.Assets;
 import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
 import feathers.data.ArrayCollection;
@@ -21,6 +17,7 @@ class ToolBar extends LayoutGroup {
 	override private function initialize() {
 		super.initialize();
 		Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
+		ToolBarItemRenderer.SIZE = this.width;
 
 		this.layout = new AnchorLayout();
 		var icons = Assets.list(AssetType.IMAGE);
@@ -38,23 +35,23 @@ class ToolBar extends LayoutGroup {
 		};
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.topList.height = width * this.topList.dataProvider.length;
+		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length;
 		this.addChild(this.topList);
 
 		var items = [];
 		for (icon in icons)
 			if (icon.substr(0, 8) == "toolfoot" && icon.indexOf("_selected") == -1)
-				items.push({text: icon});
-		var bottomList = new ListView();
-		bottomList.dataProvider = new ArrayCollection(items);
-		bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
-		bottomList.itemToText = (item:Dynamic) -> {
+		this.bottomList = new ListView();
+		this.bottomList.dataProvider = new ArrayCollection(items);
+		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
+		this.bottomList.itemToText = (item:Dynamic) -> {
 			return item.text;
 		};
-		bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
-		bottomList.addEventListener(Event.CHANGE, this.listView_changeHandler);
-		bottomList.height = width * bottomList.dataProvider.length;
-		this.addChild(bottomList);
+		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
+		this.bottomList.addEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length;
+		this.addChild(this.bottomList);
+	}
 	}
 
 	private function listView_changeHandler(event:Event):Void {

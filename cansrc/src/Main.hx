@@ -3,9 +3,9 @@ package;
 import feathers.controls.Application;
 import feathers.controls.Label;
 import feathers.controls.LayoutGroup;
-import feathers.controls.Panel;
-import feathers.layout.AnchorLayout;
-import feathers.layout.AnchorLayoutData;
+import feathers.layout.HorizontalLayout;
+import feathers.layout.HorizontalLayoutData;
+import feathers.layout.VerticalAlign;
 import feathers.style.Theme;
 import ir.grantech.canvas.controls.groups.Bar;
 import ir.grantech.canvas.controls.groups.ToolBar;
@@ -17,10 +17,15 @@ class Main extends Application {
 	private var panel:Panel;
 	private var left:ToolBar;
 	private var right:Bar;
+
 	public function new() {
 		Theme.setTheme(new CanTheme());
 		super();
-		this.layout = new AnchorLayout();
+
+		var layout = new HorizontalLayout();
+		layout.verticalAlign = VerticalAlign.JUSTIFY;
+		layout.gap = layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = CanTheme.DEFAULT_PADDING;
+		this.layout = layout;
 
 		this.left = new ToolBar();
 		this.left.width = Capabilities.screenResolutionX * 0.03;

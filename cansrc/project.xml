@@ -21,6 +21,8 @@
 	<haxdef name="openfl_pool_events"/>	
 
 	<!-- sync/embedded -->
+	<assets id="color_palette" path="assets/img/color-palette.png"/>
+
 	<assets id="toolhead_0" path="assets/img/select.png"/>
 	<assets id="toolhead_0_selected" path="assets/img/select-blue.png"/>
   <assets id="toolhead_1" path="assets/img/rectangle.png"/>

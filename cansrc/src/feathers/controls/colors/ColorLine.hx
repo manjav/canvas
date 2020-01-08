@@ -1,20 +1,22 @@
 package feathers.controls.colors;
 
-import ir.grantech.utils.Utils;
-import ir.grantech.canvas.themes.CanTheme;
 import feathers.core.InvalidationFlag;
+import feathers.events.FeathersEvent;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
+import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.utils.Utils;
 import lime.math.RGBA;
+import lime.ui.KeyCode;
 import openfl.events.Event;
-import openfl.events.MouseEvent;
+import openfl.events.KeyboardEvent;
 
 class ColorLine extends LayoutGroup {
 	static public final INVALIDATION_FLAG_COLOR_PICKER_ELEMENT_FACTORY:String = "colorPickerElementFactory";
-	
+
 	private var inputDisplay:TextInput;
 	private var pickerDisplay:ColorPicker;
 
@@ -69,8 +71,8 @@ class ColorLine extends LayoutGroup {
 		this.inputDisplay.paddingRight = 6;
 		// this.inputDisplay.maxChars = 8;
 		this.inputDisplay.restrict = "0-9a-fA-F";
-		// this.inputDisplay.addEventListener(FeathersEventType.ENTER, this.inputDisplay_enterHandler);
-		// this.inputDisplay.addEventListener(FeathersEventType.FOCUS_OUT, this.inputDisplay_enterHandler);
+		this.inputDisplay.addEventListener(KeyboardEvent.KEY_UP, this.inputDisplay_keyUpHandler);
+		this.inputDisplay.addEventListener(FeathersEvent.STATE_CHANGE, this.inputDisplay_stateChangeHandler);
 		this.inputDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 		textLayout.addChild(this.inputDisplay);
 
@@ -81,27 +83,37 @@ class ColorLine extends LayoutGroup {
 		textLayout.addChild(numSignDisplay);
 	}
 
-	private function pickerDisplay_changeHandler(e:Event):Void {
+	private function pickerDisplay_changeHandler(event:Event):Void {
 		this.data = this.pickerDisplay.data;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
 	}
 
-	private function inputDisplay_enterHandler(e:Event):Void {
-		// var hexText:String = Utils.normalizeHEX(this.inputDisplay.text);
-		// this.inputDisplay.text = hexText;
-		// this.data = Utils.hexToRGBA(hexText);
-		// this.dispatchEventWith(Event.CHANGE, false, this.data);
+	private function inputDisplay_keyUpHandler(event:KeyboardEvent):Void {
+		if (event.keyCode == 13 || event.keyCode == 1073741912)//enter
+			this.textToColor(this.inputDisplay.text);
+	}
+
+	private function inputDisplay_stateChangeHandler(event:Event):Void {
+		if (this.inputDisplay.currentState == TextInputState.ENABLED)
+			this.textToColor(this.inputDisplay.text);
+	}
+
+	private function textToColor(color:String):Void {
+		var hexText:String = Utils.normalizeHEX(color);
+		this.data = Utils.hexToRGBA(hexText);
+		this.pickerDisplay.data = this.data;
+		if (this.hasEventListener(Event.CHANGE))
+			this.dispatchEvent(new Event(Event.CHANGE));
 	}
 
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			if (this.pickerDisplay != null)
 				this.pickerDisplay.data = this.data;
-			// trace(this.data, this.pickerDisplay.data);
 
 			if (this.inputDisplay != null)
-				this.inputDisplay.text = Utils.colorToHEX(this.data.r, this.data.g, this.data.b, this.data.a);
+				this.inputDisplay.text = StringTools.hex(this.data, 2).toLowerCase();
 		}
 		super.update();
 	}

@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import ir.grantech.utils.Utils;
 import ir.grantech.canvas.themes.CanTheme;
 import feathers.core.InvalidationFlag;
 import feathers.layout.AnchorLayout;
@@ -97,10 +98,10 @@ class ColorLine extends LayoutGroup {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			if (this.pickerDisplay != null)
 				this.pickerDisplay.data = this.data;
-			trace(this.data, this.pickerDisplay.data);
+			// trace(this.data, this.pickerDisplay.data);
 
 			if (this.inputDisplay != null)
-				this.inputDisplay.text = this.data + "33"; // Utils.colorToHEX(this.data.red, this.data.green, this.data.blue, this.data.alpha);
+				this.inputDisplay.text = Utils.colorToHEX(this.data.r, this.data.g, this.data.b, this.data.a);
 		}
 		super.update();
 	}

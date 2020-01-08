@@ -39,7 +39,7 @@ class ColorPicker extends FeathersControl {
 		showSpectrum();
 	}
 
-	private function showSpectrum():Void {
+	public function showSpectrum():Void {
 		if (this.spectrumDisplay == null) {
 			this.spectrumDisplay = new ColorSpectrum();
 			this.spectrumDisplay.addEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
@@ -49,6 +49,11 @@ class ColorPicker extends FeathersControl {
 		this.spectrumDisplay.y = zone.x + this.width * 0.5;
 		this.spectrumDisplay.y = zone.y + 100;
 		this.stage.addChild(this.spectrumDisplay);
+	}
+	public function hideSpectrum():Void {
+		if (this.spectrumDisplay == null || this.spectrumDisplay.parent != stage)
+			return;
+		stage.removeChild(this.spectrumDisplay);
 	}
 
 	private function spectrumDisplay_changeHandler(event:Event):Void {

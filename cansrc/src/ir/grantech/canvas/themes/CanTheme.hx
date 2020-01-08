@@ -1,10 +1,12 @@
 package ir.grantech.canvas.themes;
 
-import openfl.system.Capabilities;
 import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.LayoutGroup;
+import feathers.controls.TextInput;
+import feathers.controls.TextInputState;
 import feathers.skins.RectangleSkin;
+import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
 import ir.grantech.canvas.controls.groups.Bar;
 import openfl.text.TextFormat;
@@ -22,6 +24,7 @@ class CanTheme extends BaseSteelTheme {
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
+		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(Bar, null, setBarStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
@@ -76,5 +79,28 @@ class CanTheme extends BaseSteelTheme {
 		button.paddingBottom = DEFAULT_PADDING;
 		button.paddingLeft = DEFAULT_PADDING;
 		button.gap = DEFAULT_PADDING;
+	}
+
+	private function setTextInputStyles(input:TextInput):Void {
+		if (input.backgroundSkin == null) {
+			var inputSkin = new UnderlineSkin();
+			// inputSkin.cornerRadius = 6.0;
+			inputSkin.width = 160.0;
+			inputSkin.fill = SolidColor(this.insetFillColor, 0);
+			inputSkin.border = getInsetBorder(2);
+			inputSkin.setBorderForState(TextInputState.FOCUSED, getThemeBorder());
+			input.backgroundSkin = inputSkin;
+		}
+
+		if (input.textFormat == null)
+			input.textFormat = getTextFormat();
+		
+		if (input.getTextFormatForState(TextInputState.DISABLED) == null)
+			input.setTextFormatForState(TextInputState.DISABLED, getDisabledTextFormat());
+		
+		input.paddingTop = 6.0;
+		input.paddingRight = 10.0;
+		input.paddingBottom = 6.0;
+		input.paddingLeft = 10.0;
 	}
 }

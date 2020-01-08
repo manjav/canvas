@@ -35,6 +35,7 @@ class ColorSpectrum extends FeathersControl {
 
 	override private function initialize():Void {
 		super.initialize();
+		
 		this.bitmapData = Assets.getBitmapData("color_palette");
 		this.colorPalette = new Bitmap(this.bitmapData);
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
@@ -45,6 +46,9 @@ class ColorSpectrum extends FeathersControl {
 		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
 		stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+		if(!stage.hasEventListener(MouseEvent.CLICK))
+			stage.addEventListener(MouseEvent.CLICK, this.stage_clickHandler);
+		this.changeColor(this.bitmapData.getPixel(Math.round(mouseX), Math.round(mouseY)));
 	}
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
@@ -55,6 +59,13 @@ class ColorSpectrum extends FeathersControl {
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
 		stage.removeEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+	}
+
+	private function stage_clickHandler(event:MouseEvent):Void {
+		if(Std.is(event.target, ColorSpectrum))
+			return;
+		stage.removeEventListener(MouseEvent.CLICK, this.stage_clickHandler);
+		stage.removeChild(this);
 	}
 
 	private function changeColor(color:Int):Void {

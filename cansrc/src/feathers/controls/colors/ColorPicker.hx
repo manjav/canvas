@@ -26,18 +26,17 @@ class ColorPicker extends FeathersControl {
 		super();
 	}
 	override function initialize() {
-		this.minWidth = CanTheme.CONTROL_SIZE * 1.5;
-		this.minHeight = CanTheme.CONTROL_SIZE;
+		this.width = CanTheme.CONTROL_SIZE * 1.5;
+		this.height = CanTheme.CONTROL_SIZE;
 		super.initialize();
 		this.buttonMode = true;
 		this.data = 0xFFFF;
-		this.filters = [new GlowFilter(0, 1, CanTheme.DEFAULT_PADDING, CanTheme.DEFAULT_PADDING, 2, 2, true)];
+		this.filters = [new GlowFilter(0, 1, CanTheme.DEFAULT_PADDING, CanTheme.DEFAULT_PADDING, 1, 2, true)];
 		this.addEventListener(MouseEvent.CLICK, this.buttonDisplay_clickHandler);
 	}
 
 	private function buttonDisplay_clickHandler(e:Event):Void {
 		showSpectrum();
-		// this.stage.addEventListener(TouchEvent.TOUCH, this.indicator_touchHandler);
 	}
 
 	private function showSpectrum():Void {
@@ -62,7 +61,7 @@ class ColorPicker extends FeathersControl {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			this.graphics.clear();
 			this.graphics.beginFill(data);
-			this.graphics.drawRoundRect(0, 0, width, height, 14, 14);
+			this.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.CONTROL_SIZE * 0.3, CanTheme.CONTROL_SIZE * 0.3);
 		}
 		super.update();
 	}

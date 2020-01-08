@@ -14,8 +14,8 @@ class CanTheme extends BaseSteelTheme {
 
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
-	static public final DEFAULT_PADDING = 5;
-	static public final CONTROL_SIZE = 48 * 1;
+	static public final DEFAULT_PADDING = 4;
+	static public final CONTROL_SIZE = 32;
 	public function new() {
 		super();
 		// this is a dark theme, set set the default theme to dark mode

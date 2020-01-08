@@ -41,7 +41,7 @@ class ToolBar extends LayoutGroup {
 		};
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length;
+		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
 		this.addChild(this.topList);
 
 		i = 0;
@@ -58,7 +58,7 @@ class ToolBar extends LayoutGroup {
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
 		this.bottomList.addEventListener("select", this.listView_selectHandler);
 		// this.bottomList.addEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length;
+		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length  + 1;
 		this.addChild(this.bottomList);
 	}
 

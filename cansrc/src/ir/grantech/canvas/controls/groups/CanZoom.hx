@@ -25,6 +25,7 @@ class CanZoom extends LayoutGroup {
 		this.stage.addEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -41,14 +42,19 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {
+		this.stage.removeEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_mouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+		if (event.type == MouseEvent.MOUSE_DOWN && Mouse.cursor != MouseCursor.HAND)
+			return;
 		this.drag();
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
 		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.drop();
 	}
 

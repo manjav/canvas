@@ -10,6 +10,22 @@ import openfl.ui.MouseCursor;
 class CanZoom extends LayoutGroup {
 	private var scene:CanScene;
 
+	public var scale(default, set):Float = 1;
+
+	private function set_scale(value:Float):Float {
+		if (0.1 > value)
+			value = 0.1;
+		if (10 < value)
+			value = 10;
+		if (this.scale == value)
+			return this.scale;
+
+		this.scale = value;
+		this.scene.scaleX = this.scene.scaleY = value;
+
+		return this.scale;
+	}
+
 	override function initialize() {
 		super.initialize();
 
@@ -26,6 +42,7 @@ class CanZoom extends LayoutGroup {
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWeelHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -56,6 +73,20 @@ class CanZoom extends LayoutGroup {
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.drop();
+	}
+
+	private function stage_mouseWeelHandler(event:MouseEvent):Void {
+		var zoomMode = event.altKey || event.ctrlKey;
+		#if mac
+		zoomMode = zoomMode || event.commandKey;
+		#end
+
+		if (zoomMode)
+			this.scale += event.delta * this.scene.scaleX * 0.1;
+		else if (event.shiftKey)
+			this.scene.x += event.delta * 10;
+		else
+			this.scene.y += event.delta * 10;
 	}
 
 	private function drag():Void {

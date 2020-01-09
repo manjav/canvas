@@ -14,14 +14,18 @@ class CanZoom extends LayoutGroup {
 
 	private function set_scale(value:Float):Float {
 		if (0.1 > value)
-			value = 0.1;
+			value = 0.3;
 		if (10 < value)
 			value = 10;
 		if (this.scale == value)
 			return this.scale;
 
 		this.scale = value;
+		var w = this.scene.width;
+		var h = this.scene.height;
 		this.scene.scaleX = this.scene.scaleY = value;
+		this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
+		this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
 
 		return this.scale;
 	}
@@ -42,7 +46,7 @@ class CanZoom extends LayoutGroup {
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
-		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWeelHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -80,7 +84,7 @@ class CanZoom extends LayoutGroup {
 		this.drop();
 	}
 
-	private function stage_mouseWeelHandler(event:MouseEvent):Void {
+	private function stage_mouseWheelHandler(event:MouseEvent):Void {
 		var zoomMode = event.altKey || event.ctrlKey;
 		#if mac
 		zoomMode = zoomMode || event.commandKey;

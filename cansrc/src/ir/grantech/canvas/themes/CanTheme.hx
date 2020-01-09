@@ -16,7 +16,7 @@ class CanTheme extends BaseSteelTheme {
 
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
-	static public final DEFAULT_PADDING = 4;
+	static public final DEFAULT_PADDING = 2;
 	static public final CONTROL_SIZE = 32;
 	public function new() {
 		super();
@@ -87,7 +87,7 @@ class CanTheme extends BaseSteelTheme {
 			// inputSkin.cornerRadius = 6.0;
 			inputSkin.width = 160.0;
 			inputSkin.fill = SolidColor(this.insetFillColor, 0);
-			inputSkin.border = getInsetBorder(2);
+			inputSkin.border = getInsetBorder();
 			inputSkin.setBorderForState(TextInputState.FOCUSED, getThemeBorder());
 			input.backgroundSkin = inputSkin;
 		}

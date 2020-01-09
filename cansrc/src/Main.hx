@@ -8,7 +8,7 @@ import feathers.layout.VerticalAlign;
 import feathers.style.Theme;
 import ir.grantech.canvas.controls.events.CanEvent;
 import ir.grantech.canvas.controls.groups.Bar;
-import ir.grantech.canvas.controls.groups.CanVas;
+import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.system.Capabilities;
@@ -16,7 +16,7 @@ import openfl.system.Capabilities;
 class Main extends Application {
 	private var left:ToolBar;
 	private var leftExtension:LayoutGroup;
-	private var canvas:CanVas;
+	private var zoom:CanZoom;
 	private var right:Bar;
 
 	public function new() {
@@ -33,9 +33,9 @@ class Main extends Application {
 		this.left.addEventListener("change", this.left_changeHandler);
 		this.addChild(this.left);
 
-		this.canvas = new CanVas();
-		this.canvas.layoutData = new HorizontalLayoutData(100);
-		this.addChild(this.canvas);
+		this.zoom = new CanZoom();
+		this.zoom.layoutData = new HorizontalLayoutData(100);
+		this.addChild(this.zoom);
 
 		this.right = new Bar();
 		this.right.width = Capabilities.screenResolutionX * 0.15;

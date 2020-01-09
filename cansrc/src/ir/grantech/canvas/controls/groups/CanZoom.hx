@@ -54,6 +54,11 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function stage_keyUpHandler(event:KeyboardEvent):Void {
+		if (event.keyCode == 0x30) {
+			if (event.ctrlKey)
+				this.scene.scaleX = this.scene.scaleY = 1;
+			return;
+		}
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 		this.drop();
 	}

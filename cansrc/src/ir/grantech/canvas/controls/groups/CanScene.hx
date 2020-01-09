@@ -18,7 +18,7 @@ class CanScene extends LayoutGroup {
 		this.layout = new AnchorLayout();
 
 		graphics.beginFill(0xFFFFFF);
-		graphics.lineStyle(0.5, 0x434343);
+		graphics.lineStyle(0.2, 0x838383);
 		graphics.drawRect(0, 0, canWidth, canHeight);
 
 		// var backgroundSkin = new RectangleSkin();

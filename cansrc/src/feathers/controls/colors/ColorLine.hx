@@ -10,7 +10,6 @@ import feathers.layout.VerticalAlign;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.utils.Utils;
 import lime.math.RGBA;
-import lime.ui.KeyCode;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 
@@ -38,7 +37,7 @@ class ColorLine extends LayoutGroup {
 			this.invalidate(INVALIDATION_FLAG_COLOR_PICKER_ELEMENT_FACTORY);
 	}*/
 	@isVar
-	public var data(default, set):RGBA = 0xFF;
+	public var data(default, set):RGBA = 0;
 
 	private function set_data(value:RGBA):RGBA {
 		if (value == this.data)
@@ -90,7 +89,7 @@ class ColorLine extends LayoutGroup {
 	}
 
 	private function inputDisplay_keyUpHandler(event:KeyboardEvent):Void {
-		if (event.keyCode == 13 || event.keyCode == 1073741912)//enter
+		if (event.keyCode == 13 || event.keyCode == 1073741912) // enter
 			this.textToColor(this.inputDisplay.text);
 	}
 

@@ -13,6 +13,7 @@ import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.events.Event;
+import openfl.ui.Mouse;
 import openfl.utils.AssetType;
 
 class ToolBar extends LayoutGroup {
@@ -69,6 +70,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function listView_changeHandler(event:Event):Void {
+		// Mouse.hide();
 		// trace("ListView selectedIndex change: " + cast(event.currentTarget, ListView).selectedIndex);
 	}
 }

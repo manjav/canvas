@@ -28,7 +28,6 @@ class Main extends Application {
 		layout.verticalAlign = VerticalAlign.JUSTIFY;
 		layout.gap = layout.paddingTop = CanTheme.DEFAULT_PADDING;
 		this.layout = layout;
-		trace(Capabilities.screenResolutionX, Capabilities.screenDPI);
 
 		this.left = new ToolBar();
 		this.left.width = 48;
@@ -44,14 +43,18 @@ class Main extends Application {
 		this.addChild(this.right);
 
 		this.leftExtension = new Bar();
-		this.leftExtension.visible = false;
 		this.leftExtension.width = this.right.width - this.left.width - layout.gap;
-		this.addChildAt(this.leftExtension, 1);
 
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
 	}
 
 	private function left_changeHandler(event:CanEvent):Void {
-		this.leftExtension.visible = event.data.index != -1;
+		if( this.leftExtension != null && this.leftExtension.parent == this)
+			this.removeChild(this.leftExtension);
+
+		if(event.data.index == -1)
+			return;
+
+		this.addChildAt(this.leftExtension, 0);
 	}
 }

@@ -51,6 +51,7 @@ class ToolsService extends BaseService {
 	}
 
 	public function new() {
+		super();
 		this.tools = new Map();
 		this.toolType = 0;
 	}

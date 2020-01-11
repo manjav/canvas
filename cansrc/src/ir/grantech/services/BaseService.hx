@@ -1,6 +1,8 @@
 package ir.grantech.services;
 
-class BaseService {
+import flash.events.EventDispatcher;
+
+class BaseService extends EventDispatcher {
 	static private var classes = new Map<String, Dynamic>();
 
 	// static public function set(ng, cl:Class<T>, args:Array<Dynamic> = null):Void {
@@ -8,7 +10,7 @@ class BaseService {
 	// }
 
 	static public function get(cl:Class<BaseService>, args:Array<Dynamic> = null):Dynamic {
-		if( args == null )
+		if (args == null)
 			args = new Array<Dynamic>();
 		var name = Std.string(cl);
 		if (!classes.exists(name))

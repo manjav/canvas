@@ -1,6 +1,7 @@
 package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
+import ir.grantech.services.ToolsService;
 import openfl.display.Shape;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -72,15 +73,18 @@ class CanZoom extends LayoutGroup {
 		this.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_mouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.scene_mouseMoveHandler);
 		if (event.type == MouseEvent.MOUSE_DOWN && Mouse.cursor != MouseCursor.HAND)
 			return;
 		this.drag();
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.scene_mouseMoveHandler);
 		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.scene.release();
 		this.drop();
 	}
 
@@ -106,5 +110,19 @@ class CanZoom extends LayoutGroup {
 	private function drop():Void {
 		this.scene.stopDrag();
 		Mouse.cursor = MouseCursor.AUTO;
+	}
+
+	private function scene_mouseMoveHandler(event:MouseEvent):Void {
+		event.updateAfterEvent();
+
+		if (ToolsService.instance.toolType == Tool.SELECT) {
+			this.scene.selectionLayer.graphics.clear();
+			this.scene.selectionLayer.graphics.beginFill(0x00FFFF, 0.2);
+			this.scene.selectionLayer.graphics.lineStyle(0.5, 0xFFFFFF);
+			this.scene.selectionLayer.graphics.drawRect(0,0,event.localX, event.localY);
+			return;
+		}
+		// this.scene.x = event.localX;
+		// this.scene.y = event.localY;
 	}
 }

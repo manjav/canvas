@@ -65,7 +65,7 @@ class CanZoom extends LayoutGroup {
 		var w = this.scene.width;
 		var h = this.scene.height;
 		this.scene.scaleX = this.scene.scaleY = value;
-		this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
-		this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
+		this.input.pointX = this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
+		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
 	}
 }

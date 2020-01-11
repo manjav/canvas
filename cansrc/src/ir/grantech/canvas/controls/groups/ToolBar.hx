@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.services.ToolsService;
 import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
 import feathers.data.ArrayCollection;
@@ -41,6 +42,7 @@ class ToolBar extends LayoutGroup {
 			return item.text;
 		};
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
+		this.topList.selectedIndex = ToolsService.instance.toolType;
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
 		this.addChild(this.topList);
@@ -70,6 +72,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function listView_changeHandler(event:Event):Void {
+		ToolsService.instance.toolType = cast(event.currentTarget, ListView).selectedIndex;
 		// Mouse.hide();
 		// trace("ListView selectedIndex change: " + cast(event.currentTarget, ListView).selectedIndex);
 	}

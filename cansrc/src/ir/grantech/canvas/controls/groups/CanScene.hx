@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.services.ToolsService;
+import openfl.geom.Point;
 import feathers.controls.CanTextInput;
 import feathers.controls.LayoutGroup;
 import feathers.controls.colors.ColorLine;
@@ -14,15 +16,17 @@ class CanScene extends LayoutGroup {
 	public var canHeight = 480;
 	public var canColor = 0xFFFFFF;
 	public var rulesLayer:Shape;
+	public var startPoint:Point;
 	public var selectionLayer:Shape;
 
 	override function initialize() {
 		super.initialize();
 		this.layout = new AnchorLayout();
+		this.startPoint = new Point();
 
-		graphics.beginFill(0xFFFFFF);
-		graphics.lineStyle(0.2, 0x838383);
-		graphics.drawRect(0, 0, canWidth, canHeight);
+		this.graphics.beginFill(0xFFFFFF);
+		this.graphics.lineStyle(0.2, 0x838383);
+		this.graphics.drawRect(0, 0, canWidth, canHeight);
 
 		// var backgroundSkin = new RectangleSkin();
 		// backgroundSkin.fill = SolidColor(0x33);
@@ -43,8 +47,10 @@ class CanScene extends LayoutGroup {
 		this.addChild(this.rulesLayer);
 
 		this.selectionLayer = new Shape();
-		this.selectionLayer.graphics.beginFill(0x0011FF, 0.1);
+		this.selectionLayer.graphics.beginFill(0x0066FF, 0.1);
 		this.selectionLayer.graphics.lineStyle(0.1, 0xFFFFFF);
+		this.selectionLayer.graphics.drawRect(0, 0, 100, 100);
+		this.selectionLayer.visible = false;
 		this.addChild(this.selectionLayer);
 	}
 
@@ -52,7 +58,24 @@ class CanScene extends LayoutGroup {
 		// trace(cast(e.currentTarget, ColorPicker).data);
 	}
 
-	public function release():Void {
-		this.selectionLayer.graphics.clear();
+	public function startDraw():Void {
+		this.startPoint.setTo(this.mouseX, this.mouseY);
+		if (ToolsService.instance.toolType == Tool.SELECT)
+			this.selectionLayer.visible = true;
+		this.updateDraw();
+	}
+
+	public function updateDraw():Void {
+		if (ToolsService.instance.toolType == Tool.SELECT) {
+			this.selectionLayer.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
+			this.selectionLayer.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
+			this.selectionLayer.width = Math.abs(this.mouseX - this.startPoint.x);
+			this.selectionLayer.height = Math.abs(this.mouseY - this.startPoint.y);
+			return;
+		}
+	}
+
+	public function stopDraw():Void {
+		this.selectionLayer.visible = false;
 	}
 }

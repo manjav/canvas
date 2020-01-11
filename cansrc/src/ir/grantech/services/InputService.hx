@@ -10,8 +10,10 @@ import openfl.display.Stage;
 class InputService extends BaseService {
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
+	static public final POINT:String = "point";
 
 	public var panState:Int = 2;
+	public var pointState:Int = 2;
 	public var lastKeyDown:Int = 0;
 	public var lastKeyUp:Int = 0;
 	public var mouseDown:Bool;
@@ -91,6 +93,8 @@ class InputService extends BaseService {
 			FeathersEvent.dispatch(this, PAN);
 			return;
 		}
+		this.pointState = 0;
+		FeathersEvent.dispatch(this, POINT);
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
@@ -101,6 +105,8 @@ class InputService extends BaseService {
 			FeathersEvent.dispatch(this, PAN);
 			return;
 		}
+		this.pointState = 2;
+		FeathersEvent.dispatch(this, POINT);
 	}
 
 	private function stage_middleMouseDownHandler(event:MouseEvent):Void {
@@ -124,6 +130,9 @@ class InputService extends BaseService {
 			this.pointX += (this.stage.mouseX - this.reservedX);
 			this.pointY += (this.stage.mouseY - this.reservedY);
 			FeathersEvent.dispatch(this, PAN);
+		} else if (this.mouseDown) {
+			this.pointState = 1;
+			FeathersEvent.dispatch(this, POINT);
 		}
 		this.reservedX = this.stage.mouseX;
 		this.reservedY = this.stage.mouseY;

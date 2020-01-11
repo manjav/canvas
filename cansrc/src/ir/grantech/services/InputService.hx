@@ -1,12 +1,12 @@
 package ir.grantech.services;
 
-import ir.grantech.canvas.controls.groups.CanScene;
-import feathers.layout.Measurements;
 import feathers.events.FeathersEvent;
-import openfl.events.MouseEvent;
+import feathers.layout.Measurements;
+import ir.grantech.canvas.controls.groups.CanScene;
 import lime.ui.KeyCode;
-import openfl.events.KeyboardEvent;
 import openfl.display.Stage;
+import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 
 class InputService extends BaseService {
 	static public final PAN:String = "pan";
@@ -88,14 +88,14 @@ class InputService extends BaseService {
 		this.lastKeyDown = 0;
 		if (this.lastKeyUp == KeyCode.NUMBER_0) {
 			if (event.ctrlKey)
-			#if mac
-			if (event.commandKey)
-			#end
-				this.zoom = 1;
-				this.pointX = 0;
-				this.pointY = 0;
-				FeathersEvent.dispatch(this, RESET);
-			}
+				#if mac
+				if (event.commandKey)
+				#end
+			this.zoom = 1;
+			this.pointX = 0;
+			this.pointY = 0;
+			FeathersEvent.dispatch(this, RESET);
+		}
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {
@@ -144,12 +144,20 @@ class InputService extends BaseService {
 			this.pointX += (this.stage.mouseX - this.reservedX);
 			this.pointY += (this.stage.mouseY - this.reservedY);
 			FeathersEvent.dispatch(this, PAN);
+			this.reservedX = this.stage.mouseX;
+			this.reservedY = this.stage.mouseY;
 		} else if (this.mouseDown) {
 			this.pointState = 1;
 			FeathersEvent.dispatch(this, POINT);
+		} else {
+			for (i in 0...scene.numChildren) {
+				if (this.scene.getChildAt(i).hitTestPoint(this.stage.mouseX, this.stage.mouseY)) {
+					this.scene.drawHit(this.scene.getChildAt(i));
+					return;
+				}
+			}
+			this.scene.hitLayer.graphics.clear();
 		}
-		this.reservedX = this.stage.mouseX;
-		this.reservedY = this.stage.mouseY;
 	}
 
 	private function stage_mouseWheelHandler(event:MouseEvent):Void {

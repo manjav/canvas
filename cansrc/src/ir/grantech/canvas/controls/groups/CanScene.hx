@@ -1,15 +1,16 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.services.ToolsService;
-import openfl.geom.Point;
-import feathers.controls.CanTextInput;
 import feathers.controls.LayoutGroup;
-import feathers.controls.colors.ColorLine;
 import feathers.layout.AnchorLayout;
-import feathers.layout.AnchorLayoutData;
-import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.services.ToolsService;
+import openfl.Vector;
+import openfl.display.DisplayObject;
+import openfl.display.GraphicsPath;
+import openfl.display.IGraphicsData;
 import openfl.display.Shape;
+import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
 	public var canWidth = 320;
@@ -17,6 +18,7 @@ class CanScene extends LayoutGroup {
 	public var canColor = 0xFFFFFF;
 	public var rulesLayer:Shape;
 	public var startPoint:Point;
+	public var hitLayer:Shape;
 	public var selectionLayer:Shape;
 
 	override function initialize() {
@@ -32,16 +34,27 @@ class CanScene extends LayoutGroup {
 		// backgroundSkin.fill = SolidColor(0x33);
 		// this.backgroundSkin = backgroundSkin;
 
-		var c = new ColorLine();
-		c.y = 123;
-		c.width = 123;
-		c.height = CanTheme.CONTROL_SIZE;
-		c.addEventListener(Event.CHANGE, changed);
-		addChild(c);
+		var sh = new Shape();
+		// sh.graphics.beginFill(0xFFFFFF);
+		sh.graphics.lineStyle(1, 0xFFFF);
+		sh.graphics.drawRoundRect(12, 23, 323, 123, 42, 44);
+		sh.x = 123;
+		sh.y = 123;
+		addChild(sh);
 
-		var txt = new CanTextInput();
-		txt.layoutData = AnchorLayoutData.center();
-		addChild(txt);
+		// var c = new ColorLine();
+		// c.y = 123;
+		// c.width = 123;
+		// c.height = CanTheme.CONTROL_SIZE;
+		// c.addEventListener(Event.CHANGE, changed);
+		// addChild(c);
+
+		// var txt = new CanTextInput();
+		// txt.layoutData = AnchorLayoutData.center();
+		// addChild(txt);
+
+		this.hitLayer = new Shape();
+		this.addChild(this.hitLayer);
 
 		this.rulesLayer = new Shape();
 		this.addChild(this.rulesLayer);
@@ -77,5 +90,27 @@ class CanScene extends LayoutGroup {
 
 	public function stopDraw():Void {
 		this.selectionLayer.visible = false;
+	}
+
+	public function drawHit(target:DisplayObject):Void {
+		this.hitLayer.graphics.clear();
+		this.hitLayer.graphics.lineStyle(0.2, 0x1692E6);
+		var graphicDataList:Vector<IGraphicsData>;
+		if (Std.is(target, Shape))
+			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
+		else
+			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
+
+		for (gd in graphicDataList) {
+			if (Std.is(gd, GraphicsPath)) {
+				var data = cast(gd, GraphicsPath).data;
+				var i = 2;
+				this.hitLayer.graphics.moveTo(target.x + data[0], target.y + data[1]);
+				while (i < data.length) {
+					this.hitLayer.graphics.lineTo(target.x + data[i], target.y + data[i + 1]);
+					i += 2;
+				}
+			}
+		}
 	}
 }

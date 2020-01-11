@@ -8,6 +8,8 @@ class BaseService {
 	// }
 
 	static public function get(cl:Class<BaseService>, args:Array<Dynamic> = null):Dynamic {
+		if( args == null )
+			args = new Array<Dynamic>();
 		var name = Std.string(cl);
 		if (!classes.exists(name))
 			classes.set(name, Type.createInstance(cl, args));

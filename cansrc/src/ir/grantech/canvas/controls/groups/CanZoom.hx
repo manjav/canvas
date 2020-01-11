@@ -73,9 +73,11 @@ class CanZoom extends LayoutGroup {
 		this.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_mouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
-		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.scene_mouseMoveHandler);
 		if (event.type == MouseEvent.MOUSE_DOWN && Mouse.cursor != MouseCursor.HAND)
+		{
+			this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.scene_mouseMoveHandler);
 			return;
+		}
 		this.drag();
 	}
 

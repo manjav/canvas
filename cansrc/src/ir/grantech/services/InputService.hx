@@ -1,5 +1,6 @@
 package ir.grantech.services;
 
+import ir.grantech.canvas.controls.groups.CanScene;
 import feathers.layout.Measurements;
 import feathers.events.FeathersEvent;
 import openfl.events.MouseEvent;
@@ -11,6 +12,7 @@ class InputService extends BaseService {
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
 	static public final POINT:String = "point";
+	static public final RESET:String = "reset";
 
 	public var panState:Int = 2;
 	public var pointState:Int = 2;
@@ -22,9 +24,10 @@ class InputService extends BaseService {
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
 
-	private var stage:Stage;
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
+	private var stage:Stage;
+	private var scene:CanScene;
 	private var measurements:Measurements;
 
 	/**
@@ -55,9 +58,10 @@ class InputService extends BaseService {
 		return this.zoom;
 	}
 
-	public function new(stage:Stage, measurements:Measurements) {
+	public function new(stage:Stage, scene:CanScene, measurements:Measurements) {
 		super();
 		this.stage = stage;
+		this.scene = scene;
 		this.measurements = measurements;
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
@@ -82,6 +86,16 @@ class InputService extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
+		if (this.lastKeyUp == KeyCode.NUMBER_0) {
+			if (event.ctrlKey)
+			#if mac
+			if (event.commandKey)
+			#end
+				this.zoom = 1;
+				this.pointX = 0;
+				this.pointY = 0;
+				FeathersEvent.dispatch(this, RESET);
+			}
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

@@ -19,7 +19,7 @@ class CanScene extends LayoutGroup {
 	public var rulesLayer:Shape;
 	public var startPoint:Point;
 	public var hitLayer:Shape;
-	public var selectionLayer:Shape;
+	public var mouseLayer:Shape;
 
 	override function initialize() {
 		super.initialize();
@@ -58,12 +58,12 @@ class CanScene extends LayoutGroup {
 		this.rulesLayer = new Shape();
 		this.addChild(this.rulesLayer);
 
-		this.selectionLayer = new Shape();
-		this.selectionLayer.graphics.beginFill(0x0066FF, 0.1);
-		this.selectionLayer.graphics.lineStyle(0.1, 0xFFFFFF);
-		this.selectionLayer.graphics.drawRect(0, 0, 100, 100);
-		this.selectionLayer.visible = false;
-		this.addChild(this.selectionLayer);
+		this.mouseLayer = new Shape();
+		this.mouseLayer.graphics.beginFill(0x0066FF, 0.1);
+		this.mouseLayer.graphics.lineStyle(0.1, 0xFFFFFF);
+		this.mouseLayer.graphics.drawRect(0, 0, 100, 100);
+		this.mouseLayer.visible = false;
+		this.addChild(this.mouseLayer);
 	}
 
 	function changed(e:Event):Void {
@@ -73,21 +73,23 @@ class CanScene extends LayoutGroup {
 	public function startDraw():Void {
 		this.startPoint.setTo(this.mouseX, this.mouseY);
 		if (ToolsService.instance.toolType == Tool.SELECT)
-			this.selectionLayer.visible = true;
+			this.mouseLayer.visible = true;
 		this.updateDraw();
 	}
 
 	public function updateDraw():Void {
 		if (ToolsService.instance.toolType == Tool.SELECT) {
-			this.selectionLayer.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
-			this.selectionLayer.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
-			this.selectionLayer.width = Math.abs(this.mouseX - this.startPoint.x);
-			this.selectionLayer.height = Math.abs(this.mouseY - this.startPoint.y);
+			this.mouseLayer.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
+			this.mouseLayer.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
+			this.mouseLayer.width = Math.abs(this.mouseX - this.startPoint.x);
+			this.mouseLayer.height = Math.abs(this.mouseY - this.startPoint.y);
 			return;
 		}
 	}
 
 	public function stopDraw():Void {
+		this.mouseLayer.visible = false;
+	}
 
 	public function hit(x:Float, y:Float):DisplayObject {
 		for (i in 0...numChildren)

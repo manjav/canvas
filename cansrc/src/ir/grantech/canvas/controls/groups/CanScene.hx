@@ -30,16 +30,15 @@ class CanScene extends LayoutGroup {
 		this.graphics.lineStyle(0.2, 0x838383);
 		this.graphics.drawRect(0, 0, canWidth, canHeight);
 
-		// var backgroundSkin = new RectangleSkin();
-		// backgroundSkin.fill = SolidColor(0x33);
-		// this.backgroundSkin = backgroundSkin;
-
 		var sh = new Shape();
-		// sh.graphics.beginFill(0xFFFFFF);
-		sh.graphics.lineStyle(1, 0xFFFF);
-		sh.graphics.drawRoundRect(12, 23, 323, 123, 42, 44);
-		sh.x = 123;
-		sh.y = 123;
+		sh.graphics.beginFill(0xFFFFFF);
+		sh.graphics.lineStyle(1, 0xFF00FF);
+		sh.graphics.moveTo(10, 10);
+		sh.graphics.lineTo(20, 10);
+		sh.graphics.curveTo(20, 20, 0, 20);
+		sh.graphics.drawRoundRect(0, 0, 122, 123, 42, 44);
+		sh.x = 23;
+		sh.y = 23;
 		addChild(sh);
 
 		// var c = new ColorLine();
@@ -103,12 +102,24 @@ class CanScene extends LayoutGroup {
 
 		for (gd in graphicDataList) {
 			if (Std.is(gd, GraphicsPath)) {
+				var commands = cast(gd, GraphicsPath).commands;
 				var data = cast(gd, GraphicsPath).data;
-				var i = 2;
-				this.hitLayer.graphics.moveTo(target.x + data[0], target.y + data[1]);
-				while (i < data.length) {
-					this.hitLayer.graphics.lineTo(target.x + data[i], target.y + data[i + 1]);
-					i += 2;
+				var c = 0;
+				var d = 0;
+				while (c < commands.length) {
+					if (commands[c] == 1) {
+						this.hitLayer.graphics.moveTo(target.x + data[d], target.y + data[d + 1]);
+						d += 2;
+						c++;
+					} else if (commands[c] == 2) {
+						this.hitLayer.graphics.lineTo(target.x + data[d], target.y + data[d + 1]);
+						d += 2;
+						c++;
+					} else if (commands[c] == 3) {
+						this.hitLayer.graphics.curveTo(target.x + data[d], target.y + data[d + 1], target.x + data[d + 2], target.y + data[d + 3]);
+						d += 4;
+						c++;
+					}
 				}
 			}
 		}

@@ -88,12 +88,19 @@ class CanScene extends LayoutGroup {
 	}
 
 	public function stopDraw():Void {
-		this.selectionLayer.visible = false;
+
+	public function hit(x:Float, y:Float):DisplayObject {
+		for (i in 0...numChildren)
+			if (this.getChildAt(i).hitTestPoint(x, y))
+				return this.getChildAt(i);
+		return null;
 	}
 
 	public function drawHit(target:DisplayObject):Void {
 		this.hitLayer.graphics.clear();
-		this.hitLayer.graphics.lineStyle(0.2, 0x1692E6);
+		if (target == null)
+			return;
+		this.hitLayer.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData>;
 		if (Std.is(target, Shape))
 			graphicDataList = cast(target, Shape).graphics.readGraphicsData();

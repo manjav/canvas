@@ -156,13 +156,7 @@ class InputService extends BaseService {
 			this.pointState = 1;
 			FeathersEvent.dispatch(this, POINT);
 		} else {
-			for (i in 0...scene.numChildren) {
-				if (this.scene.getChildAt(i).hitTestPoint(this.stage.mouseX, this.stage.mouseY)) {
-					this.scene.drawHit(this.scene.getChildAt(i));
-					return;
-				}
-			}
-			this.scene.hitLayer.graphics.clear();
+			this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
 		}
 	}
 

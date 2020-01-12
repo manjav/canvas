@@ -1,5 +1,6 @@
 package ir.grantech.services;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.groups.CanScene;
@@ -72,6 +73,7 @@ class InputService extends BaseService {
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_middleMouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
+		this.stage.addEventListener(MouseEvent.CLICK, this.stage_clickHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -86,8 +88,8 @@ class InputService extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
-		
-		//trace(StringTools.hex(this.lastKeyUp));
+
+		// trace(StringTools.hex(this.lastKeyUp));
 		if (event.ctrlKey) {
 			if (this.lastKeyUp == KeyCode.NUMBER_0) {
 				this.zoom = 1;
@@ -102,6 +104,16 @@ class InputService extends BaseService {
 				FeathersEvent.dispatch(this, ZOOM);
 			}
 		}
+	}
+
+	private function stage_clickHandler(event:MouseEvent):Void {
+		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
+		if (Std.is(item, ICanItem)) {
+			this.scene.selectionHint.set(item.x, item.y, item.width, item.height);
+			this.scene.selectionHint.visible = true;
+			return;
+		}
+		this.scene.selectionHint.visible = false;
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

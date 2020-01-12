@@ -3,6 +3,7 @@ package ir.grantech.canvas.controls.groups;
 import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayout;
 import ir.grantech.services.ToolsService;
+import ir.grantech.canvas.drawables.CanShape;
 import openfl.Vector;
 import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
@@ -16,7 +17,7 @@ class CanScene extends LayoutGroup {
 	public var canWidth = 320;
 	public var canHeight = 480;
 	public var canColor = 0xFFFFFF;
-	public var rulesLayer:Shape;
+	public var selectionHint:SelectionHint;
 	public var startPoint:Point;
 	public var hitLayer:Shape;
 	public var mouseLayer:Shape;
@@ -30,7 +31,7 @@ class CanScene extends LayoutGroup {
 		this.graphics.lineStyle(0.2, 0x838383);
 		this.graphics.drawRect(0, 0, canWidth, canHeight);
 
-		var sh = new Shape();
+		var sh = new CanShape();
 		sh.graphics.beginFill(0xFFFFFF);
 		sh.graphics.lineStyle(1, 0xFF00FF);
 		sh.graphics.moveTo(10, 10);
@@ -55,8 +56,9 @@ class CanScene extends LayoutGroup {
 		this.hitLayer = new Shape();
 		this.addChild(this.hitLayer);
 
-		this.rulesLayer = new Shape();
-		this.addChild(this.rulesLayer);
+		this.selectionHint = new SelectionHint();
+		this.selectionHint.visible = false;
+		this.addChild(this.selectionHint);
 
 		this.mouseLayer = new Shape();
 		this.mouseLayer.graphics.beginFill(0x0066FF, 0.1);

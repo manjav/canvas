@@ -6,7 +6,7 @@
 	accordance with the terms of the accompanying license agreement.
  */
 
- package ir.grantech.canvas.interfaces;
+ package ir.grantech.canvas.controls;
 
  import openfl.display.BitmapData;
 import feathers.core.IUIControl;

@@ -86,15 +86,21 @@ class InputService extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
-		if (this.lastKeyUp == KeyCode.NUMBER_0) {
-			if (event.ctrlKey)
-				#if mac
-				if (event.commandKey)
-				#end
-			this.zoom = 1;
-			this.pointX = 0;
-			this.pointY = 0;
-			FeathersEvent.dispatch(this, RESET);
+		
+		//trace(StringTools.hex(this.lastKeyUp));
+		if (event.ctrlKey) {
+			if (this.lastKeyUp == KeyCode.NUMBER_0) {
+				this.zoom = 1;
+				this.pointX = 0;
+				this.pointY = 0;
+				FeathersEvent.dispatch(this, RESET);
+			} else if (this.lastKeyUp == 187) {
+				this.zoom += 0.3;
+				FeathersEvent.dispatch(this, ZOOM);
+			} else if (this.lastKeyUp == 189) {
+				this.zoom -= 0.3;
+				FeathersEvent.dispatch(this, ZOOM);
+			}
 		}
 	}
 

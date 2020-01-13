@@ -17,10 +17,10 @@ class CanScene extends LayoutGroup {
 	public var canWidth = 320;
 	public var canHeight = 480;
 	public var canColor = 0xFFFFFF;
-	public var selectionHint:SelectionHint;
 	public var startPoint:Point;
-	public var hitLayer:Shape;
-	public var mouseLayer:Shape;
+	public var hitHint:Shape;
+	public var selectHint:Shape;
+	public var transformHint:TransformHint;
 
 	override function initialize() {
 		super.initialize();
@@ -53,19 +53,19 @@ class CanScene extends LayoutGroup {
 		// txt.layoutData = AnchorLayoutData.center();
 		// addChild(txt);
 
-		this.hitLayer = new Shape();
-		this.addChild(this.hitLayer);
+		this.hitHint = new Shape();
+		this.addChild(this.hitHint);
 
-		this.selectionHint = new SelectionHint();
-		this.selectionHint.visible = false;
-		this.addChild(this.selectionHint);
+		this.transformHint = new TransformHint();
+		this.transformHint.visible = false;
+		this.addChild(this.transformHint);
 
-		this.mouseLayer = new Shape();
-		this.mouseLayer.graphics.beginFill(0x0066FF, 0.1);
-		this.mouseLayer.graphics.lineStyle(0.1, 0xFFFFFF);
-		this.mouseLayer.graphics.drawRect(0, 0, 100, 100);
-		this.mouseLayer.visible = false;
-		this.addChild(this.mouseLayer);
+		this.selectHint = new Shape();
+		this.selectHint.graphics.beginFill(0x0066FF, 0.1);
+		this.selectHint.graphics.lineStyle(0.1, 0xFFFFFF);
+		this.selectHint.graphics.drawRect(0, 0, 100, 100);
+		this.selectHint.visible = false;
+		this.addChild(this.selectHint);
 	}
 
 	function changed(e:Event):Void {
@@ -75,22 +75,22 @@ class CanScene extends LayoutGroup {
 	public function startDraw():Void {
 		this.startPoint.setTo(this.mouseX, this.mouseY);
 		if (ToolsService.instance.toolType == Tool.SELECT)
-			this.mouseLayer.visible = true;
+			this.selectHint.visible = true;
 		this.updateDraw();
 	}
 
 	public function updateDraw():Void {
 		if (ToolsService.instance.toolType == Tool.SELECT) {
-			this.mouseLayer.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
-			this.mouseLayer.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
-			this.mouseLayer.width = Math.abs(this.mouseX - this.startPoint.x);
-			this.mouseLayer.height = Math.abs(this.mouseY - this.startPoint.y);
+			this.selectHint.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
+			this.selectHint.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
+			this.selectHint.width = Math.abs(this.mouseX - this.startPoint.x);
+			this.selectHint.height = Math.abs(this.mouseY - this.startPoint.y);
 			return;
 		}
 	}
 
 	public function stopDraw():Void {
-		this.mouseLayer.visible = false;
+		this.selectHint.visible = false;
 	}
 
 	public function hit(x:Float, y:Float):DisplayObject {
@@ -101,10 +101,10 @@ class CanScene extends LayoutGroup {
 	}
 
 	public function drawHit(target:DisplayObject):Void {
-		this.hitLayer.graphics.clear();
+		this.hitHint.graphics.clear();
 		if (target == null)
 			return;
-		this.hitLayer.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
+		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData>;
 		if (Std.is(target, Shape))
 			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
@@ -119,15 +119,15 @@ class CanScene extends LayoutGroup {
 				var d = 0;
 				while (c < commands.length) {
 					if (commands[c] == 1) {
-						this.hitLayer.graphics.moveTo(target.x + data[d], target.y + data[d + 1]);
+						this.hitHint.graphics.moveTo(target.x + data[d], target.y + data[d + 1]);
 						d += 2;
 						c++;
 					} else if (commands[c] == 2) {
-						this.hitLayer.graphics.lineTo(target.x + data[d], target.y + data[d + 1]);
+						this.hitHint.graphics.lineTo(target.x + data[d], target.y + data[d + 1]);
 						d += 2;
 						c++;
 					} else if (commands[c] == 3) {
-						this.hitLayer.graphics.curveTo(target.x + data[d], target.y + data[d + 1], target.x + data[d + 2], target.y + data[d + 3]);
+						this.hitHint.graphics.curveTo(target.x + data[d], target.y + data[d + 1], target.x + data[d + 2], target.y + data[d + 3]);
 						d += 4;
 						c++;
 					}

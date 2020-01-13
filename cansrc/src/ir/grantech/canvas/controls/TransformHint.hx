@@ -3,7 +3,7 @@ package ir.grantech.canvas.controls;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 
-class SelectionHint extends Sprite {
+class TransformHint extends Sprite {
 	private var radius:Float = 4;
 	private var lines:Array<Shape>;
 	private var circles:Array<Shape>;
@@ -35,7 +35,7 @@ class SelectionHint extends Sprite {
 	private function drawLine(i:Int):Void {
 		var vertical = i == 2 || i == 3 || i == 6 || i == 7;
 		var l:Shape = new Shape();
-		l.graphics.lineStyle(3, 0x1692E6);
+		l.graphics.lineStyle(1, 0x1692E6);
 		l.graphics.moveTo(0, 0);
 		l.graphics.lineTo(vertical ? 0 : 100, vertical ? 100 : 0);
 		this.lines.push(l);
@@ -73,7 +73,7 @@ class SelectionHint extends Sprite {
 	}
 
 	private function resizeLines(i:Int, w:Float, h:Float):Void {
-		if(i == 2 || i == 3 || i == 6 || i == 7)
+		if (i == 2 || i == 3 || i == 6 || i == 7)
 			this.lines[i].height = h;
 		else
 			this.lines[i].width = w;

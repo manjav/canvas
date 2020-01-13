@@ -20,12 +20,15 @@ class CanScene extends LayoutGroup {
 	public var hitHint:Shape;
 	public var selectHint:Shape;
 	public var transformHint:TransformHint;
+	private var container:Sprite;
 
 	override function initialize() {
 		super.initialize();
 
-		this.layout = new AnchorLayout();
-		this.startPoint = new Point();
+		// this.layout = new AnchorLayout();
+
+		this.container = new Sprite();
+		this.addChild(this.container);
 
 		this.graphics.beginFill(0xFFFFFF);
 		this.graphics.lineStyle(0.2, 0x838383);
@@ -40,7 +43,8 @@ class CanScene extends LayoutGroup {
 		sh.graphics.drawRoundRect(0, 0, 122, 123, 42, 44);
 		sh.x = 23;
 		sh.y = 23;
-		addChild(sh);
+		sh.rotation = 22;
+		this.container.addChild(sh);
 
 		// var c = new ColorLine();
 		// c.y = 123;
@@ -86,9 +90,9 @@ class CanScene extends LayoutGroup {
 	}
 
 	public function hit(x:Float, y:Float):DisplayObject {
-		for (i in 0...numChildren)
-			if (this.getChildAt(i).hitTestPoint(x, y))
-				return this.getChildAt(i);
+		for (i in 0...this.container.numChildren)
+			if (this.container.getChildAt(i).hitTestPoint(x, y, true))
+				return this.container.getChildAt(i);
 		return null;
 	}
 

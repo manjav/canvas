@@ -2,7 +2,6 @@ package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayout;
-import ir.grantech.services.ToolsService;
 import ir.grantech.canvas.drawables.CanShape;
 import openfl.Vector;
 import openfl.display.DisplayObject;
@@ -75,19 +74,15 @@ class CanScene extends LayoutGroup {
 
 	public function startDraw():Void {
 		this.startPoint.setTo(this.mouseX, this.mouseY);
-		if (ToolsService.instance.toolType == Tool.SELECT)
-			this.selectHint.visible = true;
+		this.selectHint.visible = true;
 		this.updateDraw();
 	}
 
 	public function updateDraw():Void {
-		if (ToolsService.instance.toolType == Tool.SELECT) {
-			this.selectHint.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
-			this.selectHint.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
-			this.selectHint.width = Math.abs(this.mouseX - this.startPoint.x);
-			this.selectHint.height = Math.abs(this.mouseY - this.startPoint.y);
-			return;
-		}
+		this.selectHint.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
+		this.selectHint.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
+		this.selectHint.width = Math.abs(this.mouseX - this.startPoint.x);
+		this.selectHint.height = Math.abs(this.mouseY - this.startPoint.y);
 	}
 
 	public function hit(x:Float, y:Float):DisplayObject {

@@ -1,10 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.drawables.ICanItem;
-import feathers.events.FeathersEvent;
 import feathers.controls.LayoutGroup;
 import ir.grantech.services.BaseService;
 import ir.grantech.services.InputService;
+import ir.grantech.services.ToolsService;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.ui.Mouse;
@@ -64,11 +63,22 @@ class CanZoom extends LayoutGroup {
 
 	private function input_pointHandler(event:Event):Void {
 		if (input.pointPhase == InputService.PHASE_BEGAN) {
-			this.scene.startDraw();
-		else if (input.pointState == 2)
+			if (ToolsService.instance.toolType == Tool.SELECT) {
+				if (InputService.instance.selectedItem == null)
+					this.scene.startDraw();
+				else
+					this.scene.transformHint.translate();
+			}
+		} else if (input.pointPhase == InputService.PHASE_UPDATE) {
+			if (ToolsService.instance.toolType == Tool.SELECT) {
+				if (InputService.instance.selectedItem == null)
+					this.scene.updateDraw();
+				else
+					this.scene.transformHint.translate();
+			}
+		} else {
 			this.clearHints();
-		else
-			this.scene.updateDraw();
+		}
 	}
 
 	private function input_resetHandler(event:Event):Void {

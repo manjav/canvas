@@ -89,10 +89,6 @@ class CanScene extends LayoutGroup {
 		}
 	}
 
-	public function stopDraw():Void {
-		this.selectHint.visible = false;
-	}
-
 	public function hit(x:Float, y:Float):DisplayObject {
 		for (i in 0...numChildren)
 			if (this.getChildAt(i).hitTestPoint(x, y))
@@ -104,6 +100,7 @@ class CanScene extends LayoutGroup {
 		this.hitHint.graphics.clear();
 		if (target == null)
 			return;
+		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData>;
 		if (Std.is(target, Shape))

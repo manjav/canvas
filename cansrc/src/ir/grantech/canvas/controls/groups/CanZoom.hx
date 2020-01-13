@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import feathers.events.FeathersEvent;
 import feathers.controls.LayoutGroup;
 import ir.grantech.services.BaseService;
@@ -45,6 +46,7 @@ class CanZoom extends LayoutGroup {
 			this.scene.transformHint.visible = true;
 			return;
 		}
+		this.clearHints();
 	}
 
 	private function input_panHandler(event:Event):Void {
@@ -60,12 +62,12 @@ class CanZoom extends LayoutGroup {
 	private function input_zoomHandler(event:Event):Void {
 		this.setZoom(this.input.zoom);
 	}
-	
+
 	private function input_pointHandler(event:Event):Void {
 		if (input.pointState == 0)
 			this.scene.startDraw();
 		else if (input.pointState == 2)
-			this.scene.stopDraw();
+			this.clearHints();
 		else
 			this.scene.updateDraw();
 	}
@@ -82,5 +84,11 @@ class CanZoom extends LayoutGroup {
 		this.scene.scaleX = this.scene.scaleY = value;
 		this.input.pointX = this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
 		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
+	}
+
+	private function clearHints():Void{
+		this.scene.hitHint.visible = false;
+		this.scene.selectHint.visible = false;
+		this.scene.transformHint.visible = false;
 	}
 }

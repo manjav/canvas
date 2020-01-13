@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls;
 
+import openfl.Vector;
+import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 
@@ -8,9 +10,12 @@ class TransformHint extends Sprite {
 	private var lines:Array<Shape>;
 	private var circles:Array<Shape>;
 
+	public var targets:Vector<DisplayObject>;
+
 	public function new() {
 		super();
 		this.mouseEnabled = false;
+		this.targets = new Vector<DisplayObject>();
 
 		this.lines = new Array<Shape>();
 		this.circles = new Array<Shape>();
@@ -78,4 +83,12 @@ class TransformHint extends Sprite {
 		else
 			this.lines[i].width = w;
 	}
+
+	// public function move(evt:MouseEvent):Void {
+	// 	var mouse = new Point(mouseX, mouseY);
+	// 	_target.x = mouse.x + _mouseOffset.x;
+	// 	_target.y = mouse.y + _mouseOffset.y;
+	// 	checkItemPosition();
+	// 	evt.updateAfterEvent();
+	// }
 }

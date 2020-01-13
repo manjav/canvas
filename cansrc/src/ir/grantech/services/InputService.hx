@@ -12,8 +12,10 @@ import openfl.events.MouseEvent;
 class InputService extends BaseService {
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
+	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
 	static public final RESET:String = "reset";
+	static public final CLICK:String = "click";
 
 	public var panState:Int = 2;
 	public var pointState:Int = 2;
@@ -107,13 +109,7 @@ class InputService extends BaseService {
 	}
 
 	private function stage_clickHandler(event:MouseEvent):Void {
-		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
-		if (Std.is(item, ICanItem)) {
-			this.scene.selectionHint.set(item.x, item.y, item.width, item.height);
-			this.scene.selectionHint.visible = true;
-			return;
-		}
-		this.scene.selectionHint.visible = false;
+		FeathersEvent.dispatch(this, CLICK);
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {
@@ -168,7 +164,7 @@ class InputService extends BaseService {
 			this.pointState = 1;
 			FeathersEvent.dispatch(this, POINT);
 		} else {
-			this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
+			FeathersEvent.dispatch(this, MOVE);
 		}
 	}
 

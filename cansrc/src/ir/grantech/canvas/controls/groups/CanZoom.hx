@@ -68,13 +68,14 @@ class CanZoom extends LayoutGroup {
 					this.scene.startDraw();
 				else
 					this.scene.transformHint.translate();
+					this.scene.updateSlection(true);
 			}
 		} else if (input.pointPhase == InputService.PHASE_UPDATE) {
 			if (ToolsService.instance.toolType == Tool.SELECT) {
 				if (InputService.instance.selectedItem == null)
 					this.scene.updateDraw();
 				else
-					this.scene.transformHint.translate();
+					this.scene.updateSlection();
 			}
 		} else {
 			this.clearHints();
@@ -93,11 +94,5 @@ class CanZoom extends LayoutGroup {
 		this.scene.scaleX = this.scene.scaleY = value;
 		this.input.pointX = this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
 		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
-	}
-
-	private function clearHints():Void {
-		this.scene.hitHint.visible = false;
-		this.scene.selectHint.visible = false;
-		this.scene.transformHint.visible = false;
 	}
 }

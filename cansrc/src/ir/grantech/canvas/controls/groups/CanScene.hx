@@ -16,7 +16,7 @@ class CanScene extends LayoutGroup {
 	public var canWidth = 320;
 	public var canHeight = 480;
 	public var canColor = 0xFFFFFF;
-	public var startPoint:Point;
+	public var beginPoint:Point;
 	public var hitHint:Shape;
 	public var selectHint:Shape;
 	public var transformHint:TransformHint;
@@ -25,7 +25,7 @@ class CanScene extends LayoutGroup {
 	override function initialize() {
 		super.initialize();
 
-		// this.layout = new AnchorLayout();
+		this.beginPoint = new Point();
 
 		this.container = new Sprite();
 		this.addChild(this.container);
@@ -76,17 +76,15 @@ class CanScene extends LayoutGroup {
 		// trace(cast(e.currentTarget, ColorPicker).data);
 	}
 
-	public function startDraw():Void {
-		this.startPoint.setTo(this.mouseX, this.mouseY);
+	public function updateSlection(begin:Bool = false):Void {
+		if (begin) {
 		this.selectHint.visible = true;
-		this.updateDraw();
+			this.beginPoint.setTo(this.mouseX, this.mouseY);
 	}
-
-	public function updateDraw():Void {
-		this.selectHint.x = this.mouseX < this.startPoint.x ? this.mouseX : this.startPoint.x;
-		this.selectHint.y = this.mouseY < this.startPoint.y ? this.mouseY : this.startPoint.y;
-		this.selectHint.width = Math.abs(this.mouseX - this.startPoint.x);
-		this.selectHint.height = Math.abs(this.mouseY - this.startPoint.y);
+		this.selectHint.x = this.mouseX < this.beginPoint.x ? this.mouseX : this.beginPoint.x;
+		this.selectHint.y = this.mouseY < this.beginPoint.y ? this.mouseY : this.beginPoint.y;
+		this.selectHint.width = Math.abs(this.mouseX - this.beginPoint.x);
+		this.selectHint.height = Math.abs(this.mouseY - this.beginPoint.y);
 	}
 
 	public function hit(x:Float, y:Float):DisplayObject {

@@ -1,6 +1,5 @@
 package ir.grantech.services;
 
-import ir.grantech.canvas.drawables.ICanItem;
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.groups.CanScene;
@@ -12,6 +11,11 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 
 class InputService extends BaseService {
+
+	static public final PHASE_BEGAN:Int = 0;
+	static public final PHASE_UPDATE:Int = 1;
+	static public final PHASE_ENDED:Int = 2;
+
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
 	static public final MOVE:String = "move";
@@ -19,8 +23,8 @@ class InputService extends BaseService {
 	static public final RESET:String = "reset";
 	static public final SELECT:String = "select";
 
-	public var panState:Int = 2;
-	public var pointState:Int = 2;
+	public var panPhase:Int = 2;
+	public var pointPhase:Int = 2;
 	public var lastKeyDown:Int = 0;
 	public var lastKeyUp:Int = 0;
 	public var mouseDown:Bool;
@@ -125,23 +129,23 @@ class InputService extends BaseService {
 		this.reservedX = event.stageX;
 		this.reservedY = event.stageY;
 		if (this.lastKeyDown == KeyCode.SPACE) {
-			this.panState = 0;
+			this.panPhase = PHASE_BEGAN;
 			FeathersEvent.dispatch(this, PAN);
 			return;
 		}
-		this.pointState = 0;
+		this.pointPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, POINT);
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
 		this.middleMouseDown = false;
 		this.mouseDown = false;
-		if (this.panState == 1) {
-			this.panState = 2;
+		if (this.panPhase == PHASE_UPDATE) {
+			this.panPhase = PHASE_ENDED;
 			FeathersEvent.dispatch(this, PAN);
 			return;
 		}
-		this.pointState = 2;
+		this.pointPhase = PHASE_ENDED;
 		FeathersEvent.dispatch(this, POINT);
 	}
 
@@ -149,27 +153,27 @@ class InputService extends BaseService {
 		this.reservedX = this.stage.mouseX;
 		this.reservedY = this.stage.mouseY;
 		this.middleMouseDown = true;
-		this.panState = 0;
+		this.panPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, PAN);
 	}
 
 	private function stage_middleMouseUpHandler(event:MouseEvent):Void {
 		this.middleMouseDown = false;
-		this.panState = 2;
+		this.panPhase = PHASE_ENDED;
 		FeathersEvent.dispatch(this, PAN);
 	}
 
 	private function stage_mouseMoveHandler(event:MouseEvent):Void {
 		event.updateAfterEvent();
 		if (this.middleMouseDown || (this.mouseDown && this.lastKeyDown == KeyCode.SPACE)) {
-			this.panState = 1;
+			this.panPhase = PHASE_UPDATE;
 			this.pointX += (this.stage.mouseX - this.reservedX);
 			this.pointY += (this.stage.mouseY - this.reservedY);
 			FeathersEvent.dispatch(this, PAN);
 			this.reservedX = this.stage.mouseX;
 			this.reservedY = this.stage.mouseY;
 		} else if (this.mouseDown) {
-			this.pointState = 1;
+			this.pointPhase = PHASE_UPDATE;
 			FeathersEvent.dispatch(this, POINT);
 		} else {
 			FeathersEvent.dispatch(this, MOVE);

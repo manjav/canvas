@@ -49,9 +49,9 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_panHandler(event:Event):Void {
-		if (this.input.panState == 0)
+		if (this.input.panPhase == InputService.PHASE_BEGAN)
 			Mouse.cursor = MouseCursor.HAND;
-		else if (this.input.panState == 2)
+		else if (this.input.panPhase == InputService.PHASE_ENDED)
 			Mouse.cursor = MouseCursor.AUTO;
 
 		this.scene.x = this.input.pointX;
@@ -63,7 +63,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_pointHandler(event:Event):Void {
-		if (input.pointState == 0)
+		if (input.pointPhase == InputService.PHASE_BEGAN) {
 			this.scene.startDraw();
 		else if (input.pointState == 2)
 			this.clearHints();
@@ -85,7 +85,7 @@ class CanZoom extends LayoutGroup {
 		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
 	}
 
-	private function clearHints():Void{
+	private function clearHints():Void {
 		this.scene.hitHint.visible = false;
 		this.scene.selectHint.visible = false;
 		this.scene.transformHint.visible = false;

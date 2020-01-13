@@ -24,6 +24,7 @@ class CanScene extends LayoutGroup {
 
 	override function initialize() {
 		super.initialize();
+
 		this.layout = new AnchorLayout();
 		this.startPoint = new Point();
 

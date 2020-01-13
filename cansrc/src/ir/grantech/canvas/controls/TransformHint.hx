@@ -1,10 +1,11 @@
 package ir.grantech.canvas.controls;
 
-import openfl.Vector;
+import ir.grantech.services.InputService;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
+import openfl.geom.Point;
 
 class TransformHint extends Sprite {
 	static final MODE_SCALE:Int = 0;
@@ -26,18 +27,18 @@ class TransformHint extends Sprite {
 	}
 
 	private var main:Shape;
+	private var hitCorners:Bool;
 	private var radius:Float = 4;
 	private var lines:Array<Shape>;
 	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
+	private var beginPoint:Point;
 
-	public var targets:Vector<DisplayObject>;
+	public var targets:Array<DisplayObject>;
 
 	public function new() {
 		super();
-		this.mouseEnabled = false;
-		this.targets = new Vector<DisplayObject>();
 
 		this.main = new Shape();
 		this.main.graphics.beginFill(0, 0);
@@ -45,6 +46,9 @@ class TransformHint extends Sprite {
 		this.addChild(this.main);
 
 		this.doubleClickEnabled = true;
+		this.beginPoint = new Point();
+		this.targets = new Array<DisplayObject>();
+
 		this.lines = new Array<Shape>();
 		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
@@ -141,11 +145,36 @@ class TransformHint extends Sprite {
 			this.lines[i].width = w;
 	}
 
-	// public function move(evt:MouseEvent):Void {
-	// 	var mouse = new Point(mouseX, mouseY);
-	// 	_target.x = mouse.x + _mouseOffset.x;
-	// 	_target.y = mouse.y + _mouseOffset.y;
-	// 	checkItemPosition();
-	// 	evt.updateAfterEvent();
-	// }
+	public function perform(begin:Bool = false):Void {
+		if (begin) {
+			this.hitCorners = false;
+			this.beginPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
+
+			// detect handles
+			for (i in 0...8) {
+				if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
+					this.hitCorners = true;
+					break;
+				}
+			}
+		}
+
+		if (this.hitCorners) {
+			if (this.mode == MODE_ROTATE)
+				this.rotate(begin);
+			else
+				this.scale(begin);
+		} else {
+			this.translate();
+		}
+	}
+
+	private function rotate(begin:Bool = false):Void {
+	}
+
+	private function scale(begin:Bool = false):Void {
+	}
+
+	private function translate():Void {
+	}
 }

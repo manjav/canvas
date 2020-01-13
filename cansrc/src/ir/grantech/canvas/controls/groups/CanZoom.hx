@@ -63,22 +63,27 @@ class CanZoom extends LayoutGroup {
 
 	private function input_pointHandler(event:Event):Void {
 		if (input.pointPhase == InputService.PHASE_BEGAN) {
+			this.scene.hitHint.visible = false;
 			if (ToolsService.instance.toolType == Tool.SELECT) {
-				if (InputService.instance.selectedItem == null)
-					this.scene.startDraw();
-				else
-					this.scene.transformHint.translate();
+				if (this.input.selectedItem != null) {
+					this.scene.addChild(this.scene.transformHint);
+					this.scene.transformHint.set(this.input.selectedItem);
+					this.scene.transformHint.perform(tr/ue);
+				} else {
+					if (this.scene.transformHint.parent != null)
+						this.scene.removeChild(this.scene.transformHint);
 					this.scene.updateSlection(true);
+			}
 			}
 		} else if (input.pointPhase == InputService.PHASE_UPDATE) {
 			if (ToolsService.instance.toolType == Tool.SELECT) {
-				if (InputService.instance.selectedItem == null)
-					this.scene.updateDraw();
+				if (this.input.selectedItem != null)
+					this.scene.transformHint.perform();
 				else
 					this.scene.updateSlection();
 			}
 		} else {
-			this.clearHints();
+			this.scene.selectHint.visible = false;
 		}
 	}
 

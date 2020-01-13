@@ -47,9 +47,15 @@ class TransformHint extends Sprite {
 		this.addChild(l);
 	}
 
-	public function set(x:Float, y:Float, w:Float, h:Float) {
-		this.x = x;
-		this.y = y;
+	public function set(target:DisplayObject):Void {
+		this.targets = [target];
+		var r = target.rotation;
+		target.rotation = 0;
+		var w = target.width - 1;
+		var h = target.height - 1;
+		this.x = target.x;
+		this.y = target.y;
+		this.rotation = target.rotation = r;
 
 		this.circles[1].x = w * 0.5;
 		this.circles[2].x = w;

@@ -4,7 +4,9 @@ import ir.grantech.canvas.drawables.ICanItem;
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.groups.CanScene;
+import ir.grantech.canvas.drawables.ICanItem;
 import lime.ui.KeyCode;
+import openfl.display.DisplayObject;
 import openfl.display.Stage;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -15,7 +17,7 @@ class InputService extends BaseService {
 	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
 	static public final RESET:String = "reset";
-	static public final CLICK:String = "click";
+	static public final SELECT:String = "select";
 
 	public var panState:Int = 2;
 	public var pointState:Int = 2;
@@ -26,6 +28,7 @@ class InputService extends BaseService {
 	public var rightMouseDown:Bool;
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
+	public var selectedItem:DisplayObject;
 
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
@@ -109,7 +112,12 @@ class InputService extends BaseService {
 	}
 
 	private function stage_clickHandler(event:MouseEvent):Void {
-		FeathersEvent.dispatch(this, CLICK);
+		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
+		if (Std.is(item, ICanItem))
+			this.selectedItem = item;
+		else
+			this.selectedItem = null;
+		FeathersEvent.dispatch(this, SELECT);
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

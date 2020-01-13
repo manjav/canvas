@@ -32,21 +32,20 @@ class CanZoom extends LayoutGroup {
 		this.input.addEventListener(InputService.ZOOM, this.input_zoomHandler);
 		this.input.addEventListener(InputService.POINT, this.input_pointHandler);
 		this.input.addEventListener(InputService.RESET, this.input_resetHandler);
-		this.input.addEventListener(InputService.CLICK, this.input_clickHandler);
+		this.input.addEventListener(InputService.SELECT, this.input_selectHandler);
 	}
 
 	private function input_moveHandler(event:Event):Void {
 		this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
 	}
 
-	private function input_clickHandler(event:Event):Void {
-		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
-		if (Std.is(item, ICanItem)) {
-			this.scene.transformHint.set(item.x, item.y, item.width, item.height);
-			this.scene.transformHint.visible = true;
+	private function input_selectHandler(event:Event):Void {
+		if (input.selectedItem == null) {
+			this.clearHints();
 			return;
 		}
-		this.clearHints();
+		this.scene.transformHint.set(input.selectedItem.x, input.selectedItem.y, input.selectedItem.width, input.selectedItem.height);
+		this.scene.transformHint.visible = true;
 	}
 
 	private function input_panHandler(event:Event):Void {

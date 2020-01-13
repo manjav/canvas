@@ -6,6 +6,7 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 
 class TransformHint extends Sprite {
+	private var main:Shape;
 	private var radius:Float = 4;
 	private var lines:Array<Shape>;
 	private var circles:Array<Shape>;
@@ -16,6 +17,11 @@ class TransformHint extends Sprite {
 		super();
 		this.mouseEnabled = false;
 		this.targets = new Vector<DisplayObject>();
+
+		this.main = new Shape();
+		this.main.graphics.beginFill(0, 0);
+		this.main.graphics.drawRect(0, 0, 100, 100);
+		this.addChild(this.main);
 
 		this.lines = new Array<Shape>();
 		this.circles = new Array<Shape>();
@@ -57,18 +63,9 @@ class TransformHint extends Sprite {
 		this.y = target.y;
 		this.rotation = target.rotation = r;
 
-		this.circles[1].x = w * 0.5;
-		this.circles[2].x = w;
-		this.circles[3].x = w;
-		this.circles[3].y = h * 0.5;
-		this.circles[4].x = w;
-		this.circles[4].y = h;
-		this.circles[5].x = w * 0.5;
-		this.circles[5].y = h;
-		this.circles[6].x = 0;
-		this.circles[6].y = h;
-		this.circles[7].x = 0;
-		this.circles[7].y = h * 0.5;
+		this.main.width = w;
+		this.main.height = h;
+
 
 		for (i in 0...8)
 			this.resizeLines(i, w * 0.5 - this.radius * 2, h * 0.5 - this.radius * 2);

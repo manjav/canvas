@@ -2,6 +2,7 @@ package ir.grantech.services;
 
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
+import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.drawables.ICanItem;
 import lime.ui.KeyCode;
@@ -32,7 +33,6 @@ class InputService extends BaseService {
 	public var rightMouseDown:Bool;
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
-	public var selectedItem:DisplayObject;
 
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
@@ -68,6 +68,16 @@ class InputService extends BaseService {
 		return this.zoom;
 	}
 
+	public var selectedItem(default, set):DisplayObject;
+
+	private function set_selectedItem(value:DisplayObject):DisplayObject {
+		if (this.selectedItem == value)
+			return this.selectedItem;
+		this.selectedItem = value;
+		FeathersEvent.dispatch(this, SELECT);
+		return this.selectedItem;
+	}
+
 	public function new(stage:Stage, scene:CanScene, measurements:Measurements) {
 		super();
 		this.stage = stage;
@@ -82,7 +92,6 @@ class InputService extends BaseService {
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_middleMouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
-		this.stage.addEventListener(MouseEvent.CLICK, this.stage_clickHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -114,14 +123,6 @@ class InputService extends BaseService {
 			}
 		}
 	}
-
-	private function stage_clickHandler(event:MouseEvent):Void {
-		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
-		if (Std.is(item, ICanItem))
-			this.selectedItem = item;
-		else
-			this.selectedItem = null;
-		FeathersEvent.dispatch(this, SELECT);
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {
@@ -133,6 +134,13 @@ class InputService extends BaseService {
 			FeathersEvent.dispatch(this, PAN);
 			return;
 		}
+
+		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
+		if (Std.is(item, ICanItem))
+			this.selectedItem = item;
+		else if (!Std.is(item, TransformHint))
+			this.selectedItem = null;
+
 		this.pointPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, POINT);
 	}

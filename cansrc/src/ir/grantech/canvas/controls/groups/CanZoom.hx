@@ -38,15 +38,6 @@ class CanZoom extends LayoutGroup {
 		this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
 	}
 
-	private function input_selectHandler(event:Event):Void {
-		if (input.selectedItem == null) {
-			this.clearHints();
-			return;
-		}
-		this.scene.transformHint.set(input.selectedItem.x, input.selectedItem.y, input.selectedItem.width, input.selectedItem.height);
-		this.scene.transformHint.visible = true;
-	}
-
 	private function input_panHandler(event:Event):Void {
 		if (this.input.panPhase == InputService.PHASE_BEGAN)
 			Mouse.cursor = MouseCursor.HAND;

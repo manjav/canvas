@@ -4,12 +4,33 @@ import openfl.Vector;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.MouseEvent;
 
 class TransformHint extends Sprite {
+	static final MODE_SCALE:Int = 0;
+	static final MODE_ROTATE:Int = 1;
+
+	public var mode(default, set):Int = -1;
+
+	private function set_mode(value:Int):Int {
+		if (this.mode == value)
+			return this.mode;
+		for (i in 0...8) {
+			this.rects[i].visible = value == MODE_SCALE;
+			this.circles[i].visible = value == MODE_ROTATE;
+		}
+		this.corners = value == MODE_SCALE ? this.rects : this.circles;
+		if (this.targets.length > 0)
+			this.set(this.targets[0]);
+		return this.mode = value;
+	}
+
 	private var main:Shape;
 	private var radius:Float = 4;
 	private var lines:Array<Shape>;
+	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
+	private var corners:Array<Shape>;
 
 	public var targets:Vector<DisplayObject>;
 
@@ -23,9 +44,12 @@ class TransformHint extends Sprite {
 		this.main.graphics.drawRect(0, 0, 100, 100);
 		this.addChild(this.main);
 
+		this.doubleClickEnabled = true;
 		this.lines = new Array<Shape>();
+		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
 		for (i in 0...8) {
+			this.drawRect(i);
 			this.drawCircle(i);
 			this.drawLine(i);
 		}
@@ -33,14 +57,32 @@ class TransformHint extends Sprite {
 		this.lines[5].x = this.radius;
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
+
+		this.mode = MODE_SCALE;
+		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
+	}
+
+	private function doubleClickHandler(event:MouseEvent):Void {
+		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
 	}
 
 	private function drawCircle(i:Int):Void {
 		var c:Shape = new Shape();
-		c.graphics.lineStyle(1, 0x1692E6);
-		c.graphics.drawCircle(0, 0, this.radius);
+		c.visible = false;
+		c.graphics.beginFill(0, 0);
+		c.graphics.lineStyle(2, 0x1692E6);
+		c.graphics.drawCircle(0, 0, this.radius + 1);
 		this.circles.push(c);
 		this.addChild(c);
+	}
+
+	private function drawRect(i:Int):Void {
+		var r:Shape = new Shape();
+		r.graphics.beginFill(0, 0);
+		r.graphics.lineStyle(2, 0x1692E6);
+		r.graphics.drawRect(-this.radius, -this.radius, this.radius * 2, this.radius * 2);
+		this.rects.push(r);
+		this.addChild(r);
 	}
 
 	private function drawLine(i:Int):Void {
@@ -66,6 +108,18 @@ class TransformHint extends Sprite {
 		this.main.width = w;
 		this.main.height = h;
 
+		this.corners[1].x = w * 0.5;
+		this.corners[2].x = w;
+		this.corners[3].x = w;
+		this.corners[3].y = h * 0.5;
+		this.corners[4].x = w;
+		this.corners[4].y = h;
+		this.corners[5].x = w * 0.5;
+		this.corners[5].y = h;
+		this.corners[6].x = 0;
+		this.corners[6].y = h;
+		this.corners[7].x = 0;
+		this.corners[7].y = h * 0.5;
 
 		for (i in 0...8)
 			this.resizeLines(i, w * 0.5 - this.radius * 2, h * 0.5 - this.radius * 2);

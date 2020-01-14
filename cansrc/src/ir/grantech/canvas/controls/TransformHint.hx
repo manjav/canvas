@@ -34,7 +34,9 @@ class TransformHint extends Sprite {
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
 	private var beginPoint:Point;
+	private var beginScale:Float;
 	private var beginRotation:Float;
+	private var begindistance:Float;
 
 	public var targets:Array<DisplayObject>;
 
@@ -188,6 +190,15 @@ class TransformHint extends Sprite {
 	}
 
 	private function scale(begin:Bool = false):Void {
+		var mx = stage.mouseX / InputService.instance.zoom;
+		var my = stage.mouseY / InputService.instance.zoom;
+		var distance = Math.sqrt(Math.pow(mx - this.x + parent.x, 2) + Math.pow(my - this.y + parent.y, 2));
+		if (begin) {
+			this.begindistance = distance;
+			this.beginScale = this.targets[0].scaleX;
+		}
+		this.targets[0].scaleX = this.targets[0].scaleY = this.beginScale * distance / this.begindistance;
+		this.set(this.targets[0]);
 	}
 
 	private function translate():Void {

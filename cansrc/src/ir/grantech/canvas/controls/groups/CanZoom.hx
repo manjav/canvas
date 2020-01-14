@@ -30,8 +30,8 @@ class CanZoom extends LayoutGroup {
 		this.input.addEventListener(InputService.MOVE, this.input_moveHandler);
 		this.input.addEventListener(InputService.ZOOM, this.input_zoomHandler);
 		this.input.addEventListener(InputService.POINT, this.input_pointHandler);
-		this.input.addEventListener(InputService.RESET, this.input_resetHandler);
-		this.input.addEventListener(InputService.SELECT, this.input_selectHandler);
+		this.input.addEventListener(InputService.ZOOM_RESET, this.input_zoomHandler);
+		this.input.addEventListener(InputService.TRANSFORM_RESET, this.input_resetHandler);
 	}
 
 	private function input_moveHandler(event:Event):Void {
@@ -49,7 +49,14 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_zoomHandler(event:Event):Void {
-		this.setZoom(this.input.zoom);
+		if (event.type == InputService.ZOOM) {
+			this.setZoom(this.input.zoom);
+			return;
+		}
+
+		this.setZoom(1);
+		this.scene.x = this.input.pointX = (this._layoutMeasurements.width - this.scene.canWidth) * 0.5;
+		this.scene.y = this.input.pointY = (this._layoutMeasurements.height - this.scene.canHeight) * 0.5;
 	}
 
 	private function input_pointHandler(event:Event):Void {
@@ -64,7 +71,7 @@ class CanZoom extends LayoutGroup {
 					if (this.scene.transformHint.parent != null)
 						this.scene.removeChild(this.scene.transformHint);
 					this.scene.updateSlection(true);
-			}
+				}
 			}
 		} else if (input.pointPhase == InputService.PHASE_UPDATE) {
 			if (ToolsService.instance.toolType == Tool.SELECT) {
@@ -79,9 +86,9 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_resetHandler(event:Event):Void {
-		this.setZoom(1);
-		this.scene.x = this.input.pointX = (this._layoutMeasurements.width - this.scene.canWidth) * 0.5;
-		this.scene.y = this.input.pointY = (this._layoutMeasurements.height - this.scene.canHeight) * 0.5;
+		this.input.selectedItem.scaleX = this.input.selectedItem.scaleY = 1;
+		this.input.selectedItem.rotation = 0;
+		this.scene.transformHint.set(this.input.selectedItem);
 	}
 
 	private function setZoom(value:Float):Void {

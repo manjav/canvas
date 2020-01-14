@@ -12,7 +12,6 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 
 class InputService extends BaseService {
-
 	static public final PHASE_BEGAN:Int = 0;
 	static public final PHASE_UPDATE:Int = 1;
 	static public final PHASE_ENDED:Int = 2;
@@ -21,8 +20,9 @@ class InputService extends BaseService {
 	static public final ZOOM:String = "zoom";
 	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
-	static public final RESET:String = "reset";
 	static public final SELECT:String = "select";
+	static public final ZOOM_RESET:String = "zoomReset";
+	static public final TRANSFORM_RESET:String = "transformReset";
 
 	public var panPhase:Int = 2;
 	public var pointPhase:Int = 2;
@@ -113,16 +113,17 @@ class InputService extends BaseService {
 				this.zoom = 1;
 				this.pointX = 0;
 				this.pointY = 0;
-				FeathersEvent.dispatch(this, RESET);
-			} else if (this.lastKeyUp == 187) {
+				FeathersEvent.dispatch(this, ZOOM_RESET);
+			} else if (this.lastKeyUp == 187) { // ctrl + =
 				this.zoom += 0.3;
 				FeathersEvent.dispatch(this, ZOOM);
-			} else if (this.lastKeyUp == 189) {
+			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				FeathersEvent.dispatch(this, ZOOM);
+			} else if (this.selectedItem != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
+				FeathersEvent.dispatch(this, TRANSFORM_RESET);
 			}
 		}
-	}
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

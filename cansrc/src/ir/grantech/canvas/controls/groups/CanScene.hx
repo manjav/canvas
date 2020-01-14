@@ -77,9 +77,9 @@ class CanScene extends LayoutGroup {
 
 	public function updateSlection(begin:Bool = false):Void {
 		if (begin) {
-		this.selectHint.visible = true;
+			this.selectHint.visible = true;
 			this.beginPoint.setTo(this.mouseX, this.mouseY);
-	}
+		}
 		this.selectHint.x = this.mouseX < this.beginPoint.x ? this.mouseX : this.beginPoint.x;
 		this.selectHint.y = this.mouseY < this.beginPoint.y ? this.mouseY : this.beginPoint.y;
 		this.selectHint.width = Math.abs(this.mouseX - this.beginPoint.x);

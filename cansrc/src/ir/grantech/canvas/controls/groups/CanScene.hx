@@ -1,8 +1,8 @@
 package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
-import feathers.layout.AnchorLayout;
 import ir.grantech.canvas.drawables.CanShape;
+import ir.grantech.services.InputService;
 import openfl.Vector;
 import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
@@ -61,7 +61,6 @@ class CanScene extends LayoutGroup {
 		this.addChild(this.hitHint);
 
 		this.transformHint = new TransformHint();
-		this.transformHint.visible = false;
 		this.addChild(this.transformHint);
 
 		this.selectHint = new Shape();
@@ -88,6 +87,8 @@ class CanScene extends LayoutGroup {
 	}
 
 	public function hit(x:Float, y:Float):DisplayObject {
+		if (this.transformHint.hitTestPoint(x, y, true))
+			return this.transformHint;
 		for (i in 0...this.container.numChildren)
 			if (this.container.getChildAt(i).hitTestPoint(x, y, true))
 				return this.container.getChildAt(i);
@@ -96,7 +97,7 @@ class CanScene extends LayoutGroup {
 
 	public function drawHit(target:DisplayObject):Void {
 		this.hitHint.graphics.clear();
-		if (target == null)
+		if (target == null || target == InputService.instance.selectedItem || target == this.transformHint)
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
@@ -106,6 +107,11 @@ class CanScene extends LayoutGroup {
 		else
 			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
 
+		this.hitHint.x = target.x;
+		this.hitHint.y = target.y;
+		this.hitHint.rotation = target.rotation;
+		this.hitHint.scaleX = target.scaleX;
+		this.hitHint.scaleY = target.scaleY;
 		for (gd in graphicDataList) {
 			if (Std.is(gd, GraphicsPath)) {
 				var commands = cast(gd, GraphicsPath).commands;
@@ -114,15 +120,15 @@ class CanScene extends LayoutGroup {
 				var d = 0;
 				while (c < commands.length) {
 					if (commands[c] == 1) {
-						this.hitHint.graphics.moveTo(target.x + data[d], target.y + data[d + 1]);
+						this.hitHint.graphics.moveTo(data[d], data[d + 1]);
 						d += 2;
 						c++;
 					} else if (commands[c] == 2) {
-						this.hitHint.graphics.lineTo(target.x + data[d], target.y + data[d + 1]);
+						this.hitHint.graphics.lineTo(data[d], data[d + 1]);
 						d += 2;
 						c++;
 					} else if (commands[c] == 3) {
-						this.hitHint.graphics.curveTo(target.x + data[d], target.y + data[d + 1], target.x + data[d + 2], target.y + data[d + 3]);
+						this.hitHint.graphics.curveTo(data[d], data[d + 1], data[d + 2], data[d + 3]);
 						d += 4;
 						c++;
 					}

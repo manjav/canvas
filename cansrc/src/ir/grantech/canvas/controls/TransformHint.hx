@@ -34,6 +34,7 @@ class TransformHint extends Sprite {
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
 	private var beginPoint:Point;
+	private var beginRotation:Float;
 
 	public var targets:Array<DisplayObject>;
 
@@ -170,11 +171,31 @@ class TransformHint extends Sprite {
 	}
 
 	private function rotate(begin:Bool = false):Void {
+		if (begin)
+			this.beginRotation = this.rotation;
+		var mx = stage.mouseX / InputService.instance.zoom;
+		var my = stage.mouseY / InputService.instance.zoom;
+
+		var dx1 = beginPoint.x - this.x + parent.x;
+		var dy1 = beginPoint.y - this.y + parent.y;
+		var ang1 = (Math.atan2(dy1, dx1) * 180) / Math.PI;
+		// get angle of mouse from center //
+		var dx2 = mx - this.x + parent.x;
+		var dy2 = my - this.y + parent.y;
+		var ang2 = (Math.atan2(dy2, dx2) * 180) / Math.PI;
+		// rotate the _target and stroke the difference of the two angles //
+		targets[0].rotation = this.rotation = this.beginRotation + ang2 - ang1;
 	}
 
 	private function scale(begin:Bool = false):Void {
 	}
 
 	private function translate():Void {
+		var x = stage.mouseX / InputService.instance.zoom;
+		var y = stage.mouseY / InputService.instance.zoom;
+
+		this.targets[0].x = this.x += x - this.beginPoint.x;
+		this.targets[0].y = this.y += y - this.beginPoint.y;
+		this.beginPoint.setTo(x, y);
 	}
 }

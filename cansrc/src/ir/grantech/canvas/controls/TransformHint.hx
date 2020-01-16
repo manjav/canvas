@@ -34,6 +34,7 @@ class TransformHint extends Sprite {
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
 	private var beginPoint:Point;
+	private var currentPoint:Point;
 	private var beginScale:Float;
 	private var beginRotation:Float;
 	private var begindistance:Float;
@@ -50,6 +51,7 @@ class TransformHint extends Sprite {
 
 		this.doubleClickEnabled = true;
 		this.beginPoint = new Point();
+		this.currentPoint = new Point();
 		this.targets = new Array<DisplayObject>();
 
 		this.lines = new Array<Shape>();
@@ -161,7 +163,7 @@ class TransformHint extends Sprite {
 				}
 			}
 		}
-
+		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 		if (this.hitCorners) {
 			if (this.mode == MODE_ROTATE)
 				this.rotate(begin);
@@ -175,38 +177,31 @@ class TransformHint extends Sprite {
 	private function rotate(begin:Bool = false):Void {
 		if (begin)
 			this.beginRotation = this.rotation;
-		var mx = stage.mouseX / InputService.instance.zoom;
-		var my = stage.mouseY / InputService.instance.zoom;
-
 		var dx1 = beginPoint.x - this.x + parent.x;
 		var dy1 = beginPoint.y - this.y + parent.y;
 		var ang1 = (Math.atan2(dy1, dx1) * 180) / Math.PI;
 		// get angle of mouse from center //
-		var dx2 = mx - this.x + parent.x;
-		var dy2 = my - this.y + parent.y;
+		var dx2 = this.currentPoint.x - this.x + parent.x;
+		var dy2 = this.currentPoint.y - this.y + parent.y;
 		var ang2 = (Math.atan2(dy2, dx2) * 180) / Math.PI;
 		// rotate the _target and stroke the difference of the two angles //
 		targets[0].rotation = this.rotation = this.beginRotation + ang2 - ang1;
 	}
 
 	private function scale(begin:Bool = false):Void {
-		var mx = stage.mouseX / InputService.instance.zoom;
-		var my = stage.mouseY / InputService.instance.zoom;
-		var distance = Math.sqrt(Math.pow(mx - this.x + parent.x, 2) + Math.pow(my - this.y + parent.y, 2));
+		var distance = Math.sqrt(Math.pow(this.currentPoint.x - this.x + parent.x, 2) + Math.pow(this.currentPoint.y - this.y + parent.y, 2));
 		if (begin) {
 			this.begindistance = distance;
 			this.beginScale = this.targets[0].scaleX;
 		}
+		
 		this.targets[0].scaleX = this.targets[0].scaleY = this.beginScale * distance / this.begindistance;
 		this.set(this.targets[0]);
 	}
 
 	private function translate():Void {
-		var x = stage.mouseX / InputService.instance.zoom;
-		var y = stage.mouseY / InputService.instance.zoom;
-
-		this.targets[0].x = this.x += x - this.beginPoint.x;
-		this.targets[0].y = this.y += y - this.beginPoint.y;
-		this.beginPoint.setTo(x, y);
+		this.targets[0].x = this.x += this.currentPoint.x - this.beginPoint.x;
+		this.targets[0].y = this.y += this.currentPoint.y - this.beginPoint.y;
+		this.beginPoint.setTo(this.currentPoint.x, this.currentPoint.y);
 	}
 }

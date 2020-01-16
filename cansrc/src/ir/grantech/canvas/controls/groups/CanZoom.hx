@@ -66,7 +66,7 @@ class CanZoom extends LayoutGroup {
 				if (this.input.selectedItem != null) {
 					this.scene.addChild(this.scene.transformHint);
 					this.scene.transformHint.set(this.input.selectedItem);
-					this.scene.transformHint.perform(tr/ue);
+					this.scene.transformHint.perform(true);
 				} else {
 					if (this.scene.transformHint.parent != null)
 						this.scene.removeChild(this.scene.transformHint);

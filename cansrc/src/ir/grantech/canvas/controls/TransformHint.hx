@@ -27,7 +27,7 @@ class TransformHint extends Sprite {
 	}
 
 	private var main:Shape;
-	private var hitCorners:Bool;
+	private var hitCorner:Int;
 	private var radius:Float = 4;
 	private var lines:Array<Shape>;
 	private var rects:Array<Shape>;
@@ -152,19 +152,19 @@ class TransformHint extends Sprite {
 
 	public function perform(begin:Bool = false):Void {
 		if (begin) {
-			this.hitCorners = false;
+			this.hitCorner = -1;
 			this.beginPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 
 			// detect handles
 			for (i in 0...8) {
 				if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
-					this.hitCorners = true;
+					this.hitCorner = i;
 					break;
 				}
 			}
 		}
 		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
-		if (this.hitCorners) {
+		if (this.hitCorner > -1) {
 			if (this.mode == MODE_ROTATE)
 				this.rotate(begin);
 			else

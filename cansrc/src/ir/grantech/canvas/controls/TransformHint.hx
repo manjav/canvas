@@ -150,8 +150,8 @@ class TransformHint extends Sprite {
 			this.lines[i].width = w;
 	}
 
-	public function perform(begin:Bool = false):Void {
-		if (begin) {
+	public function perform(state:Int):Void {
+		if (state == InputService.PHASE_BEGAN) {			
 			this.hitCorner = -1;
 			this.beginPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 
@@ -166,16 +166,16 @@ class TransformHint extends Sprite {
 		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 		if (this.hitCorner > -1) {
 			if (this.mode == MODE_ROTATE)
-				this.rotate(begin);
+				this.rotate(state);
 			else
-				this.scale(begin);
+				this.scale(state);
 		} else {
 			this.translate();
 		}
 	}
 
-	private function rotate(begin:Bool = false):Void {
-		if (begin)
+	private function rotate(state:Int):Void {
+		if (state == InputService.PHASE_BEGAN)
 			this.beginRotation = this.rotation;
 		var dx1 = beginPoint.x - this.x + parent.x;
 		var dy1 = beginPoint.y - this.y + parent.y;
@@ -188,9 +188,9 @@ class TransformHint extends Sprite {
 		targets[0].rotation = this.rotation = this.beginRotation + ang2 - ang1;
 	}
 
-	private function scale(begin:Bool = false):Void {
+	private function scale(state:Int):Void {
 		var distance = Math.sqrt(Math.pow(this.currentPoint.x - this.x + parent.x, 2) + Math.pow(this.currentPoint.y - this.y + parent.y, 2));
-		if (begin) {
+		if (state == InputService.PHASE_BEGAN) {
 			this.begindistance = distance;
 			this.beginScale = this.targets[0].scaleX;
 		}

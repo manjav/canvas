@@ -105,6 +105,7 @@ class TransformHint extends Sprite {
 	}
 
 	public function set(target:DisplayObject):Void {
+		this.visible = true;
 		this.targets = [target];
 		var r = target.rotation;
 		target.rotation = 0;
@@ -162,6 +163,8 @@ class TransformHint extends Sprite {
 					break;
 				}
 			}
+		} else {
+			this.visible = false;
 		}
 		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 		if (this.hitCorner > -1) {

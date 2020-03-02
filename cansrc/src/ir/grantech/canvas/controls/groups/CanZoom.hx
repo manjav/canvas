@@ -82,6 +82,8 @@ class CanZoom extends LayoutGroup {
 			}
 		} else {
 			this.scene.selectHint.visible = false;
+			if (this.input.selectedItem != null)
+				this.scene.transformHint.set(this.input.selectedItem);
 		}
 	}
 

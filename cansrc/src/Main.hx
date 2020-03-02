@@ -11,7 +11,6 @@ import ir.grantech.canvas.controls.groups.Bar;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
-import openfl.system.Capabilities;
 
 class Main extends Application {
 	private var left:ToolBar;
@@ -33,26 +32,26 @@ class Main extends Application {
 		this.left.width = 48;
 		this.left.addEventListener("change", this.left_changeHandler);
 		this.addChild(this.left);
-		
+
 		this.zoom = new CanZoom();
 		this.zoom.layoutData = new HorizontalLayoutData(100);
 		this.addChild(this.zoom);
-		
+
 		this.right = new Bar();
 		this.right.width = 290;
 		this.addChild(this.right);
 
 		this.leftExtension = new Bar();
-		this.leftExtension.width = this.right.width - this.left.width - layout.gap;
+		this.leftExtension.width = this.right.width;
 
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
 	}
 
 	private function left_changeHandler(event:CanEvent):Void {
-		if( this.leftExtension != null && this.leftExtension.parent == this)
+		if (this.leftExtension != null && this.leftExtension.parent == this)
 			this.removeChild(this.leftExtension);
 
-		if(event.data.index == -1)
+		if (event.data.index == -1)
 			return;
 
 		this.addChildAt(this.leftExtension, 0);

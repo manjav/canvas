@@ -43,16 +43,15 @@ class TransformHint extends Sprite {
 	
 	private var main:Shape;
 	private var hitCorner:Int;
-	private var radius:Float = 5;
+	private var register:Shape;
 	private var lines:Array<Shape>;
 	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
 	private var beginPoint:Point;
 	private var currentPoint:Point;
-	private var beginScale:Float;
-	private var beginRotation:Float;
-	private var begindistance:Float;
+	private var registerRatio:Point;
+	private var registerPoint:Point;
 
 	public var targets:Array<DisplayObject>;
 
@@ -67,8 +66,11 @@ class TransformHint extends Sprite {
 		this.doubleClickEnabled = true;
 		this.beginPoint = new Point();
 		this.currentPoint = new Point();
+		this.registerPoint = new Point();
+		this.registerRatio = new Point(0.5, 0.5);
 		this.targets = new Array<DisplayObject>();
 
+		this.register = this.addCircle(0, 0, this.radius);
 		this.lines = new Array<Shape>();
 		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
@@ -87,6 +89,10 @@ class TransformHint extends Sprite {
 	}
 
 	private function doubleClickHandler(event:MouseEvent):Void {
+		if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true)) {
+			this.registerRatio.setTo(0.5, 0.5);
+			this.resetRegister();
+		}
 		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
 	}
 
@@ -149,6 +155,7 @@ class TransformHint extends Sprite {
 		this.corners[6].y = h;
 		this.corners[7].x = 0;
 		this.corners[7].y = h * 0.5;
+		this.resetRegister();
 
 		for (i in 0...8)
 			drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
@@ -163,9 +170,13 @@ class TransformHint extends Sprite {
 		this.lines[6].y = h * 0.5 + this.radius;
 	}
 
-
 	public function perform(state:Int):Void {
 		if (state == InputService.PHASE_BEGAN) {			
+
+			// set register point
+			var r:Rectangle = this.register.getBounds(parent);
+			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
+
 			this.hitCorner = -1;
 			this.beginPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 

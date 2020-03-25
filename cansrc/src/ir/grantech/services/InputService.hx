@@ -28,6 +28,9 @@ class InputService extends BaseService {
 	public var pointPhase:Int = 2;
 	public var lastKeyDown:Int = 0;
 	public var lastKeyUp:Int = 0;
+	public var ctrlKey:Bool;
+	public var shiftKey:Bool;
+	public var altKey:Bool;
 	public var mouseDown:Bool;
 	public var middleMouseDown:Bool;
 	public var rightMouseDown:Bool;
@@ -128,6 +131,9 @@ class InputService extends BaseService {
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {
 		this.mouseDown = true;
+		this.shiftKey = event.shiftKey;
+		this.ctrlKey = event.ctrlKey;
+		this.altKey = event.altKey;
 		this.reservedX = event.stageX;
 		this.reservedY = event.stageY;
 		if (this.lastKeyDown == KeyCode.SPACE) {
@@ -161,6 +167,9 @@ class InputService extends BaseService {
 	private function stage_middleMouseDownHandler(event:MouseEvent):Void {
 		this.reservedX = this.stage.mouseX;
 		this.reservedY = this.stage.mouseY;
+		this.shiftKey = event.shiftKey;
+		this.ctrlKey = event.ctrlKey;
+		this.altKey = event.altKey;
 		this.middleMouseDown = true;
 		this.panPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, PAN);
@@ -173,6 +182,9 @@ class InputService extends BaseService {
 	}
 
 	private function stage_mouseMoveHandler(event:MouseEvent):Void {
+		this.shiftKey = event.shiftKey;
+		this.ctrlKey = event.ctrlKey;
+		this.altKey = event.altKey;
 		event.updateAfterEvent();
 		if (this.middleMouseDown || (this.mouseDown && this.lastKeyDown == KeyCode.SPACE)) {
 			this.panPhase = PHASE_UPDATE;

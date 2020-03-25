@@ -58,9 +58,9 @@ class TransformHint extends Sprite {
 		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
 		for (i in 0...8) {
-			this.drawRect(i);
-			this.drawCircle(i);
-			this.drawLine(i);
+			this.rects.push(this.drawRect(0, 0, 2, 0x1692E6, this.radius));
+			this.circles.push(this.drawCircle(0, 0, 2, 0x1692E6, this.radius));
+			this.lines.push(this.drawLine(i == 2 || i == 3 || i == 6 || i == 7, 100, 2, 0x1692E6));
 		}
 		this.lines[0].x = this.radius;
 		this.lines[5].x = this.radius;
@@ -75,33 +75,32 @@ class TransformHint extends Sprite {
 		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
 	}
 
-	private function drawCircle(i:Int):Void {
+	private function drawCircle(fillColor:UInt, fillAlpha:Float, lineThickness:Float, lineColor:UInt, radius:Float):Shape {
 		var c:Shape = new Shape();
 		c.visible = false;
-		c.graphics.beginFill(0, 0);
-		c.graphics.lineStyle(2, 0x1692E6);
-		c.graphics.drawCircle(0, 0, this.radius + 1);
-		this.circles.push(c);
+		c.graphics.beginFill(fillColor, fillAlpha);
+		c.graphics.lineStyle(lineThickness, lineColor);
+		c.graphics.drawCircle(0, 0, radius + 1);
 		this.addChild(c);
+		return c;
 	}
 
-	private function drawRect(i:Int):Void {
+	private function drawRect(fillColor:UInt, fillAlpha:Float, lineThickness:Float, lineColor:UInt, radius:Float):Shape {
 		var r:Shape = new Shape();
-		r.graphics.beginFill(0, 0);
-		r.graphics.lineStyle(2, 0x1692E6);
-		r.graphics.drawRect(-this.radius, -this.radius, this.radius * 2, this.radius * 2);
-		this.rects.push(r);
+		r.graphics.beginFill(fillColor, fillAlpha);
+		r.graphics.lineStyle(lineThickness, lineColor);
+		r.graphics.drawRect(-radius, -radius, radius * 2, radius * 2);
 		this.addChild(r);
+		return r;
 	}
 
-	private function drawLine(i:Int):Void {
-		var vertical = i == 2 || i == 3 || i == 6 || i == 7;
+	private function drawLine(vertical:Bool, length:Float, lineThickness:Float, lineColor:UInt):Shape {
 		var l:Shape = new Shape();
-		l.graphics.lineStyle(1, 0x1692E6);
+		l.graphics.lineStyle(lineThickness, lineColor);
 		l.graphics.moveTo(0, 0);
-		l.graphics.lineTo(vertical ? 0 : 100, vertical ? 100 : 0);
-		this.lines.push(l);
+		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
 		this.addChild(l);
+		return l;
 	}
 
 	public function set(target:DisplayObject):Void {

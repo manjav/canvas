@@ -26,6 +26,17 @@ class TransformHint extends Sprite {
 		return this.mode = value;
 	}
 
+	private function setVisible(visible:Bool, all:Bool):Void {
+		if(this.lines[0].visible == visible)
+			return;
+		for (i in 0...8) {
+			this.lines[i].visible = visible;
+			this.corners[i].visible = visible;
+		}
+		if( all )
+			this.register.visible = visible;
+	}
+
 	private var main:Shape;
 	private var hitCorner:Int;
 	private var radius:Float = 4;
@@ -96,6 +107,7 @@ class TransformHint extends Sprite {
 
 	private function drawLine(vertical:Bool, length:Float, lineThickness:Float, lineColor:UInt):Shape {
 		var l:Shape = new Shape();
+		l.visible = false;
 		l.graphics.lineStyle(lineThickness, lineColor);
 		l.graphics.moveTo(0, 0);
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
@@ -104,7 +116,7 @@ class TransformHint extends Sprite {
 	}
 
 	public function set(target:DisplayObject):Void {
-		this.visible = true;
+		this.setVisible(true, true);
 		this.targets = [target];
 		var r = target.rotation;
 		target.rotation = 0;
@@ -163,7 +175,7 @@ class TransformHint extends Sprite {
 				}
 			}
 		} else {
-			this.visible = false;
+			this.setVisible(false, this.hitCorner == -1);
 		}
 		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 		if (this.hitCorner > -1) {

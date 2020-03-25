@@ -27,14 +27,15 @@ class TransformHint extends Sprite {
 	}
 
 	private function setVisible(visible:Bool, all:Bool):Void {
-		if(this.lines[0].visible == visible)
+		if (this.lines[0].visible == visible)
 			return;
 		for (i in 0...8) {
 			this.lines[i].visible = visible;
 			this.corners[i].visible = visible;
 		}
-		if( all )
+		if (all)
 			this.register.visible = visible;
+		this.register.alpha = visible ? 1 : 0.5;
 	}
 
 	private var radius:Float = 5;
@@ -89,6 +90,7 @@ class TransformHint extends Sprite {
 		this.lines[7].y = this.radius;
 
 		this.mode = MODE_SCALE;
+		this.setVisible(false, true);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
 	}
 

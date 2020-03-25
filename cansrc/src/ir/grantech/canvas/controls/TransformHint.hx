@@ -194,8 +194,8 @@ class TransformHint extends Sprite {
 		if (this.hitCorner > -1) {
 			if (this.hitCorner == 8)
 				this.performRegister(state);
-			if (this.mode == MODE_ROTATE)
-				this.rotate(state);
+			else if (this.mode == MODE_ROTATE)
+				this.performRotate(state);
 			else
 				this.scale(state);
 		} else {
@@ -213,6 +213,30 @@ class TransformHint extends Sprite {
 		this.register.y = corners[4].y * registerRatio.y;
 		}
 
+	private function performRotate(state:Int):Void {
+		if (state == InputService.PHASE_BEGAN) {
+			this.lastAngle = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
+			return;
+		}
+
+		// calculate delta angle
+		var angle = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
+		if (InputService.instance.shiftKey || InputService.instance.ctrlKey) {
+			if (angle > Math.PI)
+				angle = angle - Math.PI * 2;
+			else if (angle < -Math.PI)
+				angle = angle + Math.PI * 2;
+			angle = Math.round(angle / (Math.PI / (InputService.instance.shiftKey ? 4.0 : 8.0)) * (Math.PI / (InputService.instance.shiftKey ? 4.0 : 8.0)));
+		}
+		var diff = angle - this.lastAngle;
+		this.lastAngle = angle;
+
+		// perform rotation with matrix
+		var mat:Matrix = this.targets[0].transform.matrix;
+		mat.translate(-registerPoint.x, -registerPoint.y);
+		mat.rotate(diff);
+		mat.translate(registerPoint.x, registerPoint.y);
+		this.targets[0].transform.matrix = mat;
 	}
 
 	private function scale(state:Int):Void {

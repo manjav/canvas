@@ -51,7 +51,7 @@ class TransformHint extends Sprite {
 	private var corners:Array<Shape>;
 	private var lastPoint:Point;
 	private var lastScale:Point;
-	private var currentScale:Point;
+	private var lastAngle:Float;
 	private var registerRatio:Point;
 	private var registerPoint:Point;
 
@@ -249,26 +249,25 @@ class TransformHint extends Sprite {
 		}
 
 		// calculate delta scale
-		this.currentScale.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
-		var _scale = new Point(1, 1);
-		if (InputService.instance.shiftKey) {
-			_scale.setTo(this.currentScale.x / this.lastScale.x, this.currentScale.x / this.lastScale.x);
-		} else {
-			if (this.hitCorner == 1 || this.hitCorner == 5)
-				_scale.setTo(1, this.currentScale.y / this.lastScale.y);
-			else if (this.hitCorner == 3 || this.hitCorner == 7)
-				_scale.setTo(this.currentScale.x / this.lastScale.x, 1);
-			else
-				_scale.setTo(this.currentScale.x / this.lastScale.x, this.currentScale.y / this.lastScale.y);
-		}
-		this.lastScale.setTo(this.currentScale.x, this.currentScale.y);
+		var sx = (this.mouseX - this.register.x) / this.lastScale.x;
+		var sy = (this.mouseY - this.register.y) / this.lastScale.y;
+		this.lastScale.setTo(sx * this.lastScale.x, sy * this.lastScale.y);
 		
 		// perform scale with matrix
 		var r = this.targets[0].rotation / 180 * Math.PI;
 		var mat:Matrix = this.targets[0].transform.matrix;
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(-r);
-		mat.scale(_scale.x, _scale.y);
+		if (InputService.instance.shiftKey) {
+			mat.scale(sx, sx);
+		} else {
+			if (this.hitCorner == 1 || this.hitCorner == 5)
+				mat.scale(1, sy);
+			else if (this.hitCorner == 3 || this.hitCorner == 7)
+				mat.scale(sx, 1);
+			else
+				mat.scale(sx, sy);
+		}
 		mat.rotate(r);
 		mat.translate(registerPoint.x, registerPoint.y);
 		this.targets[0].transform.matrix = mat;

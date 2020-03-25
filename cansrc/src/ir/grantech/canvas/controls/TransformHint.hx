@@ -50,6 +50,8 @@ class TransformHint extends Sprite {
 	private var corners:Array<Shape>;
 	private var beginPoint:Point;
 	private var currentPoint:Point;
+	private var lastScale:Point;
+	private var currentScale:Point;
 	private var registerRatio:Point;
 	private var registerPoint:Point;
 
@@ -65,6 +67,8 @@ class TransformHint extends Sprite {
 
 		this.doubleClickEnabled = true;
 		this.beginPoint = new Point();
+		this.lastScale = new Point();
+		this.beginPosition = new Point();
 		this.currentPoint = new Point();
 		this.registerPoint = new Point();
 		this.registerRatio = new Point(0.5, 0.5);
@@ -187,6 +191,7 @@ class TransformHint extends Sprite {
 					break;
 				}
 			}
+			}
 		} else {
 			this.setVisible(false, this.hitCorner == -1);
 		}
@@ -197,7 +202,7 @@ class TransformHint extends Sprite {
 			else if (this.mode == MODE_ROTATE)
 				this.performRotate(state);
 			else
-				this.scale(state);
+				this.performScale(state);
 		} else {
 			this.translate();
 		}
@@ -239,15 +244,36 @@ class TransformHint extends Sprite {
 		this.targets[0].transform.matrix = mat;
 	}
 
-	private function scale(state:Int):Void {
-		var distance = Math.sqrt(Math.pow(this.currentPoint.x - this.x + parent.x, 2) + Math.pow(this.currentPoint.y - this.y + parent.y, 2));
+	private function performScale(state:Int):Void {
 		if (state == InputService.PHASE_BEGAN) {
-			this.begindistance = distance;
-			this.beginScale = this.targets[0].scaleX;
+			this.lastScale.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
+			return;
 		}
+
+		// calculate delta scale
+		this.currentScale.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
+		var _scale = new Point(1, 1);
+		if (InputService.instance.shiftKey) {
+			_scale.setTo(this.currentScale.x / this.lastScale.x, this.currentScale.x / this.lastScale.x);
+		} else {
+			if (this.hitCorner == 1 || this.hitCorner == 5)
+				_scale.setTo(1, this.currentScale.y / this.lastScale.y);
+			else if (this.hitCorner == 3 || this.hitCorner == 7)
+				_scale.setTo(this.currentScale.x / this.lastScale.x, 1);
+			else
+				_scale.setTo(this.currentScale.x / this.lastScale.x, this.currentScale.y / this.lastScale.y);
+		}
+		this.lastScale.setTo(this.currentScale.x, this.currentScale.y);
 		
-		this.targets[0].scaleX = this.targets[0].scaleY = this.beginScale * distance / this.begindistance;
-		this.set(this.targets[0]);
+		// perform scale with matrix
+		var r = this.targets[0].rotation / 180 * Math.PI;
+		var mat:Matrix = this.targets[0].transform.matrix;
+		mat.translate(-registerPoint.x, -registerPoint.y);
+		mat.rotate(-r);
+		mat.scale(_scale.x, _scale.y);
+		mat.rotate(r);
+		mat.translate(registerPoint.x, registerPoint.y);
+		this.targets[0].transform.matrix = mat;
 	}
 
 	private function translate():Void {

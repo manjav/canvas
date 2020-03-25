@@ -49,8 +49,7 @@ class TransformHint extends Sprite {
 	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
-	private var beginPoint:Point;
-	private var currentPoint:Point;
+	private var lastPoint:Point;
 	private var lastScale:Point;
 	private var currentScale:Point;
 	private var registerRatio:Point;
@@ -67,10 +66,8 @@ class TransformHint extends Sprite {
 		this.addChild(this.main);
 
 		this.doubleClickEnabled = true;
-		this.beginPoint = new Point();
+		this.lastPoint = new Point();
 		this.lastScale = new Point();
-		this.beginPosition = new Point();
-		this.currentPoint = new Point();
 		this.registerPoint = new Point();
 		this.registerRatio = new Point(0.5, 0.5);
 		this.targets = new Array<DisplayObject>();
@@ -184,8 +181,6 @@ class TransformHint extends Sprite {
 			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
 			this.hitCorner = -1;
-			this.beginPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
-
 			// detect handles
 			for (i in 0...8) {
 				if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
@@ -197,7 +192,8 @@ class TransformHint extends Sprite {
 		} else {
 			this.setVisible(false, this.hitCorner == -1);
 		}
-		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
+
+		// porform methods
 		if (this.hitCorner > -1) {
 			if (this.hitCorner == 8)
 				this.performRegister(state);
@@ -206,7 +202,7 @@ class TransformHint extends Sprite {
 			else
 				this.performScale(state);
 		} else {
-			this.translate();
+			this.performTranslate(state);
 		}
 	}
 
@@ -278,9 +274,20 @@ class TransformHint extends Sprite {
 		this.targets[0].transform.matrix = mat;
 	}
 
-	private function translate():Void {
-		this.targets[0].x = this.x += this.currentPoint.x - this.beginPoint.x;
-		this.targets[0].y = this.y += this.currentPoint.y - this.beginPoint.y;
-		this.beginPoint.setTo(this.currentPoint.x, this.currentPoint.y);
+	private function performTranslate(state:Int):Void {
+		if (state == InputService.PHASE_BEGAN) {
+			this.lastPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
+			return;
+		}
+
+		// calculate delta translate
+		var tx = stage.mouseX / InputService.instance.zoom - this.lastPoint.x;
+		var ty = stage.mouseY / InputService.instance.zoom - this.lastPoint.y;
+		this.lastPoint.setTo(tx + this.lastPoint.x, ty + this.lastPoint.y);
+
+		// perform translate with matrix
+		var mat:Matrix = this.targets[0].transform.matrix;
+		mat.translate(tx, ty);
+		this.targets[0].transform.matrix = mat;
 	}
 }

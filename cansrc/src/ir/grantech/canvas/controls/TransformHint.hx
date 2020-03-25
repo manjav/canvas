@@ -192,6 +192,8 @@ class TransformHint extends Sprite {
 		}
 		this.currentPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
 		if (this.hitCorner > -1) {
+			if (this.hitCorner == 8)
+				this.performRegister(state);
 			if (this.mode == MODE_ROTATE)
 				this.rotate(state);
 			else
@@ -201,18 +203,16 @@ class TransformHint extends Sprite {
 		}
 	}
 
-	private function rotate(state:Int):Void {
-		if (state == InputService.PHASE_BEGAN)
-			this.beginRotation = this.rotation;
-		var dx1 = beginPoint.x - this.x + parent.x;
-		var dy1 = beginPoint.y - this.y + parent.y;
-		var ang1 = (Math.atan2(dy1, dx1) * 180) / Math.PI;
-		// get angle of mouse from center //
-		var dx2 = this.currentPoint.x - this.x + parent.x;
-		var dy2 = this.currentPoint.y - this.y + parent.y;
-		var ang2 = (Math.atan2(dy2, dx2) * 180) / Math.PI;
-		// rotate the _target and stroke the difference of the two angles //
-		targets[0].rotation = this.rotation = this.beginRotation + ang2 - ang1;
+	private function performRegister(state:Int):Void {
+		registerRatio.setTo(this.mouseX / corners[4].x, this.mouseY / corners[4].y);
+		this.resetRegister();
+	}
+
+	private function resetRegister():Void {
+		this.register.x = corners[4].x * registerRatio.x;
+		this.register.y = corners[4].y * registerRatio.y;
+		}
+
 	}
 
 	private function scale(state:Int):Void {

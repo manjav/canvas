@@ -5,7 +5,9 @@ import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
+import openfl.geom.Matrix;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 class TransformHint extends Sprite {
 	static final MODE_SCALE:Int = 0;
@@ -38,10 +40,10 @@ class TransformHint extends Sprite {
 		this.register.alpha = visible ? 1 : 0.5;
 	}
 
-	private var radius:Float = 5;
+	private var radius:Float = 6;
 	private var lineThickness:Float = 2;
 	private var lineColor:UInt = 0x1692E6;
-	
+
 	private var main:Shape;
 	private var hitCorner:Int;
 	private var register:Shape;
@@ -72,13 +74,13 @@ class TransformHint extends Sprite {
 		this.registerRatio = new Point(0.5, 0.5);
 		this.targets = new Array<DisplayObject>();
 
-		this.register = this.addCircle(0, 0, this.radius);
+		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.lines = new Array<Shape>();
 		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
 		for (i in 0...8) {
 			this.rects.push(this.addRect(0, 0, this.radius));
-			this.circles.push(this.addCircle(0, 0, this.radius));
+			this.circles.push(this.addCircle(0, 0, this.radius + 1));
 			this.lines.push(this.addLine(i == 2 || i == 3 || i == 6 || i == 7, 100));
 		}
 		this.lines[0].x = this.radius;
@@ -123,13 +125,12 @@ class TransformHint extends Sprite {
 		this.addChild(l);
 		return l;
 	}
+
 	private function drawLine(l:Shape, vertical:Bool, length:Float):Void {
 		l.graphics.clear();
 		l.graphics.lineStyle(lineThickness, lineColor);
 		l.graphics.moveTo(0, 0);
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
-		this.addChild(l);
-		return l;
 	}
 
 	public function set(target:DisplayObject):Void {
@@ -137,8 +138,8 @@ class TransformHint extends Sprite {
 		this.targets = [target];
 		var r = target.rotation;
 		target.rotation = 0;
-		var w = target.width - 1;
-		var h = target.height - 1;
+		var w = target.width;
+		var h = target.height;
 		this.x = target.x;
 		this.y = target.y;
 		this.rotation = target.rotation = r;
@@ -174,20 +175,23 @@ class TransformHint extends Sprite {
 	}
 
 	public function perform(state:Int):Void {
-		if (state == InputService.PHASE_BEGAN) {			
+		if (state == InputService.PHASE_BEGAN) {
 
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);
 			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
-			this.hitCorner = -1;
 			// detect handles
-			for (i in 0...8) {
-				if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
-					this.hitCorner = i;
-					break;
+			this.hitCorner = -1;
+			if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true)) {
+				this.hitCorner = 8;
+			} else {
+				for (i in 0...8) {
+					if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
+						this.hitCorner = i;
+						break;
+					}
 				}
-			}
 			}
 		} else {
 			this.setVisible(false, this.hitCorner == -1);
@@ -214,7 +218,7 @@ class TransformHint extends Sprite {
 	private function resetRegister():Void {
 		this.register.x = corners[4].x * registerRatio.x;
 		this.register.y = corners[4].y * registerRatio.y;
-		}
+	}
 
 	private function performRotate(state:Int):Void {
 		if (state == InputService.PHASE_BEGAN) {

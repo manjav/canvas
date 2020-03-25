@@ -88,7 +88,6 @@ class TransformHint extends Sprite {
 
 	private function drawCircle(fillColor:UInt, fillAlpha:Float, lineThickness:Float, lineColor:UInt, radius:Float):Shape {
 		var c:Shape = new Shape();
-		c.visible = false;
 		c.graphics.beginFill(fillColor, fillAlpha);
 		c.graphics.lineStyle(lineThickness, lineColor);
 		c.graphics.drawCircle(0, 0, radius + 1);
@@ -143,7 +142,10 @@ class TransformHint extends Sprite {
 		this.corners[7].y = h * 0.5;
 
 		for (i in 0...8)
-			this.resizeLines(i, w * 0.5 - this.radius * 2, h * 0.5 - this.radius * 2);
+			if (i == 2 || i == 3 || i == 6 || i == 7)
+				this.lines[i].height = h * 0.5 - this.radius * 2;
+			else
+				this.lines[i].width = w * 0.5 - this.radius * 2;
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;
@@ -155,12 +157,6 @@ class TransformHint extends Sprite {
 		this.lines[6].y = h * 0.5 + this.radius;
 	}
 
-	private function resizeLines(i:Int, w:Float, h:Float):Void {
-		if (i == 2 || i == 3 || i == 6 || i == 7)
-			this.lines[i].height = h;
-		else
-			this.lines[i].width = w;
-	}
 
 	public function perform(state:Int):Void {
 		if (state == InputService.PHASE_BEGAN) {			

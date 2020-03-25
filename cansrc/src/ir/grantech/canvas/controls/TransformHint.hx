@@ -37,9 +37,13 @@ class TransformHint extends Sprite {
 			this.register.visible = visible;
 	}
 
+	private var radius:Float = 5;
+	private var lineThickness:Float = 2;
+	private var lineColor:UInt = 0x1692E6;
+	
 	private var main:Shape;
 	private var hitCorner:Int;
-	private var radius:Float = 4;
+	private var radius:Float = 5;
 	private var lines:Array<Shape>;
 	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
@@ -69,9 +73,9 @@ class TransformHint extends Sprite {
 		this.rects = new Array<Shape>();
 		this.circles = new Array<Shape>();
 		for (i in 0...8) {
-			this.rects.push(this.drawRect(0, 0, 2, 0x1692E6, this.radius));
-			this.circles.push(this.drawCircle(0, 0, 2, 0x1692E6, this.radius));
-			this.lines.push(this.drawLine(i == 2 || i == 3 || i == 6 || i == 7, 100, 2, 0x1692E6));
+			this.rects.push(this.addRect(0, 0, this.radius));
+			this.circles.push(this.addCircle(0, 0, this.radius));
+			this.lines.push(this.addLine(i == 2 || i == 3 || i == 6 || i == 7, 100));
 		}
 		this.lines[0].x = this.radius;
 		this.lines[5].x = this.radius;
@@ -86,16 +90,16 @@ class TransformHint extends Sprite {
 		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
 	}
 
-	private function drawCircle(fillColor:UInt, fillAlpha:Float, lineThickness:Float, lineColor:UInt, radius:Float):Shape {
+	private function addCircle(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
 		var c:Shape = new Shape();
 		c.graphics.beginFill(fillColor, fillAlpha);
 		c.graphics.lineStyle(lineThickness, lineColor);
-		c.graphics.drawCircle(0, 0, radius + 1);
+		c.graphics.drawCircle(0, 0, radius);
 		this.addChild(c);
 		return c;
 	}
 
-	private function drawRect(fillColor:UInt, fillAlpha:Float, lineThickness:Float, lineColor:UInt, radius:Float):Shape {
+	private function addRect(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
 		var r:Shape = new Shape();
 		r.graphics.beginFill(fillColor, fillAlpha);
 		r.graphics.lineStyle(lineThickness, lineColor);
@@ -104,9 +108,14 @@ class TransformHint extends Sprite {
 		return r;
 	}
 
-	private function drawLine(vertical:Bool, length:Float, lineThickness:Float, lineColor:UInt):Shape {
+	private function addLine(vertical:Bool, length:Float):Shape {
 		var l:Shape = new Shape();
-		l.visible = false;
+		this.drawLine(l, vertical, length);
+		this.addChild(l);
+		return l;
+	}
+	private function drawLine(l:Shape, vertical:Bool, length:Float):Void {
+		l.graphics.clear();
 		l.graphics.lineStyle(lineThickness, lineColor);
 		l.graphics.moveTo(0, 0);
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
@@ -142,10 +151,7 @@ class TransformHint extends Sprite {
 		this.corners[7].y = h * 0.5;
 
 		for (i in 0...8)
-			if (i == 2 || i == 3 || i == 6 || i == 7)
-				this.lines[i].height = h * 0.5 - this.radius * 2;
-			else
-				this.lines[i].width = w * 0.5 - this.radius * 2;
+			drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;

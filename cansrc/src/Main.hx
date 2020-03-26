@@ -11,6 +11,8 @@ import ir.grantech.canvas.controls.groups.Bar;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
+import openfl.display.StageQuality;
+import openfl.display.StageScaleMode;
 
 class Main extends Application {
 	private var left:ToolBar;
@@ -19,6 +21,8 @@ class Main extends Application {
 	private var right:Bar;
 
 	public function new() {
+		stage.quality = StageQuality.BEST;
+		stage.scaleMode = StageScaleMode.NO_SCALE;
 		Theme.setTheme(new CanTheme());
 		super();
 
@@ -29,7 +33,7 @@ class Main extends Application {
 		this.layout = layout;
 
 		this.left = new ToolBar();
-		this.left.width = 48;
+		this.left.width = CanTheme.DPI * 24;
 		this.left.addEventListener("change", this.left_changeHandler);
 		this.addChild(this.left);
 
@@ -38,11 +42,11 @@ class Main extends Application {
 		this.addChild(this.zoom);
 
 		this.right = new Bar();
-		this.right.width = 290;
+		this.right.width = CanTheme.DPI * 144;
 		this.addChild(this.right);
 
 		this.leftExtension = new Bar();
-		this.leftExtension.width = this.right.width;
+		this.leftExtension.width = CanTheme.DPI * 120;
 
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
 	}

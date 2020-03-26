@@ -1,5 +1,6 @@
 package ir.grantech.canvas.themes;
 
+import openfl.system.Capabilities;
 import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.LayoutGroup;
@@ -16,10 +17,15 @@ class CanTheme extends BaseSteelTheme {
 
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
-	static public final DEFAULT_PADDING = 2;
-	static public final CONTROL_SIZE = 32;
+	static public var DPI:Int = 3;
+	static public var DEFAULT_PADDING = 3;
+	static public var CONTROL_SIZE = 32;
+
 	public function new() {
 		super();
+		DPI = Math.round(Capabilities.screenResolutionY / 500);
+		DEFAULT_PADDING = DPI;
+		CONTROL_SIZE = DPI * 10;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 

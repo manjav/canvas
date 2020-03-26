@@ -1,4 +1,4 @@
-package ir.grantech.canvas.controls.groups;
+package ir.grantech.canvas.controls.groups.bars;
 
 import ir.grantech.services.ToolsService;
 import feathers.controls.LayoutGroup;

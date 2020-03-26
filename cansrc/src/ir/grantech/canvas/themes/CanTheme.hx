@@ -1,6 +1,5 @@
 package ir.grantech.canvas.themes;
 
-import openfl.system.Capabilities;
 import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.LayoutGroup;
@@ -9,12 +8,12 @@ import feathers.controls.TextInputState;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
-import ir.grantech.canvas.controls.groups.Bar;
+import ir.grantech.canvas.controls.groups.bars.Bar;
+import openfl.system.Capabilities;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
 class CanTheme extends BaseSteelTheme {
-
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
 	static public var DPI:Int = 3;

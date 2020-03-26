@@ -176,7 +176,6 @@ class TransformHint extends Sprite {
 
 	public function perform(state:Int):Void {
 		if (state == InputService.PHASE_BEGAN) {
-
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);
 			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);

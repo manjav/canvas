@@ -7,9 +7,10 @@ import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
 import feathers.style.Theme;
 import ir.grantech.canvas.controls.events.CanEvent;
-import ir.grantech.canvas.controls.groups.Bar;
 import ir.grantech.canvas.controls.groups.CanZoom;
-import ir.grantech.canvas.controls.groups.ToolBar;
+import ir.grantech.canvas.controls.groups.bars.Bar;
+import ir.grantech.canvas.controls.groups.bars.RightBar;
+import ir.grantech.canvas.controls.groups.bars.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
@@ -41,7 +42,7 @@ class Main extends Application {
 		this.zoom.layoutData = new HorizontalLayoutData(100);
 		this.addChild(this.zoom);
 
-		this.right = new Bar();
+		this.right = new RightBar();
 		this.right.width = CanTheme.DPI * 144;
 		this.addChild(this.right);
 

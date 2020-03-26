@@ -1,7 +1,7 @@
-package ir.grantech.canvas.controls.groups;
+package ir.grantech.canvas.controls.groups.bars;
 
-import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
+import feathers.style.Theme;
 
 class Bar extends VGroup {
   

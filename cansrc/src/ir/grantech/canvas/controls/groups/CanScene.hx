@@ -35,14 +35,14 @@ class CanScene extends LayoutGroup {
 		this.graphics.drawRect(0, 0, canWidth, canHeight);
 
 		var sh = new CanShape();
-		sh.graphics.beginFill(0xFFFFFF);
+		sh.graphics.beginFill(0xF0FFFF, 0.7);
 		sh.graphics.lineStyle(1, 0xFF00FF);
 		sh.graphics.moveTo(10, 10);
 		sh.graphics.lineTo(20, 10);
 		sh.graphics.curveTo(20, 20, 0, 20);
 		sh.graphics.drawRoundRect(0, 0, 122, 123, 42, 44);
-		sh.x = 23;
-		sh.y = 23;
+		sh.x = 120;
+		sh.y = 150;
 		sh.rotation = 22;
 		this.container.addChild(sh);
 

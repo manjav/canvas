@@ -99,9 +99,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_resetHandler(event:Event):Void {
-		this.input.selectedItem.scaleX = this.input.selectedItem.scaleY = 1;
-		this.input.selectedItem.rotation = 0;
-		this.scene.transformHint.set(this.input.selectedItem);
+		this.scene.transformHint.resetTransform();
 	}
 
 	private function setZoom(value:Float):Void {

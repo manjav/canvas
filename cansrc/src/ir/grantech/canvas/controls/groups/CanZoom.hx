@@ -30,6 +30,7 @@ class CanZoom extends LayoutGroup {
 		this.input.addEventListener(InputService.MOVE, this.input_moveHandler);
 		this.input.addEventListener(InputService.ZOOM, this.input_zoomHandler);
 		this.input.addEventListener(InputService.POINT, this.input_pointHandler);
+		this.input.addEventListener(InputService.DELETE, this.input_deleteHandler);
 		this.input.addEventListener(InputService.ZOOM_RESET, this.input_zoomHandler);
 		this.input.addEventListener(InputService.TRANSFORM_RESET, this.input_resetHandler);
 	}
@@ -59,6 +60,13 @@ class CanZoom extends LayoutGroup {
 		else
 			this.setZoom(this.input.zoom);
 		}
+
+	private function input_deleteHandler(event:Event):Void {
+		this.input.selectedItem.parent.removeChild(this.input.selectedItem);
+		this.input.selectedItem = null;
+		if (this.scene.transformHint.parent != null)
+			this.scene.removeChild(this.scene.transformHint);
+	}
 
 	private function input_pointHandler(event:Event):Void {
 		if (input.pointPhase == InputService.PHASE_BEGAN) {

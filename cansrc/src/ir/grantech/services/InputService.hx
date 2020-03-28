@@ -21,6 +21,7 @@ class InputService extends BaseService {
 	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
 	static public final SELECT:String = "select";
+	static public final DELETE:String = "delete";
 	static public final ZOOM_RESET:String = "zoomReset";
 	static public final TRANSFORM_RESET:String = "transformReset";
 
@@ -126,6 +127,11 @@ class InputService extends BaseService {
 			} else if (this.selectedItem != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
 				FeathersEvent.dispatch(this, TRANSFORM_RESET);
 			}
+		}
+
+		if( this.lastKeyUp == 46 && this.selectedItem != null ){
+			FeathersEvent.dispatch(this, DELETE);
+			return;
 		}
 	}
 

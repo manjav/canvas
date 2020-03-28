@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups;
 
+import haxe.Timer;
+import feathers.events.FeathersEvent;
 import feathers.controls.LayoutGroup;
 import ir.grantech.services.BaseService;
 import ir.grantech.services.InputService;
@@ -35,11 +37,13 @@ class CanZoom extends LayoutGroup {
 		this.input.addEventListener(InputService.DELETE, this.input_deleteHandler);
 		this.input.addEventListener(InputService.ZOOM_RESET, this.input_zoomHandler);
 		this.input.addEventListener(InputService.TRANSFORM_RESET, this.input_resetHandler);
+
+		this.addEventListener(FeathersEvent.CREATION_COMPLETE, this.creationCompleteHandler);
 	}
 
-	override private function refreshViewPortBounds():Void {
-		super.refreshViewPortBounds();
-		this.resetZoomAndPan();
+	private function creationCompleteHandler(event:Event):Void {
+		this.removeEventListener(FeathersEvent.CREATION_COMPLETE, this.creationCompleteHandler);
+		Timer.delay(this.resetZoomAndPan, 0);
 	}
 
 	private function input_moveHandler(event:Event):Void {

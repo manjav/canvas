@@ -2,6 +2,7 @@ package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.CanShape;
+import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.services.InputService;
 import openfl.Vector;
 import openfl.display.DisplayObject;
@@ -20,7 +21,7 @@ class CanScene extends LayoutGroup {
 	public var hitHint:Shape;
 	public var selectHint:Shape;
 	public var transformHint:TransformHint;
-	private var container:Sprite;
+	public var container:Sprite;
 
 	override function initialize() {
 		super.initialize();
@@ -86,18 +87,9 @@ class CanScene extends LayoutGroup {
 		this.selectHint.height = Math.abs(this.mouseY - this.beginPoint.y);
 	}
 
-	public function hit(x:Float, y:Float):DisplayObject {
-		if (this.transformHint.hitTestPoint(x, y, true))
-			return this.transformHint;
-		for (i in 0...this.container.numChildren)
-			if (this.container.getChildAt(i).hitTestPoint(x, y, true))
-				return this.container.getChildAt(i);
-		return null;
-	}
-
 	public function drawHit(target:DisplayObject):Void {
 		this.hitHint.graphics.clear();
-		if (target == null || target == InputService.instance.selectedItem || target == this.transformHint)
+		if (target == null || !Std.is(target, ICanItem) || target == InputService.instance.selectedItem || target == this.transformHint)
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);

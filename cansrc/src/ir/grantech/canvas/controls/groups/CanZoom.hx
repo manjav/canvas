@@ -4,13 +4,15 @@ import feathers.controls.LayoutGroup;
 import ir.grantech.services.BaseService;
 import ir.grantech.services.InputService;
 import ir.grantech.services.ToolsService;
+import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 
 class CanZoom extends LayoutGroup {
-	private var scene:CanScene;
+	public var scene:CanScene;
+
 	private var input:InputService;
 
 	override function initialize() {
@@ -25,7 +27,7 @@ class CanZoom extends LayoutGroup {
 		this.scene.mask = mask;
 		this.backgroundSkin = mask;
 
-		this.input = cast(BaseService.get(InputService, [stage, this.scene, this._layoutMeasurements]), InputService);
+		this.input = cast(BaseService.get(InputService, [stage, this, this._layoutMeasurements]), InputService);
 		this.input.addEventListener(InputService.PAN, this.input_panHandler);
 		this.input.addEventListener(InputService.MOVE, this.input_moveHandler);
 		this.input.addEventListener(InputService.ZOOM, this.input_zoomHandler);
@@ -41,7 +43,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_moveHandler(event:Event):Void {
-		this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
+		this.scene.drawHit(this.hit(this.stage.mouseX, this.stage.mouseY));
 	}
 
 	private function input_panHandler(event:Event):Void {
@@ -59,7 +61,7 @@ class CanZoom extends LayoutGroup {
 			this.resetZoomAndPan();
 		else
 			this.setZoom(this.input.zoom);
-		}
+	}
 
 	private function input_deleteHandler(event:Event):Void {
 		this.input.selectedItem.parent.removeChild(this.input.selectedItem);
@@ -114,5 +116,16 @@ class CanZoom extends LayoutGroup {
 		this.setZoom(1);
 		this.scene.x = this.input.pointX = (this.explicitWidth - this.scene.canWidth) * 0.5;
 		this.scene.y = this.input.pointY = (this.explicitHeight - this.scene.canHeight) * 0.5;
+	}
+
+	public function hit(x:Float, y:Float):DisplayObject {
+		if (this.scene.transformHint.hitTestPoint(x, y, true))
+			return this.scene.transformHint;
+		for (i in 0...this.scene.container.numChildren)
+			if (this.scene.container.getChildAt(i).hitTestPoint(x, y, true))
+				return this.scene.container.getChildAt(i);
+		if (this.hitTestPoint(x, y, true))
+			return this;
+		return null;
 	}
 }

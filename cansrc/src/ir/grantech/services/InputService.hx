@@ -2,8 +2,7 @@ package ir.grantech.services;
 
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
-import ir.grantech.canvas.controls.TransformHint;
-import ir.grantech.canvas.controls.groups.CanScene;
+import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.ICanItem;
 import lime.ui.KeyCode;
 import openfl.display.DisplayObject;
@@ -37,11 +36,11 @@ class InputService extends BaseService {
 	public var rightMouseDown:Bool;
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
+	public var canZoom:CanZoom;
 
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
-	private var scene:CanScene;
 	private var measurements:Measurements;
 
 	/**
@@ -82,20 +81,20 @@ class InputService extends BaseService {
 		return this.selectedItem;
 	}
 
-	public function new(stage:Stage, scene:CanScene, measurements:Measurements) {
+	public function new(stage:Stage, canZoom:CanZoom, measurements:Measurements) {
 		super();
 		this.stage = stage;
-		this.scene = scene;
+		this.canZoom = canZoom;
 		this.measurements = measurements;
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 
-		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.canZoom.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
-		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_middleMouseDownHandler);
+		this.canZoom.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_middleMouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_middleMouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
-		this.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
+		this.canZoom.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -148,10 +147,10 @@ class InputService extends BaseService {
 			return;
 		}
 
-		var item = this.scene.hit(this.stage.mouseX, this.stage.mouseY);
+		var item = this.canZoom.hit(this.stage.mouseX, this.stage.mouseY);
 		if (Std.is(item, ICanItem))
 			this.selectedItem = item;
-		else if (!Std.is(item, TransformHint))
+		else if (Std.is(item, CanZoom))
 			this.selectedItem = null;
 
 		this.pointPhase = PHASE_BEGAN;

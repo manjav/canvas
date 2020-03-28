@@ -54,6 +54,7 @@ class TransformHint extends Sprite {
 	private var lastPoint:Point;
 	private var lastScale:Point;
 	private var lastAngle:Float;
+	private var matrixAngle:Float;
 	private var registerRatio:Point;
 	private var registerPoint:Point;
 
@@ -220,27 +221,25 @@ class TransformHint extends Sprite {
 	}
 
 	private function performRotate(state:Int):Void {
+		var rad = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
 		if (state == InputService.PHASE_BEGAN) {
-			this.lastAngle = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
+			this.matrixAngle = Math.atan2(this.targets[0].transform.matrix.b, this.targets[0].transform.matrix.a);
+			this.lastAngle = rad;
 			return;
 		}
 
-		// calculate delta angle
-		var angle = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
+		// calculate destination angle
+		var angle = this.matrixAngle + rad - this.lastAngle;
 		if (InputService.instance.shiftKey || InputService.instance.ctrlKey) {
-			if (angle > Math.PI)
-				angle = angle - Math.PI * 2;
-			else if (angle < -Math.PI)
-				angle = angle + Math.PI * 2;
-			angle = Math.round(angle / (Math.PI / (InputService.instance.shiftKey ? 4.0 : 8.0)) * (Math.PI / (InputService.instance.shiftKey ? 4.0 : 8.0)));
+			var step = Math.PI * (InputService.instance.shiftKey ? 0.5 : 0.25);
+			var mod = angle % step;
+			angle += (mod > step * 0.5 ? step - mod : -mod); // snap to 90 or 45
 		}
-		var diff = angle - this.lastAngle;
-		this.lastAngle = angle;
 
 		// perform rotation with matrix
 		var mat:Matrix = this.targets[0].transform.matrix;
 		mat.translate(-registerPoint.x, -registerPoint.y);
-		mat.rotate(diff);
+		mat.rotate(angle - Math.atan2(mat.b, mat.a));
 		mat.translate(registerPoint.x, registerPoint.y);
 		this.targets[0].transform.matrix = mat;
 	}
@@ -255,12 +254,12 @@ class TransformHint extends Sprite {
 		var sx = (this.mouseX - this.register.x) / this.lastScale.x;
 		var sy = (this.mouseY - this.register.y) / this.lastScale.y;
 		this.lastScale.setTo(sx * this.lastScale.x, sy * this.lastScale.y);
-		
+
 		// perform scale with matrix
-		var r = this.targets[0].rotation / 180 * Math.PI;
 		var mat:Matrix = this.targets[0].transform.matrix;
+		this.matrixAngle = Math.atan2(mat.b, mat.a);
 		mat.translate(-registerPoint.x, -registerPoint.y);
-		mat.rotate(-r);
+		mat.rotate(-this.matrixAngle);
 		if (InputService.instance.shiftKey) {
 			mat.scale(sx, sx);
 		} else {
@@ -271,7 +270,7 @@ class TransformHint extends Sprite {
 			else
 				mat.scale(sx, sy);
 		}
-		mat.rotate(r);
+		mat.rotate(this.matrixAngle);
 		mat.translate(registerPoint.x, registerPoint.y);
 		this.targets[0].transform.matrix = mat;
 	}

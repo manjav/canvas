@@ -1,25 +1,24 @@
 package;
 
 import feathers.controls.Application;
-import feathers.controls.LayoutGroup;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
 import feathers.style.Theme;
 import ir.grantech.canvas.controls.events.CanEvent;
+import ir.grantech.canvas.controls.groups.Panel;
 import ir.grantech.canvas.controls.groups.CanZoom;
-import ir.grantech.canvas.controls.groups.bars.Bar;
-import ir.grantech.canvas.controls.groups.bars.RightBar;
-import ir.grantech.canvas.controls.groups.bars.ToolBar;
+import ir.grantech.canvas.controls.groups.RightBar;
+import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
 
 class Main extends Application {
 	private var left:ToolBar;
-	private var leftExtension:LayoutGroup;
+	private var leftExtension:Panel;
 	private var zoom:CanZoom;
-	private var right:Bar;
+	private var right:RightBar;
 
 	public function new() {
 		stage.quality = StageQuality.BEST;
@@ -46,7 +45,7 @@ class Main extends Application {
 		this.right.width = CanTheme.DPI * 144;
 		this.addChild(this.right);
 
-		this.leftExtension = new Bar();
+		this.leftExtension = new Panel();
 		this.leftExtension.width = CanTheme.DPI * 120;
 
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);

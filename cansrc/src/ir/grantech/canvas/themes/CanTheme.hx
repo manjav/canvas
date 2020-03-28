@@ -8,7 +8,7 @@ import feathers.controls.TextInputState;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
-import ir.grantech.canvas.controls.groups.bars.Bar;
+import ir.grantech.canvas.controls.groups.Panel;
 import openfl.system.Capabilities;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
@@ -31,7 +31,7 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
-		this.styleProvider.setStyleFunction(Bar, null, setBarStyles);
+		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -57,7 +57,7 @@ class CanTheme extends BaseSteelTheme {
 		}
 	}
 
-	public function setBarStyles(bar:LayoutGroup):Void {
+	public function setPanelStyles(bar:LayoutGroup):Void {
 		if (bar.backgroundSkin == null) {
 			var skin = new RectangleSkin();
 			skin.fill = SolidColor(this.controlColor);

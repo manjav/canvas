@@ -1,6 +1,5 @@
-package ir.grantech.canvas.controls.groups.bars;
+package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.services.ToolsService;
 import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
 import feathers.data.ArrayCollection;
@@ -12,18 +11,17 @@ import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.events.CanEvent;
 import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.services.ToolsService;
 import openfl.Assets;
 import openfl.events.Event;
-import openfl.ui.Mouse;
 import openfl.utils.AssetType;
-
 class ToolBar extends LayoutGroup {
 	private var topList:ListView;
 	private var bottomList:ListView;
 
 	override private function initialize() {
 		super.initialize();
-		Std.downcast(Theme.getTheme(), CanTheme).setBarStyles(this);
+		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
 		ToolBarItemRenderer.SIZE = this.width;
 
 		this.layout = new AnchorLayout();

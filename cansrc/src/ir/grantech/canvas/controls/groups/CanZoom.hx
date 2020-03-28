@@ -34,6 +34,11 @@ class CanZoom extends LayoutGroup {
 		this.input.addEventListener(InputService.TRANSFORM_RESET, this.input_resetHandler);
 	}
 
+	override private function refreshViewPortBounds():Void {
+		super.refreshViewPortBounds();
+		this.resetZoomAndPan();
+	}
+
 	private function input_moveHandler(event:Event):Void {
 		this.scene.drawHit(this.scene.hit(this.stage.mouseX, this.stage.mouseY));
 	}
@@ -49,15 +54,11 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_zoomHandler(event:Event):Void {
-		if (event.type == InputService.ZOOM) {
+		if (event.type == InputService.ZOOM_RESET)
+			this.resetZoomAndPan();
+		else
 			this.setZoom(this.input.zoom);
-			return;
 		}
-
-		this.setZoom(1);
-		this.scene.x = this.input.pointX = (this._layoutMeasurements.width - this.scene.canWidth) * 0.5;
-		this.scene.y = this.input.pointY = (this._layoutMeasurements.height - this.scene.canHeight) * 0.5;
-	}
 
 	private function input_pointHandler(event:Event):Void {
 		if (input.pointPhase == InputService.PHASE_BEGAN) {
@@ -99,5 +100,11 @@ class CanZoom extends LayoutGroup {
 		this.scene.scaleX = this.scene.scaleY = value;
 		this.input.pointX = this.scene.x += (w - this.scene.width) * (mouseX / this._layoutMeasurements.width);
 		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
+	}
+
+	private function resetZoomAndPan():Void {
+		this.setZoom(1);
+		this.scene.x = this.input.pointX = (this.explicitWidth - this.scene.canWidth) * 0.5;
+		this.scene.y = this.input.pointY = (this.explicitHeight - this.scene.canHeight) * 0.5;
 	}
 }

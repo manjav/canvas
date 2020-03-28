@@ -158,4 +158,12 @@ class CanTextInput extends TextInput implements IRange {
 			// trace(value, this.stepY - mouseY);
 		}
 	}
+
+	override private function set_enabled(value:Bool):Bool {
+		if (super.enabled == value)
+			return super.enabled;
+		if (this.textField != null)
+			this.textField.mouseEnabled = value;
+		return super.enabled = value;
+	}
 }

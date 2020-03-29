@@ -9,7 +9,7 @@
 	<window fullscreen="false"/>
 	<window allow-high-dpi="true"/>
 	<window background="#e4e4e4" />
-	<window fps="60" width="900" height="600"/>
+	<window fps="60" width="1800" height="1200"/>
 	<window fps="0" if="html5"/>
 	
 	<source path="src" />
@@ -44,6 +44,11 @@
   <assets id="toolfoot_1" path="assets/img/assets.png"/>
   <assets id="toolfoot_1_selected" path="assets/img/assets-blue.png"/>
 
+  <assets id="x" path="assets/img/x.png"/>
+  <assets id="y" path="assets/img/y.png"/>
+  <assets id="w" path="assets/img/w.png"/>
+  <assets id="h" path="assets/img/h.png"/>
+  <assets id="rotate" path="assets/img/rotate.png"/>
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>
 </project>

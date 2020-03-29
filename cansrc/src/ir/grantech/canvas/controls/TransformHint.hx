@@ -237,6 +237,10 @@ class TransformHint extends Sprite {
 		}
 
 		// perform rotation with matrix
+		this.rotate(angle);
+	}
+
+	public function rotate(angle:Float):Void {
 		var mat:Matrix = this.targets[0].transform.matrix;
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(angle - Math.atan2(mat.b, mat.a));

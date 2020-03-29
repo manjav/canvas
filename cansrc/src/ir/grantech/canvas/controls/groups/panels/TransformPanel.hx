@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.layout.AnchorLayoutData;
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import ir.grantech.canvas.themes.CanTheme;
@@ -11,6 +12,7 @@ class TransformPanel extends Panel {
 	private var inputY:CanTextInput;
 	private var inputW:CanTextInput;
 	private var inputH:CanTextInput;
+	private var inputR:CanTextInput;
 
 	override private function initialize() {
 		this.height = 240 * CanTheme.DPI;
@@ -22,6 +24,7 @@ class TransformPanel extends Panel {
 		this.inputY = this.createInput("y", new AnchorLayoutData(padding * 5, null, null, padding));
 		this.inputW = this.createInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
 		this.inputH = this.createInput("h", new AnchorLayoutData(padding * 5, null, null, null, 0));
+		this.inputR = this.createInput("rotate", new AnchorLayoutData(padding * 1, padding));
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
@@ -38,6 +41,7 @@ class TransformPanel extends Panel {
 		if (this.inputService.selectedItem == null)
 			return;
 		var r = this.inputService.selectedItem.rotation;
+		if (event.currentTarget != this.inputR)
 		this.inputService.selectedItem.rotation = 0;
 		if (event.currentTarget == this.inputX)
 			this.inputService.selectedItem.x = this.inputX.value;
@@ -47,6 +51,9 @@ class TransformPanel extends Panel {
 			this.inputService.selectedItem.width = this.inputW.value;
 		else if (event.currentTarget == this.inputH)
 			this.inputService.selectedItem.height = this.inputH.value;
+		else if (event.currentTarget == this.inputR)
+			this.inputService.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
+		if (event.currentTarget != this.inputR)
 		this.inputService.selectedItem.rotation = r;
 	}
 
@@ -66,5 +73,6 @@ class TransformPanel extends Panel {
 		this.inputY.value = this.inputService.selectedItem.y;
 		this.inputW.value = this.inputService.selectedItem.width;
 		this.inputH.value = this.inputService.selectedItem.height;
+		this.inputR.value = this.inputService.selectedItem.rotation;
 	}
 }

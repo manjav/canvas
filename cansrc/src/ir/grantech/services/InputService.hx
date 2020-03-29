@@ -98,6 +98,22 @@ class InputService extends BaseService {
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
+		if (event.keyCode == 16 || event.keyCode == 17 || event.keyCode > 36 && event.keyCode < 41) {
+			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItem == null)
+				return;
+			if (event.keyCode == 37)
+				this.selectedItem.x -= (event.shiftKey ? 10 : 1);
+			else if (event.keyCode == 38)
+				this.selectedItem.y -= (event.shiftKey ? 10 : 1);
+			else if (event.keyCode == 39)
+				this.selectedItem.x += (event.shiftKey ? 10 : 1);
+			else if (event.keyCode == 40)
+				this.selectedItem.y += (event.shiftKey ? 10 : 1);
+			this.panPhase = PHASE_ENDED;
+			FeathersEvent.dispatch(this, POINT);
+			return;
+		}
+
 		this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 		this.stage.addEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyDown = event.keyCode;
@@ -128,7 +144,7 @@ class InputService extends BaseService {
 			}
 		}
 
-		if( this.lastKeyUp == 46 && this.selectedItem != null ){
+		if (this.lastKeyUp == 46 && this.selectedItem != null) {
 			FeathersEvent.dispatch(this, DELETE);
 			return;
 		}
@@ -148,11 +164,14 @@ class InputService extends BaseService {
 		}
 
 		var item = this.canZoom.hit(this.stage.mouseX, this.stage.mouseY);
-		if (Std.is(item, ICanItem))
+		if (Std.is(item, ICanItem)) {
 			this.selectedItem = item;
-		else if (Std.is(item, CanZoom))
-			this.selectedItem = null;
-
+			this.canZoom.focused = true;
+		} else {
+			this.canZoom.focused = false;
+			if (Std.is(item, CanZoom))
+				this.selectedItem = null;
+		}
 		this.pointPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, POINT);
 	}

@@ -14,6 +14,7 @@ import openfl.ui.MouseCursor;
 
 class CanZoom extends LayoutGroup {
 	public var scene:CanScene;
+	public var focused:Bool;
 
 	private var input:InputService;
 
@@ -22,13 +23,12 @@ class CanZoom extends LayoutGroup {
 
 		this.scene = new CanScene();
 		this.addChild(this.scene);
-
-		var mask = new Shape();
-		mask.graphics.beginFill(0);
-		mask.graphics.drawRect(0, 0, 100, 100);
-		this.scene.mask = mask;
-		this.backgroundSkin = mask;
-
+		
+		var background = new Shape();
+		background.graphics.beginFill(0, 0);
+		background.graphics.drawRect(0, 0, 100, 100);
+		this.backgroundSkin = background;
+		
 		this.input = cast(BaseService.get(InputService, [stage, this, this._layoutMeasurements]), InputService);
 		this.input.addEventListener(InputService.PAN, this.input_panHandler);
 		this.input.addEventListener(InputService.MOVE, this.input_moveHandler);

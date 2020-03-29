@@ -1,5 +1,10 @@
 package ir.grantech.canvas.controls.groups;
 
+import feathers.controls.ButtonState;
+import openfl.Assets;
+import openfl.events.MouseEvent;
+import openfl.display.Bitmap;
+import feathers.controls.Button;
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
@@ -12,6 +17,19 @@ class Panel extends CanView {
 		super.initialize();
 		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
 		this.padding = CanTheme.DEFAULT_PADDING;
+	}
+
+	private function createButton(icon:String, layoutData:AnchorLayoutData):Button {
+		var disabledIcon = new Bitmap(Assets.getBitmapData(icon));
+		disabledIcon.alpha = 0.6;
+		var element = new Button();
+		element.width = element.height = 16 * CanTheme.DPI;
+		element.icon = new Bitmap(Assets.getBitmapData(icon));
+		element.setIconForState(ButtonState.DISABLED, disabledIcon);
+		element.layoutData = layoutData;
+		element.addEventListener(MouseEvent.CLICK, this.buttons_clickHandler);
+		this.addChild(element);
+		return element;
 	}
 
 	private function createInput(icon:String, layoutData:AnchorLayoutData):CanTextInput {
@@ -27,6 +45,7 @@ class Panel extends CanView {
 		return element;
 	}
 
+	private function buttons_clickHandler(event:MouseEvent):Void {}
 	private function textInputs_focusInHandler(event:FocusEvent):Void {}
 	private function textInputs_focusOutHandler(event:FocusEvent):Void {}
 }

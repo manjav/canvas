@@ -16,8 +16,8 @@ import openfl.text.TextFormatAlign;
 class CanTheme extends BaseSteelTheme {
 	// public static final VARIANT_INPUT_DISPLAY_LABEL = "canvas-theme-input-display-label";
 	// public static final VARIANT_OPERATION_BUTTON = "canvas-theme-operation-button";
-	static public var DPI:Int = 3;
-	static public var DEFAULT_PADDING = 3;
+	static public var DPI:Int = 4;
+	static public var DEFAULT_PADDING = 4;
 	static public var CONTROL_SIZE = 32;
 
 	public function new() {
@@ -26,6 +26,7 @@ class CanTheme extends BaseSteelTheme {
 		DEFAULT_PADDING = DPI;
 		CONTROL_SIZE = DPI * 10;
 		this.fontSize = DPI * 6;
+		this.textColor = 0x484848;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
@@ -46,7 +47,7 @@ class CanTheme extends BaseSteelTheme {
 
 	private function getInputDisplayLabelTextFormat():TextFormat {
 		var result = this.getTextFormat();
-		result.align = TextFormatAlign.RIGHT;
+		result.align = TextFormatAlign.CENTER;
 		return result;
 	}
 
@@ -100,6 +101,7 @@ class CanTheme extends BaseSteelTheme {
 
 		if (input.textFormat == null)
 			input.textFormat = getTextFormat();
+		input.textFormat.align = TextFormatAlign.CENTER;
 		
 		if (input.getTextFormatForState(TextInputState.DISABLED) == null)
 			input.setTextFormatForState(TextInputState.DISABLED, getDisabledTextFormat());

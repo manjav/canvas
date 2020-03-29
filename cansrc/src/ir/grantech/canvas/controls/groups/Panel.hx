@@ -14,12 +14,13 @@ class Panel extends CanView {
 		this.padding = CanTheme.DEFAULT_PADDING;
 	}
 
-	private function createInput(?top:Null<Float>, ?right:Null<Float>, ?bottom:Null<Float>, ?left:Null<Float>, tabIndex:Int):CanTextInput {
+	private function createInput(icon:String, layoutData:AnchorLayoutData):CanTextInput {
 		var element = new CanTextInput();
-		element.width = 32 * CanTheme.DPI;
+		element.width = 36 * CanTheme.DPI;
 		element.height = 16 * CanTheme.DPI;
 		element.step = 2;
-		element.layoutData = new AnchorLayoutData(top, right, bottom, left);
+		element.icon = icon;
+		element.layoutData = layoutData;
 		element.addEventListener(FocusEvent.FOCUS_IN, this.textInputs_focusInHandler);
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);

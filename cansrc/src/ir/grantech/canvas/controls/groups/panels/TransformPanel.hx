@@ -18,10 +18,10 @@ class TransformPanel extends Panel {
 
 		var padding = CanTheme.DPI * 7;
 		this.layout = new AnchorLayout();
-		this.inputX = this.createInput(padding * 1, null, null, padding * 1, 0);
-		this.inputY = this.createInput(padding * 3, null, null, padding * 1, 1);
-		this.inputW = this.createInput(padding * 1, null, null, padding * 8, 2);
-		this.inputH = this.createInput(padding * 3, null, null, padding * 8, 3);
+		this.inputX = this.createInput("x", new AnchorLayoutData(padding * 1, null, null, padding));
+		this.inputY = this.createInput("y", new AnchorLayoutData(padding * 5, null, null, padding));
+		this.inputW = this.createInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
+		this.inputH = this.createInput("h", new AnchorLayoutData(padding * 5, null, null, null, 0));
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {

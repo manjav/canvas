@@ -2,6 +2,9 @@ package feathers.controls;
 
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
+import ir.grantech.canvas.themes.CanTheme;
+import openfl.Assets;
+import openfl.display.Bitmap;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
@@ -9,10 +12,10 @@ import openfl.events.MouseEvent;
 class CanTextInput extends TextInput implements IRange {
 	private var stepY = 0.0;
 	private var speed = 0.1;
+	private var iconDisplay:Bitmap;
 
 	/**
 		The current numeric value of the range.
-
 		The following example sets the range of acceptable values:
 
 		```hx
@@ -132,6 +135,40 @@ class CanTextInput extends TextInput implements IRange {
 		return this.maximum = maximum;
 	}
 
+	/**
+		The icon side of text.
+
+		@since 1.0.0
+	**/
+	@:isVar
+	public var icon(default, set):String;
+
+	private function set_icon(icon:String):String {
+		if (this.icon == icon)
+			return this.icon;
+		this.createIcon(icon);
+		return this.icon = icon;
+	}
+
+	private function createIcon(icon:String):Void {
+		if (this.iconDisplay != null) {
+			this.iconDisplay.bitmapData = Assets.getBitmapData(icon);
+			return;
+		}
+		this.iconDisplay = new Bitmap(Assets.getBitmapData(icon));
+		this.addChild(this.iconDisplay);
+	}
+
+	override private function set_enabled(value:Bool):Bool {
+		if (super.enabled == value)
+			return super.enabled;
+		if (this.textField != null)
+			this.textField.mouseEnabled = value;
+		if (this.iconDisplay != null)
+			this.iconDisplay.alpha = value ? 1 : 0.6;
+		return super.enabled = value;
+	}
+
 	override private function textField_changeHandler(event:Event):Void {
 		// don't let this event bubble. Feathers UI components don't bubble their
 		// events — especially not Event.CHANGE!
@@ -164,15 +201,20 @@ class CanTextInput extends TextInput implements IRange {
 		if (diff > 0) {
 			this.value += this.step * (delta / Math.abs(delta));
 			this.stepY = mouseY - diff * (delta / Math.abs(delta)) / speed;
-			// trace(value, this.stepY - mouseY);
 		}
 	}
 
-	override private function set_enabled(value:Bool):Bool {
-		if (super.enabled == value)
-			return super.enabled;
-		if (this.textField != null)
-			this.textField.mouseEnabled = value;
-		return super.enabled = value;
+	override private function layoutContent():Void {
+		super.layoutContent();
+		if (iconDisplay == null)
+			return;
+
+		this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI * 5;
+		trace(iconDisplay.width, this.actualHeight, this.paddingTop, this.paddingBottom, CanTheme.DPI * 4);
+		this.iconDisplay.x = this.paddingLeft;
+		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;
+
+		this.textField.x = this.paddingLeft + this.iconDisplay.width;
+		this.textField.width = this.actualWidth - this.iconDisplay.width - this.paddingLeft - this.paddingRight;
 	}
 }

@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import openfl.events.MouseEvent;
+import feathers.controls.Button;
 import feathers.layout.AnchorLayoutData;
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
@@ -13,6 +15,8 @@ class TransformPanel extends Panel {
 	private var inputW:CanTextInput;
 	private var inputH:CanTextInput;
 	private var inputR:CanTextInput;
+	private var buttonFlipH:Button;
+	private var buttonFlipV:Button;
 
 	override private function initialize() {
 		this.height = 240 * CanTheme.DPI;
@@ -25,6 +29,16 @@ class TransformPanel extends Panel {
 		this.inputW = this.createInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
 		this.inputH = this.createInput("h", new AnchorLayoutData(padding * 5, null, null, null, 0));
 		this.inputR = this.createInput("rotate", new AnchorLayoutData(padding * 1, padding));
+
+		this.buttonFlipH = this.createButton("flip-h", new AnchorLayoutData(padding * 5, padding * 4));
+		this.buttonFlipV = this.createButton("flip-v", new AnchorLayoutData(padding * 5, padding * 1));
+	}
+
+	override private function buttons_clickHandler(event:MouseEvent):Void {
+		if (event.currentTarget == this.buttonFlipH)
+			this.inputService.canZoom.scene.transformHint.scale(-1, 1);
+		else if (event.currentTarget == this.buttonFlipV)
+			this.inputService.canZoom.scene.transformHint.scale(1, -1);
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
@@ -42,7 +56,7 @@ class TransformPanel extends Panel {
 			return;
 		var r = this.inputService.selectedItem.rotation;
 		if (event.currentTarget != this.inputR)
-		this.inputService.selectedItem.rotation = 0;
+			this.inputService.selectedItem.rotation = 0;
 		if (event.currentTarget == this.inputX)
 			this.inputService.selectedItem.x = this.inputX.value;
 		else if (event.currentTarget == this.inputY)
@@ -54,7 +68,7 @@ class TransformPanel extends Panel {
 		else if (event.currentTarget == this.inputR)
 			this.inputService.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
 		if (event.currentTarget != this.inputR)
-		this.inputService.selectedItem.rotation = r;
+			this.inputService.selectedItem.rotation = r;
 	}
 
 	override private function set_enabled(value:Bool):Bool {

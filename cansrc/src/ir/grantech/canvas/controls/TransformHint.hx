@@ -260,6 +260,10 @@ class TransformHint extends Sprite {
 		this.lastScale.setTo(sx * this.lastScale.x, sy * this.lastScale.y);
 
 		// perform scale with matrix
+		this.scale(sx, sy);
+	}
+
+	public function scale(sx:Float, sy:Float):Void {
 		var mat:Matrix = this.targets[0].transform.matrix;
 		this.matrixAngle = Math.atan2(mat.b, mat.a);
 		mat.translate(-registerPoint.x, -registerPoint.y);

@@ -1,8 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
+import feathers.controls.LayoutGroup;
+import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
-import feathers.controls.LayoutGroup;
 import ir.grantech.services.InputService;
 
 class CanView extends LayoutGroup {
@@ -44,9 +45,19 @@ class CanView extends LayoutGroup {
 		return this.gap = value;
 	}
 
-	public var input(get, null):InputService;
+	public var inputService(get, null):InputService;
 
-	private function get_input():InputService {
+	private function get_inputService():InputService {
 		return InputService.instance;
+	}
+
+	override private function set_enabled(value:Bool):Bool {
+		if (super.enabled == value)
+			return super.enabled;
+
+    for (item in this.items)
+      if( Std.is(item, FeathersControl))
+          cast(item, FeathersControl).enabled = value;
+		return super.enabled = value;
 	}
 }

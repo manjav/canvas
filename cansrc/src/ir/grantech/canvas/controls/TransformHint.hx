@@ -28,7 +28,7 @@ class TransformHint extends Sprite {
 		return this.mode = value;
 	}
 
-	private function setVisible(visible:Bool, all:Bool):Void {
+	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
 			return;
 		for (i in 0...8) {

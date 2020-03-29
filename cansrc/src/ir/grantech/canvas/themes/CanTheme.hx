@@ -25,6 +25,7 @@ class CanTheme extends BaseSteelTheme {
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
 		DEFAULT_PADDING = DPI;
 		CONTROL_SIZE = DPI * 10;
+		this.fontSize = DPI * 6;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 

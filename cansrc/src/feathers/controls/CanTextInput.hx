@@ -38,11 +38,19 @@ class CanTextInput extends TextInput implements IRange {
 			return this.value;
 
 		this.value = value;
-		this.set_text(Std.string(this.value));
+		this.set_text(this.valueFormatter(value));
 		this.setInvalid(InvalidationFlag.DATA);
 		FeathersEvent.dispatch(this, Event.CHANGE);
 
 		return this.value;
+	}
+
+	/**
+		Replace value formatter with default
+		valueFormatter = (v:Float)->{return v + " px";};
+	**/
+	public dynamic function valueFormatter(value:Float):String {
+		return Std.string(Math.round(value * 100) / 100);
 	}
 
 	/**
@@ -138,6 +146,7 @@ class CanTextInput extends TextInput implements IRange {
 	override private function textField_focusInHandler(event:FocusEvent):Void {
 		super.textField_focusInHandler(event);
 		this.stepY = mouseY;
+		textField.restrict = "0-9";
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 	}
 

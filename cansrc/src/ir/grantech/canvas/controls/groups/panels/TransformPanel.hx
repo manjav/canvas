@@ -21,4 +21,22 @@ class TransformPanel extends Panel {
 		this.inputW = this.createInput(padding * 1, null, null, padding * 8, 2);
 		this.inputH = this.createInput(padding * 3, null, null, padding * 8, 3);
 	}
+
+	override private function set_enabled(value:Bool):Bool {
+		if (super.enabled == value)
+			return super.enabled;
+
+		if (value)
+			this.updateData();
+		return super.enabled = value;
+	}
+
+	public function updateData():Void {
+		if (this.inputService.selectedItem == null)
+			return;
+		this.inputX.value = this.inputService.selectedItem.x;
+		this.inputY.value = this.inputService.selectedItem.y;
+		this.inputW.value = this.inputService.selectedItem.width;
+		this.inputH.value = this.inputService.selectedItem.height;
+	}
 }

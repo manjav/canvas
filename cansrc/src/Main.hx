@@ -3,8 +3,8 @@ package;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.VerticalAlign;
 import feathers.style.Theme;
+import haxe.Timer;
 import ir.grantech.canvas.controls.events.CanEvent;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.Panel;
@@ -56,12 +56,13 @@ class Main extends Application {
 
 	private function left_changeHandler(event:CanEvent):Void {
 		if (event.data.index == -1) {
-		if (this.leftExtension != null && this.leftExtension.parent == this)
-			this.removeChild(this.leftExtension);
+			if (this.leftExtension != null && this.leftExtension.parent == this)
+				this.removeChild(this.leftExtension);
 			this.zoomLayout.left = this.left.width + CanTheme.DEFAULT_PADDING * 2;
 		} else {
 			this.addChild(this.leftExtension);
 			this.zoomLayout.left = this.left.width + this.leftExtension.width + CanTheme.DEFAULT_PADDING * 3;
 		}
+		Timer.delay(this.zoom.resetZoomAndPan, 0);
 	}
 }

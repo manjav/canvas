@@ -114,7 +114,7 @@ class CanZoom extends LayoutGroup {
 		this.input.pointY = this.scene.y += (h - this.scene.height) * (mouseY / this._layoutMeasurements.height);
 	}
 
-	private function resetZoomAndPan():Void {
+	public function resetZoomAndPan():Void {
 		this.setZoom(1);
 		this.scene.x = this.input.pointX = (this.explicitWidth - this.scene.canWidth) * 0.5;
 		this.scene.y = this.input.pointY = (this.explicitHeight - this.scene.canHeight) * 0.5;

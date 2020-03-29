@@ -1,17 +1,14 @@
 package ir.grantech.canvas.controls.groups;
 
-import openfl.events.Event;
-import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.services.InputService;
+import ir.grantech.canvas.controls.groups.panels.TransformPanel;
 
 class RightBar extends VGroup {
-  override private function initialize() {
-    super.initialize();
-    this.padding = this.gap = CanTheme.DEFAULT_PADDING;
-		this.input.addEventListener(InputService.SELECT, this.input_selectHandler);
+	private var transfromPanel:TransformPanel;
+
+	override private function initialize() {
+		super.initialize();
+
+		this.transfromPanel = new TransformPanel();
+		this.addChild(this.transfromPanel);
 	}
-  
-  private function input_selectHandler(event:Event):Void {
-    trace(event, input.selectedItem);
-  }
 }

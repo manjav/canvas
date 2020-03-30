@@ -151,6 +151,11 @@ class CanTextInput extends TextInput implements IRange {
 	}
 
 	private function createIcon(icon:String):Void {
+		if (icon == null) {
+			if (this.iconDisplay != null)
+				this.removeChild(this.iconDisplay);
+			return;
+		}
 		if (this.iconDisplay != null) {
 			this.iconDisplay.bitmapData = Assets.getBitmapData(icon);
 			return;
@@ -213,8 +218,5 @@ class CanTextInput extends TextInput implements IRange {
 		trace(iconDisplay.width, this.actualHeight, this.paddingTop, this.paddingBottom, CanTheme.DPI * 4);
 		this.iconDisplay.x = this.paddingLeft;
 		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;
-
-		this.textField.x = this.paddingLeft + this.iconDisplay.width;
-		this.textField.width = this.actualWidth - this.iconDisplay.width - this.paddingLeft - this.paddingRight;
 	}
 }

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.controls.Label;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanRangeInput;
@@ -13,11 +14,37 @@ import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
 
 class Panel extends CanView {
+	public var title(default, set):String;
+
+	private function set_title(value:String):String {
+		if (this.title == value)
+			return this.title;
+		if (value == null) {
+			if (this.titleDisplay != null)
+				this.removeChild(this.titleDisplay);
+			return null;
+		}
+
+		this.titleDisplay = this.createLabel(value, AnchorLayoutData.topLeft(padding, padding), Label.VARIANT_HEADING);
+		return this.title = value;
+	}
+
+	private var titleDisplay:Label;
+
 	@:access(feathers.themes.steel.CanTheme)
 	override private function initialize() {
 		super.initialize();
 		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
-		this.padding = CanTheme.DEFAULT_PADDING;
+	}
+
+	private function createLabel(text:String, layoutData:AnchorLayoutData, variant:String = null):Label {
+		var element = new Label();
+		element.text = text;
+		if (variant != null)
+			element.variant = variant;
+		element.layoutData = layoutData;
+		this.addChild(element);
+		return element;
 	}
 
 	private function createButton(icon:String, layoutData:AnchorLayoutData):Button {

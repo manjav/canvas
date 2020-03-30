@@ -27,12 +27,12 @@ class CanTheme extends BaseSteelTheme {
 	public function new() {
 		super();
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
-		DEFAULT_PADDING = DPI;
+		DEFAULT_PADDING = DPI * 6;
 		CONTROL_SIZE = DPI * 10;
-		this.fontSize = DPI * 4;
+		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
-		this.textColor = this.darkMode ? 0x484848 : 0x484848;
-		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0x8f8f8f : 0x8f8f8f;
+		this.textColor = this.darkMode ? 0x464646 : 0x464646;
+		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0xAaAaAa : 0xAaAaAa;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
@@ -40,9 +40,9 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
-		this.styleProvider.setStyleFunction(Label, null, setLableStyles);
-		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLableDetailStyles);
-		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLableHeadingStyles);
+		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
+		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
+		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -122,21 +122,21 @@ class CanTheme extends BaseSteelTheme {
 		input.paddingLeft = 10.0;
 	}
 
-	private function setLableStyles(label:Label):Void {
+	private function setLabelStyles(label:Label):Void {
 		if (label.textFormat == null)
 			label.textFormat = this.getTextFormat();
 		if (label.disabledTextFormat == null)
 			label.disabledTextFormat = this.getDisabledTextFormat();
 	}
 
-	private function setLableDetailStyles(label:Label):Void {
+	private function setLabelDetailStyles(label:Label):Void {
 		if (label.textFormat == null)
 			label.textFormat = this.getDetailTextFormat();
 		if (label.disabledTextFormat == null)
 			label.disabledTextFormat = this.getDisabledDetailTextFormat();
 	}
 
-	private function setLableHeadingStyles(label:Label):Void {
+	private function setLabelHeadingStyles(label:Label):Void {
 		if (label.textFormat == null)
 			label.textFormat = this.getHeaderTextFormat();
 		if (label.disabledTextFormat == null)

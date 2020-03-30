@@ -1,15 +1,17 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import feathers.controls.Label;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
+import feathers.controls.CanHSlider;
 import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
+import feathers.controls.Label;
 import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
+import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
 
@@ -35,6 +37,18 @@ class Panel extends CanView {
 	override private function initialize() {
 		super.initialize();
 		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
+	}
+
+	private function createSlider(minimum:Float, value:Float, maximum:Float, layoutData:AnchorLayoutData):CanHSlider {
+		var element = new CanHSlider();
+		element.minimum = minimum;
+		element.value = value;
+		element.maximum = maximum;
+		element.layoutData = layoutData;
+		element.height = 16 * CanTheme.DPI;
+		element.addEventListener(Event.CHANGE, this.sliders_changeHandler);
+		this.addChild(element);
+		return element;
 	}
 
 	private function createLabel(text:String, layoutData:AnchorLayoutData, variant:String = null):Label {
@@ -82,6 +96,8 @@ class Panel extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
+
+	private function sliders_changeHandler(event:Event):Void {}
 
 	private function buttons_clickHandler(event:MouseEvent):Void {}
 

@@ -39,7 +39,10 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
 			return this.data;
-		return this.data = value;
+		if (value == null)
+			return value;
+		this.data = value;
+		return this.data;
 	}
 
 	private function get_data():Dynamic {
@@ -49,6 +52,9 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function set_text(value:String):String {
 		if (this.text == value)
 			return this.text;
+		this.text = value;
+		if (value == null)
+			return value;
 		var icon = new Bitmap(Assets.getBitmapData(value));
 		icon.smoothing = true;
 		icon.width = icon.height = SIZE * 0.5;
@@ -63,7 +69,7 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		selectedIcon.y = icon.y;
 		this.selectedIcon = selectedIcon;
 
-		return this.text = value;
+		return this.text;
 	}
 
 	override private function refreshText():Void {}

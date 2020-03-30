@@ -42,7 +42,7 @@ class TransformPanel extends Panel {
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
-		this.inputService.canZoom.scene.transformHint.setVisible(false, true);
+		this.inputService.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
 		cast(event.currentTarget, CanTextInput).addEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 

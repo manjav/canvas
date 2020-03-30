@@ -128,15 +128,15 @@ class CanHSlider extends FeathersControl implements IRange {
 	}
 
 	override private function set_enabled(value:Bool):Bool {
-		if (super.enabled == value)
-			return super.enabled;
+		if (this.enabled == value)
+			return this.enabled;
 
 		if (this.sliderDisplay != null)
 			this.sliderDisplay.mouseEnabled = this.sliderDisplay.enabled = value;
 		if (this.inputDisplay != null)
 			this.inputDisplay.enabled = value;
 
-		return super.enabled = value;
+		return this.enabled = value;
 	}
 
 	private var sliderDisplay:HSlider;
@@ -145,9 +145,10 @@ class CanHSlider extends FeathersControl implements IRange {
 	private function createElements():Void {
 		if (this.sliderDisplay == null) {
 			this.sliderDisplay = new HSlider();
+			this.sliderDisplay.step = step;
 			this.sliderDisplay.minimum = this.minimum;
 			this.sliderDisplay.maximum = this.maximum;
-			this.sliderDisplay.step = step;
+			this.sliderDisplay.enabled = this.enabled;
 			this.addChild(this.sliderDisplay);
 		}
 
@@ -156,6 +157,7 @@ class CanHSlider extends FeathersControl implements IRange {
 			this.inputDisplay.step = this.step;
 			this.inputDisplay.minimum = this.minimum;
 			this.inputDisplay.maximum = this.maximum;
+			this.inputDisplay.enabled = this.enabled;
 			this.inputDisplay.width = CanTheme.CONTROL_SIZE * 2;
 			this.inputDisplay.valueFormatter = (v:Float) -> {
 				return Std.string(Math.round(value));

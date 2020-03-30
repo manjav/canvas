@@ -107,7 +107,8 @@ class CanTheme extends BaseSteelTheme {
 			input.textFormat = getTextFormat();
 		input.textFormat.size = this.headerFontSize;
 		input.textFormat.align = TextFormatAlign.CENTER;
-		input.textFormat.indent = cast(input, CanTextInput).icon != null ? DPI * 8 : 0;
+		if (Std.is(input, CanTextInput))
+			input.textFormat.indent = cast(input, CanTextInput).icon != null ? DPI * 8 : 0;
 
 		if (input.getTextFormatForState(TextInputState.DISABLED) == null) {
 			var format = getDisabledTextFormat();

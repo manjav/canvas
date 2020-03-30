@@ -1,9 +1,12 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.themes.CanTheme;
 import feathers.controls.LayoutGroup;
+import ir.grantech.canvas.drawables.CanBitmap;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.services.InputService;
+import openfl.Assets;
 import openfl.Vector;
 import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
@@ -47,16 +50,17 @@ class CanScene extends LayoutGroup {
 		sh.rotation = 22;
 		this.container.addChild(sh);
 
-		// var c = new ColorLine();
-		// c.y = 123;
-		// c.width = 123;
-		// c.height = CanTheme.CONTROL_SIZE;
-		// c.addEventListener(Event.CHANGE, changed);
-		// addChild(c);
+		var img = new CanBitmap();
+		img.bitmapData = Assets.getBitmapData("rotate");
+		img.rotation = 52;
+		this.container.addChild(img);
 
-		// var txt = new CanTextInput();
-		// txt.layoutData = AnchorLayoutData.center();
-		// addChild(txt);
+		var c = new feathers.controls.colors.ColorLine();
+		c.y = 123;
+		c.width = 323;
+		c.height = CanTheme.CONTROL_SIZE;
+		c.addEventListener(Event.CHANGE, changed);
+		addChild(c);
 
 		this.hitHint = new Shape();
 		this.addChild(this.hitHint);
@@ -93,11 +97,13 @@ class CanScene extends LayoutGroup {
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
-		var graphicDataList:Vector<IGraphicsData>;
+		var graphicDataList:Vector<IGraphicsData> = null;
 		if (Std.is(target, Shape))
 			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
-		else
+		else if (Std.is(target, Sprite))
 			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
+		if( graphicDataList == null)
+			return;
 
 		this.hitHint.x = target.x;
 		this.hitHint.y = target.y;

@@ -1,8 +1,9 @@
 package ir.grantech.canvas.themes;
 
-import feathers.controls.CanTextInput;
 import feathers.controls.Application;
 import feathers.controls.Button;
+import feathers.controls.CanTextInput;
+import feathers.controls.Label;
 import feathers.controls.LayoutGroup;
 import feathers.controls.TextInput;
 import feathers.controls.TextInputState;
@@ -21,13 +22,17 @@ class CanTheme extends BaseSteelTheme {
 	static public var DEFAULT_PADDING = 4;
 	static public var CONTROL_SIZE = 32;
 
+	public var headerTextColor:UInt;
+
 	public function new() {
 		super();
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
 		DEFAULT_PADDING = DPI;
 		CONTROL_SIZE = DPI * 10;
-		this.fontSize = DPI * 6;
-		this.textColor = 0x484848;
+		this.fontSize = DPI * 4;
+		this.headerFontSize = DPI * 5;
+		this.textColor = this.darkMode ? 0x484848 : 0x484848;
+		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0x8f8f8f : 0x8f8f8f;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
@@ -35,6 +40,9 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
+		this.styleProvider.setStyleFunction(Label, null, setLableStyles);
+		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLableDetailStyles);
+		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLableHeadingStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -66,17 +74,13 @@ class CanTheme extends BaseSteelTheme {
 			bar.backgroundSkin = skin;
 		}
 	}
+
 	private function setButtonStyles(button:Button):Void {
 		if (button.backgroundSkin == null) {
 			var skin = new RectangleSkin();
 			skin.fill = SolidColor(this.controlColor, 0);
 			button.backgroundSkin = skin;
 		}
-		// if (button.getSkinForState(ButtonState.DOWN) == null) {
-		// 	var skin = new RectangleSkin();
-		// 	skin.fill = SolidColor(this.activeColor);
-		// 	button.setSkinForState(ButtonState.DOWN, skin);
-		// }
 
 		if (button.textFormat == null)
 			button.textFormat = this.getTextFormat();
@@ -101,17 +105,44 @@ class CanTheme extends BaseSteelTheme {
 
 		if (input.textFormat == null)
 			input.textFormat = getTextFormat();
-		if( Std.is(input, CanTextInput)){
-			input.textFormat.align = TextFormatAlign.CENTER;
-			input.textFormat.indent = cast(input, CanTextInput).icon != null ? DPI * 8 : 0;
+		input.textFormat.size = this.headerFontSize;
+		input.textFormat.align = TextFormatAlign.CENTER;
+		input.textFormat.indent = cast(input, CanTextInput).icon != null ? DPI * 8 : 0;
+
+		if (input.getTextFormatForState(TextInputState.DISABLED) == null) {
+			var format = getDisabledTextFormat();
+			format.size = this.headerFontSize;
+			input.setTextFormatForState(TextInputState.DISABLED, format);
 		}
-		
-		if (input.getTextFormatForState(TextInputState.DISABLED) == null)
-			input.setTextFormatForState(TextInputState.DISABLED, getDisabledTextFormat());
-		
+
 		input.paddingTop = 6.0;
 		input.paddingRight = 10.0;
 		input.paddingBottom = 6.0;
 		input.paddingLeft = 10.0;
+	}
+
+	private function setLableStyles(label:Label):Void {
+		if (label.textFormat == null)
+			label.textFormat = this.getTextFormat();
+		if (label.disabledTextFormat == null)
+			label.disabledTextFormat = this.getDisabledTextFormat();
+	}
+
+	private function setLableDetailStyles(label:Label):Void {
+		if (label.textFormat == null)
+			label.textFormat = this.getDetailTextFormat();
+		if (label.disabledTextFormat == null)
+			label.disabledTextFormat = this.getDisabledDetailTextFormat();
+	}
+
+	private function setLableHeadingStyles(label:Label):Void {
+		if (label.textFormat == null)
+			label.textFormat = this.getHeaderTextFormat();
+		if (label.disabledTextFormat == null)
+			label.disabledTextFormat = this.getDisabledHeaderTextFormat();
+	}
+
+	override private function getHeaderTextFormat():TextFormat {
+		return new TextFormat(this.fontName, this.headerFontSize, this.headerTextColor);
 	}
 }

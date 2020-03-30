@@ -9,7 +9,7 @@ import feathers.controls.TextInputState;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
-import ir.grantech.canvas.controls.groups.Panel;
+import ir.grantech.canvas.controls.groups.panels.Panel;
 import openfl.system.Capabilities;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;

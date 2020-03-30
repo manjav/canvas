@@ -1,4 +1,4 @@
-package ir.grantech.canvas.controls.groups;
+package ir.grantech.canvas.controls.groups.panels;
 
 import feathers.controls.ButtonState;
 import openfl.Assets;

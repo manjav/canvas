@@ -215,7 +215,6 @@ class CanTextInput extends TextInput implements IRange {
 			return;
 
 		this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI * 5;
-		trace(iconDisplay.width, this.actualHeight, this.paddingTop, this.paddingBottom, CanTheme.DPI * 4);
 		this.iconDisplay.x = this.paddingLeft;
 		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;
 	}

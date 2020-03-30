@@ -7,7 +7,7 @@ import feathers.style.Theme;
 import haxe.Timer;
 import ir.grantech.canvas.controls.events.CanEvent;
 import ir.grantech.canvas.controls.groups.CanZoom;
-import ir.grantech.canvas.controls.groups.Panel;
+import ir.grantech.canvas.controls.groups.panels.Panel;
 import ir.grantech.canvas.controls.groups.RightBar;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.themes.CanTheme;

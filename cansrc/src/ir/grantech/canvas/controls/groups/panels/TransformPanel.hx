@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.controls.CanRangeInput;
 import openfl.events.MouseEvent;
 import feathers.controls.Button;
 import feathers.layout.AnchorLayoutData;
@@ -10,11 +11,11 @@ import openfl.events.Event;
 import openfl.events.FocusEvent;
 
 class TransformPanel extends Panel {
-	private var inputX:CanTextInput;
-	private var inputY:CanTextInput;
-	private var inputW:CanTextInput;
-	private var inputH:CanTextInput;
-	private var inputR:CanTextInput;
+	private var inputX:CanRangeInput;
+	private var inputY:CanRangeInput;
+	private var inputW:CanRangeInput;
+	private var inputH:CanRangeInput;
+	private var inputR:CanRangeInput;
 	private var buttonFlipH:Button;
 	private var buttonFlipV:Button;
 
@@ -24,11 +25,11 @@ class TransformPanel extends Panel {
 
 		var padding = CanTheme.DPI * 7;
 		this.layout = new AnchorLayout();
-		this.inputX = this.createInput("x", new AnchorLayoutData(padding * 1, null, null, padding));
-		this.inputY = this.createInput("y", new AnchorLayoutData(padding * 5, null, null, padding));
-		this.inputW = this.createInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
-		this.inputH = this.createInput("h", new AnchorLayoutData(padding * 5, null, null, null, 0));
-		this.inputR = this.createInput("rotate", new AnchorLayoutData(padding * 1, padding));
+		this.inputX = this.createRangeInput("x", new AnchorLayoutData(padding * 1, null, null, padding));
+		this.inputY = this.createRangeInput("y", new AnchorLayoutData(padding * 5, null, null, padding));
+		this.inputW = this.createRangeInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
+		this.inputH = this.createRangeInput("h", new AnchorLayoutData(padding * 5, null, null, null, 0));
+		this.inputR = this.createRangeInput("rotate", new AnchorLayoutData(padding * 1, padding));
 
 		this.buttonFlipH = this.createButton("flip-h", new AnchorLayoutData(padding * 5, padding * 4));
 		this.buttonFlipV = this.createButton("flip-v", new AnchorLayoutData(padding * 5, padding * 1));

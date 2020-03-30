@@ -1,5 +1,6 @@
 package ir.grantech.services;
 
+import ir.grantech.canvas.controls.TransformHint;
 import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.groups.CanZoom;
@@ -89,9 +90,9 @@ class InputService extends BaseService {
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 
-		this.canZoom.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
-		this.canZoom.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_middleMouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_middleMouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_middleMouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.canZoom.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
@@ -144,7 +145,7 @@ class InputService extends BaseService {
 			}
 		}
 
-		if (this.lastKeyUp == 46 && this.selectedItem != null) {
+		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItem != null) {
 			FeathersEvent.dispatch(this, DELETE);
 			return;
 		}
@@ -164,14 +165,11 @@ class InputService extends BaseService {
 		}
 
 		var item = this.canZoom.hit(this.stage.mouseX, this.stage.mouseY);
-		if (Std.is(item, ICanItem)) {
+		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
+		if (Std.is(item, ICanItem))
 			this.selectedItem = item;
-			this.canZoom.focused = true;
-		} else {
-			this.canZoom.focused = false;
-			if (Std.is(item, CanZoom))
-				this.selectedItem = null;
-		}
+		else if (Std.is(item, CanZoom))
+			this.selectedItem = null;
 		this.pointPhase = PHASE_BEGAN;
 		FeathersEvent.dispatch(this, POINT);
 	}
@@ -218,8 +216,10 @@ class InputService extends BaseService {
 			this.reservedX = this.stage.mouseX;
 			this.reservedY = this.stage.mouseY;
 		} else if (this.mouseDown) {
-			this.pointPhase = PHASE_UPDATE;
-			FeathersEvent.dispatch(this, POINT);
+			if (this.canZoom.focused) {
+				this.pointPhase = PHASE_UPDATE;
+				FeathersEvent.dispatch(this, POINT);
+			}
 		} else {
 			FeathersEvent.dispatch(this, MOVE);
 		}

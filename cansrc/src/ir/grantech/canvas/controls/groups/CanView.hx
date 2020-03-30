@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.themes.CanTheme;
 import feathers.controls.LayoutGroup;
 import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
@@ -7,7 +8,7 @@ import feathers.layout.VerticalLayout;
 import ir.grantech.services.InputService;
 
 class CanView extends LayoutGroup {
-	public var padding(default, set):Float = 0.0;
+	public var padding(default, set):Float = CanTheme.DEFAULT_PADDING;
 
 	private function set_padding(value:Float):Float {
 		if (this.padding == value)
@@ -26,7 +27,7 @@ class CanView extends LayoutGroup {
 		return this.padding = value;
 	}
 
-	public var gap(default, set):Float = 0.0;
+	public var gap(default, set):Float = CanTheme.DEFAULT_PADDING;
 
 	private function set_gap(value:Float):Float {
 		if (this.gap == value)

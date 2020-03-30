@@ -67,20 +67,20 @@ class Main extends Application {
 		if (this.leftExtension != null && this.leftExtension.parent == this)
 			this.removeChild(this.leftExtension);
 		if (event.data.index == -1) {
-			this.zoomLayout.left = this.left.width + CanTheme.DEFAULT_PADDING * 2;
+			this.zoomLayout.left = this.left.width + CanTheme.DPI * 2;
 		} else {
 			this.leftExtension = this.createPanel(event.data.index);
 			this.addChild(this.leftExtension);
-			this.zoomLayout.left = this.left.width + this.leftExtension.width + CanTheme.DEFAULT_PADDING * 3;
+			this.zoomLayout.left = this.left.width + this.leftExtension.width + CanTheme.DPI * 3;
 		}
 		Timer.delay(this.zoom.resetZoomAndPan, 0);
 	}
 
 	private function createPanel(index:Int):Panel {
 		if (!this.extensions.exists(index)) {
-			var p = CanTheme.DEFAULT_PADDING * 2;
+			var p = CanTheme.DPI * 2;
 			var pnl:Panel = index == 0 ? new LayersPanel() : new AssetsPanel();
-			pnl.layoutData = new AnchorLayoutData(this.header.height + p, null, CanTheme.DEFAULT_PADDING, this.left.width + p);
+			pnl.layoutData = new AnchorLayoutData(this.header.height + p, null, CanTheme.DPI, this.left.width + p);
 			pnl.width = CanTheme.DPI * 120;
 			this.extensions.set(index, pnl);
 		}

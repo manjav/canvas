@@ -160,7 +160,7 @@ class CanHSlider extends FeathersControl implements IRange {
 			this.inputDisplay.enabled = this.enabled;
 			this.inputDisplay.width = CanTheme.CONTROL_SIZE * 2;
 			this.inputDisplay.valueFormatter = (v:Float) -> {
-				return Std.string(Math.round(value));
+				return Std.string(Math.round(value)) + " %";
 			};
 			this.addChild(this.inputDisplay);
 		}

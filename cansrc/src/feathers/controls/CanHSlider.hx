@@ -131,8 +131,10 @@ class CanHSlider extends FeathersControl implements IRange {
 		if (this.enabled == value)
 			return this.enabled;
 
-		if (this.sliderDisplay != null)
+		if (this.sliderDisplay != null){
 			this.sliderDisplay.mouseEnabled = this.sliderDisplay.enabled = value;
+			this.sliderDisplay.alpha = value ? 1.0 : 0.4;
+		}
 		if (this.inputDisplay != null)
 			this.inputDisplay.enabled = value;
 
@@ -149,6 +151,7 @@ class CanHSlider extends FeathersControl implements IRange {
 			this.sliderDisplay.minimum = this.minimum;
 			this.sliderDisplay.maximum = this.maximum;
 			this.sliderDisplay.enabled = this.enabled;
+			this.sliderDisplay.alpha = this.enabled ? 1.0 : 0.4;
 			this.addChild(this.sliderDisplay);
 		}
 

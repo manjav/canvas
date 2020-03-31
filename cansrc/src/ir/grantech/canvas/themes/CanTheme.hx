@@ -38,11 +38,11 @@ class CanTheme extends BaseSteelTheme {
 
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
-		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
+		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -141,6 +141,37 @@ class CanTheme extends BaseSteelTheme {
 			label.textFormat = this.getHeaderTextFormat();
 		if (label.disabledTextFormat == null)
 			label.disabledTextFormat = this.getDisabledHeaderTextFormat();
+	}
+
+	private function setHSliderStyles(slider:HSlider):Void {
+		if (slider.thumbSkin == null) {
+			var thumbSkin = new CircleSkin();
+			thumbSkin.border = LineStyle.SolidColor(DPI, this.textColor);
+			thumbSkin.setBorderForState(ButtonState.DISABLED, LineStyle.SolidColor(DPI, this.textColor));
+			thumbSkin.fill = SolidColor(this.controlColor, 1);
+			thumbSkin.setFillForState(ButtonState.DOWN, SolidColor(this.textColor, 1));
+			thumbSkin.width = DPI * 8;
+			thumbSkin.height = DPI * 8;
+			var thumb = new BasicButton();
+			thumb.keepDownStateOnRollOut = true;
+			thumb.backgroundSkin = thumbSkin;
+			slider.thumbSkin = thumb;
+		}
+
+		if (slider.trackSkin == null) {
+			var trackSkin = new RectangleSkin();
+			trackSkin.fill = SolidColor(this.textColor, 1);
+			trackSkin.setFillForState(ButtonState.DISABLED, SolidColor(this.disabledTextColor, 1));
+			trackSkin.height = DPI;
+			slider.trackSkin = trackSkin;
+		}
+
+		if (slider.secondaryTrackSkin == null) {
+			var secondaryTrackSkin = new RectangleSkin();
+			secondaryTrackSkin.fill = SolidColor(this.disabledTextColor, 0.5);
+			secondaryTrackSkin.height = DPI;
+			slider.secondaryTrackSkin = secondaryTrackSkin;
+		}
 	}
 
 	override private function getHeaderTextFormat():TextFormat {

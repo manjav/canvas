@@ -1,5 +1,16 @@
 package ir.grantech.canvas.themes;
 
+import feathers.graphics.FillStyle;
+import feathers.controls.ToggleButtonState;
+import feathers.controls.dataRenderers.ItemRenderer;
+import feathers.controls.BasicButton;
+import feathers.skins.CircleSkin;
+import feathers.controls.HSlider;
+import feathers.controls.ButtonState;
+import openfl.Assets;
+import flash.display.Bitmap;
+import openfl.display.Shape;
+import feathers.controls.PopUpListView;
 import feathers.controls.Application;
 import feathers.controls.Button;
 import feathers.controls.CanTextInput;
@@ -28,7 +39,7 @@ class CanTheme extends BaseSteelTheme {
 		super();
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
 		DEFAULT_PADDING = DPI * 6;
-		CONTROL_SIZE = DPI * 10;
+		CONTROL_SIZE = DPI * 18;
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
 		this.textColor = this.darkMode ? 0x464646 : 0x464646;
@@ -43,6 +54,10 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
+		this.styleProvider.setStyleFunction(HSlider, null, setHSliderStyles);
+		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
+		this.styleProvider.setStyleFunction(Button, PopUpListView.CHILD_VARIANT_BUTTON, setButtonPopupStyles);
+
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
 		// this.styleProvider.setStyleFunction(Label, VARIANT_INPUT_DISPLAY_LABEL, setInputDisplayLabelStyles);
 	}
@@ -51,7 +66,7 @@ class CanTheme extends BaseSteelTheme {
 	// private var fontSize = 50;
 	// private var textColor = 0xf1f1f1;
 	private var activeColor = 0xff9500;
-	private var controlColor = 0xf5f5f5;
+	private var controlColor = 0xfafafa;
 	private var operationColor = 0xff9500;
 
 	private function getInputDisplayLabelTextFormat():TextFormat {
@@ -90,6 +105,37 @@ class CanTheme extends BaseSteelTheme {
 		button.paddingBottom = DEFAULT_PADDING;
 		button.paddingLeft = DEFAULT_PADDING;
 		button.gap = DEFAULT_PADDING;
+	}
+
+	private function setButtonPopupStyles(button:Button):Void {
+		if (button.backgroundSkin == null) {
+			var skin = new RectangleSkin();
+			skin.cornerRadius = DPI * 4;
+			skin.fill = SolidColor(this.controlColor, 1);
+			skin.border = LineStyle.SolidColor(DPI * 0.5, this.disabledTextColor);
+			skin.setBorderForState(ButtonState.DISABLED, LineStyle.SolidColor(DPI * 0.5, this.disabledTextColor, 0.5));
+			button.backgroundSkin = skin;
+		}
+
+		if (button.textFormat == null)
+			button.textFormat = this.getTextFormat();
+
+		if (button.getTextFormatForState(ButtonState.DISABLED) == null)
+			button.setTextFormatForState(ButtonState.DISABLED, this.getDisabledTextFormat());
+
+		button.paddingTop = DEFAULT_PADDING;
+		button.paddingRight = DEFAULT_PADDING;
+		button.paddingBottom = DEFAULT_PADDING;
+		button.paddingLeft = DEFAULT_PADDING;
+		button.gap = Math.POSITIVE_INFINITY;
+		button.horizontalAlign = LEFT;
+		button.minGap = 6.0;
+
+		button.icon = new Bitmap(Assets.getBitmapData("chevron-d"));
+		var bmp = new Bitmap(Assets.getBitmapData("chevron-d"));
+		bmp.alpha = 0.5;
+		button.setIconForState(ButtonState.DISABLED, bmp);
+		button.iconPosition = RIGHT;
 	}
 
 	private function setTextInputStyles(input:TextInput):Void {
@@ -174,7 +220,44 @@ class CanTheme extends BaseSteelTheme {
 		}
 	}
 
+	private function setItemRendererStyles(itemRenderer:ItemRenderer):Void {
+		if (itemRenderer.backgroundSkin == null) {
+			var skin = new UnderlineSkin();
+			skin.fill = this.getContainerFill();
+			skin.border = this.getDividerBorder();
+			skin.selectedFill = this.getActiveThemeFill();
+			skin.setFillForState(ToggleButtonState.DOWN(false), this.getActiveThemeFill());
+			skin.width = CONTROL_SIZE;
+			skin.height = CONTROL_SIZE;
+			skin.minWidth = CONTROL_SIZE;
+			skin.minHeight = CONTROL_SIZE;
+			itemRenderer.backgroundSkin = skin;
+		}
+
+		if (itemRenderer.textFormat == null)
+			itemRenderer.textFormat = this.getTextFormat();
+
+		if (itemRenderer.disabledTextFormat == null)
+			itemRenderer.disabledTextFormat = this.getDisabledTextFormat();
+
+		if (itemRenderer.selectedTextFormat == null)
+			itemRenderer.selectedTextFormat = this.getActiveTextFormat();
+
+		if (itemRenderer.getTextFormatForState(ToggleButtonState.DOWN(false)) == null)
+			itemRenderer.setTextFormatForState(ToggleButtonState.DOWN(false), this.getActiveTextFormat());
+
+		itemRenderer.paddingTop = DEFAULT_PADDING;
+		itemRenderer.paddingRight = DEFAULT_PADDING;
+		itemRenderer.paddingBottom = DEFAULT_PADDING;
+		itemRenderer.paddingLeft = DEFAULT_PADDING;
+		itemRenderer.horizontalAlign = LEFT;
+	}
+
 	override private function getHeaderTextFormat():TextFormat {
 		return new TextFormat(this.fontName, this.headerFontSize, this.headerTextColor);
+	}
+
+	override private function getActiveThemeFill():FillStyle {
+		return SolidColor(this.textColor, 1);
 	}
 }

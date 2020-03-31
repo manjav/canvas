@@ -32,7 +32,7 @@ class Main extends Application {
 		Theme.setTheme(new CanTheme());
 		super();
 
-		var p = CanTheme.DEFAULT_PADDING;
+		var p = CanTheme.DPI;
 		this.layout = new AnchorLayout();
 		this.extensions = new Map<Int, Panel>();
 		this.zoom = new CanZoom();

@@ -6,8 +6,11 @@ import feathers.controls.CanHSlider;
 import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
 import feathers.controls.Label;
+import feathers.controls.PopUpListView;
+import feathers.data.ArrayCollection;
 import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
+import ir.grantech.canvas.controls.popups.DropCenterPopUpAdapter;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -45,8 +48,19 @@ class Panel extends CanView {
 		element.value = value;
 		element.maximum = maximum;
 		element.layoutData = layoutData;
-		element.height = 16 * CanTheme.DPI;
+		element.height = CanTheme.CONTROL_SIZE;
 		element.addEventListener(Event.CHANGE, this.sliders_changeHandler);
+		this.addChild(element);
+		return element;
+	}
+
+	private function createPopupList(items:Array<Dynamic>, layoutData:AnchorLayoutData):PopUpListView {
+		var element = new PopUpListView();
+		element.dataProvider = new ArrayCollection(items);
+		element.layoutData = layoutData;
+		element.height = CanTheme.CONTROL_SIZE;
+		element.popUpAdapter = new DropCenterPopUpAdapter(12 * CanTheme.CONTROL_SIZE);
+		element.addEventListener(Event.CHANGE, this.popupListView_changeHandler);
 		this.addChild(element);
 		return element;
 	}
@@ -96,6 +110,8 @@ class Panel extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
+
+	private function popupListView_changeHandler(event:Event):Void {}
 
 	private function sliders_changeHandler(event:Event):Void {}
 

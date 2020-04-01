@@ -6,6 +6,7 @@ import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
 import ir.grantech.services.InputService;
+import ir.grantech.services.LayersService;
 
 class CanView extends LayoutGroup {
 	public var padding(default, set):Float = CanTheme.DEFAULT_PADDING;
@@ -52,13 +53,9 @@ class CanView extends LayoutGroup {
 		return InputService.instance;
 	}
 
-	override private function set_enabled(value:Bool):Bool {
-		if (super.enabled == value)
-			return super.enabled;
+	public var layersService(get, null):LayersService;
 
-    for (item in this.items)
-      if( Std.is(item, FeathersControl))
-          cast(item, FeathersControl).enabled = value;
-		return super.enabled = value;
+	private function get_layersService():LayersService {
+		return LayersService.instance;
 	}
 }

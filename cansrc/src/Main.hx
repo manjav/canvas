@@ -14,6 +14,7 @@ import ir.grantech.canvas.controls.groups.panels.LayersPanel;
 import ir.grantech.canvas.controls.groups.panels.Panel;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.services.BaseService;
+import ir.grantech.services.LayersService;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
 
@@ -30,6 +31,7 @@ class Main extends Application {
 		stage.quality = StageQuality.BEST;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		Theme.setTheme(new CanTheme());
+		BaseService.get(LayersService, [stage]);
 		super();
 
 		var p = CanTheme.DPI;

@@ -6,7 +6,7 @@ import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import feathers.themes.steel.BaseSteelTheme;
-import ir.grantech.canvas.controls.events.CanEvent;
+import ir.grantech.canvas.events.CanEvent;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.events.Event;

@@ -1,11 +1,11 @@
 package feathers.controls;
 
-import ir.grantech.canvas.themes.CanTheme;
-import feathers.events.FeathersEvent;
-import openfl.events.Event;
-import feathers.core.InvalidationFlag;
-import feathers.core.FeathersControl;
 import feathers.controls.IRange;
+import feathers.core.FeathersControl;
+import feathers.core.InvalidationFlag;
+import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.themes.CanTheme;
+import openfl.events.Event;
 
 class CanHSlider extends FeathersControl implements IRange {
 	/**
@@ -122,7 +122,7 @@ class CanHSlider extends FeathersControl implements IRange {
 
 		this.value = value;
 		this.setInvalid(InvalidationFlag.DATA);
-		FeathersEvent.dispatch(this, Event.CHANGE);
+		CanEvent.dispatch(this, Event.CHANGE);
 
 		return this.value;
 	}
@@ -131,7 +131,7 @@ class CanHSlider extends FeathersControl implements IRange {
 		if (this.enabled == value)
 			return this.enabled;
 
-		if (this.sliderDisplay != null){
+		if (this.sliderDisplay != null) {
 			this.sliderDisplay.mouseEnabled = this.sliderDisplay.enabled = value;
 			this.sliderDisplay.alpha = value ? 1.0 : 0.4;
 		}

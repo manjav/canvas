@@ -1,9 +1,9 @@
 package ir.grantech.services;
 
-import openfl.display.Stage;
 import feathers.data.ArrayCollection;
-import feathers.events.FeathersEvent;
+import ir.grantech.canvas.events.CanEvent;
 import openfl.display.Bitmap;
+import openfl.display.Stage;
 import openfl.events.Event;
 
 class LayersService extends BaseService {
@@ -43,9 +43,9 @@ class LayersService extends BaseService {
 		if (this.selectedIndex == value)
 			return this.selectedIndex;
 
-		this.selectedItem = value > -1 ? this.items.get(this.selectedIndex) : null;
 		this.selectedIndex = value;
-		FeathersEvent.dispatch(this, Event.SELECT);
+		this.selectedItem = value > -1 ? this.items.get(this.selectedIndex) : null;
+		CanEvent.dispatch(this, Event.SELECT);
 		return this.selectedIndex;
 	}
 
@@ -82,19 +82,21 @@ class LayersService extends BaseService {
 	/**
 	 * Method to remove layer with it's object.
 	 */
-	public function remove(layer:Layer):Void {
-		this.items.remove(layer);
+	public function remove(item:Layer):Void {
+		this.items.remove(item);
 		this.selectedIndex = -1;
-		FeathersEvent.dispatch(this, Event.REMOVED);
+		CanEvent.dispatch(this, Event.REMOVED, item);
 	}
 
 	/**
 	 * Method to remove layer with it's index.
 	 */
 	public function removeLayerAt(index:Int):Void {
-		this.items.removeAt(index);
+		var item = this.items.removeAt(index);
+		if( item == null )
+			return;
+		CanEvent.dispatch(this, Event.REMOVED, item);
 		this.selectedIndex = -1;
-		FeathersEvent.dispatch(this, Event.REMOVED);
 	}
 
 	private function getItemIndex(item:Layer):Int {

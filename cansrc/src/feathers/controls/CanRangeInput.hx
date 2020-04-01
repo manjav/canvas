@@ -1,5 +1,6 @@
 package feathers.controls;
 
+import ir.grantech.canvas.events.CanEvent;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
 import openfl.events.Event;
@@ -39,7 +40,7 @@ class CanRangeInput extends CanTextInput implements IRange {
 		this.value = value;
 		this.set_text(this.valueFormatter(value));
 		this.setInvalid(InvalidationFlag.DATA);
-		FeathersEvent.dispatch(this, Event.CHANGE);
+		CanEvent.dispatch(this, Event.CHANGE);
 
 		return this.value;
 	}

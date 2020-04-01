@@ -1,10 +1,10 @@
 package ir.grantech.services;
 
-import ir.grantech.canvas.controls.TransformHint;
-import feathers.events.FeathersEvent;
 import feathers.layout.Measurements;
+import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.events.CanEvent;
 import lime.ui.KeyCode;
 import openfl.display.DisplayObject;
 import openfl.display.Stage;
@@ -68,7 +68,7 @@ class InputService extends BaseService {
 			return this.zoom;
 
 		this.zoom = value;
-		FeathersEvent.dispatch(this, ZOOM);
+		CanEvent.dispatch(this, ZOOM);
 		return this.zoom;
 	}
 
@@ -78,7 +78,7 @@ class InputService extends BaseService {
 		if (this.selectedItem == value)
 			return this.selectedItem;
 		this.selectedItem = value;
-		FeathersEvent.dispatch(this, SELECT);
+		CanEvent.dispatch(this, SELECT);
 		return this.selectedItem;
 	}
 
@@ -111,7 +111,7 @@ class InputService extends BaseService {
 			else if (event.keyCode == 40)
 				this.selectedItem.y += (event.shiftKey ? 10 : 1);
 			this.panPhase = PHASE_ENDED;
-			FeathersEvent.dispatch(this, POINT);
+			CanEvent.dispatch(this, POINT);
 			return;
 		}
 
@@ -133,20 +133,20 @@ class InputService extends BaseService {
 				this.zoom = 1;
 				this.pointX = 0;
 				this.pointY = 0;
-				FeathersEvent.dispatch(this, ZOOM_RESET);
+				CanEvent.dispatch(this, ZOOM_RESET);
 			} else if (this.lastKeyUp == 187) { // ctrl + =
 				this.zoom += 0.3;
-				FeathersEvent.dispatch(this, ZOOM);
+				CanEvent.dispatch(this, ZOOM);
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
-				FeathersEvent.dispatch(this, ZOOM);
+				CanEvent.dispatch(this, ZOOM);
 			} else if (this.selectedItem != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
-				FeathersEvent.dispatch(this, TRANSFORM_RESET);
+				CanEvent.dispatch(this, TRANSFORM_RESET);
 			}
 		}
 
 		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItem != null) {
-			FeathersEvent.dispatch(this, DELETE);
+			CanEvent.dispatch(this, DELETE);
 			return;
 		}
 	}
@@ -160,7 +160,7 @@ class InputService extends BaseService {
 		this.reservedY = event.stageY;
 		if (this.lastKeyDown == KeyCode.SPACE) {
 			this.panPhase = PHASE_BEGAN;
-			FeathersEvent.dispatch(this, PAN);
+			CanEvent.dispatch(this, PAN);
 			return;
 		}
 
@@ -171,7 +171,7 @@ class InputService extends BaseService {
 		else if (Std.is(item, CanZoom))
 			this.selectedItem = null;
 		this.pointPhase = PHASE_BEGAN;
-		FeathersEvent.dispatch(this, POINT);
+		CanEvent.dispatch(this, POINT);
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
@@ -179,11 +179,11 @@ class InputService extends BaseService {
 		this.mouseDown = false;
 		if (this.panPhase == PHASE_UPDATE) {
 			this.panPhase = PHASE_ENDED;
-			FeathersEvent.dispatch(this, PAN);
+			CanEvent.dispatch(this, PAN);
 			return;
 		}
 		this.pointPhase = PHASE_ENDED;
-		FeathersEvent.dispatch(this, POINT);
+		CanEvent.dispatch(this, POINT);
 	}
 
 	private function stage_middleMouseDownHandler(event:MouseEvent):Void {
@@ -194,13 +194,13 @@ class InputService extends BaseService {
 		this.altKey = event.altKey;
 		this.middleMouseDown = true;
 		this.panPhase = PHASE_BEGAN;
-		FeathersEvent.dispatch(this, PAN);
+		CanEvent.dispatch(this, PAN);
 	}
 
 	private function stage_middleMouseUpHandler(event:MouseEvent):Void {
 		this.middleMouseDown = false;
 		this.panPhase = PHASE_ENDED;
-		FeathersEvent.dispatch(this, PAN);
+		CanEvent.dispatch(this, PAN);
 	}
 
 	private function stage_mouseMoveHandler(event:MouseEvent):Void {
@@ -212,16 +212,16 @@ class InputService extends BaseService {
 			this.panPhase = PHASE_UPDATE;
 			this.pointX += (this.stage.mouseX - this.reservedX);
 			this.pointY += (this.stage.mouseY - this.reservedY);
-			FeathersEvent.dispatch(this, PAN);
+			CanEvent.dispatch(this, PAN);
 			this.reservedX = this.stage.mouseX;
 			this.reservedY = this.stage.mouseY;
 		} else if (this.mouseDown) {
 			if (this.canZoom.focused) {
 				this.pointPhase = PHASE_UPDATE;
-				FeathersEvent.dispatch(this, POINT);
+				CanEvent.dispatch(this, POINT);
 			}
 		} else {
-			FeathersEvent.dispatch(this, MOVE);
+			CanEvent.dispatch(this, MOVE);
 		}
 	}
 
@@ -241,6 +241,6 @@ class InputService extends BaseService {
 		else
 			this.pointY += event.delta * 10;
 
-		FeathersEvent.dispatch(this, PAN);
+		CanEvent.dispatch(this, PAN);
 	}
 }

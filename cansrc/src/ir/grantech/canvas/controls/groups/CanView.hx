@@ -1,10 +1,10 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.themes.CanTheme;
 import feathers.controls.LayoutGroup;
 import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
+import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.services.InputService;
 import ir.grantech.services.LayersService;
 
@@ -17,11 +17,11 @@ class CanView extends LayoutGroup {
 
 		if (this.layout == null)
 			return this.padding;
-		if( Std.is(this.layout, VerticalLayout) ){
+		if (Std.is(this.layout, VerticalLayout)) {
 			var layout = cast(this.layout, VerticalLayout);
 			layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = value;
 		}
-		if( Std.is(this.layout, HorizontalLayout) ){
+		if (Std.is(this.layout, HorizontalLayout)) {
 			var layout = cast(this.layout, HorizontalLayout);
 			layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = value;
 		}
@@ -36,15 +36,25 @@ class CanView extends LayoutGroup {
 
 		if (this.layout == null)
 			return this.gap;
-		if( Std.is(this.layout, VerticalLayout) ){
+		if (Std.is(this.layout, VerticalLayout)) {
 			var layout = cast(this.layout, VerticalLayout);
 			layout.gap = value;
 		}
-		if( Std.is(this.layout, HorizontalLayout) ){
+		if (Std.is(this.layout, HorizontalLayout)) {
 			var layout = cast(this.layout, HorizontalLayout);
-			layout.gap	 = value;
+			layout.gap = value;
 		}
 		return this.gap = value;
+	}
+
+	override private function set_enabled(value:Bool):Bool {
+		if (super.enabled == value)
+			return super.enabled;
+
+		for (item in this.items)
+			if (Std.is(item, FeathersControl))
+				cast(item, FeathersControl).enabled = value;
+		return super.enabled = value;
 	}
 
 	public var inputService(get, null):InputService;

@@ -42,7 +42,7 @@ class CanTheme extends BaseSteelTheme {
 		CONTROL_SIZE = DPI * 18;
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
-		this.textColor = this.darkMode ? 0x464646 : 0x464646;
+		this.textColor = this.darkMode ? 0x646464 : 0x646464;
 		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0xAaAaAa : 0xAaAaAa;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
@@ -123,12 +123,11 @@ class CanTheme extends BaseSteelTheme {
 		if (button.getTextFormatForState(ButtonState.DISABLED) == null)
 			button.setTextFormatForState(ButtonState.DISABLED, this.getDisabledTextFormat());
 
-		button.paddingTop = DEFAULT_PADDING;
 		button.paddingRight = DEFAULT_PADDING;
-		button.paddingBottom = DEFAULT_PADDING;
 		button.paddingLeft = DEFAULT_PADDING;
 		button.gap = Math.POSITIVE_INFINITY;
 		button.horizontalAlign = LEFT;
+		button.verticalAlign = MIDDLE;
 		button.minGap = 6.0;
 
 		button.icon = new Bitmap(Assets.getBitmapData("chevron-d"));
@@ -256,7 +255,7 @@ class CanTheme extends BaseSteelTheme {
 	override private function getHeaderTextFormat():TextFormat {
 		return new TextFormat(this.fontName, this.headerFontSize, this.headerTextColor);
 	}
-
+	
 	override private function getActiveThemeFill():FillStyle {
 		return SolidColor(this.textColor, 1);
 	}

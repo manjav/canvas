@@ -2,6 +2,7 @@ package ir.grantech.canvas.controls.items;
 
 import feathers.controls.ToggleButton;
 import ir.grantech.services.LayersService.Layer;
+import feathers.core.InvalidationFlag;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import feathers.controls.ToggleButtonState;
@@ -96,6 +97,12 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
+		if (this.mouseX > this.lockDisplay.x) {
+			if (this.mouseX < this.lockDisplay.x + this.lockDisplay.width)
+				this.layer.enabled = !this.layer.enabled;
+			else
+				this.layer.visible = !this.layer.visible;
+		}
 		super.basicToggleButton_triggerHandler(event);
 	}
 }

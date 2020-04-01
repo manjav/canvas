@@ -1,6 +1,9 @@
 package ir.grantech.canvas.controls.items;
 
 import feathers.controls.ToggleButton;
+import ir.grantech.services.LayersService.Layer;
+import openfl.Assets;
+import openfl.display.Bitmap;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -27,6 +30,10 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
+	private var layer:Layer;
+	private var lockDisplay:Bitmap;
+	private var hideDisplay:Bitmap;
+
 	public function new() {
 		super();
 		this.height = CanTheme.CONTROL_SIZE;
@@ -46,8 +53,46 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
+
+		this.icon = new Bitmap(Assets.getBitmapData("bitmap"));
+
+		this.lockDisplay = new Bitmap(Assets.getBitmapData("lock"));
+		this.addChild(this.lockDisplay);
+
+		this.hideDisplay = new Bitmap(Assets.getBitmapData("hide"));
+		this.addChild(this.hideDisplay);
+
 		this.iconPosition = MANUAL;
 		this.gap = CanTheme.DEFAULT_PADDING;
+	}
+
+	override private function update():Void {
+		if (this.isInvalid(InvalidationFlag.STATE)) {
+			if (this.currentState.equals(ToggleButtonState.HOVER(false))) {
+				this.hideDisplay.alpha = 0.4;
+				this.lockDisplay.alpha = 0.4;
+			} else {
+				this.textField.alpha = this.icon.alpha = this.layer.visible ? 1.0 : 0.4;
+				this.hideDisplay.alpha = this.layer.visible ? 0.0 : 1.0;
+				this.lockDisplay.alpha = this.layer.enabled ? 0.0 : 1.0;
+			}
+		}
+
+		super.update();
+	}
+
+	override private function layoutContent():Void {
+		this.icon.x = this.paddingLeft;
+		this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
+
+		this.textField.x = this.paddingLeft + this.icon.width + this.gap;
+		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
+
+		this.hideDisplay.x = this.actualWidth - this.paddingRight - this.hideDisplay.width;
+		this.hideDisplay.y = (this.actualHeight - this.hideDisplay.height) * 0.5;
+
+		this.lockDisplay.x = this.actualWidth - this.paddingRight - this.hideDisplay.width - this.gap * 2 - this.lockDisplay.width;
+		this.lockDisplay.y = (this.actualHeight - this.lockDisplay.height) * 0.5;
 	}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {

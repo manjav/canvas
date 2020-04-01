@@ -1,5 +1,10 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import openfl.display.DisplayObject;
+import feathers.data.ListViewItemState;
+import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
+import feathers.utils.DisplayObjectRecycler;
+import feathers.controls.ListView;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
@@ -65,6 +70,18 @@ class Panel extends CanView {
 		return element;
 	}
 
+	private function createList(items:Array<Dynamic>, itemRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>, layoutData:AnchorLayoutData = null):ListView {
+		var element = new ListView();
+		if (items != null)
+			element.dataProvider = new ArrayCollection(items);
+		if (itemRendererRecycler != null)
+			element.itemRendererRecycler = itemRendererRecycler;
+		element.layoutData = layoutData;
+		element.addEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.addChild(element);
+		return element;
+	}
+
 	private function createLabel(text:String, layoutData:AnchorLayoutData, variant:String = null):Label {
 		var element = new Label();
 		element.text = text;
@@ -110,6 +127,8 @@ class Panel extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
+
+	private function listView_changeHandler(event:Event):Void {}
 
 	private function popupListView_changeHandler(event:Event):Void {}
 

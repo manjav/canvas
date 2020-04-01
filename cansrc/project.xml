@@ -52,6 +52,9 @@
   <assets id="flip-h" path="assets/img/flip-h.png"/>
   <assets id="flip-v" path="assets/img/flip-v.png"/>
   <assets id="chevron-d" path="assets/img/chevron-d.png"/>
+  <assets id="lock" path="assets/img/lock.png"/>
+  <assets id="hide" path="assets/img/hide.png"/>
+  <assets id="bitmap" path="assets/img/bitmap.png"/>
 
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

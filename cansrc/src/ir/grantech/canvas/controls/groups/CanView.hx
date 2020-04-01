@@ -5,6 +5,7 @@ import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.services.AssetsService;
 import ir.grantech.services.InputService;
 import ir.grantech.services.LayersService;
 
@@ -61,6 +62,12 @@ class CanView extends LayoutGroup {
 
 	private function get_inputService():InputService {
 		return InputService.instance;
+	}
+
+	public var assetsService(get, null):AssetsService;
+
+	private function get_assetsService():AssetsService {
+		return AssetsService.instance;
 	}
 
 	public var layersService(get, null):LayersService;

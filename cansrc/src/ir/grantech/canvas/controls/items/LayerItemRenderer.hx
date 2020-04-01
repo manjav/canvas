@@ -70,8 +70,8 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.STATE)) {
 			if (this.currentState.equals(ToggleButtonState.HOVER(false))) {
-				this.hideDisplay.alpha = 0.4;
-				this.lockDisplay.alpha = 0.4;
+				this.hideDisplay.alpha = this.layer.visible ? 0.4 : 1.0;
+				this.lockDisplay.alpha = this.layer.enabled ? 0.4 : 1.0;
 			} else {
 				this.textField.alpha = this.icon.alpha = this.layer.visible ? 1.0 : 0.4;
 				this.hideDisplay.alpha = this.layer.visible ? 0.0 : 1.0;
@@ -102,6 +102,8 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 				this.layer.enabled = !this.layer.enabled;
 			else
 				this.layer.visible = !this.layer.visible;
+			this.setInvalid(InvalidationFlag.STATE);
+			return;
 		}
 		super.basicToggleButton_triggerHandler(event);
 	}

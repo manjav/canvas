@@ -1,14 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.themes.CanTheme;
 import feathers.controls.LayoutGroup;
-import ir.grantech.canvas.drawables.CanBitmap;
-import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.services.InputService;
-import openfl.Assets;
 import openfl.Vector;
-import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
 import openfl.display.Shape;
@@ -37,30 +32,6 @@ class CanScene extends LayoutGroup {
 		this.graphics.beginFill(0xFFFFFF);
 		this.graphics.lineStyle(0.2, 0x838383);
 		this.graphics.drawRect(0, 0, canWidth, canHeight);
-
-		var sh = new CanShape();
-		sh.graphics.beginFill(0xF0FFFF, 0.7);
-		sh.graphics.lineStyle(1, 0xFF00FF);
-		sh.graphics.moveTo(10, 10);
-		sh.graphics.lineTo(20, 10);
-		sh.graphics.curveTo(20, 20, 0, 20);
-		sh.graphics.drawRoundRect(0, 0, 122, 123, 42, 44);
-		sh.x = 120;
-		sh.y = 150;
-		sh.rotation = 22;
-		this.container.addChild(sh);
-
-		var img = new CanBitmap();
-		img.bitmapData = Assets.getBitmapData("rotate");
-		img.rotation = 52;
-		this.container.addChild(img);
-
-		var c = new feathers.controls.colors.ColorLine();
-		c.y = 123;
-		c.width = 323;
-		c.height = CanTheme.CONTROL_SIZE;
-		c.addEventListener(Event.CHANGE, changed);
-		addChild(c);
 
 		this.hitHint = new Shape();
 		this.addChild(this.hitHint);

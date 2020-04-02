@@ -1,5 +1,35 @@
 package ir.grantech.canvas.drawables;
 
-interface ICanItem {
-  public var id(default, null):Int;
+import feathers.core.IDisplayObject;
+import ir.grantech.services.LayersService.Layer;
+import openfl.display.BlendMode;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.geom.Rectangle;
+import openfl.geom.Transform;
+
+interface ICanItem extends IDisplayObject {
+	public var layer(default, default):Layer;
+
+	#if flash
+	public var rotation:Float;
+	#else
+	public var rotation(get, set):Float;
+	#end
+
+	#if flash
+	public var transform:Transform;
+	#else
+	public var transform(get, set):Transform;
+	#end
+
+	#if flash
+	public var blendMode:BlendMode;
+	#else
+	public var blendMode(get, set):BlendMode;
+	#end
+
+	public var parent(default, never):DisplayObjectContainer;
+	
+	public function getBounds(targetCoordinateSpace:DisplayObject):Rectangle;
 }

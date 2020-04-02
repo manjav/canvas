@@ -47,7 +47,9 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_moveHandler(event:Event):Void {
-		this.scene.drawHit(this.hit(this.stage.mouseX, this.stage.mouseY));
+		var target = this.hit(this.stage.mouseX, this.stage.mouseY);
+		if (target != null && Std.is(target, ICanItem))
+			this.scene.drawHit(cast(target, ICanItem));
 	}
 
 	private function input_panHandler(event:Event):Void {
@@ -68,7 +70,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_deleteHandler(event:Event):Void {
-		this.input.selectedItem.parent.removeChild(this.input.selectedItem);
+		this.scene.container.removeChild(cast this.input.selectedItem);
 		this.input.selectedItem = null;
 		if (this.scene.transformHint.parent != null)
 			this.scene.removeChild(this.scene.transformHint);

@@ -1,11 +1,10 @@
 package ir.grantech.canvas.drawables;
 
-import openfl.display.PixelSnapping;
-import openfl.display.BitmapData;
+import ir.grantech.services.LayersService.Layer;
 import openfl.display.Bitmap;
 
 class CanBitmap extends Bitmap implements ICanItem {
-  public var id(default, null):Int;
+  public var layer(default, default):Layer;
   public function new() {
     super(null);
   }

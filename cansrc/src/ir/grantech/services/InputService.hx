@@ -72,9 +72,9 @@ class InputService extends BaseService {
 		return this.zoom;
 	}
 
-	public var selectedItem(default, set):DisplayObject;
+	public var selectedItem(default, set):ICanItem;
 
-	private function set_selectedItem(value:DisplayObject):DisplayObject {
+	private function set_selectedItem(value:ICanItem):ICanItem {
 		if (this.selectedItem == value)
 			return this.selectedItem;
 		this.selectedItem = value;
@@ -167,7 +167,7 @@ class InputService extends BaseService {
 		var item = this.canZoom.hit(this.stage.mouseX, this.stage.mouseY);
 		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
 		if (Std.is(item, ICanItem))
-			this.selectedItem = item;
+			this.selectedItem = cast(item, ICanItem);
 		else if (Std.is(item, CanZoom))
 			this.selectedItem = null;
 		this.pointPhase = PHASE_BEGAN;

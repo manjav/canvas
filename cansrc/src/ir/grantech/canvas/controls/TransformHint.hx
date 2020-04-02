@@ -1,7 +1,7 @@
 package ir.grantech.canvas.controls;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.services.InputService;
-import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
@@ -58,7 +58,7 @@ class TransformHint extends Sprite {
 	private var registerRatio:Point;
 	private var registerPoint:Point;
 
-	public var targets:Array<DisplayObject>;
+	public var targets:Array<ICanItem>;
 
 	public function new() {
 		super();
@@ -73,7 +73,7 @@ class TransformHint extends Sprite {
 		this.lastScale = new Point();
 		this.registerPoint = new Point();
 		this.registerRatio = new Point(0.5, 0.5);
-		this.targets = new Array<DisplayObject>();
+		this.targets = new Array<ICanItem>();
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.lines = new Array<Shape>();
@@ -134,7 +134,7 @@ class TransformHint extends Sprite {
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
 	}
 
-	public function set(target:DisplayObject):Void {
+	public function set(target:ICanItem):Void {
 		this.setVisible(true, true);
 		this.targets = [target];
 		var r = target.rotation;

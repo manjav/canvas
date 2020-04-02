@@ -91,9 +91,9 @@ class CanScene extends LayoutGroup {
 		this.selectHint.height = Math.abs(this.mouseY - this.beginPoint.y);
 	}
 
-	public function drawHit(target:DisplayObject):Void {
+	public function drawHit(target:ICanItem):Void {
 		this.hitHint.graphics.clear();
-		if (target == null || !Std.is(target, ICanItem) || target == InputService.instance.selectedItem || target == this.transformHint)
+		if ( target == InputService.instance.selectedItem )
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
@@ -102,7 +102,9 @@ class CanScene extends LayoutGroup {
 			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
 		else if (Std.is(target, Sprite))
 			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
-		if( graphicDataList == null)
+		else if (Std.is(target, Sprite))
+			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
+		if (graphicDataList == null)
 			return;
 
 		this.hitHint.x = target.x;

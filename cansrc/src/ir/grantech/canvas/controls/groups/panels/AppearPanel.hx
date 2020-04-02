@@ -36,19 +36,19 @@ class AppearPanel extends Panel {
 	}
 
 	override private function sliders_changeHandler(event:Event) {
-		if (this.inputService.selectedItem != null)
-			this.inputService.selectedItem.alpha = this.alphaSlider.value * 0.01;
+		if (this.inputs.selectedItem != null)
+			this.inputs.selectedItem.alpha = this.alphaSlider.value * 0.01;
 	}
 
 	override private function popupListView_changeHandler(event:Event) {
-		if (this.inputService.selectedItem != null)
-			this.inputService.selectedItem.blendMode = this.modesList.selectedItem;
+		if (this.inputs.selectedItem != null)
+			this.inputs.selectedItem.blendMode = this.modesList.selectedItem;
 	}
 
 	public function updateData():Void {
-		if (this.inputService.selectedItem == null)
+		if (this.inputs.selectedItem == null)
 			return;
-		this.alphaSlider.value = this.inputService.selectedItem.alpha * 100;
-		this.modesList.selectedItem = this.inputService.selectedItem.blendMode;
+		this.alphaSlider.value = this.inputs.selectedItem.alpha * 100;
+		this.modesList.selectedItem = this.inputs.selectedItem.blendMode;
 	}
 }

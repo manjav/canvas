@@ -1,10 +1,11 @@
 package ir.grantech.canvas.controls.groups;
 
 import feathers.layout.VerticalLayoutData;
-import ir.grantech.canvas.controls.groups.panels.FiltersPanel;
-import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.controls.groups.panels.AppearPanel;
+import ir.grantech.canvas.controls.groups.panels.FiltersPanel;
 import ir.grantech.canvas.controls.groups.panels.TransformPanel;
+import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.services.CommandsService;
 import ir.grantech.services.InputService;
 import ir.grantech.services.ToolsService;
 import openfl.events.Event;
@@ -29,21 +30,22 @@ class RightBar extends VGroup {
 		this.filtersPanel.layoutData = new VerticalLayoutData(100, 100);
 		this.addChild(this.filtersPanel);
 
-		this.inputService.addEventListener(InputService.SELECT, this.input_selectHandler);
-		this.inputService.addEventListener(InputService.POINT, this.input_pointHandler);
+		this.inputs.addEventListener(InputService.POINT, this.input_pointHandler);
+		this.commands.addEventListener(CommandsService.SELECT, this.commands_selectHandler);
 		this.enabled = false;
 	}
 
 	private function input_pointHandler(event:Event):Void {
 		if (ToolsService.instance.toolType != Tool.SELECT)
 			return;
-		if (this.inputService.pointPhase < InputService.PHASE_UPDATE)
+		if (this.inputs.pointPhase < InputService.PHASE_UPDATE)
 			this.appearPanel.updateData();
-		else
-			this.transfromPanel.updateData();
 	}
 
-	private function input_selectHandler(event:Event):Void {
-		this.enabled = inputService.selectedItem != null;
-	}
+	private function commands_selectHandler(event:Event):Void {
+		this.enabled = inputs.selectedItem != null;
+		if(!this.enabled)
+			return;
+		this.appearPanel.updateData();
+		this.transfromPanel.updateData();	}
 }

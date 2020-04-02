@@ -45,33 +45,33 @@ class TransformPanel extends Panel {
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
-		this.inputService.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
+		this.inputs.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
 		cast(event.currentTarget, CanTextInput).addEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	override private function textInputs_focusOutHandler(event:FocusEvent):Void {
-		this.inputService.canZoom.scene.transformHint.set(this.inputService.selectedItem);
+		this.inputs.canZoom.scene.transformHint.set(this.inputs.selectedItem);
 		cast(event.currentTarget, CanTextInput).removeEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.inputService.selectedItem == null)
+		if (this.inputs.selectedItem == null)
 			return;
-		var r = this.inputService.selectedItem.rotation;
+		var r = this.inputs.selectedItem.rotation;
 		if (event.currentTarget != this.inputR)
-			this.inputService.selectedItem.rotation = 0;
+			this.inputs.selectedItem.rotation = 0;
 		if (event.currentTarget == this.inputX)
-			this.inputService.selectedItem.x = this.inputX.value;
+			this.inputs.selectedItem.x = this.inputX.value;
 		else if (event.currentTarget == this.inputY)
-			this.inputService.selectedItem.y = this.inputY.value;
+			this.inputs.selectedItem.y = this.inputY.value;
 		else if (event.currentTarget == this.inputW)
-			this.inputService.selectedItem.width = this.inputW.value;
+			this.inputs.selectedItem.width = this.inputW.value;
 		else if (event.currentTarget == this.inputH)
-			this.inputService.selectedItem.height = this.inputH.value;
+			this.inputs.selectedItem.height = this.inputH.value;
 		else if (event.currentTarget == this.inputR)
-			this.inputService.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
+			this.inputs.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
 		if (event.currentTarget != this.inputR)
-			this.inputService.selectedItem.rotation = r;
+			this.inputs.selectedItem.rotation = r;
 	}
 
 	override private function set_enabled(value:Bool):Bool {
@@ -84,12 +84,12 @@ class TransformPanel extends Panel {
 	}
 
 	public function updateData():Void {
-		if (this.inputService.selectedItem == null)
+		if (this.inputs.selectedItem == null)
 			return;
-		this.inputX.value = this.inputService.selectedItem.x;
-		this.inputY.value = this.inputService.selectedItem.y;
-		this.inputW.value = this.inputService.selectedItem.width;
-		this.inputH.value = this.inputService.selectedItem.height;
-		this.inputR.value = this.inputService.selectedItem.rotation;
+		this.inputX.value = this.inputs.selectedItem.x;
+		this.inputY.value = this.inputs.selectedItem.y;
+		this.inputW.value = this.inputs.selectedItem.width;
+		this.inputH.value = this.inputs.selectedItem.height;
+		this.inputR.value = this.inputs.selectedItem.rotation;
 	}
 }

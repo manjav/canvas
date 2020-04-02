@@ -4,7 +4,7 @@ import feathers.controls.ListView;
 import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.items.LayerItemRenderer;
-import ir.grantech.services.LayersService.Layer;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.services.CommandsService;
 import ir.grantech.services.Layers.Layer;
 import openfl.events.Event;
@@ -31,11 +31,18 @@ class LayersPanel extends ListPanel {
 
 	override private function layoutGroup_removedFromStageHandler(event:Event):Void {
 		super.layoutGroup_removedFromStageHandler(event);
-		this.layersService.removeEventListener(Event.CHANGE, layersService_changeHandler);
+		this.commands.removeEventListener(CommandsService.SELECT, this.commads_selectHandler);
 		this.listView.dataProvider = null;
 	}
 
-	private function layersService_changeHandler(event:Event):Void {}
+	private function listView_changeHandler(event:Event):Void {
+		if (this.listView.selectedItem != null)
+			this.commands.commit(CommandsService.SELECT, [this.listView.selectedItem.item]);
+	}
 
 	private function commads_selectHandler(event:CanEvent):Void {
+		this.listView.removeEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.listView.selectedItem = event.data[0] == null ? null : event.data[0].layer;
+		this.listView.addEventListener(Event.CHANGE, this.listView_changeHandler);
+	}
 }

@@ -1,12 +1,11 @@
 package ir.grantech.services;
 
+import ir.grantech.canvas.events.CanEvent;
 import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.ICanItem;
-import ir.grantech.canvas.events.CanEvent;
 import lime.ui.KeyCode;
-import openfl.display.DisplayObject;
 import openfl.display.Stage;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -20,10 +19,7 @@ class InputService extends BaseService {
 	static public final ZOOM:String = "zoom";
 	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
-	static public final SELECT:String = "select";
-	static public final DELETE:String = "delete";
 	static public final ZOOM_RESET:String = "zoomReset";
-	static public final TRANSFORM_RESET:String = "transformReset";
 
 	public var panPhase:Int = 2;
 	public var pointPhase:Int = 2;
@@ -42,7 +38,6 @@ class InputService extends BaseService {
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
-	private var measurements:Measurements;
 
 	/**
 		The singleton method of InputService.
@@ -78,15 +73,14 @@ class InputService extends BaseService {
 		if (this.selectedItem == value)
 			return this.selectedItem;
 		this.selectedItem = value;
-		CanEvent.dispatch(this, SELECT);
+		this.commands.commit(CommandsService.SELECT, [selectedItem]);
 		return this.selectedItem;
 	}
 
-	public function new(stage:Stage, canZoom:CanZoom, measurements:Measurements) {
+	public function new(stage:Stage, canZoom:CanZoom) {
 		super();
 		this.stage = stage;
 		this.canZoom = canZoom;
-		this.measurements = measurements;
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 
@@ -141,12 +135,12 @@ class InputService extends BaseService {
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
 			} else if (this.selectedItem != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
-				CanEvent.dispatch(this, TRANSFORM_RESET);
+				this.commands.commit(CommandsService.RESET, [selectedItem]);
 			}
 		}
 
 		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItem != null) {
-			CanEvent.dispatch(this, DELETE);
+			this.commands.commit(CommandsService.REMOVED, [selectedItem]);
 			return;
 		}
 	}

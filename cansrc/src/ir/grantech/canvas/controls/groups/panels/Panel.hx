@@ -77,7 +77,6 @@ class Panel extends CanView {
 		if (itemRendererRecycler != null)
 			element.itemRendererRecycler = itemRendererRecycler;
 		element.layoutData = layoutData;
-		element.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.addChild(element);
 		return element;
 	}
@@ -127,8 +126,6 @@ class Panel extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
-
-	private function listView_changeHandler(event:Event):Void {}
 
 	private function popupListView_changeHandler(event:Event):Void {}
 

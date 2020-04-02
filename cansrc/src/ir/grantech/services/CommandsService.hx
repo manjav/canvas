@@ -1,5 +1,6 @@
 package ir.grantech.services;
 
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.services.Layers.Layer;
 
 class CommandsService extends BaseService {
@@ -28,4 +29,11 @@ class CommandsService extends BaseService {
 		this.layers = new Layers();
 	}
 
+	public function commit(command:String, args:Array<Dynamic> = null):Void {
+		switch (command){
+			case ADDED: this.layers.add(new Layer(args[0]));
+			case REMOVED: this.layers.remove(args[0].layer);
+		}
+		CanEvent.dispatch(this, command, args);
+	}
 }

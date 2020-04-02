@@ -130,13 +130,27 @@ class Layer {
 	public var type(default, default):Int;
 	public var order(default, default):Int;
 	public var name(default, default):String;
-  public var icon(default, default):Bitmap;
-  public var visible(default, default):Bool = true;
-  public var enabled(default, default):Bool = true;
+	public var visible(default, set):Bool = true;
+	public var enabled(default, set):Bool = true;
   
   public function new(id:Int, type:Int) {
     this.id = id;
     this.type = type;
     this.name = "Layer " + id;
+
+	private function set_visible(vlaue:Bool):Bool {
+		if (this.visible == vlaue)
+			return this.visible;
+		this.visible = vlaue;
+		CanEvent.dispatch(this, Event.RENDER);
+		return this.visible;
+	}
+
+	private function set_enabled(vlaue:Bool):Bool {
+		if (this.enabled == vlaue)
+			return this.enabled;
+		this.enabled = vlaue;
+		CanEvent.dispatch(this, Event.ACTIVATE);
+		return this.enabled;
   }
 }

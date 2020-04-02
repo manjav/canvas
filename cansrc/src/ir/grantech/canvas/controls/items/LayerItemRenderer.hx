@@ -1,17 +1,16 @@
 package ir.grantech.canvas.controls.items;
 
-import feathers.controls.ToggleButton;
-import ir.grantech.services.LayersService.Layer;
-import feathers.core.InvalidationFlag;
-import openfl.Assets;
-import openfl.display.Bitmap;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
+import feathers.core.InvalidationFlag;
 import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.services.Layers.Layer;
+import openfl.Assets;
+import openfl.display.Bitmap;
 
 class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar

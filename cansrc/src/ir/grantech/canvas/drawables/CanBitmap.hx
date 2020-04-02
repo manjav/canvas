@@ -1,6 +1,6 @@
 package ir.grantech.canvas.drawables;
 
-import ir.grantech.services.LayersService.Layer;
+import ir.grantech.services.Layers.Layer;
 import openfl.display.Bitmap;
 
 class CanBitmap extends Bitmap implements ICanItem {

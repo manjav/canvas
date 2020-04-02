@@ -1,5 +1,7 @@
 package ir.grantech.services;
 
+import ir.grantech.services.Layers.Layer;
+
 class CommandsService extends BaseService {
 	static public final ADDED:String = "added";
 	static public final REMOVED:String = "removed";
@@ -18,6 +20,12 @@ class CommandsService extends BaseService {
 
 	static private function get_instance():CommandsService {
 		return BaseService.get(CommandsService);
+	}
+
+	private var layers:Layers;
+	public function new() {
+		super();
+		this.layers = new Layers();
 	}
 
 }

@@ -7,6 +7,7 @@ class Commands extends BaseService {
 	static public final ADDED:String = "added";
 	static public final REMOVED:String = "removed";
 	static public final SELECT:String = "select";
+	static public final ROTATE:String = "rotate";
 	static public final SCALE:String = "scale";
 	static public final RESET:String = "reset";
 

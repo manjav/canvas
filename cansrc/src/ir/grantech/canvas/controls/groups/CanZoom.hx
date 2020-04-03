@@ -36,6 +36,8 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
 		commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
 		commands.addEventListener(Commands.RESET, this.commands_resetHandler);
+		commands.addEventListener(Commands.SCALE, this.commands_transformHandler);
+		commands.addEventListener(Commands.ROTATE, this.commands_transformHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
 		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
@@ -64,6 +66,12 @@ class CanZoom extends LayoutGroup {
 			this.scene.removeChild(this.scene.transformHint);
 	}
 
+	private function commands_transformHandler(event:CanEvent):Void {
+		if(event.type == Commands.SCALE)
+			this.scene.transformHint.scale(event.data[0], event.data[1]);
+		else if(event.type == Commands.ROTATE)
+			this.scene.transformHint.rotate(event.data[0]);
+	}
 	private function commands_selectHandler(event:CanEvent):Void {}
 
 	private function commands_changeVisibleHandler(event:CanEvent):Void {}

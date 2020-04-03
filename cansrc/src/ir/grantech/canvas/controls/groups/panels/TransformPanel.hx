@@ -10,9 +10,11 @@ import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
 
 class TransformPanel extends Panel {
 	private var changing = false;
+	private var selfBounds:Rectangle;
 	private var inputX:CanRangeInput;
 	private var inputY:CanRangeInput;
 	private var inputW:CanRangeInput;
@@ -40,9 +42,9 @@ class TransformPanel extends Panel {
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {
 		if (event.currentTarget == this.buttonFlipH)
-			this.inputService.canZoom.scene.transformHint.scale(-1, 1);
+			this.commands.commit(Commands.SCALE, [-this.target.scaleX, this.target.scaleY]);
 		else if (event.currentTarget == this.buttonFlipV)
-			this.inputService.canZoom.scene.transformHint.scale(1, -1);
+			this.commands.commit(Commands.SCALE, [this.target.scaleX, -this.target.scaleY]);
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
@@ -59,21 +61,17 @@ class TransformPanel extends Panel {
 		this.changing = true;
 		if (this.target == null)
 			return;
-		var r = this.target.rotation;
-		if (event.currentTarget != this.inputR)
-			this.target.rotation = 0;
 		if (event.currentTarget == this.inputX)
 			this.target.x = this.inputX.value;
 		else if (event.currentTarget == this.inputY)
 			this.target.y = this.inputY.value;
 		else if (event.currentTarget == this.inputW)
-			this.target.width = this.inputW.value;
+			this.commands.commit(Commands.SCALE, [this.inputW.value / this.selfBounds.width, 1]);
 		else if (event.currentTarget == this.inputH)
-			this.target.height = this.inputH.value;
+			this.commands.commit(Commands.SCALE, [1, this.inputH.value / this.selfBounds.height]);
 		else if (event.currentTarget == this.inputR)
-			this.inputs.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
-		if (event.currentTarget != this.inputR)
-			this.target.rotation = r;
+			this.commands.commit(Commands.ROTATE, [this.inputR.value / 180 * Math.PI]);
+
 		this.changing = false;
 	}
 
@@ -81,10 +79,11 @@ class TransformPanel extends Panel {
 override public function updateData():Void {
 		if (this.changing || this.target == null)
 			return;
+		this.selfBounds = this.target.getBounds(cast(this.target, DisplayObject));
 		this.inputX.value = this.target.x;
 		this.inputY.value = this.target.y;
-		this.inputW.value = this.target.width;
-		this.inputH.value = this.target.height;
 		this.inputR.value = this.target.rotation;
+		this.inputW.value = this.selfBounds.width * this.target.scaleX;
+		this.inputH.value = this.selfBounds.height * this.target.scaleY;
 	}
 }

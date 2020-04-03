@@ -45,7 +45,7 @@ class AppearPanel extends Panel {
 			this.inputs.selectedItem.blendMode = this.modesList.selectedItem;
 	}
 
-	public function updateData():Void {
+	override public function updateData():Void {
 		if (this.inputs.selectedItem == null)
 			return;
 		this.alphaSlider.value = this.inputs.selectedItem.alpha * 100;

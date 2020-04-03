@@ -264,7 +264,6 @@ class TransformHint extends Sprite {
 		// calculate delta scale
 		var sx = this.scaleBegin.x * (this.mouseX - this.register.x) / this.mouseScaleBegin.x;
 		var sy = this.scaleBegin.y * (this.mouseY - this.register.y) / this.mouseScaleBegin.y;
-		this.scaleBegin.setTo(sx * this.scaleBegin.x, sy * this.scaleBegin.y);
 
 		this.scale(sx, sy);
 	}
@@ -276,14 +275,14 @@ class TransformHint extends Sprite {
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(-this.angleBegin);
 		if (Inputs.instance.shiftKey) {
-			mat.scale(sx, sx);
+			mat.scale(sx / mat.a, sy / mat.d);
 		} else {
 			if (this.hitCorner == 1 || this.hitCorner == 5)
-				mat.scale(1, sy);
+				mat.scale(1, sy / mat.d);
 			else if (this.hitCorner == 3 || this.hitCorner == 7)
-				mat.scale(sx, 1);
+				mat.scale(sx / mat.a, 1);
 			else
-				mat.scale(sx, sy);
+				mat.scale(sx / mat.a, sy / mat.d);
 		}
 		mat.rotate(this.angleBegin);
 		mat.translate(registerPoint.x, registerPoint.y);

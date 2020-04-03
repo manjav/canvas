@@ -51,10 +51,11 @@ class TransformHint extends Sprite {
 	private var rects:Array<Shape>;
 	private var circles:Array<Shape>;
 	private var corners:Array<Shape>;
-	private var lastPoint:Point;
-	private var lastScale:Point;
-	private var lastAngle:Float;
-	private var matrixAngle:Float;
+	private var mouseTranslateBegin:Point;
+	private var mouseScaleBegin:Point;
+	private var mouseAngleBegin:Float;
+	private var scaleBegin:Point;
+	private var angleBegin:Float;
 	private var registerRatio:Point;
 	private var registerPoint:Point;
 
@@ -69,8 +70,9 @@ class TransformHint extends Sprite {
 		this.addChild(this.main);
 
 		this.doubleClickEnabled = true;
-		this.lastPoint = new Point();
-		this.lastScale = new Point();
+		this.mouseTranslateBegin = new Point();
+		this.mouseScaleBegin = new Point();
+		this.scaleBegin = new Point();
 		this.registerPoint = new Point();
 		this.registerRatio = new Point(0.5, 0.5);
 		this.targets = new Array<ICanItem>();
@@ -223,23 +225,23 @@ class TransformHint extends Sprite {
 	private function performRotate(state:Int):Void {
 		var rad = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
 		if (state == Inputs.PHASE_BEGAN) {
-			this.matrixAngle = Math.atan2(this.targets[0].transform.matrix.b, this.targets[0].transform.matrix.a);
-			this.lastAngle = rad;
+			this.angleBegin = Math.atan2(this.targets[0].transform.matrix.b, this.targets[0].transform.matrix.a);
+			this.mouseAngleBegin = rad;
 			return;
 		}
 
 		// calculate destination angle
-		var angle = this.matrixAngle + rad - this.lastAngle;
+		var angle = this.angleBegin + rad - this.mouseAngleBegin;
 		if (Inputs.instance.shiftKey || Inputs.instance.ctrlKey) {
 			var step = Math.PI * (Inputs.instance.shiftKey ? 0.5 : 0.25);
 			var mod = angle % step;
 			angle += (mod > step * 0.5 ? step - mod : -mod); // snap to 90 or 45
 		}
 
-		// perform rotation with matrix
 		this.rotate(angle);
 	}
 
+	// perform rotation with matrix
 	public function rotate(angle:Float):Void {
 		var mat:Matrix = this.targets[0].transform.matrix;
 		mat.translate(-registerPoint.x, -registerPoint.y);
@@ -250,24 +252,29 @@ class TransformHint extends Sprite {
 
 	private function performScale(state:Int):Void {
 		if (state == Inputs.PHASE_BEGAN) {
-			this.lastScale.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
+			this.mouseScaleBegin.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
+			var mat:Matrix = this.targets[0].transform.matrix;
+			this.angleBegin = Math.atan2(mat.b, mat.a);
+			mat.rotate(-this.angleBegin);
+			this.scaleBegin.setTo(mat.a, mat.d);
+			mat.rotate(this.angleBegin);
 			return;
 		}
 
 		// calculate delta scale
-		var sx = (this.mouseX - this.register.x) / this.lastScale.x;
-		var sy = (this.mouseY - this.register.y) / this.lastScale.y;
-		this.lastScale.setTo(sx * this.lastScale.x, sy * this.lastScale.y);
+		var sx = this.scaleBegin.x * (this.mouseX - this.register.x) / this.mouseScaleBegin.x;
+		var sy = this.scaleBegin.y * (this.mouseY - this.register.y) / this.mouseScaleBegin.y;
+		this.scaleBegin.setTo(sx * this.scaleBegin.x, sy * this.scaleBegin.y);
 
-		// perform scale with matrix
 		this.scale(sx, sy);
 	}
 
+	// perform scale with matrix
 	public function scale(sx:Float, sy:Float):Void {
 		var mat:Matrix = this.targets[0].transform.matrix;
-		this.matrixAngle = Math.atan2(mat.b, mat.a);
+		this.angleBegin = Math.atan2(mat.b, mat.a);
 		mat.translate(-registerPoint.x, -registerPoint.y);
-		mat.rotate(-this.matrixAngle);
+		mat.rotate(-this.angleBegin);
 		if (Inputs.instance.shiftKey) {
 			mat.scale(sx, sx);
 		} else {
@@ -278,21 +285,21 @@ class TransformHint extends Sprite {
 			else
 				mat.scale(sx, sy);
 		}
-		mat.rotate(this.matrixAngle);
+		mat.rotate(this.angleBegin);
 		mat.translate(registerPoint.x, registerPoint.y);
 		this.targets[0].transform.matrix = mat;
 	}
 
 	private function performTranslate(state:Int):Void {
 		if (state == Inputs.PHASE_BEGAN) {
-			this.lastPoint.setTo(stage.mouseX / Inputs.instance.zoom, stage.mouseY / Inputs.instance.zoom);
+			this.mouseTranslateBegin.setTo(stage.mouseX / Inputs.instance.zoom, stage.mouseY / Inputs.instance.zoom);
 			return;
 		}
 
 		// calculate delta translate
-		var tx = stage.mouseX / Inputs.instance.zoom - this.lastPoint.x;
-		var ty = stage.mouseY / Inputs.instance.zoom - this.lastPoint.y;
-		this.lastPoint.setTo(tx + this.lastPoint.x, ty + this.lastPoint.y);
+		var tx = stage.mouseX / Inputs.instance.zoom - this.mouseTranslateBegin.x;
+		var ty = stage.mouseY / Inputs.instance.zoom - this.mouseTranslateBegin.y;
+		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
 
 		// perform translate with matrix
 		var mat:Matrix = this.targets[0].transform.matrix;

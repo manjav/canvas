@@ -6,11 +6,13 @@ import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.services.Commands;
+import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
 
 class TransformPanel extends Panel {
+	private var changing = false;
 	private var inputX:CanRangeInput;
 	private var inputY:CanRangeInput;
 	private var inputW:CanRangeInput;
@@ -49,46 +51,40 @@ class TransformPanel extends Panel {
 	}
 
 	override private function textInputs_focusOutHandler(event:FocusEvent):Void {
-		this.inputs.canZoom.scene.transformHint.set(this.inputs.selectedItem);
+		this.inputs.canZoom.scene.transformHint.set(this.target);
 		cast(event.currentTarget, CanTextInput).removeEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.inputs.selectedItem == null)
+		this.changing = true;
+		if (this.target == null)
 			return;
-		var r = this.inputs.selectedItem.rotation;
+		var r = this.target.rotation;
 		if (event.currentTarget != this.inputR)
-			this.inputs.selectedItem.rotation = 0;
+			this.target.rotation = 0;
 		if (event.currentTarget == this.inputX)
-			this.inputs.selectedItem.x = this.inputX.value;
+			this.target.x = this.inputX.value;
 		else if (event.currentTarget == this.inputY)
-			this.inputs.selectedItem.y = this.inputY.value;
+			this.target.y = this.inputY.value;
 		else if (event.currentTarget == this.inputW)
-			this.inputs.selectedItem.width = this.inputW.value;
+			this.target.width = this.inputW.value;
 		else if (event.currentTarget == this.inputH)
-			this.inputs.selectedItem.height = this.inputH.value;
+			this.target.height = this.inputH.value;
 		else if (event.currentTarget == this.inputR)
 			this.inputs.canZoom.scene.transformHint.rotate(this.inputR.value / 180 * Math.PI);
 		if (event.currentTarget != this.inputR)
-			this.inputs.selectedItem.rotation = r;
+			this.target.rotation = r;
+		this.changing = false;
 	}
 
-	override private function set_enabled(value:Bool):Bool {
-		if (super.enabled == value)
-			return super.enabled;
 
-		if (value)
-			this.updateData();
-		return super.enabled = value;
-	}
-
-	public function updateData():Void {
-		if (this.inputs.selectedItem == null)
+override public function updateData():Void {
+		if (this.changing || this.target == null)
 			return;
-		this.inputX.value = this.inputs.selectedItem.x;
-		this.inputY.value = this.inputs.selectedItem.y;
-		this.inputW.value = this.inputs.selectedItem.width;
-		this.inputH.value = this.inputs.selectedItem.height;
-		this.inputR.value = this.inputs.selectedItem.rotation;
+		this.inputX.value = this.target.x;
+		this.inputY.value = this.target.y;
+		this.inputW.value = this.target.width;
+		this.inputH.value = this.target.height;
+		this.inputR.value = this.target.rotation;
 	}
 }

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import openfl.display.DisplayObject;
 import feathers.data.ListViewItemState;
 import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
@@ -47,6 +48,19 @@ class Panel extends CanView {
 		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
 	}
 
+	public var target(default, set):ICanItem;
+
+	private function set_target(value:ICanItem):ICanItem {
+		if (this.target == value)
+			return this.target;
+		this.target = value;
+		if (this.target != null)
+			this.update();
+		return this.target;
+	}
+
+	public function updateData():Void {}
+
 	private function createSlider(minimum:Float, value:Float, maximum:Float, layoutData:AnchorLayoutData):CanHSlider {
 		var element = new CanHSlider();
 		element.minimum = minimum;
@@ -70,7 +84,8 @@ class Panel extends CanView {
 		return element;
 	}
 
-	private function createList(items:Array<Dynamic>, itemRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>, layoutData:AnchorLayoutData = null):ListView {
+	private function createList(items:Array<Dynamic>, itemRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>,
+			layoutData:AnchorLayoutData = null):ListView {
 		var element = new ListView();
 		if (items != null)
 			element.dataProvider = new ArrayCollection(items);

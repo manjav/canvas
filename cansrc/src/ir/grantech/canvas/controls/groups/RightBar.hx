@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.events.CanEvent;
 import feathers.layout.VerticalLayoutData;
 import ir.grantech.canvas.controls.groups.panels.AppearPanel;
 import ir.grantech.canvas.controls.groups.panels.FiltersPanel;
@@ -38,14 +39,13 @@ class RightBar extends VGroup {
 	private function input_pointHandler(event:Event):Void {
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
-		if (this.inputs.pointPhase < Inputs.PHASE_UPDATE)
-			this.appearPanel.updateData();
+		if (this.inputs.pointPhase < Inputs.PHASE_ENDED)
+			this.transfromPanel.updateData();
 	}
 
-	private function commands_selectHandler(event:Event):Void {
-		this.enabled = inputs.selectedItem != null;
-		if(!this.enabled)
-			return;
-		this.appearPanel.updateData();
-		this.transfromPanel.updateData();	}
+	private function commands_selectHandler(event:CanEvent):Void {
+		this.enabled = event.data[0] != null;
+		this.appearPanel.target = event.data[0];
+		this.transfromPanel.target = event.data[0];
+	}
 }

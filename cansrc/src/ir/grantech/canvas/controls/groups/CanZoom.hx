@@ -3,7 +3,6 @@ package ir.grantech.canvas.controls.groups;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
-import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
@@ -39,8 +38,8 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.RESET, this.commands_resetHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
+		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
 		this.input.addEventListener(Inputs.PAN, this.input_panHandler);
-		this.input.addEventListener(Inputs.MOVE, this.input_moveHandler);
 		this.input.addEventListener(Inputs.ZOOM, this.input_zoomHandler);
 		this.input.addEventListener(Inputs.POINT, this.input_pointHandler);
 		this.input.addEventListener(Inputs.ZOOM_RESET, this.input_zoomHandler);
@@ -74,10 +73,8 @@ class CanZoom extends LayoutGroup {
 	}
 
 	// ------ inputs listeners ------
-	private function input_moveHandler(event:CanEvent):Void {
-		var target = this.hit(this.stage.mouseX, this.stage.mouseY);
-		if (target != null && Std.is(target, ICanItem))
-			this.scene.drawHit(cast(target, ICanItem));
+	private function input_hitHandler(event:CanEvent):Void {
+		this.scene.drawHit(cast event.data);
 	}
 
 	private function input_panHandler(event:CanEvent):Void {
@@ -99,7 +96,7 @@ class CanZoom extends LayoutGroup {
 
 	private function input_pointHandler(event:CanEvent):Void {
 		if (input.pointPhase == Inputs.PHASE_BEGAN) {
-			this.scene.hitHint.visible = false;
+			// this.scene.hitHint.visible = false;
 			if (ToolsService.instance.toolType == Tool.SELECT) {
 				if (this.input.selectedItem != null) {
 					this.scene.addChild(this.scene.transformHint);
@@ -137,16 +134,5 @@ class CanZoom extends LayoutGroup {
 		this.setZoom(1);
 		this.scene.x = this.input.pointX = (this.explicitWidth - this.scene.canWidth) * 0.5;
 		this.scene.y = this.input.pointY = (this.explicitHeight - this.scene.canHeight) * 0.5;
-	}
-
-	public function hit(x:Float, y:Float):DisplayObject {
-		if (this.scene.transformHint.hitTestPoint(x, y, true))
-			return this.scene.transformHint;
-		for (i in 0...this.scene.container.numChildren)
-			if (this.scene.container.getChildAt(i).hitTestPoint(x, y, true))
-				return this.scene.container.getChildAt(i);
-		if (this.hitTestPoint(x, y, true))
-			return this;
-		return null;
 	}
 }

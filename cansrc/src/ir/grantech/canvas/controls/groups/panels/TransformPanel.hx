@@ -1,15 +1,14 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import feathers.controls.HSlider;
-import feathers.controls.CanRangeInput;
-import openfl.events.MouseEvent;
 import feathers.controls.Button;
-import feathers.layout.AnchorLayoutData;
+import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
-import ir.grantech.canvas.themes.CanTheme;
+import feathers.layout.AnchorLayoutData;
+import ir.grantech.canvas.services.Commands;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
+import openfl.events.MouseEvent;
 
 class TransformPanel extends Panel {
 	private var inputX:CanRangeInput;

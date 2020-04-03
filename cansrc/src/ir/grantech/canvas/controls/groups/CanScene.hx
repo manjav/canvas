@@ -2,8 +2,8 @@ package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
-import ir.grantech.canvas.services.Inputs;
 import openfl.Vector;
+import openfl.display.Bitmap;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
 import openfl.display.Shape;
@@ -64,25 +64,28 @@ class CanScene extends LayoutGroup {
 
 	public function drawHit(target:ICanItem):Void {
 		this.hitHint.graphics.clear();
-		if ( target == Inputs.instance.selectedItem )
+		if (target == null)
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData> = null;
-		if (Std.is(target, Shape))
+		if (Std.is(target, Shape)) {
 			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
-		else if (Std.is(target, Sprite))
+		} else if (Std.is(target, Sprite)) {
 			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
-		else if (Std.is(target, Sprite))
-			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
-		if (graphicDataList == null)
-			return;
+		} else if (Std.is(target, Bitmap)) {
+			var bmp = cast(target, Bitmap);
+			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);
+		}
 
 		this.hitHint.x = target.x;
 		this.hitHint.y = target.y;
 		this.hitHint.rotation = target.rotation;
 		this.hitHint.scaleX = target.scaleX;
 		this.hitHint.scaleY = target.scaleY;
+		if (graphicDataList == null)
+			return;
+
 		for (gd in graphicDataList) {
 			if (Std.is(gd, GraphicsPath)) {
 				var commands = cast(gd, GraphicsPath).commands;

@@ -1,11 +1,12 @@
 package ir.grantech.canvas.services;
 
-import ir.grantech.canvas.events.CanEvent;
-import feathers.layout.Measurements;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.ToolsService.Tool;
 import lime.ui.KeyCode;
+import openfl.display.DisplayObject;
 import openfl.display.Stage;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -15,6 +16,7 @@ class Inputs extends BaseService {
 	static public final PHASE_UPDATE:Int = 1;
 	static public final PHASE_ENDED:Int = 2;
 
+	static public final HIT:String = "hit";
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
 	static public final MOVE:String = "move";
@@ -75,6 +77,16 @@ class Inputs extends BaseService {
 		this.selectedItem = value;
 		this.commands.commit(Commands.SELECT, [selectedItem]);
 		return this.selectedItem;
+	}
+
+	public var hit(default, set):ICanItem;
+
+	private function set_hit(value:ICanItem):ICanItem {
+		if (this.hit == value)
+			return this.hit;
+		this.hit = value;
+		CanEvent.dispatch(this, HIT, this.hit);
+		return this.hit;
 	}
 
 	public function new(stage:Stage, canZoom:CanZoom) {
@@ -158,7 +170,7 @@ class Inputs extends BaseService {
 			return;
 		}
 
-		var item = this.canZoom.hit(this.stage.mouseX, this.stage.mouseY);
+		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
 		if (Std.is(item, ICanItem))
 			this.selectedItem = cast(item, ICanItem);
@@ -215,7 +227,14 @@ class Inputs extends BaseService {
 				CanEvent.dispatch(this, POINT);
 			}
 		} else {
-			CanEvent.dispatch(this, MOVE);
+			var hit = this.hitTest(this.stage.mouseX, this.stage.mouseY);
+			if (hit != null && Std.is(hit, ICanItem)) {
+				var h = cast(hit, ICanItem);
+				this.hit = h == selectedItem ? null : h;
+			} else {
+				this.hit = null;
+			}
+			// CanEvent.dispatch(this, MOVE);
 		}
 	}
 
@@ -236,5 +255,18 @@ class Inputs extends BaseService {
 			this.pointY += event.delta * 10;
 
 		CanEvent.dispatch(this, PAN);
+	}
+
+	public function hitTest(x:Float, y:Float):DisplayObject {
+		if (ToolsService.instance.toolType != Tool.SELECT)
+			return null;
+		if (this.canZoom.scene.transformHint.hitTestPoint(x, y, true))
+			return this.canZoom.scene.transformHint;
+		for (i in 0...this.canZoom.scene.container.numChildren)
+			if (this.canZoom.scene.container.getChildAt(i).hitTestPoint(x, y, true))
+				return this.canZoom.scene.container.getChildAt(i);
+		if (this.canZoom.hitTestPoint(x, y, true))
+			return this.canZoom;
+		return null;
 	}
 }

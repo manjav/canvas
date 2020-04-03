@@ -5,9 +5,9 @@ import ir.grantech.canvas.controls.groups.panels.AppearPanel;
 import ir.grantech.canvas.controls.groups.panels.FiltersPanel;
 import ir.grantech.canvas.controls.groups.panels.TransformPanel;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.services.CommandsService;
-import ir.grantech.services.InputService;
-import ir.grantech.services.ToolsService;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.ToolsService;
 import openfl.events.Event;
 
 class RightBar extends VGroup {
@@ -30,15 +30,15 @@ class RightBar extends VGroup {
 		this.filtersPanel.layoutData = new VerticalLayoutData(100, 100);
 		this.addChild(this.filtersPanel);
 
-		this.inputs.addEventListener(InputService.POINT, this.input_pointHandler);
-		this.commands.addEventListener(CommandsService.SELECT, this.commands_selectHandler);
+		this.inputs.addEventListener(Inputs.POINT, this.input_pointHandler);
+		this.commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
 		this.enabled = false;
 	}
 
 	private function input_pointHandler(event:Event):Void {
 		if (ToolsService.instance.toolType != Tool.SELECT)
 			return;
-		if (this.inputs.pointPhase < InputService.PHASE_UPDATE)
+		if (this.inputs.pointPhase < Inputs.PHASE_UPDATE)
 			this.appearPanel.updateData();
 	}
 

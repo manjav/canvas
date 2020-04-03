@@ -5,9 +5,9 @@ import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.services.AssetsService;
-import ir.grantech.services.CommandsService;
-import ir.grantech.services.InputService;
+import ir.grantech.canvas.services.Libs;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
 
 class CanView extends LayoutGroup {
 	public var padding(default, set):Float = CanTheme.DEFAULT_PADDING;
@@ -59,21 +59,21 @@ class CanView extends LayoutGroup {
 	}
 
 
-	public var inputs(get, null):InputService;
+	public var inputs(get, null):Inputs;
 
-	private function get_inputs():InputService {
-		return InputService.instance;
+	private function get_inputs():Inputs {
+		return Inputs.instance;
 	}
 
-	public var assets(get, null):AssetsService;
+	public var assets(get, null):Libs;
 
-	private function get_assets():AssetsService {
-		return AssetsService.instance;
+	private function get_assets():Libs {
+		return Libs.instance;
 	}
 
-	public var commands(get, null):CommandsService;
+	public var commands(get, null):Commands;
 
-	private function get_commands():CommandsService {
-		return CommandsService.instance;
+	private function get_commands():Commands {
+		return Commands.instance;
 	}
 }

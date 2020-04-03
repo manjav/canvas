@@ -5,11 +5,11 @@ import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.items.LayerItemRenderer;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.services.CommandsService;
-import ir.grantech.services.Layers.Layer;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
 
-@:access(ir.grantech.services.CommandsService)
+@:access(ir.grantech.canvas.services.Commands)
 class LayersPanel extends ListPanel {
 	private var listView:ListView;
 
@@ -25,19 +25,19 @@ class LayersPanel extends ListPanel {
 
 	override private function layoutGroup_addedToStageHandler(event:Event):Void {
 		super.layoutGroup_addedToStageHandler(event);
-		this.commands.addEventListener(CommandsService.SELECT, this.commads_selectHandler);
+		this.commands.addEventListener(Commands.SELECT, this.commads_selectHandler);
 		this.listView.dataProvider = this.commands.layers;
 	}
 
 	override private function layoutGroup_removedFromStageHandler(event:Event):Void {
 		super.layoutGroup_removedFromStageHandler(event);
-		this.commands.removeEventListener(CommandsService.SELECT, this.commads_selectHandler);
+		this.commands.removeEventListener(Commands.SELECT, this.commads_selectHandler);
 		this.listView.dataProvider = null;
 	}
 
 	private function listView_changeHandler(event:Event):Void {
 		if (this.listView.selectedItem != null)
-			this.commands.commit(CommandsService.SELECT, [this.listView.selectedItem.item]);
+			this.commands.commit(Commands.SELECT, [this.listView.selectedItem.item]);
 	}
 
 	private function commads_selectHandler(event:CanEvent):Void {

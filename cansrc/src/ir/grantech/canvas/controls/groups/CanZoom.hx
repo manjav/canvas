@@ -5,10 +5,10 @@ import feathers.events.FeathersEvent;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.services.BaseService;
-import ir.grantech.services.CommandsService;
-import ir.grantech.services.InputService;
-import ir.grantech.services.ToolsService;
+import ir.grantech.canvas.services.BaseService;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.ToolsService;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -19,7 +19,7 @@ class CanZoom extends LayoutGroup {
 	public var scene:CanScene;
 	public var focused:Bool;
 
-	private var input:InputService;
+	private var input:Inputs;
 
 	override function initialize() {
 		super.initialize();
@@ -32,18 +32,18 @@ class CanZoom extends LayoutGroup {
 		background.graphics.drawRect(0, 0, 100, 100);
 		this.backgroundSkin = background;
 
-		var commands = cast(BaseService.get(CommandsService), CommandsService);
-		commands.addEventListener(CommandsService.ADDED, this.commands_addedHandler);
-		commands.addEventListener(CommandsService.REMOVED, this.commands_removedHandler);
-		commands.addEventListener(CommandsService.SELECT, this.commands_selectHandler);
-		commands.addEventListener(CommandsService.RESET, this.commands_resetHandler);
+		var commands = cast(BaseService.get(Commands), Commands);
+		commands.addEventListener(Commands.ADDED, this.commands_addedHandler);
+		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
+		commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
+		commands.addEventListener(Commands.RESET, this.commands_resetHandler);
 
-		this.input = cast(BaseService.get(InputService, [stage, this]), InputService);
-		this.input.addEventListener(InputService.PAN, this.input_panHandler);
-		this.input.addEventListener(InputService.MOVE, this.input_moveHandler);
-		this.input.addEventListener(InputService.ZOOM, this.input_zoomHandler);
-		this.input.addEventListener(InputService.POINT, this.input_pointHandler);
-		this.input.addEventListener(InputService.ZOOM_RESET, this.input_zoomHandler);
+		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
+		this.input.addEventListener(Inputs.PAN, this.input_panHandler);
+		this.input.addEventListener(Inputs.MOVE, this.input_moveHandler);
+		this.input.addEventListener(Inputs.ZOOM, this.input_zoomHandler);
+		this.input.addEventListener(Inputs.POINT, this.input_pointHandler);
+		this.input.addEventListener(Inputs.ZOOM_RESET, this.input_zoomHandler);
 
 		this.addEventListener(FeathersEvent.CREATION_COMPLETE, this.creationCompleteHandler);
 	}
@@ -81,9 +81,9 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_panHandler(event:CanEvent):Void {
-		if (this.input.panPhase == InputService.PHASE_BEGAN)
+		if (this.input.panPhase == Inputs.PHASE_BEGAN)
 			Mouse.cursor = MouseCursor.HAND;
-		else if (this.input.panPhase == InputService.PHASE_ENDED)
+		else if (this.input.panPhase == Inputs.PHASE_ENDED)
 			Mouse.cursor = MouseCursor.AUTO;
 
 		this.scene.x = this.input.pointX;
@@ -91,14 +91,14 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_zoomHandler(event:CanEvent):Void {
-		if (event.type == InputService.ZOOM_RESET)
+		if (event.type == Inputs.ZOOM_RESET)
 			this.resetZoomAndPan();
 		else
 			this.setZoom(this.input.zoom);
 	}
 
 	private function input_pointHandler(event:CanEvent):Void {
-		if (input.pointPhase == InputService.PHASE_BEGAN) {
+		if (input.pointPhase == Inputs.PHASE_BEGAN) {
 			this.scene.hitHint.visible = false;
 			if (ToolsService.instance.toolType == Tool.SELECT) {
 				if (this.input.selectedItem != null) {
@@ -111,7 +111,7 @@ class CanZoom extends LayoutGroup {
 					this.scene.updateSlection(true);
 				}
 			}
-		} else if (input.pointPhase == InputService.PHASE_UPDATE) {
+		} else if (input.pointPhase == Inputs.PHASE_UPDATE) {
 			if (ToolsService.instance.toolType == Tool.SELECT) {
 				if (this.input.selectedItem != null)
 					this.scene.transformHint.perform(input.pointPhase);

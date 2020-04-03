@@ -1,5 +1,6 @@
 package;
 
+import ir.grantech.canvas.services.Libs;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -13,8 +14,7 @@ import ir.grantech.canvas.controls.groups.panels.AssetsPanel;
 import ir.grantech.canvas.controls.groups.panels.LayersPanel;
 import ir.grantech.canvas.controls.groups.panels.Panel;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.services.AssetsService;
-import ir.grantech.services.BaseService;
+import ir.grantech.canvas.services.BaseService;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
 
@@ -31,7 +31,7 @@ class Main extends Application {
 		stage.quality = StageQuality.BEST;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		Theme.setTheme(new CanTheme());
-		BaseService.get(AssetsService, [stage]);
+		BaseService.get(Libs, [stage]);
 		super();
 
 		var p = CanTheme.DPI;

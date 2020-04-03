@@ -1,7 +1,7 @@
 package ir.grantech.canvas.controls;
 
 import ir.grantech.canvas.drawables.ICanItem;
-import ir.grantech.services.InputService;
+import ir.grantech.canvas.services.Inputs;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
@@ -176,7 +176,7 @@ class TransformHint extends Sprite {
 	}
 
 	public function perform(state:Int):Void {
-		if (state == InputService.PHASE_BEGAN) {
+		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);
 			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
@@ -222,7 +222,7 @@ class TransformHint extends Sprite {
 
 	private function performRotate(state:Int):Void {
 		var rad = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
-		if (state == InputService.PHASE_BEGAN) {
+		if (state == Inputs.PHASE_BEGAN) {
 			this.matrixAngle = Math.atan2(this.targets[0].transform.matrix.b, this.targets[0].transform.matrix.a);
 			this.lastAngle = rad;
 			return;
@@ -230,8 +230,8 @@ class TransformHint extends Sprite {
 
 		// calculate destination angle
 		var angle = this.matrixAngle + rad - this.lastAngle;
-		if (InputService.instance.shiftKey || InputService.instance.ctrlKey) {
-			var step = Math.PI * (InputService.instance.shiftKey ? 0.5 : 0.25);
+		if (Inputs.instance.shiftKey || Inputs.instance.ctrlKey) {
+			var step = Math.PI * (Inputs.instance.shiftKey ? 0.5 : 0.25);
 			var mod = angle % step;
 			angle += (mod > step * 0.5 ? step - mod : -mod); // snap to 90 or 45
 		}
@@ -249,7 +249,7 @@ class TransformHint extends Sprite {
 	}
 
 	private function performScale(state:Int):Void {
-		if (state == InputService.PHASE_BEGAN) {
+		if (state == Inputs.PHASE_BEGAN) {
 			this.lastScale.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
 			return;
 		}
@@ -268,7 +268,7 @@ class TransformHint extends Sprite {
 		this.matrixAngle = Math.atan2(mat.b, mat.a);
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(-this.matrixAngle);
-		if (InputService.instance.shiftKey) {
+		if (Inputs.instance.shiftKey) {
 			mat.scale(sx, sx);
 		} else {
 			if (this.hitCorner == 1 || this.hitCorner == 5)
@@ -284,14 +284,14 @@ class TransformHint extends Sprite {
 	}
 
 	private function performTranslate(state:Int):Void {
-		if (state == InputService.PHASE_BEGAN) {
-			this.lastPoint.setTo(stage.mouseX / InputService.instance.zoom, stage.mouseY / InputService.instance.zoom);
+		if (state == Inputs.PHASE_BEGAN) {
+			this.lastPoint.setTo(stage.mouseX / Inputs.instance.zoom, stage.mouseY / Inputs.instance.zoom);
 			return;
 		}
 
 		// calculate delta translate
-		var tx = stage.mouseX / InputService.instance.zoom - this.lastPoint.x;
-		var ty = stage.mouseY / InputService.instance.zoom - this.lastPoint.y;
+		var tx = stage.mouseX / Inputs.instance.zoom - this.lastPoint.x;
+		var ty = stage.mouseY / Inputs.instance.zoom - this.lastPoint.y;
 		this.lastPoint.setTo(tx + this.lastPoint.x, ty + this.lastPoint.y);
 
 		// perform translate with matrix

@@ -2,7 +2,7 @@ package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
-import ir.grantech.services.InputService;
+import ir.grantech.canvas.services.Inputs;
 import openfl.Vector;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
@@ -64,7 +64,7 @@ class CanScene extends LayoutGroup {
 
 	public function drawHit(target:ICanItem):Void {
 		this.hitHint.graphics.clear();
-		if ( target == InputService.instance.selectedItem )
+		if ( target == Inputs.instance.selectedItem )
 			return;
 		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);

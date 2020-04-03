@@ -4,7 +4,7 @@ import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.canvas.services.ToolsService.Tool;
+import ir.grantech.canvas.services.Tools.Tool;
 import lime.ui.KeyCode;
 import openfl.display.DisplayObject;
 import openfl.display.Stage;
@@ -258,7 +258,7 @@ class Inputs extends BaseService {
 	}
 
 	public function hitTest(x:Float, y:Float):DisplayObject {
-		if (ToolsService.instance.toolType != Tool.SELECT)
+		if (Tools.instance.toolType != Tool.SELECT)
 			return null;
 		if (this.canZoom.scene.transformHint.hitTestPoint(x, y, true))
 			return this.canZoom.scene.transformHint;

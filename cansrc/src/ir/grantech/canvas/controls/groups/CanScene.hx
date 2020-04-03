@@ -66,7 +66,6 @@ class CanScene extends LayoutGroup {
 		this.hitHint.graphics.clear();
 		if (target == null)
 			return;
-		this.hitHint.visible = true;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData> = null;
 		if (Std.is(target, Shape)) {

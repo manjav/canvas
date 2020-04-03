@@ -11,7 +11,7 @@ import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.canvas.services.ToolsService;
+import ir.grantech.canvas.services.Tools;
 import openfl.Assets;
 import openfl.events.Event;
 import openfl.utils.AssetType;
@@ -40,7 +40,7 @@ class ToolBar extends LayoutGroup {
 			return item.text;
 		};
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
-		this.topList.selectedIndex = ToolsService.instance.toolType;
+		this.topList.selectedIndex = Tools.instance.toolType;
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
 		this.addChild(this.topList);
@@ -70,7 +70,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function listView_changeHandler(event:Event):Void {
-		ToolsService.instance.toolType = cast(event.currentTarget, ListView).selectedIndex;
+		Tools.instance.toolType = cast(event.currentTarget, ListView).selectedIndex;
 		// Mouse.hide();
 		// trace("ListView selectedIndex change: " + cast(event.currentTarget, ListView).selectedIndex);
 	}

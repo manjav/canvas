@@ -7,7 +7,7 @@ import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
-import ir.grantech.canvas.services.ToolsService;
+import ir.grantech.canvas.services.Tools;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -96,8 +96,8 @@ class CanZoom extends LayoutGroup {
 
 	private function input_pointHandler(event:CanEvent):Void {
 		if (input.pointPhase == Inputs.PHASE_BEGAN) {
-			// this.scene.hitHint.visible = false;
-			if (ToolsService.instance.toolType == Tool.SELECT) {
+			this.scene.hitHint.graphics.clear();
+			if (Tools.instance.toolType == Tool.SELECT) {
 				if (this.input.selectedItem != null) {
 					this.scene.addChild(this.scene.transformHint);
 					this.scene.transformHint.set(this.input.selectedItem);
@@ -109,7 +109,7 @@ class CanZoom extends LayoutGroup {
 				}
 			}
 		} else if (input.pointPhase == Inputs.PHASE_UPDATE) {
-			if (ToolsService.instance.toolType == Tool.SELECT) {
+			if (Tools.instance.toolType == Tool.SELECT) {
 				if (this.input.selectedItem != null)
 					this.scene.transformHint.perform(input.pointPhase);
 				else

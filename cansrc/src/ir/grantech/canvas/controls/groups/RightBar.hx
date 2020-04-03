@@ -7,7 +7,7 @@ import ir.grantech.canvas.controls.groups.panels.TransformPanel;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
-import ir.grantech.canvas.services.ToolsService;
+import ir.grantech.canvas.services.Tools;
 import openfl.events.Event;
 
 class RightBar extends VGroup {
@@ -36,7 +36,7 @@ class RightBar extends VGroup {
 	}
 
 	private function input_pointHandler(event:Event):Void {
-		if (ToolsService.instance.toolType != Tool.SELECT)
+		if (Tools.instance.toolType != Tool.SELECT)
 			return;
 		if (this.inputs.pointPhase < Inputs.PHASE_UPDATE)
 			this.appearPanel.updateData();

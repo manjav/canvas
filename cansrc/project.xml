@@ -55,6 +55,8 @@
   <assets id="lock" path="assets/img/lock.png"/>
   <assets id="hide" path="assets/img/hide.png"/>
   <assets id="bitmap" path="assets/img/bitmap.png"/>
+  <assets id="cur-scale" path="assets/img/cur-scale.png"/>
+  <assets id="cur-rotate" path="assets/img/cur-rotate.png"/>
 
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

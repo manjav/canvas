@@ -1,5 +1,9 @@
 package ir.grantech.canvas.controls;
 
+import openfl.Assets;
+import openfl.display.Bitmap;
+import flash.ui.Mouse;
+import openfl.events.Event;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Inputs;
 import openfl.display.Shape;
@@ -47,6 +51,7 @@ class TransformHint extends Sprite {
 	private var angleBegin:Float;
 	private var registerRatio:Point;
 	private var registerPoint:Point;
+	private var cursor:Cursor;
 
 	public var targets:Array<ICanItem>;
 
@@ -87,17 +92,54 @@ class TransformHint extends Sprite {
 		this.lines[7].y = this.radius;
 
 		this.setVisible(false, true);
+		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
+	}
+
+	private function addedToStageHandler(event:Event):Void {
+		if (cursor == null) {
+			this.cursor = new Cursor();
+			stage.addChild(this.cursor);
+		}
+
+		this.removeEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
+		this.addEventListener(Event.REMOVED_FROM_STAGE, this.removeFromStageHandler);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+	}
+
+	private function removeFromStageHandler(event:Event):Void {
+		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
+		this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removeFromStageHandler);
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+		this.cursor.mode = Cursor.MODE_NONE;
+	}
+
+	private function mouseMoveHandler(event:MouseEvent):Void {
+		if (this.mode == MODE_NONE) {
+			var anchor = this.getAnchor();
+			if (anchor < 0 || anchor == 8 || anchor == 9) {
+				this.cursor.mode = Cursor.MODE_NONE;
+				return;
+			}
+			this.cursor.mode = anchor > 9 ? Cursor.MODE_ROTATE : Cursor.MODE_SCALE;
+		}
+
+		if (this.cursor.mode != MODE_NONE) {
+			this.cursor.rotation = this.rotation + Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x) * 180 / Math.PI;
+			this.cursor.x = event.stageX;
+			this.cursor.y = event.stageY;
+			event.updateAfterEvent();
+		}
 	}
 
 	private function doubleClickHandler(event:MouseEvent):Void {
 		// if (!this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
 		// 	return;
-			this.registerRatio.setTo(0.5, 0.5);
-			if (this.targets.length == 1)
-				this.targets[0].layer.pivot.setTo(0.5, 0.5);
-			this.resetRegister();
-		}
+		this.registerRatio.setTo(0.5, 0.5);
+		if (this.targets.length == 1)
+			this.targets[0].layer.pivot.setTo(0.5, 0.5);
+		this.resetRegister();
+	}
 
 	private function addCircle(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
 		var c:Shape = new Shape();
@@ -210,13 +252,13 @@ class TransformHint extends Sprite {
 		if (this.hitAnchor < 0)
 			return;
 		if (this.mode == MODE_REGISTER)
-				this.performRegister(state);
+			this.performRegister(state);
 		else if (this.mode == MODE_TRANSLATE)
 			this.performTranslate(state);
 		else if (this.mode == MODE_SCALE)
 			this.performScale(state);
-			else if (this.mode == MODE_ROTATE)
-				this.performRotate(state);
+		else if (this.mode == MODE_ROTATE)
+			this.performRotate(state);
 	}
 
 	private function performRegister(state:Int):Void {
@@ -358,3 +400,39 @@ class RotateAnchor extends Shape {
 	}
 }
 
+class Cursor extends Sprite {
+	static public final MODE_NONE:Int = -1;
+	static public final MODE_SCALE:Int = 0;
+	static public final MODE_ROTATE:Int = 1;
+
+	private var cursorScale:Bitmap;
+	private var cursorRotate:Bitmap;
+
+	public var mode(default, set):Int;
+
+	private function set_mode(value:Int):Int {
+		if (this.mode == value)
+			return this.mode;
+		this.mode = value;
+		this.removeChildren();
+		if (this.mode > MODE_NONE) {
+			this.addChild(this.mode == MODE_SCALE ? this.cursorScale : this.cursorRotate);
+			Mouse.hide();
+		} else {
+			Mouse.show();
+		}
+		return this.mode;
+	}
+
+	public function new() {
+		super();
+
+		this.cursorScale = new Bitmap(Assets.getBitmapData("cur-scale"));
+		this.cursorScale.x = -this.cursorScale.width * 0.5;
+		this.cursorScale.y = -this.cursorScale.height * 0.5;
+
+		this.cursorRotate = new Bitmap(Assets.getBitmapData("cur-rotate"));
+		this.cursorRotate.x = -this.cursorRotate.width * 0.5;
+		this.cursorRotate.y = -this.cursorRotate.height * 0.5;
+	}
+}

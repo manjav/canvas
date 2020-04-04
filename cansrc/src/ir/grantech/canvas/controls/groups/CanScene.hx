@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.services.Inputs;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
 import openfl.Vector;
@@ -49,8 +50,8 @@ class CanScene extends LayoutGroup {
 		// trace(cast(e.currentTarget, ColorPicker).data);
 	}
 
-	public function updateSlection(begin:Bool = false):Void {
-		if (begin) {
+	public function updateSlection(phase:Int):Void {
+		if (phase == Inputs.PHASE_BEGAN) {
 			this.selectHint.visible = true;
 			this.beginPoint.setTo(this.mouseX, this.mouseY);
 		}

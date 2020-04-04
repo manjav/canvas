@@ -93,7 +93,7 @@ class TransformHint extends Sprite {
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
 
-			this.cursor = new Cursor();
+		this.cursor = new Cursor();
 		this.owner.stage.addChild(this.cursor);
 
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
@@ -162,6 +162,11 @@ class TransformHint extends Sprite {
 			this.owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 			this.owner.removeChild(this);
 		}
+
+		this.updateBounds();
+	}
+
+	public function updateBounds():Void {
 		this.mode = MODE_NONE;
 		if (this.targets.length < 1 || this.targets[0] == null)
 			return;
@@ -378,7 +383,7 @@ class TransformHint extends Sprite {
 		this.targets[0].transform.matrix = mat;
 		this.targets[0].x = r.left + r.width * 0.5 - this.targets[0].width * 0.5;
 		this.targets[0].y = r.top + r.height * 0.5 - this.targets[0].height * 0.5;
-		this.set(this.targets[0]);
+		this.updateBounds();
 	}
 }
 

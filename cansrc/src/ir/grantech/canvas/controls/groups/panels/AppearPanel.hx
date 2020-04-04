@@ -24,7 +24,7 @@ class AppearPanel extends Panel {
 		this.createLabel("Blend Mode", AnchorLayoutData.topLeft(padding * 9, padding));
 
 		var modes = [
-			"add", "alpha", "darken", "difference", "erase", "hardlight", "invert", "layer", "lighten", "multiply", "normal", "overlay", "screen", "shader",
+			"normal", "overlay", "screen", "multiply", "add", "alpha", "lighten", "darken", "difference", "erase", "hardlight", "invert", "layer", "shader",
 			"subtract"
 		];
 		this.modesList = this.createPopupList(modes, new AnchorLayoutData(padding * 10.7, padding, null, padding));
@@ -36,19 +36,19 @@ class AppearPanel extends Panel {
 	}
 
 	override private function sliders_changeHandler(event:Event) {
-		if (this.inputs.selectedItem != null)
-			this.inputs.selectedItem.alpha = this.alphaSlider.value * 0.01;
+		if (this.target != null)
+			this.target.alpha = this.alphaSlider.value * 0.01;
 	}
 
 	override private function popupListView_changeHandler(event:Event) {
-		if (this.inputs.selectedItem != null)
-			this.inputs.selectedItem.blendMode = this.modesList.selectedItem;
+		if (this.target != null)
+			this.target.blendMode = this.modesList.selectedItem;
 	}
 
 	override public function updateData():Void {
-		if (this.inputs.selectedItem == null)
+		if (this.target == null)
 			return;
-		this.alphaSlider.value = this.inputs.selectedItem.alpha * 100;
-		this.modesList.selectedItem = this.inputs.selectedItem.blendMode;
+		this.alphaSlider.value = this.target.alpha * 100;
+		this.modesList.selectedItem = this.target.blendMode;
 	}
 }

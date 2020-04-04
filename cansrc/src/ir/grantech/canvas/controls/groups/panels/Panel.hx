@@ -55,7 +55,7 @@ class Panel extends CanView {
 			return this.target;
 		this.target = value;
 		if (this.target != null)
-			this.update();
+			this.updateData();
 		return this.target;
 	}
 

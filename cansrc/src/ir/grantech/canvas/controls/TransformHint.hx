@@ -99,6 +99,8 @@ class TransformHint extends Sprite {
 	private function doubleClickHandler(event:MouseEvent):Void {
 		if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true)) {
 			this.registerRatio.setTo(0.5, 0.5);
+			if (this.targets.length == 1)
+				this.targets[0].layer.pivot.setTo(0.5, 0.5);
 			this.resetRegister();
 		}
 		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
@@ -138,7 +140,6 @@ class TransformHint extends Sprite {
 
 	public function set(target:ICanItem):Void {
 		this.setVisible(true, true);
-		this.targets = [target];
 		var r = target.rotation;
 		target.rotation = 0;
 		var w = target.width;
@@ -162,7 +163,6 @@ class TransformHint extends Sprite {
 		this.corners[6].y = h;
 		this.corners[7].x = 0;
 		this.corners[7].y = h * 0.5;
-		this.resetRegister();
 
 		for (i in 0...8)
 			drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
@@ -175,6 +175,15 @@ class TransformHint extends Sprite {
 		this.lines[4].y = h;
 		this.lines[5].y = h;
 		this.lines[6].y = h * 0.5 + this.radius;
+
+		if (this.targets[0] == target)
+			return;
+		this.targets = [target];
+		if (this.targets.length == 1)
+			this.registerRatio.setTo(this.targets[0].layer.pivot.x, this.targets[0].layer.pivot.y);
+		else
+			this.registerRatio.setTo(0.5, 0.5);
+		this.resetRegister();
 	}
 
 	public function perform(state:Int):Void {
@@ -213,13 +222,15 @@ class TransformHint extends Sprite {
 	}
 
 	private function performRegister(state:Int):Void {
-		registerRatio.setTo(this.mouseX / corners[4].x, this.mouseY / corners[4].y);
+		this.registerRatio.setTo(this.mouseX / this.corners[4].x, this.mouseY / this.corners[4].y);
+		if (this.targets.length == 1)
+			this.targets[0].layer.pivot.setTo(this.registerRatio.x, this.registerRatio.y);
 		this.resetRegister();
 	}
 
 	private function resetRegister():Void {
-		this.register.x = corners[4].x * registerRatio.x;
-		this.register.y = corners[4].y * registerRatio.y;
+		this.register.x = this.corners[4].x * this.registerRatio.x;
+		this.register.y = this.corners[4].y * this.registerRatio.y;
 	}
 
 	private function performRotate(state:Int):Void {

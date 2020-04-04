@@ -303,7 +303,7 @@ class TransformHint extends Sprite {
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(-this.angleBegin);
 		if (Inputs.instance.shiftKey) {
-			mat.scale(sx / mat.a, sy / mat.d);
+			mat.scale(sx / mat.a, sx / mat.a);
 		} else {
 			if (this.hitAnchor == 1 || this.hitAnchor == 5)
 				mat.scale(1, sy / mat.d);

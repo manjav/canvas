@@ -10,6 +10,7 @@ import openfl.events.MouseEvent;
 class CanRangeInput extends CanTextInput implements IRange {
 	private var stepY = 0.0;
 	private var speed = 0.1;
+	private var diff = 0.0;
 
 	/**
 		The current numeric value of the range.
@@ -37,6 +38,7 @@ class CanRangeInput extends CanTextInput implements IRange {
 		if (this.value == value)
 			return this.value;
 
+		this.diff = value - this.value;
 		this.value = value;
 		this.set_text(this.valueFormatter(value));
 		this.setInvalid(InvalidationFlag.DATA);

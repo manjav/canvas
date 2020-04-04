@@ -222,10 +222,24 @@ class TransformHint extends Sprite {
 	}
 
 	private function performRegister(state:Int):Void {
-		this.registerRatio.setTo(this.mouseX / this.corners[4].x, this.mouseY / this.corners[4].y);
+		this.registerRatio.setTo(this.mouseX / this.scaleAnchores[4].x, this.mouseY / this.scaleAnchores[4].y);
+		this.snapTo(this.registerRatio, -0.05, 0.05, -0.05, 0.05);
+		this.snapTo(this.registerRatio, 0.45, 0.55, -0.05, 0.05);
+		this.snapTo(this.registerRatio, 0.95, 1.05, -0.05, 0.05);
+		this.snapTo(this.registerRatio, -0.05, 0.05, 0.45, 0.55);
+		this.snapTo(this.registerRatio, 0.45, 0.55, 0.45, 0.55);
+		this.snapTo(this.registerRatio, 0.95, 1.05, 0.45, 0.55);
+		this.snapTo(this.registerRatio, -0.05, 0.05, 0.95, 1.05);
+		this.snapTo(this.registerRatio, 0.45, 0.55, 0.95, 1.05);
+		this.snapTo(this.registerRatio, 0.95, 1.05, 0.95, 1.05);
 		if (this.targets.length == 1)
 			this.targets[0].layer.pivot.setTo(this.registerRatio.x, this.registerRatio.y);
 		this.resetRegister();
+	}
+
+	private function snapTo(c:Point, x1:Float, x2:Float, y1:Float, y2:Float):Void {
+		if (c.x > x1 && c.x < x2 && c.y > y1 && c.y < y2)
+			c.setTo(x1 + (x2 - x1) * 0.5, y1 + (y2 - y1) * 0.5);
 	}
 
 	private function resetRegister():Void {

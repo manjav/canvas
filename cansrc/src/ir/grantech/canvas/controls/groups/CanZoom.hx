@@ -81,7 +81,7 @@ class CanZoom extends LayoutGroup {
 		if (event.data[0] == null)
 			this.scene.transformHint.set(null);
 		else
-			this.scene.transformHint.set(this.input.selectedItem);
+			this.scene.transformHint.set(event.data[0]);
 	}
 
 	private function commands_changeVisibleHandler(event:CanEvent):Void {}

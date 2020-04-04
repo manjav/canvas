@@ -13,8 +13,8 @@ import openfl.events.Event;
 import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
-	public var canWidth = 320;
-	public var canHeight = 480;
+	public var canWidth = 640;
+	public var canHeight = 960;
 	public var canColor = 0xFFFFFF;
 	public var beginPoint:Point;
 	public var hitHint:Shape;

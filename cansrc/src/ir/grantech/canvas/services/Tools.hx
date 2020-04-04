@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import openfl.geom.Rectangle;
 import ir.grantech.canvas.drawables.CanBitmap;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanSprite;
@@ -40,35 +41,35 @@ class Tools extends BaseService {
 		if (!this.tools.exists(this.toolType))
 			this.tools.set(this.toolType, new Tool(this.toolType));
 		if (this.toolType > 0 && this.toolType < 4) {
-
 			var item:ICanItem = null;
+			var f = Math.round(Math.random() * 0xFFFFFF);
+			var l = Math.round(Math.random() * 0xFFFFFF);
+			var r  = 50 + Math.random() * 100;
 			if (this.toolType == 1) {
 				var sh = new CanShape();
-				sh.graphics.beginFill(0xFFF0FF, 0.7);
-				sh.graphics.lineStyle(1, 0xFF00FF);
-				sh.graphics.moveTo(10, 10);
-				sh.graphics.lineTo(20, 10);
-				sh.graphics.curveTo(20, 20, 0, 20);
-				sh.graphics.drawRoundRect(0, 0, 122, 123, 42, 44);
+				sh.graphics.beginFill(f, 0.7);
+				sh.graphics.lineStyle(1, l);
+				sh.graphics.drawRoundRect(0, 0, r * 3, r * 3, r, r);
 				item = sh;
-			}
-			else if(this.toolType == 2){
+			} else if (this.toolType == 2) {
 				var sp = new CanSprite();
-				sp.graphics.beginFill(0xF0FFFF);
-				sp.graphics.drawRect(0,0,100,100);
+				sp.graphics.beginFill(f);
+				sp.graphics.lineStyle(1, l);
+				sp.graphics.drawCircle(r, r, r);
 				item = sp;
-			}
-			else if(this.toolType == 3){
+			} else if (this.toolType == 3) {
 				var bmp = new CanBitmap();
 				bmp.bitmapData = Assets.getBitmapData("rotate");
+				bmp.scale9Grid = new Rectangle(10, 10, 2, 2);
 				item = bmp;
 			}
-			
+
 			item.x = Math.random() * 320;
 			item.y = Math.random() * 480;
 			item.rotation = Math.random() * 360;
 
 			this.commands.commands.commit(Commands.ADDED, [item]);
+			this.toolType = 0;
 		}
 
 		return this.toolType;

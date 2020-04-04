@@ -21,14 +21,16 @@ class TransformHint extends Sprite {
 			return;
 		for (i in 0...8) {
 			this.lines[i].visible = visible;
-			this.corners[i].visible = visible;
+			this.scaleAnchores[i].visible = visible;
+			this.rotateAnchores[i].visible = visible;
 		}
 		if (all)
 			this.register.visible = visible;
 		this.register.alpha = visible ? 1 : 0.5;
 	}
 
-	private var radius:Float = 6;
+	private var mode:Int = -1;
+	private var radius:Float = 8;
 	private var lineThickness:Float = 2;
 	private var lineColor:UInt = 0x1692E6;
 
@@ -36,9 +38,8 @@ class TransformHint extends Sprite {
 	private var hitAnchor:Int;
 	private var register:Shape;
 	private var lines:Array<Shape>;
-	private var rects:Array<Shape>;
-	private var circles:Array<Shape>;
-	private var corners:Array<Shape>;
+	private var scaleAnchores:Array<ScaleAnchor>;
+	private var rotateAnchores:Array<RotateAnchor>;
 	private var mouseTranslateBegin:Point;
 	private var mouseScaleBegin:Point;
 	private var mouseAngleBegin:Float;
@@ -67,11 +68,17 @@ class TransformHint extends Sprite {
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.lines = new Array<Shape>();
-		this.rects = new Array<Shape>();
-		this.circles = new Array<Shape>();
+		this.scaleAnchores = new Array<ScaleAnchor>();
+		this.rotateAnchores = new Array<RotateAnchor>();
 		for (i in 0...8) {
-			this.rects.push(this.addRect(0, 0, this.radius));
-			this.circles.push(this.addCircle(0, 0, this.radius + 1));
+			var sa = new ScaleAnchor(this.radius, this.lineThickness, this.lineColor);
+			this.addChild(sa);
+			this.scaleAnchores.push(sa);
+
+			var ra = new RotateAnchor(this.radius, this.lineThickness, this.lineColor);
+			this.addChild(ra);
+			this.rotateAnchores.push(ra);
+
 			this.lines.push(this.addLine(i == 2 || i == 3 || i == 6 || i == 7, 100));
 		}
 		this.lines[0].x = this.radius;
@@ -79,20 +86,18 @@ class TransformHint extends Sprite {
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
 
-		this.mode = MODE_SCALE;
 		this.setVisible(false, true);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
 	}
 
 	private function doubleClickHandler(event:MouseEvent):Void {
-		if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true)) {
+		// if (!this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
+		// 	return;
 			this.registerRatio.setTo(0.5, 0.5);
 			if (this.targets.length == 1)
 				this.targets[0].layer.pivot.setTo(0.5, 0.5);
 			this.resetRegister();
 		}
-		this.mode = this.mode == MODE_SCALE ? MODE_ROTATE : MODE_SCALE;
-	}
 
 	private function addCircle(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
 		var c:Shape = new Shape();
@@ -101,15 +106,6 @@ class TransformHint extends Sprite {
 		c.graphics.drawCircle(0, 0, radius);
 		this.addChild(c);
 		return c;
-	}
-
-	private function addRect(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
-		var r:Shape = new Shape();
-		r.graphics.beginFill(fillColor, fillAlpha);
-		r.graphics.lineStyle(lineThickness, lineColor);
-		r.graphics.drawRect(-radius, -radius, radius * 2, radius * 2);
-		this.addChild(r);
-		return r;
 	}
 
 	private function addLine(vertical:Bool, length:Float):Shape {
@@ -127,6 +123,7 @@ class TransformHint extends Sprite {
 	}
 
 	public function set(target:ICanItem):Void {
+		this.mode = MODE_NONE;
 		this.setVisible(true, true);
 		var r = target.rotation;
 		target.rotation = 0;
@@ -139,21 +136,21 @@ class TransformHint extends Sprite {
 		this.main.width = w;
 		this.main.height = h;
 
-		this.corners[1].x = w * 0.5;
-		this.corners[2].x = w;
-		this.corners[3].x = w;
-		this.corners[3].y = h * 0.5;
-		this.corners[4].x = w;
-		this.corners[4].y = h;
-		this.corners[5].x = w * 0.5;
-		this.corners[5].y = h;
-		this.corners[6].x = 0;
-		this.corners[6].y = h;
-		this.corners[7].x = 0;
-		this.corners[7].y = h * 0.5;
+		this.scaleAnchores[1].x = this.rotateAnchores[1].x = w * 0.5;
+		this.scaleAnchores[2].x = this.rotateAnchores[2].x = w;
+		this.scaleAnchores[3].x = this.rotateAnchores[3].x = w;
+		this.scaleAnchores[3].y = this.rotateAnchores[3].y = h * 0.5;
+		this.scaleAnchores[4].x = this.rotateAnchores[4].x = w;
+		this.scaleAnchores[4].y = this.rotateAnchores[4].y = h;
+		this.scaleAnchores[5].x = this.rotateAnchores[5].x = w * 0.5;
+		this.scaleAnchores[5].y = this.rotateAnchores[5].y = h;
+		this.scaleAnchores[6].x = this.rotateAnchores[6].x = 0;
+		this.scaleAnchores[6].y = this.rotateAnchores[6].y = h;
+		this.scaleAnchores[7].x = this.rotateAnchores[7].x = 0;
+		this.scaleAnchores[7].y = this.rotateAnchores[7].y = h * 0.5;
 
 		for (i in 0...8)
-			drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
+			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;
@@ -164,8 +161,6 @@ class TransformHint extends Sprite {
 		this.lines[5].y = h;
 		this.lines[6].y = h * 0.5 + this.radius;
 
-		if (this.targets[0] == target)
-			return;
 		this.targets = [target];
 		if (this.targets.length == 1)
 			this.registerRatio.setTo(this.targets[0].layer.pivot.x, this.targets[0].layer.pivot.y);
@@ -246,8 +241,8 @@ class TransformHint extends Sprite {
 	}
 
 	private function resetRegister():Void {
-		this.register.x = this.corners[4].x * this.registerRatio.x;
-		this.register.y = this.corners[4].y * this.registerRatio.y;
+		this.register.x = this.scaleAnchores[4].x * this.registerRatio.x;
+		this.register.y = this.scaleAnchores[4].y * this.registerRatio.y;
 	}
 
 	private function performRotate(state:Int):Void {
@@ -345,3 +340,21 @@ class TransformHint extends Sprite {
 		this.set(this.targets[0]);
 	}
 }
+
+class ScaleAnchor extends Sprite {
+	public function new(radius:Float, thinkness:Float, lineColor:UInt) {
+		super();
+		this.graphics.lineStyle(thinkness, lineColor);
+		this.graphics.beginFill(0, 0);
+		this.graphics.drawCircle(0, 0, radius);
+	}
+}
+
+class RotateAnchor extends Shape {
+	public function new(radius:Float, thinkness:Float, lineColor:UInt) {
+		super();
+		this.graphics.beginFill(0xFF, 0);
+		this.graphics.drawCircle(0, 0, radius * 4);
+	}
+}
+

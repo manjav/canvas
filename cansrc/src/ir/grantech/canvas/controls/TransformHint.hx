@@ -10,23 +10,11 @@ import openfl.geom.Point;
 import openfl.geom.Rectangle;
 
 class TransformHint extends Sprite {
-	static final MODE_SCALE:Int = 0;
-	static final MODE_ROTATE:Int = 1;
-
-	public var mode(default, set):Int = -1;
-
-	private function set_mode(value:Int):Int {
-		if (this.mode == value)
-			return this.mode;
-		for (i in 0...8) {
-			this.rects[i].visible = value == MODE_SCALE;
-			this.circles[i].visible = value == MODE_ROTATE;
-		}
-		this.corners = value == MODE_SCALE ? this.rects : this.circles;
-		if (this.targets.length > 0)
-			this.set(this.targets[0]);
-		return this.mode = value;
-	}
+	static final MODE_NONE:Int = -1;
+	static final MODE_REGISTER:Int = 0;
+	static final MODE_TRANSLATE:Int = 1;
+	static final MODE_SCALE:Int = 2;
+	static final MODE_ROTATE:Int = 3;
 
 	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
@@ -45,7 +33,7 @@ class TransformHint extends Sprite {
 	private var lineColor:UInt = 0x1692E6;
 
 	private var main:Shape;
-	private var hitCorner:Int;
+	private var hitAnchor:Int;
 	private var register:Shape;
 	private var lines:Array<Shape>;
 	private var rects:Array<Shape>;
@@ -186,39 +174,54 @@ class TransformHint extends Sprite {
 		this.resetRegister();
 	}
 
+	private function getAnchor():Int {
+		if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
+			return 8;
+		for (i in 0...8)
+			if (this.scaleAnchores[i].hitTestPoint(stage.mouseX, stage.mouseY, true))
+				return i;
+		if (this.main.hitTestPoint(stage.mouseX, stage.mouseY, true))
+			return 9;
+		for (i in 0...8)
+			if (this.rotateAnchores[i].hitTestPoint(stage.mouseX, stage.mouseY, true))
+				return 10 + i;
+		return -1;
+	}
+
 	public function perform(state:Int):Void {
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);
 			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
-			// detect handles
-			this.hitCorner = -1;
-			if (this.register.hitTestPoint(stage.mouseX, stage.mouseY, true)) {
-				this.hitCorner = 8;
-			} else {
-				for (i in 0...8) {
-					if (this.corners[i].hitTestPoint(stage.mouseX, stage.mouseY, true)) {
-						this.hitCorner = i;
-						break;
-					}
-				}
+			// detect anchores
+			this.hitAnchor = this.getAnchor();
+			if (this.hitAnchor < 0)
+				return;
+			if (this.hitAnchor < 8) {
+				this.mode = MODE_SCALE;
+			} else if (this.hitAnchor == 8) {
+				this.mode = MODE_REGISTER;
+			} else if (this.hitAnchor == 9) {
+				this.mode = MODE_TRANSLATE;
+			} else if (this.hitAnchor > 9) {
+				this.mode = MODE_ROTATE;
+				this.hitAnchor -= 10;
 			}
-		} else {
-			this.setVisible(false, this.hitCorner == -1);
+			this.setVisible(false, this.mode == MODE_TRANSLATE);
 		}
 
 		// porform methods
-		if (this.hitCorner > -1) {
-			if (this.hitCorner == 8)
+		if (this.hitAnchor < 0)
+			return;
+		if (this.mode == MODE_REGISTER)
 				this.performRegister(state);
+		else if (this.mode == MODE_TRANSLATE)
+			this.performTranslate(state);
+		else if (this.mode == MODE_SCALE)
+			this.performScale(state);
 			else if (this.mode == MODE_ROTATE)
 				this.performRotate(state);
-			else
-				this.performScale(state);
-		} else {
-			this.performTranslate(state);
-		}
 	}
 
 	private function performRegister(state:Int):Void {
@@ -302,9 +305,9 @@ class TransformHint extends Sprite {
 		if (Inputs.instance.shiftKey) {
 			mat.scale(sx / mat.a, sy / mat.d);
 		} else {
-			if (this.hitCorner == 1 || this.hitCorner == 5)
+			if (this.hitAnchor == 1 || this.hitAnchor == 5)
 				mat.scale(1, sy / mat.d);
-			else if (this.hitCorner == 3 || this.hitCorner == 7)
+			else if (this.hitAnchor == 3 || this.hitAnchor == 7)
 				mat.scale(sx / mat.a, 1);
 			else
 				mat.scale(sx / mat.a, sy / mat.d);

@@ -1,11 +1,11 @@
 package ir.grantech.canvas.controls;
 
-import openfl.Assets;
-import openfl.display.Bitmap;
 import flash.ui.Mouse;
-import openfl.events.Event;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Inputs;
+import openfl.Assets;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
@@ -42,6 +42,7 @@ class TransformHint extends Sprite {
 	private var hitAnchor:Int;
 	private var register:Shape;
 	private var lines:Array<Shape>;
+	private var owner:DisplayObjectContainer;
 	private var scaleAnchores:Array<ScaleAnchor>;
 	private var rotateAnchores:Array<RotateAnchor>;
 	private var mouseTranslateBegin:Point;
@@ -55,9 +56,10 @@ class TransformHint extends Sprite {
 
 	public var targets:Array<ICanItem>;
 
-	public function new() {
+	public function new(owner:DisplayObjectContainer) {
 		super();
 
+		this.owner = owner;
 		this.main = new Shape();
 		this.main.graphics.beginFill(0, 0);
 		this.main.graphics.drawRect(0, 0, 100, 100);
@@ -91,30 +93,13 @@ class TransformHint extends Sprite {
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
 
-		this.setVisible(false, true);
-		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
+			this.cursor = new Cursor();
+		this.owner.stage.addChild(this.cursor);
+
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
 	}
 
-	private function addedToStageHandler(event:Event):Void {
-		if (cursor == null) {
-			this.cursor = new Cursor();
-			stage.addChild(this.cursor);
-		}
-
-		this.removeEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
-		this.addEventListener(Event.REMOVED_FROM_STAGE, this.removeFromStageHandler);
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-	}
-
-	private function removeFromStageHandler(event:Event):Void {
-		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
-		this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removeFromStageHandler);
-		stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-		this.cursor.mode = Cursor.MODE_NONE;
-	}
-
-	private function mouseMoveHandler(event:MouseEvent):Void {
+	private function stage_mouseMoveHandler(event:MouseEvent):Void {
 		if (this.mode == MODE_NONE) {
 			var anchor = this.getAnchor();
 			if (anchor < 0 || anchor == 8 || anchor == 9) {
@@ -165,15 +150,30 @@ class TransformHint extends Sprite {
 	}
 
 	public function set(target:ICanItem):Void {
+		if (this.targets[0] == target)
+			return;
+		this.targets = [target];
+
+		if (target != null) {
+			this.owner.addChild(this);
+			this.owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+			this.cursor.mode = Cursor.MODE_NONE;
+		} else if (this.owner == parent) {
+			this.owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+			this.owner.removeChild(this);
+		}
 		this.mode = MODE_NONE;
+		if (this.targets.length < 1 || this.targets[0] == null)
+			return;
 		this.setVisible(true, true);
-		var r = target.rotation;
-		target.rotation = 0;
-		var w = target.width;
-		var h = target.height;
-		this.x = target.x;
-		this.y = target.y;
-		this.rotation = target.rotation = r;
+
+		var r = this.targets[0].rotation;
+		this.targets[0].rotation = 0;
+		var w = this.targets[0].width;
+		var h = this.targets[0].height;
+		this.x = this.targets[0].x;
+		this.y = this.targets[0].y;
+		this.rotation = this.targets[0].rotation = r;
 
 		this.main.width = w;
 		this.main.height = h;
@@ -203,7 +203,6 @@ class TransformHint extends Sprite {
 		this.lines[5].y = h;
 		this.lines[6].y = h * 0.5 + this.radius;
 
-		this.targets = [target];
 		if (this.targets.length == 1)
 			this.registerRatio.setTo(this.targets[0].layer.pivot.x, this.targets[0].layer.pivot.y);
 		else

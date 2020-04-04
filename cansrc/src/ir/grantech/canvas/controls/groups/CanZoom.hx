@@ -1,9 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.drawables.ICanItem;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
+import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
@@ -69,14 +69,20 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_transformHandler(event:CanEvent):Void {
-		if(event.type == Commands.SCALE)
+		if (event.type == Commands.SCALE)
 			this.scene.transformHint.scale(event.data[0], event.data[1]);
-		else if(event.type == Commands.ROTATE)
+		else if (event.type == Commands.ROTATE)
 			this.scene.transformHint.rotate(event.data[0]);
-		else if(event.type == Commands.VISIBLE)
+		else if (event.type == Commands.VISIBLE)
 			cast(event.data[0], ICanItem).visible = event.data[1];
 	}
-	private function commands_selectHandler(event:CanEvent):Void {}
+
+	private function commands_selectHandler(event:CanEvent):Void {
+		if (event.data[0] == null)
+			this.scene.transformHint.set(null);
+		else
+			this.scene.transformHint.set(this.input.selectedItem);
+	}
 
 	private function commands_changeVisibleHandler(event:CanEvent):Void {}
 
@@ -107,31 +113,19 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function input_pointHandler(event:CanEvent):Void {
-		if (input.pointPhase == Inputs.PHASE_BEGAN) {
-			this.scene.hitHint.graphics.clear();
-			if (Tools.instance.toolType == Tool.SELECT) {
-				if (this.input.selectedItem != null) {
-					this.scene.addChild(this.scene.transformHint);
+		if (input.pointPhase == Inputs.PHASE_ENDED) {
 					this.scene.transformHint.set(this.input.selectedItem);
-					this.scene.transformHint.perform(input.pointPhase);
-				} else {
-					if (this.scene.transformHint.parent != null)
-						this.scene.removeChild(this.scene.transformHint);
-					this.scene.updateSlection(true);
+			this.scene.hitHint.graphics.clear();
+			return;
 				}
-			}
-		} else if (input.pointPhase == Inputs.PHASE_UPDATE) {
-			if (Tools.instance.toolType == Tool.SELECT) {
+
+		if (Tools.instance.toolType != Tool.SELECT)
+			return;
+
 				if (this.input.selectedItem != null)
 					this.scene.transformHint.perform(input.pointPhase);
 				else
-					this.scene.updateSlection();
-			}
-		} else {
-			this.scene.selectHint.visible = false;
-			if (this.input.selectedItem != null)
-				this.scene.transformHint.set(this.input.selectedItem);
-		}
+			this.scene.updateSlection(input.pointPhase);
 	}
 
 	private function setZoom(value:Float):Void {

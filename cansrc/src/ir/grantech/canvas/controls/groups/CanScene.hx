@@ -34,10 +34,8 @@ class CanScene extends LayoutGroup {
 		this.graphics.drawRect(0, 0, canWidth, canHeight);
 
 		this.hitHint = new Shape();
-		this.addChild(this.hitHint);
 
-		this.transformHint = new TransformHint();
-		this.addChild(this.transformHint);
+		this.transformHint = new TransformHint(this);
 
 		this.selectHint = new Shape();
 		this.selectHint.graphics.beginFill(0x0066FF, 0.1);
@@ -82,6 +80,7 @@ class CanScene extends LayoutGroup {
 		this.hitHint.rotation = target.rotation;
 		this.hitHint.scaleX = target.scaleX;
 		this.hitHint.scaleY = target.scaleY;
+		this.addChild(this.hitHint);
 		if (graphicDataList == null)
 			return;
 

@@ -1,16 +1,14 @@
 package ir.grantech.canvas.services;
 
-import openfl.geom.Point;
 import feathers.data.ArrayCollection;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanBitmap;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanSprite;
 import ir.grantech.canvas.drawables.ICanItem;
-import openfl.display.Stage;
+import openfl.geom.Point;
 
 class Layers extends ArrayCollection<Layer> {
-
 	// public var items(default, default):ArrayCollection<Layer>;
 	public var selectedItem(default, set):Layer;
 
@@ -111,7 +109,7 @@ class Layer {
 		if (Std.is(item, CanBitmap))
 			this.type = TYPE_BITMAP;
 		this.name = type + " " + id;
-		
+
 		this.item = item;
 		this.item.layer = this;
 	}
@@ -120,7 +118,7 @@ class Layer {
 		if (this.visible == vlaue)
 			return this.visible;
 		this.visible = vlaue;
-		// CanEvent.dispatch(this, Event.RENDER);
+		Commands.instance.commit(Commands.VISIBLE, [this.item, vlaue]);
 		return this.visible;
 	}
 
@@ -128,7 +126,7 @@ class Layer {
 		if (this.enabled == vlaue)
 			return this.enabled;
 		this.enabled = vlaue;
-		// CanEvent.dispatch(this, Event.ACTIVATE);
+		Commands.instance.commit(Commands.ENABLE, [this.item, vlaue]);
 		return this.enabled;
 	}
 }

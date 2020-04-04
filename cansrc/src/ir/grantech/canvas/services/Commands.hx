@@ -9,6 +9,8 @@ class Commands extends BaseService {
 	static public final SELECT:String = "select";
 	static public final ROTATE:String = "rotate";
 	static public final SCALE:String = "scale";
+	static public final ENABLE:String = "enable";
+	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";
 
 	/**
@@ -25,15 +27,18 @@ class Commands extends BaseService {
 	}
 
 	private var layers:Layers;
+
 	public function new() {
 		super();
 		this.layers = new Layers();
 	}
 
 	public function commit(command:String, args:Array<Dynamic> = null):Void {
-		switch (command){
-			case ADDED: this.layers.add(new Layer(args[0]));
-			case REMOVED: this.layers.remove(args[0].layer);
+		switch (command) {
+			case ADDED:
+				this.layers.add(new Layer(args[0]));
+			case REMOVED:
+				this.layers.remove(args[0].layer);
 		}
 		CanEvent.dispatch(this, command, args);
 	}

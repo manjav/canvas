@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
@@ -38,6 +39,7 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.RESET, this.commands_resetHandler);
 		commands.addEventListener(Commands.SCALE, this.commands_transformHandler);
 		commands.addEventListener(Commands.ROTATE, this.commands_transformHandler);
+		commands.addEventListener(Commands.VISIBLE, this.commands_transformHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
 		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
@@ -71,6 +73,8 @@ class CanZoom extends LayoutGroup {
 			this.scene.transformHint.scale(event.data[0], event.data[1]);
 		else if(event.type == Commands.ROTATE)
 			this.scene.transformHint.rotate(event.data[0]);
+		else if(event.type == Commands.VISIBLE)
+			cast(event.data[0], ICanItem).visible = event.data[1];
 	}
 	private function commands_selectHandler(event:CanEvent):Void {}
 

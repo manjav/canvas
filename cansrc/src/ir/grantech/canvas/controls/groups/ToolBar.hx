@@ -15,7 +15,21 @@ import ir.grantech.canvas.services.Tools;
 import openfl.Assets;
 import openfl.events.Event;
 import openfl.utils.AssetType;
+
 class ToolBar extends LayoutGroup {
+	private var selectedPanel(default, set):Int = -1;
+
+	private function set_selectedPanel(value:Int):Int {
+		if (this.selectedPanel == value) {
+			this.bottomList.selectedIndex = this.selectedPanel = -1;
+			CanEvent.dispatch(this, Event.CHANGE, this.selectedPanel);
+			return this.selectedPanel;
+		}
+		this.selectedPanel = value;
+		CanEvent.dispatch(this, Event.CHANGE, this.selectedPanel);
+		return this.selectedPanel;
+	}
+
 	private var topList:ListView;
 	private var bottomList:ListView;
 
@@ -59,19 +73,15 @@ class ToolBar extends LayoutGroup {
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
 		this.bottomList.addEventListener("select", this.listView_selectHandler);
 		// this.bottomList.addEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length  + 1;
+		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length + 1;
 		this.addChild(this.bottomList);
 	}
 
 	private function listView_selectHandler(event:CanEvent):Void {
-		this.dispatchEvent(new CanEvent(Event.CHANGE, {index: this.bottomList.selectedIndex == event.data.index ? -1 : event.data.index, text: event.data.text}));
-		if (this.bottomList.selectedIndex == event.data.index)
-			this.bottomList.selectedIndex = -1;
+		this.selectedPanel = event.data.index;
 	}
 
 	private function listView_changeHandler(event:Event):Void {
 		Tools.instance.toolType = cast(event.currentTarget, ListView).selectedIndex;
-		// Mouse.hide();
-		// trace("ListView selectedIndex change: " + cast(event.currentTarget, ListView).selectedIndex);
 	}
 }

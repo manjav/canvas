@@ -68,10 +68,10 @@ class Main extends Application {
 	private function left_changeHandler(event:CanEvent):Void {
 		if (this.leftExtension != null && this.leftExtension.parent == this)
 			this.removeChild(this.leftExtension);
-		if (event.data.index == -1) {
+		if (event.data == -1) {
 			this.zoomLayout.left = this.left.width + CanTheme.DPI * 2;
 		} else {
-			this.leftExtension = this.createPanel(event.data.index);
+			this.leftExtension = this.createPanel(event.data);
 			this.addChild(this.leftExtension);
 			this.zoomLayout.left = this.left.width + this.leftExtension.width + CanTheme.DPI * 3;
 		}

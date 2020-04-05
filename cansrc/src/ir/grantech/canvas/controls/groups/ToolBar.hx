@@ -48,6 +48,7 @@ class ToolBar extends LayoutGroup {
 				items.push({index: i++, text: icon});
 
 		this.topList = new ListView();
+		this.topList.variant = ListView.VARIANT_BORDERLESS;
 		this.topList.dataProvider = new ArrayCollection(items);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.topList.itemToText = (item:Dynamic) -> {
@@ -65,6 +66,7 @@ class ToolBar extends LayoutGroup {
 			if (icon.substr(0, 8) == "toolfoot" && icon.indexOf("_selected") == -1)
 				items.push({index: i++, text: icon});
 		this.bottomList = new ListView();
+		this.bottomList.variant = ListView.VARIANT_BORDERLESS;
 		this.bottomList.dataProvider = new ArrayCollection(items);
 		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.bottomList.itemToText = (item:Dynamic) -> {

@@ -5,8 +5,8 @@ import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
-import feathers.themes.steel.BaseSteelTheme;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.events.Event;
@@ -19,11 +19,11 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.height = this.width = SIZE;
 	}
 
-	@:access(feathers.themes.steel.BaseSteelTheme)
+	@:access(ir.grantech.canvas.themes.CanTheme)
 	override function initialize():Void {
 		super.initialize();
 
-		var theme = Std.downcast(Theme.fallbackTheme, BaseSteelTheme);
+		var theme = Std.downcast(Theme.getTheme(), CanTheme);
 		var skin = new RectangleSkin();
 		skin.fill = theme.getContainerFill();
 		this.backgroundSkin = skin;

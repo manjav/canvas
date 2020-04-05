@@ -1,27 +1,26 @@
 package ir.grantech.canvas.themes;
 
-import feathers.graphics.FillStyle;
-import feathers.controls.ToggleButtonState;
-import feathers.controls.dataRenderers.ItemRenderer;
-import feathers.controls.BasicButton;
-import feathers.skins.CircleSkin;
-import feathers.controls.HSlider;
-import feathers.controls.ButtonState;
-import openfl.Assets;
-import flash.display.Bitmap;
-import openfl.display.Shape;
-import feathers.controls.PopUpListView;
 import feathers.controls.Application;
+import feathers.controls.BasicButton;
 import feathers.controls.Button;
+import feathers.controls.ButtonState;
 import feathers.controls.CanTextInput;
+import feathers.controls.HSlider;
 import feathers.controls.Label;
 import feathers.controls.LayoutGroup;
+import feathers.controls.PopUpListView;
 import feathers.controls.TextInput;
 import feathers.controls.TextInputState;
+import feathers.controls.ToggleButtonState;
+import feathers.controls.dataRenderers.ItemRenderer;
+import feathers.graphics.FillStyle;
+import feathers.skins.CircleSkin;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
+import flash.display.Bitmap;
 import ir.grantech.canvas.controls.groups.panels.Panel;
+import openfl.Assets;
 import openfl.system.Capabilities;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
@@ -48,13 +47,13 @@ class CanTheme extends BaseSteelTheme {
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
-		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(HSlider, null, setHSliderStyles);
+		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
 		this.styleProvider.setStyleFunction(Button, PopUpListView.CHILD_VARIANT_BUTTON, setButtonPopupStyles);
 
@@ -255,7 +254,7 @@ class CanTheme extends BaseSteelTheme {
 	override private function getHeaderTextFormat():TextFormat {
 		return new TextFormat(this.fontName, this.headerFontSize, this.headerTextColor);
 	}
-	
+
 	override private function getActiveThemeFill():FillStyle {
 		return SolidColor(this.textColor, 1);
 	}

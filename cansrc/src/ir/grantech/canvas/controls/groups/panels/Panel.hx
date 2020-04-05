@@ -87,7 +87,8 @@ class Panel extends CanView {
 	private function createList(items:Array<Dynamic>, itemRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>,
 			layoutData:AnchorLayoutData = null):ListView {
 		var element = new ListView();
-		if (items != null)
+		element.variant = ListView.VARIANT_BORDERLESS;
+				if (items != null)
 			element.dataProvider = new ArrayCollection(items);
 		if (itemRendererRecycler != null)
 			element.itemRendererRecycler = itemRendererRecycler;

@@ -58,14 +58,12 @@ class CanZoom extends LayoutGroup {
 
 	// ------ commands listeners ------
 	private function commands_addedHandler(event:CanEvent):Void {
-		this.scene.container.addChild(cast(event.data[0], DisplayObject));
+		this.scene.container.addChild(cast event.data[0]);
 	}
 
 	private function commands_removedHandler(event:CanEvent):Void {
-		this.scene.container.removeChild(cast this.input.selectedItem);
-		this.input.selectedItem = null;
-		if (this.scene.transformHint.parent != null)
-			this.scene.removeChild(this.scene.transformHint);
+		this.scene.transformHint.set(null);
+		this.scene.container.removeChild(cast event.data[0]);
 	}
 
 	private function commands_transformHandler(event:CanEvent):Void {
@@ -112,6 +110,7 @@ class CanZoom extends LayoutGroup {
 			this.setZoom(this.input.zoom);
 	}
 
+	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
 			this.scene.transformHint.updateBounds();

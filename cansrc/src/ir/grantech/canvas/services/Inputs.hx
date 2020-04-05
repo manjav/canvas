@@ -69,7 +69,7 @@ class Inputs extends BaseService {
 		return this.zoom;
 	}
 
-	public var selectedItem(default, set):ICanItem;
+	private var selectedItem(default, set):ICanItem;
 
 	private function set_selectedItem(value:ICanItem):ICanItem {
 		if (this.selectedItem == value)

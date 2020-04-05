@@ -20,9 +20,9 @@ class BaseService extends EventDispatcher {
 		return Inputs.instance;
 	}
 
-	public var assets(get, null):Libs;
+	public var libs(get, null):Libs;
 
-	private function get_assets():Libs {
+	private function get_libs():Libs {
 		return Libs.instance;
 	}
 

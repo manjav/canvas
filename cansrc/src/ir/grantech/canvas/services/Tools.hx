@@ -44,12 +44,13 @@ class Tools extends BaseService {
 			var item:ICanItem = null;
 			var f = Math.round(Math.random() * 0xFFFFFF);
 			var l = Math.round(Math.random() * 0xFFFFFF);
-			var r  = 50 + Math.random() * 100;
+			var r = 10 + Math.random() * 100;
 			if (this.toolType == 1) {
 				var sh = new CanShape();
 				sh.graphics.beginFill(f, 0.7);
 				sh.graphics.lineStyle(1, l);
 				sh.graphics.drawRoundRect(0, 0, r * 3, r * 3, r, r);
+				sh.scale9Grid = new Rectangle(r, r, r, r);
 				item = sh;
 			} else if (this.toolType == 2) {
 				var sp = new CanSprite();
@@ -60,7 +61,7 @@ class Tools extends BaseService {
 			} else if (this.toolType == 3) {
 				var bmp = new CanBitmap();
 				bmp.bitmapData = Assets.getBitmapData("rotate");
-				bmp.scale9Grid = new Rectangle(10, 10, 2, 2);
+				bmp.scale9Grid = new Rectangle(10, 10, 12, 12);
 				item = bmp;
 			}
 

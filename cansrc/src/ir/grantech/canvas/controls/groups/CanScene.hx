@@ -67,10 +67,8 @@ class CanScene extends LayoutGroup {
 			return;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData> = null;
-		if (Std.is(target, Shape)) {
-			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
-		} else if (Std.is(target, Sprite)) {
-			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
+		if (Std.is(target, Shape) || Std.is(target, Sprite)) {
+			graphicDataList = (cast target).graphics.readGraphicsData();
 		} else if (Std.is(target, Bitmap)) {
 			var bmp = cast(target, Bitmap);
 			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);

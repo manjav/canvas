@@ -114,13 +114,13 @@ class CanZoom extends LayoutGroup {
 	private function input_pointHandler(event:CanEvent):Void {
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
 			this.scene.transformHint.updateBounds();
-			this.scene.hitHint.graphics.clear();
 			return;
 		}
 
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
-
+		
+		this.scene.hitHint.graphics.clear();
 		if (this.input.selectedItem != null)
 			this.scene.transformHint.perform(input.pointPhase);
 		else

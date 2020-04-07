@@ -1,7 +1,7 @@
 package ir.grantech.canvas.services;
 
 import openfl.geom.Rectangle;
-import ir.grantech.canvas.drawables.CanBitmap;
+import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanSprite;
 import ir.grantech.canvas.drawables.ICanItem;
@@ -59,9 +59,7 @@ class Tools extends BaseService {
 				sp.graphics.drawCircle(r, r, r);
 				item = sp;
 			} else if (this.toolType == 3) {
-				var bmp = new CanBitmap();
-				bmp.bitmapData = Assets.getBitmapData("rotate");
-				bmp.scale9Grid = new Rectangle(10, 10, 12, 12);
+				var bmp = new CanSlicedBitmap(Assets.getBitmapData("toolfoot_1_selected"), new Rectangle(22, 24, 4, 4));
 				item = bmp;
 			}
 

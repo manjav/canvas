@@ -66,9 +66,9 @@ class TransformPanel extends Panel {
 		else if (event.currentTarget == this.inputY)
 			this.target.y = this.inputY.value;
 		else if (event.currentTarget == this.inputW)
-			this.commands.commit(Commands.SCALE, [this.inputW.value / this.selfBounds.width, 1]);
+			this.commands.commit(Commands.SCALE, [this.inputW.value / this.selfBounds.width, this.target.scaleY]);
 		else if (event.currentTarget == this.inputH)
-			this.commands.commit(Commands.SCALE, [1, this.inputH.value / this.selfBounds.height]);
+			this.commands.commit(Commands.SCALE, [this.target.scaleX, this.inputH.value / this.selfBounds.height]);
 		else if (event.currentTarget == this.inputR)
 			this.commands.commit(Commands.ROTATE, [this.inputR.value / 180 * Math.PI]);
 

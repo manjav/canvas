@@ -38,7 +38,9 @@ class Commands extends BaseService {
 			case ADDED:
 				this.layers.add(new Layer(args[0]));
 			case REMOVED:
-				this.layers.remove(args[0].layer);
+				var items = cast(args[0], CanItems).items;
+				for (i in items)
+					this.layers.remove(i.layer);
 		}
 		CanEvent.dispatch(this, command, args);
 	}

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.drawables.CanItems;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
@@ -9,9 +10,9 @@ import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Tools;
-import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
+import openfl.geom.Rectangle;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 
@@ -63,6 +64,7 @@ class CanZoom extends LayoutGroup {
 
 	private function commands_removedHandler(event:CanEvent):Void {
 		this.scene.transformHint.set(null);
+		cast(event.data[0], CanItems).removeAll();
 		this.scene.container.removeChild(cast event.data[0]);
 	}
 

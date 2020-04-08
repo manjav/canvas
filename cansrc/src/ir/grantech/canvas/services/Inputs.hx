@@ -152,8 +152,8 @@ class Inputs extends BaseService {
 			}
 		}
 
-		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItem != null) {
-			this.commands.commit(Commands.REMOVED, [selectedItem]);
+		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItems != null) {
+			this.commands.commit(Commands.REMOVED, [this.selectedItems]);
 			return;
 		}
 	}

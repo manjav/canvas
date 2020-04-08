@@ -1,6 +1,7 @@
 package ir.grantech.canvas.controls;
 
-import flash.ui.Mouse;
+import ir.grantech.canvas.drawables.CanItems;
+import openfl.ui.Mouse;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Inputs;
 import openfl.Assets;
@@ -71,7 +72,6 @@ class TransformHint extends Sprite {
 		this.scaleBegin = new Point();
 		this.registerPoint = new Point();
 		this.registerRatio = new Point(0.5, 0.5);
-		this.targets = new Array<ICanItem>();
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.lines = new Array<Shape>();

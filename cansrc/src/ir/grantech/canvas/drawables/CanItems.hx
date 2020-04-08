@@ -23,13 +23,22 @@ class CanItems {
 			this.calculateBounds();
 	}
 
-	public function remove(item:ICanItem):Bool {
+	public function removeAll():Void {
+		for (i in this.items)
+			this.remove(i, false);
+		this.calculateBounds();
+	}
+
+	public function remove(item:ICanItem, createBounds:Bool = true):Bool {
 		var ret = this.items.remove(item);
-		if (ret) {
+		if (!ret)
+			return false;
 			this.length--;
+			if (item.parent != null)
+				item.parent.removeChild(cast item);
+		if (createBounds)
 			this.calculateBounds();
-		}
-		return ret;
+		return true;
 	}
 
 	public function get(index:Int):ICanItem {

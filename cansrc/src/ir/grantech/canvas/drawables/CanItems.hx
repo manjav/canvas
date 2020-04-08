@@ -58,4 +58,13 @@ class CanItems {
 		return this.items.indexOf(item);
 	}
 
+	// perform translate with matrix
+	public function translate(dx:Float, dy:Float):Void {
+		for (i in this.items) {
+			var mat:Matrix = i.transform.matrix;
+			mat.translate(dx, dy);
+			i.transform.matrix = mat;
+		}
+		this.calculateBounds();
+	}
 }

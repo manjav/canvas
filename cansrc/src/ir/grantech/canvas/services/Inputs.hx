@@ -2,6 +2,7 @@ package ir.grantech.canvas.services;
 
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Tools.Tool;
@@ -106,16 +107,16 @@ class Inputs extends BaseService {
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 16 || event.keyCode == 17 || event.keyCode > 36 && event.keyCode < 41) {
-			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItem == null)
+			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItems == null)
 				return;
 			if (event.keyCode == 37)
-				this.selectedItem.x -= (event.shiftKey ? 10 : 1);
+				this.selectedItems.translate(event.shiftKey ? -10 : -1, 0);
 			else if (event.keyCode == 38)
-				this.selectedItem.y -= (event.shiftKey ? 10 : 1);
+				this.selectedItems.translate(0, event.shiftKey ? -10 : -1);
 			else if (event.keyCode == 39)
-				this.selectedItem.x += (event.shiftKey ? 10 : 1);
+				this.selectedItems.translate(event.shiftKey ? 10 : 1, 0);
 			else if (event.keyCode == 40)
-				this.selectedItem.y += (event.shiftKey ? 10 : 1);
+				this.selectedItems.translate(0, event.shiftKey ? 10 : 1);
 			this.panPhase = PHASE_ENDED;
 			CanEvent.dispatch(this, POINT);
 			return;

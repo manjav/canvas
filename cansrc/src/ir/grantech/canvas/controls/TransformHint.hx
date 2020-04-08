@@ -368,11 +368,7 @@ class TransformHint extends Sprite {
 		var tx = stage.mouseX / Inputs.instance.zoom - this.mouseTranslateBegin.x;
 		var ty = stage.mouseY / Inputs.instance.zoom - this.mouseTranslateBegin.y;
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
-
-		// perform translate with matrix
-		var mat:Matrix = this.targets[0].transform.matrix;
-		mat.translate(tx, ty);
-		this.targets[0].transform.matrix = mat;
+		this.targets.translate(tx, ty);
 	}
 
 	public function resetTransform():Void {

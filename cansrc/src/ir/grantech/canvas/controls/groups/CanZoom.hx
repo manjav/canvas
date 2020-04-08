@@ -85,7 +85,7 @@ class CanZoom extends LayoutGroup {
 	private function commands_changeVisibleHandler(event:CanEvent):Void {}
 
 	private function commands_resetHandler(event:CanEvent):Void {
-		this.scene.transformHint.resetTransform();
+		cast(event.data[0], CanItems).resetTransform();
 	}
 
 	// ------ inputs listeners ------

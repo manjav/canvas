@@ -147,8 +147,8 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
-			} else if (this.selectedItem != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
-				this.commands.commit(Commands.RESET, [selectedItem]);
+			} else if (this.selectedItems != null && event.shiftKey && this.lastKeyUp == 90) { // ctrl + shift + z
+				this.commands.commit(Commands.RESET, [this.selectedItems]);
 			}
 		}
 

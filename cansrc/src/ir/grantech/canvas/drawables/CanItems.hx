@@ -67,4 +67,17 @@ class CanItems {
 		}
 		this.calculateBounds();
 	}
+
+	public function resetTransform():Void {
+		for (i in this.items) {
+			var mat:Matrix = i.transform.matrix;
+			var r = i.getBounds(i.parent);
+			mat.a = mat.d = 1;
+			mat.b = mat.c = 0;
+			i.transform.matrix = mat;
+			i.x = r.left + r.width * 0.5 - i.width * 0.5;
+			i.y = r.top + r.height * 0.5 - i.height * 0.5;
+		}
+		this.calculateBounds();
+	}
 }

@@ -370,17 +370,6 @@ class TransformHint extends Sprite {
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
 		this.targets.translate(tx, ty);
 	}
-
-	public function resetTransform():Void {
-		var mat:Matrix = this.targets[0].transform.matrix;
-		var r = this.targets[0].getBounds(this.targets[0].parent);
-		mat.a = mat.d = 1;
-		mat.b = mat.c = 0;
-		this.targets[0].transform.matrix = mat;
-		this.targets[0].x = r.left + r.width * 0.5 - this.targets[0].width * 0.5;
-		this.targets[0].y = r.top + r.height * 0.5 - this.targets[0].height * 0.5;
-		this.updateBounds();
-	}
 }
 
 class ScaleAnchor extends Sprite {

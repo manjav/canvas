@@ -4,6 +4,18 @@ import flash.geom.Matrix;
 import openfl.geom.Rectangle;
 
 class CanItems {
+	public var alpha(default, set):Float = 1;
+
+	private function set_alpha(value:Float):Float {
+		if (this.alpha == value)
+			return this.alpha;
+		this.alpha = value;
+		for (i in this.items)
+			i.alpha = this.alpha;
+		return this.alpha;
+	}
+
+	public var _x:Float = Math.POSITIVE_INFINITY;
 	public var length:Int = 0;
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;

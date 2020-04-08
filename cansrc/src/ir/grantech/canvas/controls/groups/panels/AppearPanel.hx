@@ -36,8 +36,8 @@ class AppearPanel extends Panel {
 	}
 
 	override private function sliders_changeHandler(event:Event) {
-		if (this.target != null)
-			this.target.alpha = this.alphaSlider.value * 0.01;
+		if (this.targets != null)
+			this.targets.alpha = this.alphaSlider.value * 0.01;
 	}
 
 	override private function popupListView_changeHandler(event:Event) {
@@ -46,9 +46,9 @@ class AppearPanel extends Panel {
 	}
 
 	override public function updateData():Void {
-		if (this.target == null)
+		if (this.targets == null)
 			return;
-		this.alphaSlider.value = this.target.alpha * 100;
+		this.alphaSlider.value = this.targets.alpha * 100;
 		this.modesList.selectedItem = this.target.blendMode;
 	}
 }

@@ -4,10 +4,9 @@ import feathers.controls.LayoutGroup;
 import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
-import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.canvas.services.Libs;
 import ir.grantech.canvas.services.Commands;
-import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.Libs;
+import ir.grantech.canvas.themes.CanTheme;
 
 class CanView extends LayoutGroup {
 	public var padding(default, set):Float = CanTheme.DEFAULT_PADDING;
@@ -56,13 +55,6 @@ class CanView extends LayoutGroup {
 			if (Std.is(item, FeathersControl))
 				cast(item, FeathersControl).enabled = value;
 		return super.enabled = value;
-	}
-
-
-	public var inputs(get, null):Inputs;
-
-	private function get_inputs():Inputs {
-		return Inputs.instance;
 	}
 
 	public var libs(get, null):Libs;

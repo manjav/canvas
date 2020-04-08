@@ -69,14 +69,14 @@ class Inputs extends BaseService {
 		return this.zoom;
 	}
 
-	private var selectedItem(default, set):ICanItem;
+	private var selectedItems(default, set):CanItems;
 
-	private function set_selectedItem(value:ICanItem):ICanItem {
-		if (this.selectedItem == value)
-			return this.selectedItem;
-		this.selectedItem = value;
-		this.commands.commit(Commands.SELECT, [selectedItem]);
-		return this.selectedItem;
+	private function set_selectedItems(value:CanItems):CanItems {
+		if (this.selectedItems == value)
+			return this.selectedItems;
+		this.selectedItems = value;
+		this.commands.commit(Commands.SELECT, [this.selectedItems]);
+		return this.selectedItems;
 	}
 
 	public var hit(default, set):ICanItem;
@@ -172,10 +172,14 @@ class Inputs extends BaseService {
 
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
-		if (Std.is(item, ICanItem))
-			this.selectedItem = cast(item, ICanItem);
-		else if (Std.is(item, CanZoom))
-			this.selectedItem = null;
+		if (Std.is(item, ICanItem)) {
+			if (this.selectedItems == null)
+				this.selectedItems = new CanItems([item]);
+			else if (this.selectedItems.indexOf(cast item) == -1)
+				this.selectedItems.add(cast item);
+		} else if (Std.is(item, CanZoom)) {
+			this.selectedItems = null;
+		}
 		this.pointPhase = PHASE_BEGAN;
 		CanEvent.dispatch(this, POINT);
 	}
@@ -230,7 +234,7 @@ class Inputs extends BaseService {
 			var hit = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 			if (hit != null && Std.is(hit, ICanItem)) {
 				var h = cast(hit, ICanItem);
-				this.hit = h == selectedItem ? null : h;
+				this.hit = selectedItems == null || selectedItems.indexOf(h) == -1 ? h : null;
 			} else {
 				this.hit = null;
 			}

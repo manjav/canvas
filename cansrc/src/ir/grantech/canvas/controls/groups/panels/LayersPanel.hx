@@ -1,5 +1,8 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.drawables.CanItems;
+import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.drawables.ICanItem;
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
@@ -35,14 +38,17 @@ class LayersPanel extends ListPanel {
 		this.listView.dataProvider = null;
 	}
 
+	@:access(ir.grantech.canvas.services.Inputs)
 	private function listView_changeHandler(event:Event):Void {
-		if (this.listView.selectedItem != null)
-			this.commands.commit(Commands.SELECT, [this.listView.selectedItem.item]);
+		if (this.listView.selectedItem == null)
+			return;
+		var item = cast(this.listView.selectedItem.item, ICanItem);
+		Inputs.instance.selectedItems = new CanItems([item]);
 	}
 
 	private function commads_selectHandler(event:CanEvent):Void {
 		this.listView.removeEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.listView.selectedItem = event.data[0] == null ? null : event.data[0].layer;
+		this.listView.selectedItem = event.data[0] == null ? null : event.data[0].get(0).layer;
 		this.listView.addEventListener(Event.CHANGE, this.listView_changeHandler);
 	}
 }

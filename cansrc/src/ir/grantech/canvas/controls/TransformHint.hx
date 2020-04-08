@@ -54,7 +54,7 @@ class TransformHint extends Sprite {
 	private var registerPoint:Point;
 	private var cursor:Cursor;
 
-	public var targets:Array<ICanItem>;
+	public var targets:CanItems;
 
 	public function new(owner:DisplayObjectContainer) {
 		super();
@@ -122,7 +122,7 @@ class TransformHint extends Sprite {
 		// 	return;
 		this.registerRatio.setTo(0.5, 0.5);
 		if (this.targets.length == 1)
-			this.targets[0].layer.pivot.setTo(0.5, 0.5);
+			this.targets.get(0).layer.pivot.setTo(0.5, 0.5);
 		this.resetRegister();
 	}
 
@@ -149,12 +149,12 @@ class TransformHint extends Sprite {
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
 	}
 
-	public function set(target:ICanItem):Void {
-		if (this.targets[0] == target)
+	public function set(targets:CanItems):Void {
+		if (this.targets == targets)
 			return;
-		this.targets = [target];
+		this.targets = targets;
 
-		if (target != null) {
+		if (targets != null && targets.length > 0) {
 			this.owner.addChild(this);
 			this.owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 			this.cursor.mode = Cursor.MODE_NONE;
@@ -168,17 +168,17 @@ class TransformHint extends Sprite {
 
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
-		if (this.targets.length < 1 || this.targets[0] == null)
+		if (this.targets == null || this.targets.length < 1 || this.targets.get(0) == null)
 			return;
 		this.setVisible(true, true);
 
-		var r = this.targets[0].rotation;
-		this.targets[0].rotation = 0;
-		var w = this.targets[0].width;
-		var h = this.targets[0].height;
-		this.x = this.targets[0].x;
-		this.y = this.targets[0].y;
-		this.rotation = this.targets[0].rotation = r;
+		var r = this.targets.get(0).rotation;
+		this.targets.get(0).rotation = 0;
+		var w = this.targets.get(0).width;
+		var h = this.targets.get(0).height;
+		this.x = this.targets.get(0).x;
+		this.y = this.targets.get(0).y;
+		this.rotation = this.targets.get(0).rotation = r;
 
 		this.main.width = w;
 		this.main.height = h;
@@ -209,7 +209,7 @@ class TransformHint extends Sprite {
 		this.lines[6].y = h * 0.5 + this.radius;
 
 		if (this.targets.length == 1)
-			this.registerRatio.setTo(this.targets[0].layer.pivot.x, this.targets[0].layer.pivot.y);
+			this.registerRatio.setTo(this.targets.get(0).layer.pivot.x, this.targets.get(0).layer.pivot.y);
 		else
 			this.registerRatio.setTo(0.5, 0.5);
 		this.resetRegister();
@@ -277,7 +277,7 @@ class TransformHint extends Sprite {
 		this.snapTo(this.registerRatio, 0.45, 0.55, 0.95, 1.05);
 		this.snapTo(this.registerRatio, 0.95, 1.05, 0.95, 1.05);
 		if (this.targets.length == 1)
-			this.targets[0].layer.pivot.setTo(this.registerRatio.x, this.registerRatio.y);
+			this.targets.get(0).layer.pivot.setTo(this.registerRatio.x, this.registerRatio.y);
 		this.resetRegister();
 	}
 
@@ -294,7 +294,7 @@ class TransformHint extends Sprite {
 	private function performRotate(state:Int):Void {
 		var rad = Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x);
 		if (state == Inputs.PHASE_BEGAN) {
-			this.angleBegin = Math.atan2(this.targets[0].transform.matrix.b, this.targets[0].transform.matrix.a);
+			this.angleBegin = Math.atan2(this.targets.get(0).transform.matrix.b, this.targets.get(0).transform.matrix.a);
 			this.mouseAngleBegin = rad;
 			return;
 		}
@@ -312,17 +312,17 @@ class TransformHint extends Sprite {
 
 	// perform rotation with matrix
 	public function rotate(angle:Float):Void {
-		var mat:Matrix = this.targets[0].transform.matrix;
+		var mat:Matrix = this.targets.get(0).transform.matrix;
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(angle - Math.atan2(mat.b, mat.a));
 		mat.translate(registerPoint.x, registerPoint.y);
-		this.targets[0].transform.matrix = mat;
+		this.targets.get(0).transform.matrix = mat;
 	}
 
 	private function performScale(state:Int):Void {
 		if (state == Inputs.PHASE_BEGAN) {
 			this.mouseScaleBegin.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
-			var mat:Matrix = this.targets[0].transform.matrix;
+			var mat:Matrix = this.targets.get(0).transform.matrix;
 			this.angleBegin = Math.atan2(mat.b, mat.a);
 			mat.rotate(-this.angleBegin);
 			this.scaleBegin.setTo(mat.a, mat.d);
@@ -339,7 +339,7 @@ class TransformHint extends Sprite {
 
 	// perform scale with matrix
 	public function scale(sx:Float, sy:Float):Void {
-		var mat:Matrix = this.targets[0].transform.matrix;
+		var mat:Matrix = this.targets.get(0).transform.matrix;
 		this.angleBegin = Math.atan2(mat.b, mat.a);
 		mat.translate(-registerPoint.x, -registerPoint.y);
 		mat.rotate(-this.angleBegin);
@@ -355,7 +355,7 @@ class TransformHint extends Sprite {
 		}
 		mat.rotate(this.angleBegin);
 		mat.translate(registerPoint.x, registerPoint.y);
-		this.targets[0].transform.matrix = mat;
+		this.targets.get(0).transform.matrix = mat;
 	}
 
 	private function performTranslate(state:Int):Void {

@@ -48,18 +48,18 @@ class TransformPanel extends Panel {
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
-		this.inputs.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
+		Inputs.instance.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
 		cast(event.currentTarget, CanTextInput).addEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	override private function textInputs_focusOutHandler(event:FocusEvent):Void {
-		this.inputs.canZoom.scene.transformHint.updateBounds();
+		Inputs.instance.canZoom.scene.transformHint.updateBounds();
 		cast(event.currentTarget, CanTextInput).removeEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
 		this.changing = true;
-		if (this.target == null)
+		if (this.targets == null)
 			return;
 		if (event.currentTarget == this.inputX)
 			this.target.x = this.inputX.value;
@@ -77,7 +77,7 @@ class TransformPanel extends Panel {
 
 
 override public function updateData():Void {
-		if (this.changing || this.target == null)
+		if (this.changing || this.targets == null)
 			return;
 		this.selfBounds = this.target.getBounds(cast(this.target, DisplayObject));
 		this.inputX.value = this.target.x;

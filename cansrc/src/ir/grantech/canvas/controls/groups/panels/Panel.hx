@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.drawables.CanItems;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
@@ -47,15 +48,15 @@ class Panel extends CanView {
 		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
 	}
 
-	public var target(default, set):ICanItem;
+	public var targets(default, set):CanItems;
 
-	private function set_target(value:ICanItem):ICanItem {
-		if (this.target == value)
-			return this.target;
-		this.target = value;
-		if (this.target != null)
+	private function set_targets(value:CanItems):CanItems {
+		if (this.targets == value)
+			return this.targets;
+		this.targets = value;
+		if (this.targets != null)
 			this.updateData();
-		return this.target;
+		return this.targets;
 	}
 
 	public function updateData():Void {}

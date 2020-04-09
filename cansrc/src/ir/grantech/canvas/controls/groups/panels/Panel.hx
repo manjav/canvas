@@ -40,6 +40,7 @@ class Panel extends CanView {
 	}
 
 	private var titleDisplay:Label;
+	private var updating = false;
 
 	@:access(feathers.themes.steel.CanTheme)
 	override private function initialize() {

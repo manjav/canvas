@@ -7,7 +7,6 @@ import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.services.Commands;
-import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
@@ -74,6 +73,7 @@ class TransformPanel extends Panel {
 override public function updateData():Void {
 		if (this.targets == null || !this.targets.filled)
 			return;
+		this.updating = true;
 		this.inputX.value = this.targets.bounds.x;
 		this.inputY.value = this.targets.bounds.y;
 		if (this.targets.length == 1) {
@@ -82,5 +82,6 @@ override public function updateData():Void {
 			// this.inputW.value = this.selfBounds.width * this.targets.scaleX;
 			// this.inputH.value = this.selfBounds.height * this.targets.scaleY;
 		}
+		this.updating = false;
 	}
 }

@@ -61,8 +61,9 @@ class TransformPanel extends Panel {
 		this.changing = true;
 		if (this.targets == null)
 			return;
+
 		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
-			this.targets.translate(this.inputX.value - this.targets.bounds.x, this.inputY.value - this.targets.bounds.y);
+			this.commands.commit(Commands.TRANSLATE, [this.targets, this.inputX.value - this.targets.bounds.x, this.inputY.value - this.targets.bounds.y]);
 		else if (event.currentTarget == this.inputW)
 			this.commands.commit(Commands.SCALE, [this.inputW.value / this.selfBounds.width, this.target.scaleY]);
 		else if (event.currentTarget == this.inputH)

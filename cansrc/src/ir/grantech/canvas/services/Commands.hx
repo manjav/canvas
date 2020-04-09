@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Layers.Layer;
 
@@ -7,8 +8,9 @@ class Commands extends BaseService {
 	static public final ADDED:String = "added";
 	static public final REMOVED:String = "removed";
 	static public final SELECT:String = "select";
-	static public final ROTATE:String = "rotate";
+	static public final TRANSLATE:String = "translate";
 	static public final SCALE:String = "scale";
+	static public final ROTATE:String = "rotate";
 	static public final ENABLE:String = "enable";
 	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";

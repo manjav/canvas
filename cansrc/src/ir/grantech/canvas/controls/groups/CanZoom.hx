@@ -41,6 +41,8 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.TRANSLATE, this.commands_transformHandler);
 		commands.addEventListener(Commands.SCALE, this.commands_transformHandler);
 		commands.addEventListener(Commands.ROTATE, this.commands_transformHandler);
+		commands.addEventListener(Commands.ALPHA, this.commands_transformHandler);
+		commands.addEventListener(Commands.BLEND_MODE, this.commands_transformHandler);
 		commands.addEventListener(Commands.VISIBLE, this.commands_transformHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
@@ -70,10 +72,16 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_transformHandler(event:CanEvent):Void {
-		var items =cast(event.data[0], CanItems);
-		if (event.type == Commands.TRANSLATE)
+		var items = cast(event.data[0], CanItems);
+		switch (event.type) {
+			case Commands.ALPHA:
+				items.alpha = event.data[1];
+			case Commands.BLEND_MODE:
+				items.blendMode = event.data[1];
+			case Commands.TRANSLATE:
 			items.translate(event.data[1], event.data[2]);
-		else if (event.type == Commands.SCALE)
+		}
+		if (event.type == Commands.SCALE)
 			this.scene.transformHint.scale(event.data[0], event.data[1]);
 		else if (event.type == Commands.ROTATE)
 			this.scene.transformHint.rotate(event.data[0]);

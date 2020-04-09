@@ -11,6 +11,8 @@ class Commands extends BaseService {
 	static public final TRANSLATE:String = "translate";
 	static public final SCALE:String = "scale";
 	static public final ROTATE:String = "rotate";
+	static public final BLEND_MODE:String = "blendMode";
+	static public final ALPHA:String = "alpha";
 	static public final ENABLE:String = "enable";
 	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.services.Commands;
 import feathers.controls.CanHSlider;
 import feathers.controls.PopUpListView;
 import feathers.layout.AnchorLayout;
@@ -36,19 +37,18 @@ class AppearPanel extends Panel {
 	}
 
 	override private function sliders_changeHandler(event:Event) {
-		if (this.targets != null)
-			this.targets.alpha = this.alphaSlider.value * 0.01;
+		if (!this.updating && this.targets != null)
+			commands.commit(Commands.ALPHA, [this.targets, this.alphaSlider.value * 0.01]);
 	}
 
 	override private function popupListView_changeHandler(event:Event) {
-		if (this.target != null)
-			this.target.blendMode = this.modesList.selectedItem;
+			commands.commit(Commands.BLEND_MODE, [this.targets, this.modesList.selectedItem]);
 	}
 
 	override public function updateData():Void {
 		if (this.targets == null)
 			return;
 		this.alphaSlider.value = this.targets.alpha * 100;
-		this.modesList.selectedItem = this.target.blendMode;
+		this.modesList.selectedItem = this.targets.blendMode;
 	}
 }

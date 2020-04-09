@@ -87,6 +87,18 @@ class CanItems {
 		return true;
 	}
 
+	public function deleteAll():Void {
+		while (this.items.length > 0) {
+			var i = this.items.pop();
+			if (i.parent != null)
+				i.parent.removeChild(cast i);
+		}
+
+		this.length = 0;
+		this.calculateBounds();
+		Commands.instance.commit(Commands.SELECT, [this]);
+	}
+
 	public function get(index:Int):ICanItem {
 		if (index >= this.length)
 			return null;

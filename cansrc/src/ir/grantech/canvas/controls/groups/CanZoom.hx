@@ -1,9 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.drawables.CanItems;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
@@ -12,7 +12,6 @@ import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Tools;
 import openfl.display.Shape;
 import openfl.events.Event;
-import openfl.geom.Rectangle;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 
@@ -77,18 +76,18 @@ class CanZoom extends LayoutGroup {
 			case Commands.BLEND_MODE:
 				items.blendMode = event.data[1];
 			case Commands.TRANSLATE:
-			items.translate(event.data[1], event.data[2]);
+				items.translate(event.data[1], event.data[2]);
+			case Commands.SCALE:
+				items.scale(event.data[1], event.data[2]);
 		}
-		if (event.type == Commands.SCALE)
-			this.scene.transformHint.scale(event.data[0], event.data[1]);
-		else if (event.type == Commands.ROTATE)
+		if (event.type == Commands.ROTATE)
 			this.scene.transformHint.rotate(event.data[0]);
 		else if (event.type == Commands.VISIBLE)
 			cast(event.data[0], ICanItem).visible = event.data[1];
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
-			this.scene.transformHint.set(event.data[0]);
+		this.scene.transformHint.set(event.data[0]);
 	}
 
 	private function commands_changeVisibleHandler(event:CanEvent):Void {}
@@ -128,9 +127,9 @@ class CanZoom extends LayoutGroup {
 
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
-		
+
 		this.scene.hitHint.graphics.clear();
-		if (this.input.selectedItems.filled) {
+		if (this.input.selectedItems.filled)
 			this.scene.transformHint.perform(input.pointPhase);
 		else
 			this.scene.updateSlection(input.pointPhase);

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls;
 
+import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.drawables.CanItems;
 import openfl.ui.Mouse;
 import ir.grantech.canvas.drawables.ICanItem;
@@ -51,8 +52,6 @@ class TransformHint extends Sprite {
 	private var mouseAngleBegin:Float;
 	private var scaleBegin:Point;
 	private var angleBegin:Float;
-	private var registerRatio:Point;
-	private var registerPoint:Point;
 	private var cursor:Cursor;
 
 	public var targets:CanItems;
@@ -70,8 +69,6 @@ class TransformHint extends Sprite {
 		this.mouseTranslateBegin = new Point();
 		this.mouseScaleBegin = new Point();
 		this.scaleBegin = new Point();
-		this.registerPoint = new Point();
-		this.registerRatio = new Point(0.5, 0.5);
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.lines = new Array<Shape>();
@@ -120,7 +117,7 @@ class TransformHint extends Sprite {
 	private function doubleClickHandler(event:MouseEvent):Void {
 		// if (!this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
 		// 	return;
-		this.registerRatio.setTo(0.5, 0.5);
+		this.targets.pivot.setTo(0.5, 0.5);
 		if (this.targets.length == 1)
 			this.targets.get(0).layer.pivot.setTo(0.5, 0.5);
 		this.resetRegister();
@@ -206,10 +203,6 @@ class TransformHint extends Sprite {
 		this.lines[5].y = h;
 		this.lines[6].y = h * 0.5 + this.radius;
 
-		if (this.targets.length == 1)
-			this.registerRatio.setTo(this.targets.get(0).layer.pivot.x, this.targets.get(0).layer.pivot.y);
-		else
-			this.registerRatio.setTo(0.5, 0.5);
 		this.resetRegister();
 	}
 
@@ -231,7 +224,7 @@ class TransformHint extends Sprite {
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);
-			this.registerPoint.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
+			this.targets.pivotV.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
 			// detect anchores
 			this.hitAnchor = this.getAnchor();
@@ -264,18 +257,18 @@ class TransformHint extends Sprite {
 	}
 
 	private function performRegister(state:Int):Void {
-		this.registerRatio.setTo(this.mouseX / this.scaleAnchores[4].x, this.mouseY / this.scaleAnchores[4].y);
-		this.snapTo(this.registerRatio, -0.05, 0.05, -0.05, 0.05);
-		this.snapTo(this.registerRatio, 0.45, 0.55, -0.05, 0.05);
-		this.snapTo(this.registerRatio, 0.95, 1.05, -0.05, 0.05);
-		this.snapTo(this.registerRatio, -0.05, 0.05, 0.45, 0.55);
-		this.snapTo(this.registerRatio, 0.45, 0.55, 0.45, 0.55);
-		this.snapTo(this.registerRatio, 0.95, 1.05, 0.45, 0.55);
-		this.snapTo(this.registerRatio, -0.05, 0.05, 0.95, 1.05);
-		this.snapTo(this.registerRatio, 0.45, 0.55, 0.95, 1.05);
-		this.snapTo(this.registerRatio, 0.95, 1.05, 0.95, 1.05);
+		this.targets.pivot.setTo(this.mouseX / this.scaleAnchores[4].x, this.mouseY / this.scaleAnchores[4].y);
+		this.snapTo(this.targets.pivot, -0.05, 0.05, -0.05, 0.05);
+		this.snapTo(this.targets.pivot, 0.45, 0.55, -0.05, 0.05);
+		this.snapTo(this.targets.pivot, 0.95, 1.05, -0.05, 0.05);
+		this.snapTo(this.targets.pivot, -0.05, 0.05, 0.45, 0.55);
+		this.snapTo(this.targets.pivot, 0.45, 0.55, 0.45, 0.55);
+		this.snapTo(this.targets.pivot, 0.95, 1.05, 0.45, 0.55);
+		this.snapTo(this.targets.pivot, -0.05, 0.05, 0.95, 1.05);
+		this.snapTo(this.targets.pivot, 0.45, 0.55, 0.95, 1.05);
+		this.snapTo(this.targets.pivot, 0.95, 1.05, 0.95, 1.05);
 		if (this.targets.length == 1)
-			this.targets.get(0).layer.pivot.setTo(this.registerRatio.x, this.registerRatio.y);
+			this.targets.get(0).layer.pivot.setTo(this.targets.pivot.x, this.targets.pivot.y);
 		this.resetRegister();
 	}
 
@@ -285,8 +278,8 @@ class TransformHint extends Sprite {
 	}
 
 	private function resetRegister():Void {
-		this.register.x = this.scaleAnchores[4].x * this.registerRatio.x;
-		this.register.y = this.scaleAnchores[4].y * this.registerRatio.y;
+		this.register.x = this.scaleAnchores[4].x * this.targets.pivot.x;
+		this.register.y = this.scaleAnchores[4].y * this.targets.pivot.y;
 	}
 
 	private function performRotate(state:Int):Void {
@@ -311,9 +304,9 @@ class TransformHint extends Sprite {
 	// perform rotation with matrix
 	public function rotate(angle:Float):Void {
 		var mat:Matrix = this.targets.get(0).transform.matrix;
-		mat.translate(-registerPoint.x, -registerPoint.y);
+		mat.translate(-targets.pivotV.x, -targets.pivotV.y);
 		mat.rotate(angle - Math.atan2(mat.b, mat.a));
-		mat.translate(registerPoint.x, registerPoint.y);
+		mat.translate(targets.pivotV.x, targets.pivotV.y);
 		this.targets.get(0).transform.matrix = mat;
 	}
 
@@ -332,28 +325,15 @@ class TransformHint extends Sprite {
 		var sx = this.scaleBegin.x * (this.mouseX - this.register.x) / this.mouseScaleBegin.x;
 		var sy = this.scaleBegin.y * (this.mouseY - this.register.y) / this.mouseScaleBegin.y;
 
-		this.scale(sx, sy);
-	}
-
-	// perform scale with matrix
-	public function scale(sx:Float, sy:Float):Void {
-		var mat:Matrix = this.targets.get(0).transform.matrix;
-		this.angleBegin = Math.atan2(mat.b, mat.a);
-		mat.translate(-registerPoint.x, -registerPoint.y);
-		mat.rotate(-this.angleBegin);
 		if (Inputs.instance.shiftKey) {
-			mat.scale(sx / mat.a, sx / mat.a);
+			sy = sx;
 		} else {
 			if (this.hitAnchor == 1 || this.hitAnchor == 5)
-				mat.scale(1, sy / mat.d);
+				sx = 1000000;
 			else if (this.hitAnchor == 3 || this.hitAnchor == 7)
-				mat.scale(sx / mat.a, 1);
-			else
-				mat.scale(sx / mat.a, sy / mat.d);
+				sy = 1000000;
 		}
-		mat.rotate(this.angleBegin);
-		mat.translate(registerPoint.x, registerPoint.y);
-		this.targets.get(0).transform.matrix = mat;
+		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy, this.targets.pivotV]);
 	}
 
 	private function performTranslate(state:Int):Void {

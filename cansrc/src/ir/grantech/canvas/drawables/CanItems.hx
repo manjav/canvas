@@ -1,8 +1,9 @@
 package ir.grantech.canvas.drawables;
 
+import flash.geom.Matrix;
 import ir.grantech.canvas.services.Commands;
 import openfl.display.BlendMode;
-import flash.geom.Matrix;
+import openfl.geom.Point;
 import openfl.geom.Rectangle;
 
 class CanItems {
@@ -11,6 +12,7 @@ class CanItems {
 	public function get_filled():Bool {
 		return length > 0;
 	}
+
 	public var alpha(default, set):Float = 1;
 
 	private function set_alpha(value:Float):Float {
@@ -49,10 +51,14 @@ class CanItems {
 	public var length:Int = 0;
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
+	public var pivot:Point;
+	public var pivotV:Point;
 
 	public function new() {
 		this.items = new Array<ICanItem>();
 		this.bounds = new Rectangle();
+		this.pivot = new Point(0.5, 0.5);
+		this.pivotV = new Point();
 	}
 
 	public function add(item:ICanItem, createBounds:Bool = true):Bool {
@@ -105,11 +111,24 @@ class CanItems {
 		return this.items[index];
 	}
 
+	public function indexOf(item:ICanItem):Int {
+		return this.items.indexOf(item);
+	}
+
 	public function calculateBounds() {
+		if (length == 1) {
+			var t = this.items[0];
+			this.pivot.setTo(t.layer.pivot.x, t.layer.pivot.y);
+			return;
+		}
+
 		this.bounds.x = Math.NEGATIVE_INFINITY;
 		this.bounds.y = Math.NEGATIVE_INFINITY;
 		this.bounds.width = Math.NEGATIVE_INFINITY;
 		this.bounds.height = Math.NEGATIVE_INFINITY;
+		if (length == 0)
+			return;
+
 		for (t in this.items) {
 			var b = t.getBounds(t.parent);
 			this.bounds.x = Math.max(this.bounds.x, b.x);
@@ -119,10 +138,7 @@ class CanItems {
 		}
 		this.bounds.width -= this.bounds.x;
 		this.bounds.height -= this.bounds.y;
-	}
-
-	public function indexOf(item:ICanItem):Int {
-		return this.items.indexOf(item);
+		this.pivot.setTo(0.5, 0.5);
 	}
 
 	// perform translate with matrix
@@ -132,6 +148,22 @@ class CanItems {
 			mat.translate(dx, dy);
 			i.transform.matrix = mat;
 		}
+		this.calculateBounds();
+	}
+
+	// perform scale with matrix
+	public function scale(sx:Float, sy:Float):Void {
+		if (length != 1)
+			return;
+		var i = this.items[0];
+			var mat:Matrix = i.transform.matrix;
+			var angle = Math.atan2(mat.b, mat.a);
+			mat.translate(-pivotV.x, -pivotV.y);
+			mat.rotate(-angle);
+			mat.scale(sx == 1000000 ? 1 : sx / mat.a, sy == 1000000 ? 1 : (sx == sy ? sx / mat.a : sy / mat.d));
+			mat.rotate(angle);
+			mat.translate(pivotV.x, pivotV.y);
+			i.transform.matrix = mat;
 		this.calculateBounds();
 	}
 

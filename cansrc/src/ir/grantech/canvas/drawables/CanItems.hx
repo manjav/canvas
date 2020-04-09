@@ -1,9 +1,16 @@
 package ir.grantech.canvas.drawables;
 
+import ir.grantech.canvas.services.Commands;
+import openfl.display.BlendMode;
 import flash.geom.Matrix;
 import openfl.geom.Rectangle;
 
 class CanItems {
+	public var filled(get, null):Bool;
+
+	public function get_filled():Bool {
+		return length > 0;
+	}
 	public var alpha(default, set):Float = 1;
 
 	private function set_alpha(value:Float):Float {
@@ -15,30 +22,58 @@ class CanItems {
 		return this.alpha;
 	}
 
+	@:isVar
+	public var blendMode(get, set):BlendMode;
+
+	private function get_blendMode():BlendMode {
+		if (length < 1)
+			return "";
+
+		var b:BlendMode = this.items[0].blendMode;
+		for (i in 1...length)
+			if (b != this.items[i].blendMode)
+				return "";
+		return b;
+	}
+
+	private function set_blendMode(value:BlendMode):BlendMode {
+		if (this.blendMode == value)
+			return value;
+		this.blendMode = value;
+		for (i in this.items)
+			i.blendMode = value;
+		return value;
+	}
+
 	public var _x:Float = Math.POSITIVE_INFINITY;
 	public var length:Int = 0;
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
 
-	public function new(items:Array<Dynamic>) {
+	public function new() {
 		this.items = new Array<ICanItem>();
 		this.bounds = new Rectangle();
-		for (i in items)
-			this.add(cast i, false);
-		this.calculateBounds();
 	}
 
-	public function add(item:ICanItem, createBounds:Bool = true):Void {
-		this.length++;
+	public function add(item:ICanItem, createBounds:Bool = true):Bool {
+		if (this.indexOf(item) > -1)
+			return false;
+
+		++this.length;
 		this.items.push(item);
 		if (createBounds)
 			this.calculateBounds();
+		Commands.instance.commit(Commands.SELECT, [this]);
+		return true;
 	}
 
 	public function removeAll():Void {
-		for (i in this.items)
-			this.remove(i, false);
+		while (this.items.length > 0)
+			this.items.pop();
+
+		this.length = 0;
 		this.calculateBounds();
+		Commands.instance.commit(Commands.SELECT, [this]);
 	}
 
 	public function remove(item:ICanItem, createBounds:Bool = true):Bool {
@@ -46,10 +81,9 @@ class CanItems {
 		if (!ret)
 			return false;
 			this.length--;
-			if (item.parent != null)
-				item.parent.removeChild(cast item);
 		if (createBounds)
 			this.calculateBounds();
+		Commands.instance.commit(Commands.SELECT, [this]);
 		return true;
 	}
 

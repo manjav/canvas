@@ -150,11 +150,9 @@ class TransformHint extends Sprite {
 	}
 
 	public function set(targets:CanItems):Void {
-		if (this.targets == targets)
-			return;
 		this.targets = targets;
 
-		if (targets != null && targets.length > 0) {
+		if (targets.filled) {
 			this.owner.addChild(this);
 			this.owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 			this.cursor.mode = Cursor.MODE_NONE;
@@ -168,7 +166,7 @@ class TransformHint extends Sprite {
 
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
-		if (this.targets == null || this.targets.length < 1 || this.targets.get(0) == null)
+		if (this.targets == null || !this.targets.filled)
 			return;
 		this.setVisible(true, true);
 
@@ -368,7 +366,7 @@ class TransformHint extends Sprite {
 		var tx = stage.mouseX / Inputs.instance.zoom - this.mouseTranslateBegin.x;
 		var ty = stage.mouseY / Inputs.instance.zoom - this.mouseTranslateBegin.y;
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
-		this.targets.translate(tx, ty);
+		Commands.instance.commit(Commands.TRANSLATE, [this.targets, tx, ty]);
 	}
 }
 

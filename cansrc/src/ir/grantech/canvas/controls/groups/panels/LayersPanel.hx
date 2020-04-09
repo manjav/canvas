@@ -1,14 +1,13 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import ir.grantech.canvas.drawables.CanItems;
-import ir.grantech.canvas.services.Inputs;
-import ir.grantech.canvas.drawables.ICanItem;
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.items.LayerItemRenderer;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
 
@@ -40,15 +39,16 @@ class LayersPanel extends ListPanel {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function listView_changeHandler(event:Event):Void {
-		if (this.listView.selectedItem == null)
-			return;
-		var item = cast(this.listView.selectedItem.item, ICanItem);
-		Inputs.instance.selectedItems = new CanItems([item]);
+		if (this.listView.selectedIndex == -1)
+			Inputs.instance.selectedItems.removeAll();
+		else
+			Inputs.instance.selectedItems.add(cast this.listView.selectedItem.item);
 	}
 
 	private function commads_selectHandler(event:CanEvent):Void {
 		this.listView.removeEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.listView.selectedItem = event.data[0] == null ? null : event.data[0].get(0).layer;
+		var items = cast(event.data[0], CanItems);
+		this.listView.selectedItem = items.filled ? items.get(0).layer : null;
 		this.listView.addEventListener(Event.CHANGE, this.listView_changeHandler);
 	}
 }

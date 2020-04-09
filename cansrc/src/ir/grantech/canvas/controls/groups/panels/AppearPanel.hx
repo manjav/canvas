@@ -42,11 +42,12 @@ class AppearPanel extends Panel {
 	}
 
 	override private function popupListView_changeHandler(event:Event) {
+		if (this.targets != null)
 			commands.commit(Commands.BLEND_MODE, [this.targets, this.modesList.selectedItem]);
 	}
 
 	override public function updateData():Void {
-		if (this.targets == null)
+		if (this.targets == null || !this.targets.filled)
 			return;
 		this.alphaSlider.value = this.targets.alpha * 100;
 		this.modesList.selectedItem = this.targets.blendMode;

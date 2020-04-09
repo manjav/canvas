@@ -90,9 +90,6 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
-		if (event.data[0] == null)
-			this.scene.transformHint.set(null);
-		else
 			this.scene.transformHint.set(event.data[0]);
 	}
 
@@ -135,7 +132,7 @@ class CanZoom extends LayoutGroup {
 			return;
 		
 		this.scene.hitHint.graphics.clear();
-		if (this.input.selectedItems != null) {
+		if (this.input.selectedItems.filled) {
 			this.scene.transformHint.perform(input.pointPhase);
 		else
 			this.scene.updateSlection(input.pointPhase);

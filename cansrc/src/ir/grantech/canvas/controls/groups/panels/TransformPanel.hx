@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.services.Inputs;
 import feathers.controls.Button;
 import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
@@ -13,7 +14,6 @@ import openfl.events.MouseEvent;
 import openfl.geom.Rectangle;
 
 class TransformPanel extends Panel {
-	private var changing = false;
 	private var selfBounds:Rectangle;
 	private var inputX:CanRangeInput;
 	private var inputY:CanRangeInput;
@@ -58,8 +58,7 @@ class TransformPanel extends Panel {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		this.changing = true;
-		if (this.targets == null)
+		if (!this.targets.filled)
 			return;
 
 		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
@@ -70,13 +69,10 @@ class TransformPanel extends Panel {
 			this.commands.commit(Commands.SCALE, [this.target.scaleX, this.inputH.value / this.selfBounds.height]);
 		else if (event.currentTarget == this.inputR)
 			this.commands.commit(Commands.ROTATE, [this.inputR.value / 180 * Math.PI]);
-
-		this.changing = false;
 	}
 
-
 override public function updateData():Void {
-		if (this.changing || this.targets == null)
+		if (this.targets == null || !this.targets.filled)
 			return;
 		this.inputX.value = this.targets.bounds.x;
 		this.inputY.value = this.targets.bounds.y;

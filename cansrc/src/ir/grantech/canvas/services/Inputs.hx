@@ -37,7 +37,8 @@ class Inputs extends BaseService {
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
 	public var canZoom:CanZoom;
-
+	
+	private var selectedItems:CanItems;
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
@@ -70,16 +71,6 @@ class Inputs extends BaseService {
 		return this.zoom;
 	}
 
-	private var selectedItems(default, set):CanItems;
-
-	private function set_selectedItems(value:CanItems):CanItems {
-		if (this.selectedItems == value)
-			return this.selectedItems;
-		this.selectedItems = value;
-		this.commands.commit(Commands.SELECT, [this.selectedItems]);
-		return this.selectedItems;
-	}
-
 	public var hit(default, set):ICanItem;
 
 	private function set_hit(value:ICanItem):ICanItem {
@@ -94,6 +85,7 @@ class Inputs extends BaseService {
 		super();
 		this.stage = stage;
 		this.canZoom = canZoom;
+		this.selectedItems = new CanItems();
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 
@@ -107,7 +99,7 @@ class Inputs extends BaseService {
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 16 || event.keyCode == 17 || event.keyCode > 36 && event.keyCode < 41) {
-			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItems == null)
+			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || !this.selectedItems.filled)
 				return;
 			if (event.keyCode == 37)
 				this.selectedItems.translate(event.shiftKey ? -10 : -1, 0);
@@ -173,14 +165,11 @@ class Inputs extends BaseService {
 
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
-		if (Std.is(item, ICanItem)) {
-			if (this.selectedItems == null)
-				this.selectedItems = new CanItems([item]);
-			else if (this.selectedItems.indexOf(cast item) == -1)
-				this.selectedItems.add(cast item);
-		} else if (Std.is(item, CanZoom)) {
-			this.selectedItems = null;
-		}
+		if (Std.is(item, ICanItem))
+			this.selectedItems.add(cast item);
+		else if (Std.is(item, CanZoom))
+			this.selectedItems.removeAll();
+
 		this.pointPhase = PHASE_BEGAN;
 		CanEvent.dispatch(this, POINT);
 	}
@@ -235,7 +224,7 @@ class Inputs extends BaseService {
 			var hit = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 			if (hit != null && Std.is(hit, ICanItem)) {
 				var h = cast(hit, ICanItem);
-				this.hit = selectedItems == null || selectedItems.indexOf(h) == -1 ? h : null;
+				this.hit = selectedItems.indexOf(h) == -1 ? h : null;
 			} else {
 				this.hit = null;
 			}

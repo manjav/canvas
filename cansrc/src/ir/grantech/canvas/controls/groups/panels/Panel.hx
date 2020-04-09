@@ -1,6 +1,5 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import ir.grantech.canvas.drawables.CanItems;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
@@ -15,7 +14,7 @@ import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.popups.DropCenterPopUpAdapter;
-import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -51,12 +50,10 @@ class Panel extends CanView {
 	public var targets(default, set):CanItems;
 
 	private function set_targets(value:CanItems):CanItems {
-		if (this.targets == value)
-			return this.targets;
 		this.targets = value;
-		if (this.targets != null)
+		if (value.filled)
 			this.updateData();
-		return this.targets;
+		return value;
 	}
 
 	public function updateData():Void {}

@@ -297,17 +297,7 @@ class TransformHint extends Sprite {
 			var mod = angle % step;
 			angle += (mod > step * 0.5 ? step - mod : -mod); // snap to 90 or 45
 		}
-
-		this.rotate(angle);
-	}
-
-	// perform rotation with matrix
-	public function rotate(angle:Float):Void {
-		var mat:Matrix = this.targets.get(0).transform.matrix;
-		mat.translate(-targets.pivotV.x, -targets.pivotV.y);
-		mat.rotate(angle - Math.atan2(mat.b, mat.a));
-		mat.translate(targets.pivotV.x, targets.pivotV.y);
-		this.targets.get(0).transform.matrix = mat;
+		Commands.instance.commit(Commands.ROTATE, [this.targets, angle]);
 	}
 
 	private function performScale(state:Int):Void {

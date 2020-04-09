@@ -67,13 +67,14 @@ class TransformPanel extends Panel {
 		else if (event.currentTarget == this.inputH)
 			this.commands.commit(Commands.SCALE, [this.target.scaleX, this.inputH.value / this.selfBounds.height]);
 		else if (event.currentTarget == this.inputR)
-			this.commands.commit(Commands.ROTATE, [this.inputR.value / 180 * Math.PI]);
+			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
 	}
 
 override public function updateData():Void {
 		if (this.targets == null || !this.targets.filled)
 			return;
 		this.updating = true;
+		this.inputR.value = this.targets.length == 1 ? this.targets.get(0).rotation : 0;
 		this.inputX.value = this.targets.bounds.x;
 		this.inputY.value = this.targets.bounds.y;
 		if (this.targets.length == 1) {

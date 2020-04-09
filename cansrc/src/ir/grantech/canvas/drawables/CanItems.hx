@@ -86,7 +86,7 @@ class CanItems {
 		var ret = this.items.remove(item);
 		if (!ret)
 			return false;
-			this.length--;
+		this.length--;
 		if (createBounds)
 			this.calculateBounds();
 		Commands.instance.commit(Commands.SELECT, [this]);
@@ -118,6 +118,16 @@ class CanItems {
 	public function calculateBounds() {
 		if (length == 1) {
 			var t = this.items[0];
+			var b = t.getBounds(cast t);
+			// var r = t.rotation;
+			// t.rotation = 0;
+			this.bounds.x = t.x;
+			this.bounds.y = t.y;
+			this.bounds.width = t.width * t.scaleX;
+			this.bounds.height = t.height * t.scaleY;
+			// this.bounds.width = t.width;
+			// this.bounds.height = t.height;
+			// t.rotation = r;
 			this.pivot.setTo(t.layer.pivot.x, t.layer.pivot.y);
 			return;
 		}
@@ -143,10 +153,10 @@ class CanItems {
 
 	// perform translate with matrix
 	public function translate(dx:Float, dy:Float):Void {
-		for (i in this.items) {
-			var mat:Matrix = i.transform.matrix;
+		for (item in this.items) {
+			var mat:Matrix = item.transform.matrix;
 			mat.translate(dx, dy);
-			i.transform.matrix = mat;
+			item.transform.matrix = mat;
 		}
 		this.calculateBounds();
 	}
@@ -155,16 +165,29 @@ class CanItems {
 	public function scale(sx:Float, sy:Float):Void {
 		if (length != 1)
 			return;
-		var i = this.items[0];
-			var mat:Matrix = i.transform.matrix;
-			var angle = Math.atan2(mat.b, mat.a);
-			mat.translate(-pivotV.x, -pivotV.y);
-			mat.rotate(-angle);
-			mat.scale(sx == 1000000 ? 1 : sx / mat.a, sy == 1000000 ? 1 : (sx == sy ? sx / mat.a : sy / mat.d));
-			mat.rotate(angle);
-			mat.translate(pivotV.x, pivotV.y);
-			i.transform.matrix = mat;
+		var mat:Matrix = this.items[0].transform.matrix;
+		var angle = Math.atan2(mat.b, mat.a);
+		mat.translate(-pivotV.x, -pivotV.y);
+		mat.rotate(-angle);
+		mat.scale(sx == 1000000 ? 1 : sx / mat.a, sy == 1000000 ? 1 : (sx == sy ? sx / mat.a : sy / mat.d));
+		mat.rotate(angle);
+		mat.translate(pivotV.x, pivotV.y);
+		this.items[0].transform.matrix = mat;
 		this.calculateBounds();
+	}
+
+	// perform rotation with matrix
+	public function rotate(angle:Float):Void {
+		var a = 0.0;
+		for (i in 0...length) {
+			var mat:Matrix = this.items[i].transform.matrix;
+			mat.translate(-this.pivotV.x, -this.pivotV.y);
+			if (i == 0)
+				a = Math.atan2(mat.b, mat.a);
+			mat.rotate(angle - a);
+			mat.translate(this.pivotV.x, this.pivotV.y);
+			this.items[i].transform.matrix = mat;
+		}
 	}
 
 	public function resetTransform():Void {

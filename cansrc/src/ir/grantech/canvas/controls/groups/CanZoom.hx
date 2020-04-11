@@ -84,11 +84,11 @@ class CanZoom extends LayoutGroup {
 				items.translate(event.data[1], event.data[2]);
 			case Commands.SCALE:
 				items.scale(event.data[1], event.data[2]);
+			case Commands.ROTATE:
+				items.rotate(event.data[1]);
 			case Commands.DIMENTIONS:
 				items.setDim(event.data[1], event.data[2]);
 		}
-		if (event.type == Commands.ROTATE)
-			this.scene.transformHint.rotate(event.data[0]);
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {

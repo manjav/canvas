@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Inputs;
 import feathers.controls.Button;
 import feathers.controls.CanRangeInput;
@@ -13,7 +14,13 @@ import openfl.events.MouseEvent;
 import openfl.geom.Rectangle;
 
 class TransformPanel extends Panel {
-	private var selfBounds:Rectangle;
+	override private function set_targets(value:CanItems):CanItems {
+		super.set_targets(value);
+		this.buttonFlipH.enabled =  value.length == 1;
+		this.buttonFlipV.enabled =  value.length == 1;
+		return value;
+	}
+
 	private var inputX:CanRangeInput;
 	private var inputY:CanRangeInput;
 	private var inputW:CanRangeInput;
@@ -41,9 +48,9 @@ class TransformPanel extends Panel {
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {
 		if (event.currentTarget == this.buttonFlipH)
-			this.commands.commit(Commands.SCALE, [-this.target.scaleX, this.target.scaleY]);
+			this.commands.commit(Commands.SCALE, [this.targets, -this.targets.get(0).scaleX, this.targets.get(0).scaleY]);
 		else if (event.currentTarget == this.buttonFlipV)
-			this.commands.commit(Commands.SCALE, [this.target.scaleX, -this.target.scaleY]);
+			this.commands.commit(Commands.SCALE, [this.targets, this.targets.get(0).scaleX, -this.targets.get(0).scaleY]);
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {

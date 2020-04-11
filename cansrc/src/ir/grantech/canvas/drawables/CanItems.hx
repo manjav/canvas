@@ -13,6 +13,17 @@ class CanItems {
 		return length > 0;
 	}
 
+	public var visible(default, set):Bool = true;
+
+	private function set_visible(value:Bool):Bool {
+		if (this.visible == value)
+			return value;
+		this.visible = value;
+		for (item in this.items)
+			item.visible = value;
+		return value;
+	}
+
 	public var alpha(default, set):Float = 1;
 
 	private function set_alpha(value:Float):Float {

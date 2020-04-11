@@ -4,11 +4,11 @@ import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanItems;
-import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.Layers;
 import ir.grantech.canvas.services.Tools;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -36,14 +36,15 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.ADDED, this.commands_addedHandler);
 		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
 		commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
-		commands.addEventListener(Commands.RESET, this.commands_resetHandler);
-		commands.addEventListener(Commands.TRANSLATE, this.commands_transformHandler);
-		commands.addEventListener(Commands.SCALE, this.commands_transformHandler);
-		commands.addEventListener(Commands.ROTATE, this.commands_transformHandler);
-		commands.addEventListener(Commands.DIMENTIONS, this.commands_transformHandler);
-		commands.addEventListener(Commands.ALPHA, this.commands_transformHandler);
-		commands.addEventListener(Commands.BLEND_MODE, this.commands_transformHandler);
-		commands.addEventListener(Commands.VISIBLE, this.commands_transformHandler);
+		commands.addEventListener(Commands.ORDER, this.commands_orderHandler);
+		commands.addEventListener(Commands.VISIBLE, this.commands_visibleHandler);
+		commands.addEventListener(Commands.RESET, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TRANSLATE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.SCALE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.ROTATE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.DIMENTIONS, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.BLEND_MODE, this.commands_itemsEventsHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
 		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
@@ -69,11 +70,22 @@ class CanZoom extends LayoutGroup {
 		cast(event.data[0], CanItems).deleteAll();
 	}
 
-	private function commands_transformHandler(event:CanEvent):Void {
-		if (event.type == Commands.VISIBLE) {
-			event.data[0].visible = event.data[1];
-			return;
-		}
+	private function commands_selectHandler(event:CanEvent):Void {
+		this.scene.transformHint.set(event.data[0]);
+	}
+
+	private function commands_visibleHandler(event:CanEvent):Void {
+		event.data[0].visible = event.data[1];
+	}
+
+	private function commands_orderHandler(event:CanEvent):Void {
+		var layers = cast(event.data[2], Layers);trace(event.data);
+		var len = layers.length;
+		for(i in 0...len)
+			this.scene.container.setChildIndex(cast layers.get(i).item, len - i - 1);
+	}
+
+	private function commands_itemsEventsHandler(event:CanEvent):Void {
 		var items = cast(event.data[0], CanItems);
 		switch (event.type) {
 			case Commands.ALPHA:
@@ -88,17 +100,9 @@ class CanZoom extends LayoutGroup {
 				items.rotate(event.data[1]);
 			case Commands.DIMENTIONS:
 				items.setDim(event.data[1], event.data[2]);
-			}
-	}
-
-	private function commands_selectHandler(event:CanEvent):Void {
-		this.scene.transformHint.set(event.data[0]);
-	}
-
-	private function commands_changeVisibleHandler(event:CanEvent):Void {}
-
-	private function commands_resetHandler(event:CanEvent):Void {
-		cast(event.data[0], CanItems).resetTransform();
+			case Commands.RESET:
+				items.resetTransform();
+		}
 	}
 
 	// ------ inputs listeners ------
@@ -127,7 +131,7 @@ class CanZoom extends LayoutGroup {
 	private function input_pointHandler(event:CanEvent):Void {
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
-		
+
 		if (!input.beganCanItem)
 			this.scene.updateSlection(input.pointPhase);
 

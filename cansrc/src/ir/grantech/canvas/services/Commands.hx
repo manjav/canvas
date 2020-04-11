@@ -17,6 +17,7 @@ class Commands extends BaseService {
 	static public final ENABLE:String = "enable";
 	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";
+	static public final ORDER:String = "order";
 
 	/**
 		The singleton method of Commands.
@@ -46,6 +47,9 @@ class Commands extends BaseService {
 				var items = cast(args[0], CanItems).items;
 				for (i in items)
 					this.layers.remove(i.layer);
+			case ORDER:
+				this.layers.changeOrder(args[0], args[1]);
+				args[2] = this.layers;
 		}
 		CanEvent.dispatch(this, command, args);
 	}

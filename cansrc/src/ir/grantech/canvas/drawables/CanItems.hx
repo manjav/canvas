@@ -123,8 +123,8 @@ class CanItems {
 			// t.rotation = 0;
 			this.bounds.x = t.x;
 			this.bounds.y = t.y;
-			this.bounds.width = t.width * t.scaleX;
-			this.bounds.height = t.height * t.scaleY;
+			this.bounds.width = b.width * t.scaleX;
+			this.bounds.height = b.height * t.scaleY;
 			// this.bounds.width = t.width;
 			// this.bounds.height = t.height;
 			// t.rotation = r;
@@ -132,8 +132,8 @@ class CanItems {
 			return;
 		}
 
-		this.bounds.x = Math.NEGATIVE_INFINITY;
-		this.bounds.y = Math.NEGATIVE_INFINITY;
+		this.bounds.x = Math.POSITIVE_INFINITY;
+		this.bounds.y = Math.POSITIVE_INFINITY;
 		this.bounds.width = Math.NEGATIVE_INFINITY;
 		this.bounds.height = Math.NEGATIVE_INFINITY;
 		if (length == 0)
@@ -141,8 +141,8 @@ class CanItems {
 
 		for (t in this.items) {
 			var b = t.getBounds(t.parent);
-			this.bounds.x = Math.max(this.bounds.x, b.x);
-			this.bounds.y = Math.max(this.bounds.y, b.y);
+			this.bounds.x = Math.min(this.bounds.x, b.x);
+			this.bounds.y = Math.min(this.bounds.y, b.y);
 			this.bounds.width = Math.max(this.bounds.width, b.x + b.width);
 			this.bounds.height = Math.max(this.bounds.height, b.y + b.height);
 		}
@@ -188,6 +188,19 @@ class CanItems {
 			mat.translate(this.pivotV.x, this.pivotV.y);
 			this.items[i].transform.matrix = mat;
 		}
+		this.calculateBounds();
+	}
+
+	public function setDim(width:Float, height:Float):Void {
+		var rx = width / this.bounds.width;
+		var ry = height / this.bounds.height;
+		for (item in this.items) {
+			item.width *= rx;
+			item.height *= ry;
+			item.x = this.bounds.x + (item.x - this.bounds.x) * rx;
+			item.y = this.bounds.y + (item.y - this.bounds.y) * ry;
+		}
+		this.calculateBounds();
 	}
 
 	public function resetTransform():Void {

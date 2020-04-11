@@ -63,9 +63,9 @@ class TransformPanel extends Panel {
 		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
 			this.commands.commit(Commands.TRANSLATE, [this.targets, this.inputX.value - this.targets.bounds.x, this.inputY.value - this.targets.bounds.y]);
 		else if (event.currentTarget == this.inputW)
-			this.commands.commit(Commands.SCALE, [this.inputW.value / this.selfBounds.width, this.target.scaleY]);
+			this.commands.commit(Commands.DIMENTIONS, [this.targets, this.inputW.value, this.targets.bounds.height]);
 		else if (event.currentTarget == this.inputH)
-			this.commands.commit(Commands.SCALE, [this.target.scaleX, this.inputH.value / this.selfBounds.height]);
+			this.commands.commit(Commands.DIMENTIONS, [this.targets, this.targets.bounds.width, this.inputH.value]);
 		else if (event.currentTarget == this.inputR)
 			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
 	}
@@ -77,12 +77,9 @@ override public function updateData():Void {
 		this.inputR.value = this.targets.length == 1 ? this.targets.get(0).rotation : 0;
 		this.inputX.value = this.targets.bounds.x;
 		this.inputY.value = this.targets.bounds.y;
-		if (this.targets.length == 1) {
-			// this.inputR.value = this.targets.rotation;
-			// this.selfBounds = this.targets.getBounds(cast(this.targets, DisplayObject));
-			// this.inputW.value = this.selfBounds.width * this.targets.scaleX;
-			// this.inputH.value = this.selfBounds.height * this.targets.scaleY;
-		}
+		this.inputW.value = this.targets.bounds.width;
+		this.inputH.value = this.targets.bounds.height;
+
 		this.updating = false;
 	}
 }

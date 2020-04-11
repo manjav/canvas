@@ -4,6 +4,7 @@ import feathers.data.ArrayCollection;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanBitmap;
 import ir.grantech.canvas.drawables.CanShape;
+import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanSprite;
 import ir.grantech.canvas.drawables.ICanItem;
 import openfl.geom.Point;
@@ -79,10 +80,13 @@ class Layer {
 
 		if (Std.is(item, CanShape))
 			this.type = TYPE_SHAPE;
-		if (Std.is(item, CanSprite))
+		else if (Std.is(item, CanSprite))
 			this.type = TYPE_SPRITE;
-		if (Std.is(item, CanBitmap))
+		else if (Std.is(item, CanBitmap))
 			this.type = TYPE_BITMAP;
+		else if (Std.is(item, CanSlicedBitmap))
+			this.type = TYPE_SLICED;
+
 		this.name = type + " " + id;
 
 		this.item = item;

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.drawables.CanBitmap;
 import openfl.geom.Rectangle;
 import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanShape;
@@ -40,14 +41,14 @@ class Tools extends BaseService {
 		this.toolType = value;
 		if (!this.tools.exists(this.toolType))
 			this.tools.set(this.toolType, new Tool(this.toolType));
-		if (this.toolType > 0 && this.toolType < 4) {
+		if (this.toolType > 0 && this.toolType < 5) {
 			var item:ICanItem = null;
 			var f = Math.round(Math.random() * 0xFFFFFF);
 			var l = Math.round(Math.random() * 0xFFFFFF);
-			var r = 10 + Math.random() * 100;
+			var r = 10 + Math.random() * 50;
 			if (this.toolType == 1) {
 				var sh = new CanShape();
-				sh.graphics.beginFill(f, 0.7);
+				sh.graphics.beginFill(f);
 				sh.graphics.lineStyle(1, l);
 				sh.graphics.drawRoundRect(0, 0, r * 3, r * 3, r, r);
 				sh.scale9Grid = new Rectangle(r, r, r, r);
@@ -59,8 +60,11 @@ class Tools extends BaseService {
 				sp.graphics.drawCircle(r, r, r);
 				item = sp;
 			} else if (this.toolType == 3) {
-				var bmp = new CanSlicedBitmap(Assets.getBitmapData("toolfoot_1_selected"), new Rectangle(22, 24, 4, 4));
+				var bmp = new CanBitmap();
+				bmp.bitmapData = Assets.getBitmapData("rotate");
 				item = bmp;
+			} else if (this.toolType == 4) {
+				item = new CanSlicedBitmap(Assets.getBitmapData("toolfoot_1_selected"), new Rectangle(22, 24, 4, 4));
 			}
 
 			item.x = Math.random() * 320;

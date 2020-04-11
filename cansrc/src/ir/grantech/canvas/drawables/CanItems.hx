@@ -28,11 +28,11 @@ class CanItems {
 
 	private function set_alpha(value:Float):Float {
 		if (this.alpha == value)
-			return this.alpha;
+			return value;
 		this.alpha = value;
-		for (i in this.items)
-			i.alpha = this.alpha;
-		return this.alpha;
+		for (item in this.items)
+			item.alpha = value;
+		return value;
 	}
 
 	@:isVar
@@ -215,14 +215,14 @@ class CanItems {
 	}
 
 	public function resetTransform():Void {
-		for (i in this.items) {
-			var mat:Matrix = i.transform.matrix;
-			var r = i.getBounds(i.parent);
+		for (item in this.items) {
+			var mat:Matrix = item.transform.matrix;
+			var r = item.getBounds(item.parent);
 			mat.a = mat.d = 1;
 			mat.b = mat.c = 0;
-			i.transform.matrix = mat;
-			i.x = r.left + r.width * 0.5 - i.width * 0.5;
-			i.y = r.top + r.height * 0.5 - i.height * 0.5;
+			item.transform.matrix = mat;
+			item.x = r.left + r.width * 0.5 - item.width * 0.5;
+			item.y = r.top + r.height * 0.5 - item.height * 0.5;
 		}
 		this.calculateBounds();
 	}

@@ -152,7 +152,6 @@ class TransformHint extends Sprite {
 		if (targets.filled) {
 			this.owner.addChild(this);
 			this.owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
-			this.cursor.mode = Cursor.MODE_NONE;
 		} else if (this.owner == parent) {
 			this.owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 			this.owner.removeChild(this);
@@ -163,17 +162,28 @@ class TransformHint extends Sprite {
 
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
+		this.cursor.mode = Cursor.MODE_NONE;
 		if (this.targets == null || !this.targets.filled)
 			return;
 		this.setVisible(true, true);
 
-		var r = this.targets.get(0).rotation;
-		this.targets.get(0).rotation = 0;
-		var w = this.targets.get(0).width;
-		var h = this.targets.get(0).height;
-		this.x = this.targets.get(0).x;
-		this.y = this.targets.get(0).y;
-		this.rotation = this.targets.get(0).rotation = r;
+		var w = 0.0;
+		var h = 0.0;
+		if(this.targets.length == 1 ){
+			var r = this.targets.get(0).rotation;
+			this.targets.get(0).rotation = 0;
+			w = this.targets.get(0).width;
+			h = this.targets.get(0).height;
+			this.x = this.targets.get(0).x;
+			this.y = this.targets.get(0).y;
+			this.rotation = this.targets.get(0).rotation = r;
+		} else{
+			this.rotation = 0;
+			this.x = this.targets.bounds.x;
+			this.y = this.targets.bounds.y;
+			w = this.targets.bounds.width;
+			h = this.targets.bounds.height;
+		}
 
 		this.main.width = w;
 		this.main.height = h;

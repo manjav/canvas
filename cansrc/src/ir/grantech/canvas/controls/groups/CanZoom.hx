@@ -88,7 +88,7 @@ class CanZoom extends LayoutGroup {
 				items.rotate(event.data[1]);
 			case Commands.DIMENTIONS:
 				items.setDim(event.data[1], event.data[2]);
-		}
+			}
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
@@ -125,19 +125,19 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
+		if (Tools.instance.toolType != Tool.SELECT)
+			return;
+		
+		if (!input.beganCanItem)
+			this.scene.updateSlection(input.pointPhase);
+
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
 			this.scene.transformHint.updateBounds();
 			return;
 		}
 
-		if (Tools.instance.toolType != Tool.SELECT)
-			return;
-
-		this.scene.hitHint.graphics.clear();
 		if (this.input.selectedItems.filled)
 			this.scene.transformHint.perform(input.pointPhase);
-		else
-			this.scene.updateSlection(input.pointPhase);
 	}
 
 	private function setZoom(value:Float):Void {

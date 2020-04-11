@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
@@ -18,7 +19,7 @@ class CanScene extends LayoutGroup {
 	public var canColor = 0xFFFFFF;
 	public var beginPoint:Point;
 	public var hitHint:Shape;
-	public var selectHint:Shape;
+	public var selection:Shape;
 	public var transformHint:TransformHint;
 	public var container:Sprite;
 
@@ -38,27 +39,40 @@ class CanScene extends LayoutGroup {
 
 		this.transformHint = new TransformHint(this);
 
-		this.selectHint = new Shape();
-		this.selectHint.graphics.beginFill(0x0066FF, 0.1);
-		this.selectHint.graphics.lineStyle(0.1, 0xFFFFFF);
-		this.selectHint.graphics.drawRect(0, 0, 100, 100);
-		this.selectHint.visible = false;
-		this.addChild(this.selectHint);
+		this.selection = new Shape();
+		this.selection.graphics.beginFill(0x0066FF, 0.1);
+		this.selection.graphics.lineStyle(0.1, 0xFFFFFF);
+		this.selection.graphics.drawRect(0, 0, 100, 100);
+		this.selection.visible = false;
+		this.addChild(this.selection);
 	}
 
 	function changed(e:Event):Void {
 		// trace(cast(e.currentTarget, ColorPicker).data);
 	}
 
+	@:access(ir.grantech.canvas.services.Inputs)
 	public function updateSlection(phase:Int):Void {
+		this.selection.visible = phase == Inputs.PHASE_UPDATE;
 		if (phase == Inputs.PHASE_BEGAN) {
-			this.selectHint.visible = true;
 			this.beginPoint.setTo(this.mouseX, this.mouseY);
+			this.selection.width = 0;
+		} else if (phase == Inputs.PHASE_ENDED && this.selection.width > 10) {
+			var selectionBounds = this.selection.getBounds(this);
+			if (!Inputs.instance.shiftKey && !Inputs.instance.ctrlKey)
+				Inputs.instance.selectedItems.removeAll(false);
+			for (i in 0...this.container.numChildren)
+				if (selectionBounds.containsRect(this.container.getChildAt(i).getBounds(this)))
+					Inputs.instance.selectedItems.add(cast this.container.getChildAt(i), false);
+			Inputs.instance.selectedItems.calculateBounds();
+			Commands.instance.commit(Commands.SELECT, [Inputs.instance.selectedItems]);
+			return;
 		}
-		this.selectHint.x = this.mouseX < this.beginPoint.x ? this.mouseX : this.beginPoint.x;
-		this.selectHint.y = this.mouseY < this.beginPoint.y ? this.mouseY : this.beginPoint.y;
-		this.selectHint.width = Math.abs(this.mouseX - this.beginPoint.x);
-		this.selectHint.height = Math.abs(this.mouseY - this.beginPoint.y);
+
+		this.selection.x = this.mouseX < this.beginPoint.x ? this.mouseX : this.beginPoint.x;
+		this.selection.y = this.mouseY < this.beginPoint.y ? this.mouseY : this.beginPoint.y;
+		this.selection.width = Math.abs(this.mouseX - this.beginPoint.x);
+		this.selection.height = Math.abs(this.mouseY - this.beginPoint.y);
 	}
 
 	public function drawHit(target:ICanItem):Void {

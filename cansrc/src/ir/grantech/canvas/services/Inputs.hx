@@ -11,6 +11,7 @@ import openfl.display.DisplayObject;
 import openfl.display.Stage;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
 
 class Inputs extends BaseService {
 	static public final PHASE_BEGAN:Int = 0;
@@ -20,7 +21,6 @@ class Inputs extends BaseService {
 	static public final HIT:String = "hit";
 	static public final PAN:String = "pan";
 	static public final ZOOM:String = "zoom";
-	static public final MOVE:String = "move";
 	static public final POINT:String = "point";
 	static public final ZOOM_RESET:String = "zoomReset";
 
@@ -37,11 +37,13 @@ class Inputs extends BaseService {
 	public var pointX:Float = 0;
 	public var pointY:Float = 0;
 	public var canZoom:CanZoom;
-	
+
 	private var selectedItems:CanItems;
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
+	private var selection:Rectangle;
+	private var beganCanItem:Bool;
 
 	/**
 		The singleton method of Inputs.
@@ -75,10 +77,10 @@ class Inputs extends BaseService {
 
 	private function set_hit(value:ICanItem):ICanItem {
 		if (this.hit == value)
-			return this.hit;
+			return value;
 		this.hit = value;
-		CanEvent.dispatch(this, HIT, this.hit);
-		return this.hit;
+		CanEvent.dispatch(this, HIT, value);
+		return value;
 	}
 
 	public function new(stage:Stage, canZoom:CanZoom) {
@@ -163,13 +165,26 @@ class Inputs extends BaseService {
 			return;
 		}
 
+		this.canZoom.focused = this.canZoom.getBounds(stage).contains(event.stageX, event.stageY);
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
-		this.canZoom.focused = Std.is(item, TransformHint) || Std.is(item, ICanItem);
-		if (Std.is(item, ICanItem))
-			this.selectedItems.add(cast item);
-		else if (Std.is(item, CanZoom))
-			this.selectedItems.removeAll();
-
+		this.beganCanItem = Std.is(item, ICanItem) || Std.is(item, TransformHint);
+		if (!Std.is(item, TransformHint)) {
+			if (this.beganCanItem) {
+				var i = cast(item, ICanItem);
+				var exists = this.selectedItems.indexOf(i) > -1;
+				if (this.shiftKey || this.ctrlKey) {
+					if (exists)
+						this.selectedItems.remove(i);
+					else
+						this.selectedItems.add(i);
+				} else if (!exists) {
+					this.selectedItems.removeAll();
+					this.selectedItems.add(i);
+				}
+			} else if (this.canZoom.focused) {
+				this.selectedItems.removeAll();
+			}
+		}
 		this.pointPhase = PHASE_BEGAN;
 		CanEvent.dispatch(this, POINT);
 	}
@@ -254,13 +269,11 @@ class Inputs extends BaseService {
 	public function hitTest(x:Float, y:Float):DisplayObject {
 		if (Tools.instance.toolType != Tool.SELECT)
 			return null;
-		if (this.canZoom.scene.transformHint.hitTestPoint(x, y, true))
-			return this.canZoom.scene.transformHint;
 		for (i in 0...this.canZoom.scene.container.numChildren)
 			if (this.canZoom.scene.container.getChildAt(i).hitTestPoint(x, y, true))
 				return this.canZoom.scene.container.getChildAt(i);
-		if (this.canZoom.hitTestPoint(x, y, true))
-			return this.canZoom;
+		if (this.canZoom.scene.transformHint.hitTestPoint(x, y, true))
+			return this.canZoom.scene.transformHint;
 		return null;
 	}
 }

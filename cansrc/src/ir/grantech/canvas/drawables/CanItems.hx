@@ -58,7 +58,6 @@ class CanItems {
 		return value;
 	}
 
-	public var _x:Float = Math.POSITIVE_INFINITY;
 	public var length:Int = 0;
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
@@ -72,35 +71,39 @@ class CanItems {
 		this.pivotV = new Point();
 	}
 
-	public function add(item:ICanItem, createBounds:Bool = true):Bool {
+	public function add(item:ICanItem, finalize:Bool = true):Bool {
 		if (this.indexOf(item) > -1)
 			return false;
 
 		++this.length;
 		this.items.push(item);
-		if (createBounds)
+		if (finalize) {
 			this.calculateBounds();
-		Commands.instance.commit(Commands.SELECT, [this]);
+			Commands.instance.commit(Commands.SELECT, [this]);
+		}
 		return true;
 	}
 
-	public function removeAll():Void {
+	public function removeAll(finalize:Bool = true):Void {
 		while (this.items.length > 0)
 			this.items.pop();
 
 		this.length = 0;
-		this.calculateBounds();
-		Commands.instance.commit(Commands.SELECT, [this]);
+		if (finalize) {
+			this.calculateBounds();
+			Commands.instance.commit(Commands.SELECT, [this]);
+		}
 	}
 
-	public function remove(item:ICanItem, createBounds:Bool = true):Bool {
+	public function remove(item:ICanItem, finalize:Bool = true):Bool {
 		var ret = this.items.remove(item);
 		if (!ret)
 			return false;
-		this.length--;
-		if (createBounds)
+		--this.length;
+		if (finalize) {
 			this.calculateBounds();
-		Commands.instance.commit(Commands.SELECT, [this]);
+			Commands.instance.commit(Commands.SELECT, [this]);
+		}
 		return true;
 	}
 

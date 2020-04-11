@@ -9,33 +9,6 @@ import ir.grantech.canvas.drawables.ICanItem;
 import openfl.geom.Point;
 
 class Layers extends ArrayCollection<Layer> {
-	// public var items(default, default):ArrayCollection<Layer>;
-	public var selectedItem(default, set):Layer;
-
-	private function set_selectedItem(value:Layer):Layer {
-		if (this.selectedItem == value)
-			return value;
-		var index = this.indexOf(value);
-		if (index > -1)
-			this.selectedIndex = index;
-		this.selectedItem = value;
-		return this.selectedItem;
-	}
-
-	/**
-	 * Method to select layer with index.
-	 */
-	public var selectedIndex(default, set):Int = -1;
-
-	private function set_selectedIndex(value:Int):Int {
-		if (this.selectedIndex == value)
-			return this.selectedIndex;
-
-		this.selectedIndex = value;
-		this.selectedItem = value > -1 ? this.get(this.selectedIndex) : null;
-		// CanEvent.dispatch(this, Event.SELECT);
-		return this.selectedIndex;
-	}
 
 	/**
 	 * Constructor.
@@ -76,7 +49,6 @@ class Layers extends ArrayCollection<Layer> {
 		newLayer.order = tmp;
 
 		this.refresh();
-		this.selectedItem = newLayer;
 	}
 
 	private function orderFunction(left:Layer, right:Layer):Int {

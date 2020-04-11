@@ -11,7 +11,6 @@ import openfl.display.DisplayObject;
 import openfl.display.Stage;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
-import openfl.geom.Rectangle;
 
 class Inputs extends BaseService {
 	static public final PHASE_BEGAN:Int = 0;
@@ -42,7 +41,6 @@ class Inputs extends BaseService {
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
-	private var selection:Rectangle;
 	private var beganCanItem:Bool;
 
 	/**
@@ -165,7 +163,10 @@ class Inputs extends BaseService {
 			return;
 		}
 
-		this.canZoom.focused = this.canZoom.getBounds(stage).contains(event.stageX, event.stageY);
+		this.canZoom.focused = event.stageX > this.canZoom.x
+			&& event.stageY > this.canZoom.y
+			&& event.stageX < this.canZoom.x + this.canZoom.width
+			&& event.stageY < this.canZoom.y + this.canZoom.height;
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 		this.beganCanItem = Std.is(item, ICanItem) || Std.is(item, TransformHint);
 		if (!Std.is(item, TransformHint)) {

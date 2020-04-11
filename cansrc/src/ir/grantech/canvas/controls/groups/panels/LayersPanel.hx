@@ -22,7 +22,7 @@ class LayersPanel extends ListPanel {
 		this.listView.itemToText = (item:Layer) -> {
 			return item.name;
 		};
-		this.listView.addEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
 	}
 
 	override private function layoutGroup_addedToStageHandler(event:Event):Void {
@@ -38,17 +38,13 @@ class LayersPanel extends ListPanel {
 	}
 
 	@:access(ir.grantech.canvas.services.Inputs)
-	private function listView_changeHandler(event:Event):Void {
-		if (this.listView.selectedIndex == -1)
-			Inputs.instance.selectedItems.removeAll();
-		else
-			Inputs.instance.selectedItems.add(cast this.listView.selectedItem.item);
+	private function listView_itemSelectHandler(event:CanEvent):Void {
+		Inputs.instance.selectedItems.removeAll();
+		Inputs.instance.selectedItems.add(cast event.data.item);
 	}
 
 	private function commads_selectHandler(event:CanEvent):Void {
-		this.listView.removeEventListener(Event.CHANGE, this.listView_changeHandler);
 		var items = cast(event.data[0], CanItems);
 		this.listView.selectedItem = items.filled ? items.get(0).layer : null;
-		this.listView.addEventListener(Event.CHANGE, this.listView_changeHandler);
 	}
 }

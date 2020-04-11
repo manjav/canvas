@@ -5,7 +5,9 @@ import openfl.events.Event;
 import openfl.events.IEventDispatcher;
 
 class CanEvent extends Event {
-	private static var _pool = new ObjectPool<CanEvent>(() -> return new CanEvent(null, null, false, false));
+	static public final ITEM_SELECT:String = "itemSelect";
+
+	static private var _pool = new ObjectPool<CanEvent>(() -> return new CanEvent(null, null, false, false));
 
 	/**
 		Dispatches a pooled event with the specified properties.
@@ -16,7 +18,7 @@ class CanEvent extends Event {
 
 		@since 1.0.0
 	**/
-	public static function dispatch(dispatcher:IEventDispatcher, type:String, data:Dynamic = null, bubbles:Bool = false, cancelable:Bool = false):Bool {
+	static public function dispatch(dispatcher:IEventDispatcher, type:String, data:Dynamic = null, bubbles:Bool = false, cancelable:Bool = false):Bool {
 		#if flash
 		var event = new CanEvent(type, data, bubbles, cancelable);
 		return dispatcher.dispatchEvent(event);

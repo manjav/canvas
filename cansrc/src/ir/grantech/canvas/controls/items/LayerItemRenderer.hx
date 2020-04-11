@@ -7,8 +7,9 @@ import feathers.core.InvalidationFlag;
 import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
-import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
 
@@ -103,6 +104,8 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 				this.layer.visible = !this.layer.visible;
 			this.setInvalid(InvalidationFlag.STATE);
 			return;
+		} else {
+			CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.data, true);
 		}
 		super.basicToggleButton_triggerHandler(event);
 	}

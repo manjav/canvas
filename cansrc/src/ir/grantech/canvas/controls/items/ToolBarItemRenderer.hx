@@ -9,7 +9,6 @@ import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
-import openfl.events.Event;
 
 class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	static public var SIZE:Float = 52;
@@ -75,7 +74,7 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function refreshText():Void {}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
-		this.dispatchEvent(new CanEvent(Event.SELECT, this.data, true, false));
+		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.data, true);
 		super.basicToggleButton_triggerHandler(event);
 	}
 }

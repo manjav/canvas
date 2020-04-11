@@ -50,7 +50,7 @@ class AppearPanel extends Panel {
 		if (this.targets == null || !this.targets.filled)
 			return;
 		this.updating = true;
-		this.alphaSlider.value = this.targets.alpha * 100;
+		this.alphaSlider.value = this.targets.length == 1 ? this.targets.get(0).alpha * 100 : 100;
 		this.modesList.selectedItem = this.targets.blendMode;
 		this.updating = false;
 	}

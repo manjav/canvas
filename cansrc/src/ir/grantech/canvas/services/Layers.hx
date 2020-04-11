@@ -19,11 +19,12 @@ class Layers extends ArrayCollection<Layer> {
 	}
 
 	/**
-	 * Method to remove layer with it's object.
+	 * Method to add layer with it's object.
 	 */
-	override public function remove(item:Layer):Void {
-		super.remove(item);
-		this.selectedIndex = -1;
+	override public function add(item:Layer):Void {
+		this.addAt(item, 0);
+		for (i in 0...this.length)
+			this.get(i).order = i;
 	}
 
 	/**
@@ -31,8 +32,8 @@ class Layers extends ArrayCollection<Layer> {
 	 */
 	override public function removeAt(index:Int):Layer {
 		var item = this.removeAt(index);
-		if (item != null)
-			this.selectedIndex = -1;
+		for (i in 0...this.length)
+			this.get(i).order = i;
 		return item;
 	}
 
@@ -40,7 +41,9 @@ class Layers extends ArrayCollection<Layer> {
 		return -1;
 	}
 
-	private function changeOrder(index:Int, direction:Int):Void {
+	public function changeOrder(index:Int, direction:Int):Void {
+		if (index + direction < 0 || index + direction > length - 1)
+			return;
 		var oldLayer = this.get(index);
 		var newLayer = this.get(index + direction);
 
@@ -60,7 +63,7 @@ class Layer {
 	static public final TYPE_SHAPE:String = "shape";
 	static public final TYPE_SPRITE:String = "sprite";
 	static public final TYPE_BITMAP:String = "bitmap";
-	static public final TYPE_PARTICLE:String = "particle";
+	static public final TYPE_SLICED:String = "slicedBitmap";
 
 	public var id(default, default):Int;
 	public var order(default, default):Int;

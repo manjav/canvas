@@ -107,8 +107,9 @@ class Panel extends CanView {
 
 	private function createButton(icon:String, layoutData:AnchorLayoutData):Button {
 		var disabledIcon = new Bitmap(Assets.getBitmapData(icon));
-		disabledIcon.alpha = 0.6;
+		disabledIcon.alpha = 0.5;
 		var element = new Button();
+		element.name = icon;
 		element.width = element.height = 16 * CanTheme.DPI;
 		element.icon = new Bitmap(Assets.getBitmapData(icon));
 		element.setIconForState(ButtonState.DISABLED, disabledIcon);

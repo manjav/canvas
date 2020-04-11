@@ -70,6 +70,10 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_transformHandler(event:CanEvent):Void {
+		if (event.type == Commands.VISIBLE) {
+			event.data[0].visible = event.data[1];
+			return;
+		}
 		var items = cast(event.data[0], CanItems);
 		switch (event.type) {
 			case Commands.ALPHA:
@@ -85,8 +89,6 @@ class CanZoom extends LayoutGroup {
 		}
 		if (event.type == Commands.ROTATE)
 			this.scene.transformHint.rotate(event.data[0]);
-		else if (event.type == Commands.VISIBLE)
-			cast(event.data[0], ICanItem).visible = event.data[1];
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {

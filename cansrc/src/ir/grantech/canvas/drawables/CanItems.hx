@@ -1,7 +1,8 @@
 package ir.grantech.canvas.drawables;
 
-import ir.grantech.canvas.controls.groups.CanScene;
 import flash.geom.Matrix;
+import haxe.ds.ArraySort;
+import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.services.Commands;
 import openfl.display.BlendMode;
 import openfl.geom.Point;
@@ -213,6 +214,10 @@ class CanItems {
 	}
 
 	public function align(mode:String):Void {
+		if (mode == "distr-h" || mode == "distr-v") {
+			this.distribute(mode);
+			return;
+		}
 		if (length == 1) {
 			var w = cast(this.items[0].parent.parent, CanScene).canWidth;
 			var h = cast(this.items[0].parent.parent, CanScene).canHeight;
@@ -249,6 +254,41 @@ class CanItems {
 					this.stranslate(item, 0, this.bounds.y + this.bounds.height * 0.5 - b.y - b.height * 0.5);
 				case "align-b":
 					this.stranslate(item, 0, this.bounds.y + this.bounds.height - b.y - b.height);
+			}
+		}
+		this.calculateBounds();
+	}
+
+	public function distribute(mode:String):Void {
+		var srtd = this.items.copy();
+		var bnds = new Array<Rectangle>();
+		if (mode == "distr-h") {
+			ArraySort.sort(srtd, (l, r) -> l.x > r.x ? 1 : -1);
+			var gap = this.bounds.width;
+			var len = srtd.length;
+			for (i in 0...len) {
+				bnds[i] = srtd[i].getBounds(srtd[i].parent);
+				gap -= bnds[i].width;
+			}
+			gap /= (len - 1);
+			var x = 0.0;
+			for (i in 0...len) {
+				this.stranslate(srtd[i], -bnds[i].x + this.bounds.x + x + (gap * i), 0);
+				x += bnds[i].width;
+			}
+		} else {
+			ArraySort.sort(srtd, (l, r) -> l.y > r.y ? 1 : -1);
+			var gap = this.bounds.height;
+			var len = srtd.length;
+			for (i in 0...len) {
+				bnds[i] = srtd[i].getBounds(srtd[i].parent);
+				gap -= bnds[i].height;
+			}
+			gap /= (len - 1);
+			var y = 0.0;
+			for (i in 0...len) {
+				this.stranslate(srtd[i], 0, -bnds[i].y + this.bounds.y + y + (gap * i));
+				y += bnds[i].height;
 			}
 		}
 		this.calculateBounds();

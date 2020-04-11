@@ -1,13 +1,13 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import openfl.display.InteractiveObject;
-import ir.grantech.canvas.services.Commands;
-import openfl.events.MouseEvent;
 import feathers.controls.Button;
-import ir.grantech.canvas.drawables.CanItems;
-import ir.grantech.canvas.themes.CanTheme;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+import ir.grantech.canvas.drawables.CanItems;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.themes.CanTheme;
+import openfl.display.InteractiveObject;
+import openfl.events.MouseEvent;
 
 class AlignPanel extends Panel {
 	private var alignT:Button;
@@ -48,23 +48,6 @@ class AlignPanel extends Panel {
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {
 		var name = cast(event.currentTarget, InteractiveObject).name;
-		// var cmd = switch (name) {
-		// 	case "alignT": VerticalAlign.TOP;
-		// 	case this.alignM: VerticalAlign.MIDDLE;
-		// 	case this.alignB: VerticalAlign.BOTTOM;
-		// 	case this.alignL: HorizontalAlign.LEFT;
-		// 	case this.alignC: HorizontalAlign.CENTER;
-		// 	case this.alignR: HorizontalAlign.LEFT;
-		// 	default:HorizontalAlign.JUSTIFY;
-		// }
 		Commands.instance.commit(Commands.ALIGN, [this.targets, name]);
-	}
-
-	override public function updateData():Void {
-		if (this.targets == null || !this.targets.filled)
-			return;
-		this.updating = true;
-
-		this.updating = false;
 	}
 }

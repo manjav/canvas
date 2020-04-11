@@ -58,6 +58,15 @@
   <assets id="cur-scale" path="assets/img/cur-scale.png"/>
   <assets id="cur-rotate" path="assets/img/cur-rotate.png"/>
 
+  <assets id="align-t" path="assets/img/align-t.png"/>
+  <assets id="align-m" path="assets/img/align-m.png"/>
+  <assets id="align-b" path="assets/img/align-b.png"/>
+  <assets id="align-r" path="assets/img/align-r.png"/>
+  <assets id="align-c" path="assets/img/align-c.png"/>
+  <assets id="align-l" path="assets/img/align-l.png"/>
+  <assets id="distr-h" path="assets/img/distr-h.png"/>
+  <assets id="distr-v" path="assets/img/distr-v.png"/>
+
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>
 </project>

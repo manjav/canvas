@@ -18,6 +18,7 @@ class Commands extends BaseService {
 	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";
 	static public final ORDER:String = "order";
+	static public final ALIGN:String = "align";
 
 	/**
 		The singleton method of Commands.

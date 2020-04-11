@@ -1,5 +1,6 @@
 package ir.grantech.canvas.drawables;
 
+import ir.grantech.canvas.controls.groups.CanScene;
 import flash.geom.Matrix;
 import ir.grantech.canvas.services.Commands;
 import openfl.display.BlendMode;
@@ -130,22 +131,6 @@ class CanItems {
 	}
 
 	public function calculateBounds() {
-		if (length == 1) {
-			var t = this.items[0];
-			var b = t.getBounds(cast t);
-			// var r = t.rotation;
-			// t.rotation = 0;
-			this.bounds.x = t.x;
-			this.bounds.y = t.y;
-			this.bounds.width = b.width * t.scaleX;
-			this.bounds.height = b.height * t.scaleY;
-			// this.bounds.width = t.width;
-			// this.bounds.height = t.height;
-			// t.rotation = r;
-			this.pivot.setTo(t.layer.pivot.x, t.layer.pivot.y);
-			return;
-		}
-
 		this.bounds.x = Math.POSITIVE_INFINITY;
 		this.bounds.y = Math.POSITIVE_INFINITY;
 		this.bounds.width = Math.NEGATIVE_INFINITY;
@@ -162,17 +147,27 @@ class CanItems {
 		}
 		this.bounds.width -= this.bounds.x;
 		this.bounds.height -= this.bounds.y;
-		this.pivot.setTo(0.5, 0.5);
+
+		if (length == 1)
+			this.pivot.setTo(this.items[0].layer.pivot.x, this.items[0].layer.pivot.y);
+		else
+			this.pivot.setTo(0.5, 0.5);
 	}
 
 	// perform translate with matrix
-	public function translate(dx:Float, dy:Float):Void {
-		for (item in this.items) {
-			var mat:Matrix = item.transform.matrix;
-			mat.translate(dx, dy);
-			item.transform.matrix = mat;
-		}
+	public function translate(dx:Float, dy:Float, index:Int = -1):Void {
+		if (index > -1)
+			this.stranslate(this.items[index], dx, dy);
+		else
+			for (item in this.items)
+				this.stranslate(item, dx, dy);
 		this.calculateBounds();
+	}
+
+	private function stranslate(item:ICanItem, dx:Float, dy:Float):Void {
+		var mat:Matrix = item.transform.matrix;
+		mat.translate(dx, dy);
+		item.transform.matrix = mat;
 	}
 
 	// perform scale with matrix
@@ -213,6 +208,48 @@ class CanItems {
 			item.height *= ry;
 			item.x = this.bounds.x + (item.x - this.bounds.x) * rx;
 			item.y = this.bounds.y + (item.y - this.bounds.y) * ry;
+		}
+		this.calculateBounds();
+	}
+
+	public function align(mode:String):Void {
+		if (length == 1) {
+			var w = cast(this.items[0].parent.parent, CanScene).canWidth;
+			var h = cast(this.items[0].parent.parent, CanScene).canHeight;
+			switch (mode) {
+				case "align-l":
+					this.stranslate(this.items[0], -this.bounds.x, 0);
+				case "align-c":
+					this.stranslate(this.items[0], (w - this.bounds.width) * 0.5 - this.bounds.x, 0);
+				case "align-r":
+					this.stranslate(this.items[0], w - this.bounds.width - this.bounds.x, 0);
+				case "align-t":
+					this.stranslate(this.items[0], 0, -this.bounds.y);
+				case "align-m":
+					this.stranslate(this.items[0], 0, (h - this.bounds.height) * 0.5 - this.bounds.y);
+				case "align-b":
+					this.stranslate(this.items[0], 0, h - this.bounds.height - this.bounds.y);
+			}
+			this.calculateBounds();
+			return;
+		}
+		var b:Rectangle;
+		for (item in this.items) {
+			b = item.getBounds(item.parent);
+			switch (mode) {
+				case "align-l":
+					this.stranslate(item, -b.x + this.bounds.x, 0);
+				case "align-c":
+					this.stranslate(item, this.bounds.x + this.bounds.width * 0.5 - b.x - b.width * 0.5, 0);
+				case "align-r":
+					this.stranslate(item, this.bounds.x + this.bounds.width - b.x - b.width, 0);
+				case "align-t":
+					this.stranslate(item, 0, -b.y + this.bounds.y);
+				case "align-m":
+					this.stranslate(item, 0, this.bounds.y + this.bounds.height * 0.5 - b.y - b.height * 0.5);
+				case "align-b":
+					this.stranslate(item, 0, this.bounds.y + this.bounds.height - b.y - b.height);
+			}
 		}
 		this.calculateBounds();
 	}

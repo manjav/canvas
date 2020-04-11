@@ -44,6 +44,7 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.ROTATE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.DIMENTIONS, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.ALIGN, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BLEND_MODE, this.commands_itemsEventsHandler);
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
@@ -103,6 +104,8 @@ class CanZoom extends LayoutGroup {
 				items.setDim(event.data[1], event.data[2]);
 			case Commands.RESET:
 				items.resetTransform();
+			case Commands.ALIGN:
+				items.align(event.data[1]);
 		}
 	}
 

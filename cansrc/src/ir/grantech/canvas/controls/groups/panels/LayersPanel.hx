@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import ir.grantech.canvas.drawables.ICanItem;
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
@@ -40,7 +41,7 @@ class LayersPanel extends ListPanel {
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function listView_itemSelectHandler(event:CanEvent):Void {
 		Inputs.instance.selectedItems.removeAll();
-		Inputs.instance.selectedItems.add(cast event.data.item);
+		Inputs.instance.selectedItems.add(cast(event.data.item, ICanItem));
 	}
 
 	private function commads_selectHandler(event:CanEvent):Void {

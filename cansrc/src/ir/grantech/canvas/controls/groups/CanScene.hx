@@ -1,9 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.services.Commands;
-import ir.grantech.canvas.services.Inputs;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
 import openfl.Vector;
 import openfl.display.Bitmap;
 import openfl.display.GraphicsPath;
@@ -63,7 +63,7 @@ class CanScene extends LayoutGroup {
 				Inputs.instance.selectedItems.removeAll(false);
 			for (i in 0...this.container.numChildren)
 				if (selectionBounds.containsRect(this.container.getChildAt(i).getBounds(this)))
-					Inputs.instance.selectedItems.add(cast this.container.getChildAt(i), false);
+					Inputs.instance.selectedItems.add(cast(this.container.getChildAt(i), ICanItem), false);
 			Inputs.instance.selectedItems.calculateBounds();
 			Commands.instance.commit(Commands.SELECT, [Inputs.instance.selectedItems]);
 			return;
@@ -81,8 +81,10 @@ class CanScene extends LayoutGroup {
 			return;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData> = null;
-		if (Std.is(target, Shape) || Std.is(target, Sprite)) {
-			graphicDataList = (cast target).graphics.readGraphicsData();
+		if (Std.is(target, Sprite)) {
+			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
+		} else if (Std.is(target, Shape)) {
+			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
 		} else if (Std.is(target, Bitmap)) {
 			var bmp = cast(target, Bitmap);
 			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);

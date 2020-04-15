@@ -5,6 +5,7 @@ import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.services.Commands;
 import openfl.display.BlendMode;
+import openfl.display.DisplayObject;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 
@@ -115,7 +116,7 @@ class CanItems {
 		while (this.length > 0) {
 			var item = this.items.pop();
 			if (item.parent != null)
-				item.parent.removeChild(cast item);
+				item.parent.removeChild(cast(item, DisplayObject));
 		}
 
 		this.calculateBounds();

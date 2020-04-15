@@ -4,12 +4,14 @@ import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanItems;
+import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Layers;
 import ir.grantech.canvas.services.Tools;
+import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.ui.Mouse;
@@ -64,7 +66,7 @@ class CanZoom extends LayoutGroup {
 
 	// ------ commands listeners ------
 	private function commands_addedHandler(event:CanEvent):Void {
-		this.scene.container.addChild(cast event.data[0]);
+		this.scene.container.addChild(cast(event.data[0], DisplayObject));
 	}
 
 	private function commands_removedHandler(event:CanEvent):Void {
@@ -83,7 +85,7 @@ class CanZoom extends LayoutGroup {
 		var layers = cast(event.data[2], Layers);
 		var len = layers.length;
 		for (i in 0...len)
-			this.scene.container.setChildIndex(cast layers.get(i).item, len - i - 1);
+			this.scene.container.setChildIndex(cast(layers.get(i).item, DisplayObject), len - i - 1);
 	}
 
 	private function commands_itemsEventsHandler(event:CanEvent):Void {
@@ -110,7 +112,7 @@ class CanZoom extends LayoutGroup {
 
 	// ------ inputs listeners ------
 	private function input_hitHandler(event:CanEvent):Void {
-		this.scene.drawHit(cast event.data);
+		this.scene.drawHit(cast(event.data, ICanItem));
 	}
 
 	private function input_panHandler(event:CanEvent):Void {

@@ -9,7 +9,13 @@ import openfl.geom.Point;
 import openfl.geom.Rectangle;
 
 class CanItems {
-	public var filled(get, null):Bool;
+	public var length(get, never):Int;
+
+	private function get_length():Int {
+		return this.items.length;
+	}
+
+	public var filled(get, never):Bool;
 
 	public function get_filled():Bool {
 		return this.length > 0;
@@ -60,7 +66,6 @@ class CanItems {
 		return value;
 	}
 
-	public var length:Int = 0;
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
 	public var pivot:Point;
@@ -77,7 +82,6 @@ class CanItems {
 		if (this.indexOf(item) > -1)
 			return false;
 
-		++this.length;
 		this.items.push(item);
 		if (finalize) {
 			this.calculateBounds();
@@ -90,7 +94,6 @@ class CanItems {
 		while (this.length > 0)
 			this.items.pop();
 
-		this.length = 0;
 		if (finalize) {
 			this.calculateBounds();
 			Commands.instance.commit(Commands.SELECT, [this]);
@@ -101,7 +104,6 @@ class CanItems {
 		var ret = this.items.remove(item);
 		if (!ret)
 			return false;
-		--this.length;
 		if (finalize) {
 			this.calculateBounds();
 			Commands.instance.commit(Commands.SELECT, [this]);
@@ -116,7 +118,6 @@ class CanItems {
 				item.parent.removeChild(cast item);
 		}
 
-		this.length = 0;
 		this.calculateBounds();
 		Commands.instance.commit(Commands.SELECT, [this]);
 	}

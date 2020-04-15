@@ -1,23 +1,22 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import ir.grantech.canvas.drawables.CanItems;
-import ir.grantech.canvas.services.Inputs;
 import feathers.controls.Button;
 import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Inputs;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
-import openfl.geom.Rectangle;
 
 class TransformPanel extends Panel {
 	override private function set_targets(value:CanItems):CanItems {
 		super.set_targets(value);
-		this.buttonFlipH.enabled =  value.length == 1;
-		this.buttonFlipV.enabled =  value.length == 1;
+		this.buttonFlipH.enabled = value.length == 1;
+		this.buttonFlipV.enabled = value.length == 1;
 		return value;
 	}
 

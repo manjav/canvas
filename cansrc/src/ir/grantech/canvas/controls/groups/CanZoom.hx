@@ -81,7 +81,6 @@ class CanZoom extends LayoutGroup {
 
 	private function commands_orderHandler(event:CanEvent):Void {
 		var layers = cast(event.data[2], Layers);
-		trace(event.data);
 		var len = layers.length;
 		for (i in 0...len)
 			this.scene.container.setChildIndex(cast layers.get(i).item, len - i - 1);

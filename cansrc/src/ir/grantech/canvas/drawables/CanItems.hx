@@ -12,7 +12,7 @@ class CanItems {
 	public var filled(get, null):Bool;
 
 	public function get_filled():Bool {
-		return length > 0;
+		return this.length > 0;
 	}
 
 	public var visible(default, set):Bool = true;
@@ -41,11 +41,11 @@ class CanItems {
 	public var blendMode(get, set):BlendMode;
 
 	private function get_blendMode():BlendMode {
-		if (length < 1)
+		if (this.length < 1)
 			return "";
 
 		var b:BlendMode = this.items[0].blendMode;
-		for (i in 1...length)
+		for (i in 1...this.length)
 			if (b != this.items[i].blendMode)
 				return "";
 		return b;
@@ -87,7 +87,7 @@ class CanItems {
 	}
 
 	public function removeAll(finalize:Bool = true):Void {
-		while (this.items.length > 0)
+		while (this.length > 0)
 			this.items.pop();
 
 		this.length = 0;
@@ -110,10 +110,10 @@ class CanItems {
 	}
 
 	public function deleteAll():Void {
-		while (this.items.length > 0) {
-			var i = this.items.pop();
-			if (i.parent != null)
-				i.parent.removeChild(cast i);
+		while (this.length > 0) {
+			var item = this.items.pop();
+			if (item.parent != null)
+				item.parent.removeChild(cast item);
 		}
 
 		this.length = 0;
@@ -136,7 +136,7 @@ class CanItems {
 		this.bounds.y = Math.POSITIVE_INFINITY;
 		this.bounds.width = Math.NEGATIVE_INFINITY;
 		this.bounds.height = Math.NEGATIVE_INFINITY;
-		if (length == 0)
+		if (this.length == 0)
 			return;
 
 		for (t in this.items) {
@@ -149,7 +149,7 @@ class CanItems {
 		this.bounds.width -= this.bounds.x;
 		this.bounds.height -= this.bounds.y;
 
-		if (length == 1)
+		if (this.length == 1)
 			this.pivot.setTo(this.items[0].layer.pivot.x, this.items[0].layer.pivot.y);
 		else
 			this.pivot.setTo(0.5, 0.5);
@@ -173,7 +173,7 @@ class CanItems {
 
 	// perform scale with matrix
 	public function scale(sx:Float, sy:Float):Void {
-		if (length != 1)
+		if (this.length != 1)
 			return;
 		var mat:Matrix = this.items[0].transform.matrix;
 		var angle = Math.atan2(mat.b, mat.a);
@@ -189,7 +189,7 @@ class CanItems {
 	// perform rotation with matrix
 	public function rotate(angle:Float):Void {
 		var a = 0.0;
-		for (i in 0...length) {
+		for (i in 0...this.length) {
 			var mat:Matrix = this.items[i].transform.matrix;
 			mat.translate(-this.pivotV.x, -this.pivotV.y);
 			if (i == 0)
@@ -218,7 +218,7 @@ class CanItems {
 			this.distribute(mode);
 			return;
 		}
-		if (length == 1) {
+		if (this.length == 1) {
 			var w = cast(this.items[0].parent.parent, CanScene).canWidth;
 			var h = cast(this.items[0].parent.parent, CanScene).canHeight;
 			switch (mode) {

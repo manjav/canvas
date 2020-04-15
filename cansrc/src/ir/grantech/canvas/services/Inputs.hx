@@ -166,7 +166,7 @@ class Inputs extends BaseService {
 			return;
 		}
 
-		this.canZoom.focused = event.stageX > this.canZoom.x
+	 	this.canZoom.focused = event.stageX > this.canZoom.x
 			&& event.stageY > this.canZoom.y
 			&& event.stageX < this.canZoom.x + this.canZoom.width
 			&& event.stageY < this.canZoom.y + this.canZoom.height;
@@ -174,16 +174,16 @@ class Inputs extends BaseService {
 		this.beganCanItem = Std.is(item, ICanItem) || Std.is(item, TransformHint);
 		if (!Std.is(item, TransformHint)) {
 			if (this.beganCanItem) {
-				var i = cast(item, ICanItem);
-				var exists = this.selectedItems.indexOf(i) > -1;
+				var item = cast(item, ICanItem);
+				var exists = this.selectedItems.indexOf(item) > -1;
 				if (this.shiftKey || this.ctrlKey) {
 					if (exists)
-						this.selectedItems.remove(i);
+						this.selectedItems.remove(item);
 					else
-						this.selectedItems.add(i);
+						this.selectedItems.add(item);
 				} else if (!exists) {
-					this.selectedItems.removeAll();
-					this.selectedItems.add(i);
+					this.selectedItems.removeAll(false);
+					this.selectedItems.add(item);
 				}
 			} else if (this.canZoom.focused) {
 				this.selectedItems.removeAll();

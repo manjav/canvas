@@ -49,12 +49,12 @@ class CanView extends LayoutGroup {
 
 	override private function set_enabled(value:Bool):Bool {
 		if (super.enabled == value)
-			return super.enabled;
-
+			return value;
+		super.enabled = value;
 		for (item in this.items)
 			if (Std.is(item, FeathersControl))
 				cast(item, FeathersControl).enabled = value;
-		return super.enabled = value;
+		return value;
 	}
 
 	public var libs(get, null):Libs;

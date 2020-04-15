@@ -1,10 +1,10 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import ir.grantech.canvas.services.Commands;
 import feathers.controls.CanHSlider;
 import feathers.controls.PopUpListView;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+import ir.grantech.canvas.services.Commands;
 import openfl.events.Event;
 
 class AppearPanel extends Panel {

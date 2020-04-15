@@ -169,7 +169,7 @@ class TransformHint extends Sprite {
 
 		var w = 0.0;
 		var h = 0.0;
-		if(this.targets.length == 1 ){
+		if (this.targets.length == 1) {
 			var r = this.targets.get(0).rotation;
 			this.targets.get(0).rotation = 0;
 			w = this.targets.get(0).width;
@@ -177,7 +177,7 @@ class TransformHint extends Sprite {
 			this.x = this.targets.get(0).x;
 			this.y = this.targets.get(0).y;
 			this.rotation = this.targets.get(0).rotation = r;
-		} else{
+		} else {
 			this.rotation = 0;
 			this.x = this.targets.bounds.x;
 			this.y = this.targets.bounds.y;
@@ -231,6 +231,8 @@ class TransformHint extends Sprite {
 	}
 
 	public function perform(state:Int):Void {
+		if (this.targets == null || !this.targets.filled)
+			return;
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
 			var r:Rectangle = this.register.getBounds(parent);

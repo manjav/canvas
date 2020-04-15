@@ -1,10 +1,9 @@
 package ir.grantech.canvas.controls;
 
-import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.drawables.CanItems;
-import openfl.ui.Mouse;
-import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObjectContainer;
@@ -14,6 +13,7 @@ import openfl.events.MouseEvent;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.ui.Mouse;
 
 class TransformHint extends Sprite {
 	static final MODE_NONE:Int = -1;
@@ -36,8 +36,8 @@ class TransformHint extends Sprite {
 	}
 
 	private var mode:Int = -1;
-	private var radius:Float = 8;
-	private var lineThickness:Float = 2;
+	private var radius:Float;
+	private var lineThickness:Float;
 	private var lineColor:UInt = 0x1692E6;
 
 	private var main:Shape;
@@ -60,6 +60,10 @@ class TransformHint extends Sprite {
 		super();
 
 		this.owner = owner;
+
+		this.radius = 2 * CanTheme.DPI;
+		this.lineThickness = 0.5 * CanTheme.DPI;
+
 		this.main = new Shape();
 		this.main.graphics.beginFill(0, 0);
 		this.main.graphics.drawRect(0, 0, 100, 100);

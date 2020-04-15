@@ -1,20 +1,21 @@
 package;
 
-import ir.grantech.canvas.services.Libs;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
+import flash.system.Capabilities;
 import haxe.Timer;
-import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.RightBar;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.controls.groups.panels.AssetsPanel;
 import ir.grantech.canvas.controls.groups.panels.LayersPanel;
 import ir.grantech.canvas.controls.groups.panels.Panel;
-import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
+import ir.grantech.canvas.services.Libs;
+import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
 
@@ -28,8 +29,14 @@ class Main extends Application {
 	private var zoomLayout:AnchorLayoutData;
 
 	public function new() {
+		var paddingX:Int = Math.round(Capabilities.screenResolutionX * 0.010) * 10;
+		var paddingY:Int = Math.round(Capabilities.screenResolutionX * 0.012) * 10;
 		stage.quality = StageQuality.BEST;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
+		stage.window.x = paddingX;
+		stage.window.y = paddingY;
+		stage.window.width = Math.floor(Capabilities.screenResolutionX - paddingX * 2);
+		stage.window.height = Math.floor(Capabilities.screenResolutionY - paddingY * 2);
 		Theme.setTheme(new CanTheme());
 		BaseService.get(Libs, [stage]);
 		super();
@@ -64,6 +71,7 @@ class Main extends Application {
 		this.zoomLayout.left = this.left.width + p * 2;
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
 	}
+	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
 
 	private function left_changeHandler(event:CanEvent):Void {
 		if (this.leftExtension != null && this.leftExtension.parent == this)

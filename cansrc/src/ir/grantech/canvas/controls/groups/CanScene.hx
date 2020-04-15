@@ -1,5 +1,9 @@
 package ir.grantech.canvas.controls.groups;
 
+import openfl.display.DisplayObject;
+import ir.grantech.canvas.drawables.CanBitmap;
+import ir.grantech.canvas.drawables.CanSprite;
+import ir.grantech.canvas.drawables.CanShape;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Commands;
@@ -79,8 +83,9 @@ class CanScene extends LayoutGroup {
 		this.hitHint.graphics.clear();
 		if (target == null)
 			return;
-		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		var graphicDataList:Vector<IGraphicsData> = null;
+		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
+		#if flash
 		if (Std.is(target, Sprite)) {
 			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
 		} else if (Std.is(target, Shape)) {
@@ -89,6 +94,10 @@ class CanScene extends LayoutGroup {
 			var bmp = cast(target, Bitmap);
 			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);
 		}
+		#else
+		var bounds = target.getBounds(cast(target, DisplayObject));
+		this.hitHint.graphics.drawRect(0, 0, bounds.width, bounds.height);
+		#end
 
 		this.hitHint.x = target.x;
 		this.hitHint.y = target.y;

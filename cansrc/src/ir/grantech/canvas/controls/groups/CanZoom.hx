@@ -112,7 +112,7 @@ class CanZoom extends LayoutGroup {
 
 	// ------ inputs listeners ------
 	private function input_hitHandler(event:CanEvent):Void {
-		this.scene.drawHit(cast(event.data, ICanItem));
+		this.scene.drawHit(event.data != null ? cast(event.data, ICanItem) : null);
 	}
 
 	private function input_panHandler(event:CanEvent):Void {

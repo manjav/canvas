@@ -1,11 +1,12 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.controls.groups.panels.AlignPanel;
-import ir.grantech.canvas.drawables.CanItems;
 import feathers.layout.VerticalLayoutData;
+import ir.grantech.canvas.controls.groups.panels.AlignPanel;
 import ir.grantech.canvas.controls.groups.panels.AppearPanel;
 import ir.grantech.canvas.controls.groups.panels.FiltersPanel;
+import ir.grantech.canvas.controls.groups.panels.TextPanel;
 import ir.grantech.canvas.controls.groups.panels.TransformPanel;
+import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
@@ -14,6 +15,7 @@ import ir.grantech.canvas.themes.CanTheme;
 import openfl.events.Event;
 
 class RightBar extends VGroup {
+	private var textPanel:TextPanel;
 	private var alignPanel:AlignPanel;
 	private var appearPanel:AppearPanel;
 	private var filtersPanel:FiltersPanel;
@@ -29,6 +31,9 @@ class RightBar extends VGroup {
 
 		this.transfromPanel = new TransformPanel();
 		this.addChild(this.transfromPanel);
+
+		this.textPanel = new TextPanel();
+		this.addChild(this.textPanel);
 
 		this.appearPanel = new AppearPanel();
 		this.addChild(this.appearPanel);
@@ -52,6 +57,7 @@ class RightBar extends VGroup {
 	private function commands_selectHandler(event:CanEvent):Void {
 		var items = cast(event.data[0], CanItems);
 		this.enabled = items.filled;
+		this.textPanel.targets = items;
 		this.alignPanel.targets = items;
 		this.appearPanel.targets = items;
 		this.transfromPanel.targets = items;

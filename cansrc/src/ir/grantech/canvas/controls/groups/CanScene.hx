@@ -1,15 +1,11 @@
 package ir.grantech.canvas.controls.groups;
 
-import openfl.display.DisplayObject;
-import ir.grantech.canvas.drawables.CanBitmap;
-import ir.grantech.canvas.drawables.CanSprite;
-import ir.grantech.canvas.drawables.CanShape;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import openfl.Vector;
-import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
 import openfl.display.Shape;
@@ -86,12 +82,12 @@ class CanScene extends LayoutGroup {
 		var graphicDataList:Vector<IGraphicsData> = null;
 		this.hitHint.graphics.lineStyle(0.1 * scaleX, 0x1692E6);
 		#if flash
-		if (Std.is(target, Sprite)) {
-			graphicDataList = cast(target, Sprite).graphics.readGraphicsData();
-		} else if (Std.is(target, Shape)) {
-			graphicDataList = cast(target, Shape).graphics.readGraphicsData();
-		} else if (Std.is(target, Bitmap)) {
-			var bmp = cast(target, Bitmap);
+		if (Std.is(target, openfl.display.Sprite)) {
+			graphicDataList = cast(target, openfl.display.Sprite).graphics.readGraphicsData();
+		} else if (Std.is(target, openfl.display.Shape)) {
+			graphicDataList = cast(target, openfl.display.Shape).graphics.readGraphicsData();
+		} else if (Std.is(target, openfl.display.Bitmap)) {
+			var bmp = cast(target, openfl.display.Bitmap);
 			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);
 		}
 		#else

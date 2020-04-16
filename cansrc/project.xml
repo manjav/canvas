@@ -10,7 +10,7 @@
 	<window allow-high-dpi="true"/>
 	<window background="#e4e4e4" />
 	<window fps="60" width="1800" height="1200"/>
-	<window fps="0" if="html5"/>
+	<!-- <window fps="0" if="html5"/> -->
 	
 	<source path="src" />
 	
@@ -66,6 +66,7 @@
   <assets id="align-l" path="assets/img/align-l.png"/>
   <assets id="distr-h" path="assets/img/distr-h.png"/>
   <assets id="distr-v" path="assets/img/distr-v.png"/>
+  <assets id="IRANSans" path="assets/IRANSans-Light-web.ttf"/>
 
 	<!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

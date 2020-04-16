@@ -67,6 +67,11 @@ class CanTheme extends BaseSteelTheme {
 	private var activeColor = 0xff9500;
 	private var controlColor = 0xfafafa;
 	private var operationColor = 0xff9500;
+	
+	override private function refreshFonts():Void {
+		this.fontName = "IRANSans Light";
+		this.refreshFontSizes();
+	}
 
 	private function getInputDisplayLabelTextFormat():TextFormat {
 		var result = this.getTextFormat();

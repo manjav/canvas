@@ -97,6 +97,7 @@ class Panel extends CanView {
 
 	private function createLabel(text:String, layoutData:AnchorLayoutData, variant:String = null):Label {
 		var element = new Label();
+		element.embedFonts = true;
 		element.text = text;
 		if (variant != null)
 			element.variant = variant;

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls;
 
+import openfl.display.BlendMode;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
@@ -75,6 +76,7 @@ class TransformHint extends Sprite {
 		this.scaleBegin = new Point();
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
+		this.register.blendMode = BlendMode.DIFFERENCE;
 		this.lines = new Array<Shape>();
 		this.scaleAnchores = new Array<ScaleAnchor>();
 		this.rotateAnchores = new Array<RotateAnchor>();

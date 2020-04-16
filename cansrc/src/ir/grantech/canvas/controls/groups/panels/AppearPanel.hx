@@ -25,8 +25,8 @@ class AppearPanel extends Panel {
 		// Blend Mode
 		this.createLabel("Blend Mode", AnchorLayoutData.topLeft(padding * 9, padding));
 		var names = [
-			"Normal", "Overlay", "screen", "multiply", "add", "alpha", "lighten", "darken", "difference", "erase", "hardlight", "invert", "layer", "shader",
-			"subtract"
+			"Normal", "Overlay", "Screen", "Multiply", "Add", "Alpha", "Lighten", "Darken", "Difference", "Erase", "Hardlight", "Invert", "Layer", "Shader",
+			"Subtract"
 		];
 
 		var modes = [

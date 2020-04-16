@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import openfl.display.BlendMode;
 import feathers.controls.CanHSlider;
 import feathers.controls.PopUpListView;
 import feathers.layout.AnchorLayout;
@@ -23,14 +24,22 @@ class AppearPanel extends Panel {
 
 		// Blend Mode
 		this.createLabel("Blend Mode", AnchorLayoutData.topLeft(padding * 9, padding));
-
-		var modes = [
-			"normal", "overlay", "screen", "multiply", "add", "alpha", "lighten", "darken", "difference", "erase", "hardlight", "invert", "layer", "shader",
+		var names = [
+			"Normal", "Overlay", "screen", "multiply", "add", "alpha", "lighten", "darken", "difference", "erase", "hardlight", "invert", "layer", "shader",
 			"subtract"
 		];
-		this.modesList = this.createPopupList(modes, new AnchorLayoutData(padding * 10.7, padding, null, padding));
-		this.modesList.itemToText = (item:String) -> {
-			return item.substr(0, 1).toUpperCase() + item.substr(1);
+
+		var modes = [
+			BlendMode.NORMAL, BlendMode.OVERLAY, BlendMode.SCREEN, BlendMode.MULTIPLY, BlendMode.ADD, BlendMode.ALPHA, BlendMode.LIGHTEN, BlendMode.DARKEN,
+			BlendMode.DIFFERENCE, BlendMode.ERASE, BlendMode.HARDLIGHT, BlendMode.INVERT, BlendMode.LAYER, BlendMode.SHADER, BlendMode.SUBTRACT
+		];
+
+		var data = [];
+		for(i in 0...modes.length)
+			data.push({text:names[i], value:modes[i]});
+		this.modesList = this.createPopupList(data, new AnchorLayoutData(padding * 10.7, padding, null, padding));
+		this.modesList.itemToText = (item:Dynamic) -> {
+			return item.text;
 		};
 
 		this.height = padding * 15;
@@ -43,7 +52,7 @@ class AppearPanel extends Panel {
 
 	override private function popupListView_changeHandler(event:Event) {
 		if (!this.updating && this.targets != null)
-			commands.commit(Commands.BLEND_MODE, [this.targets, this.modesList.selectedItem]);
+			commands.commit(Commands.BLEND_MODE, [this.targets, this.modesList.selectedItem.value]);
 	}
 
 	override public function updateData():Void {
@@ -51,7 +60,14 @@ class AppearPanel extends Panel {
 			return;
 		this.updating = true;
 		this.alphaSlider.value = this.targets.length == 1 ? this.targets.get(0).alpha * 100 : 100;
-		this.modesList.selectedItem = this.targets.blendMode;
+		this.modesList.selectedIndex = this.findBlendMode(this.targets.blendMode);
 		this.updating = false;
+	}
+
+	private function findBlendMode(blendMode:BlendMode):Int{
+		for (i in 0...this.modesList.dataProvider.length)
+			if( this.modesList.dataProvider.get(i).value == blendMode)
+				return i;	
+		return -1;
 	}
 }

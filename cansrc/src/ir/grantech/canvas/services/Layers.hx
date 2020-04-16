@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.drawables.CanText;
 import feathers.data.ArrayCollection;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanBitmap;
@@ -10,7 +11,6 @@ import ir.grantech.canvas.drawables.ICanItem;
 import openfl.geom.Point;
 
 class Layers extends ArrayCollection<Layer> {
-
 	/**
 	 * Constructor.
 	 */
@@ -65,6 +65,7 @@ class Layer {
 	static public final TYPE_SPRITE:String = "sprite";
 	static public final TYPE_BITMAP:String = "bitmap";
 	static public final TYPE_SLICED:String = "slicedBitmap";
+	static public final TYPE_TEXT:String = "text";
 
 	public var id(default, default):Int;
 	public var order(default, default):Int;
@@ -86,6 +87,8 @@ class Layer {
 			this.type = TYPE_BITMAP;
 		else if (Std.is(item, CanSlicedBitmap))
 			this.type = TYPE_SLICED;
+		else if (Std.is(item, CanText))
+			this.type = TYPE_TEXT;
 
 		this.name = type + " " + id;
 

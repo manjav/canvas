@@ -1,12 +1,15 @@
 package ir.grantech.canvas.services;
 
+import openfl.text.TextFormat;
+import openfl.text.TextFieldType;
 import ir.grantech.canvas.drawables.CanBitmap;
-import openfl.geom.Rectangle;
-import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanShape;
+import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanSprite;
+import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
 import openfl.Assets;
+import openfl.geom.Rectangle;
 
 class Tools extends BaseService {
 	private var tools:Map<Int, Tool>;
@@ -41,7 +44,7 @@ class Tools extends BaseService {
 		this.toolType = value;
 		if (!this.tools.exists(this.toolType))
 			this.tools.set(this.toolType, new Tool(this.toolType));
-		if (this.toolType > 0 && this.toolType < 5) {
+		if (this.toolType > 0 && this.toolType < 6) {
 			var item:ICanItem = null;
 			var f = Math.round(Math.random() * 0xFFFFFF);
 			var l = Math.round(Math.random() * 0xFFFFFF);
@@ -65,6 +68,14 @@ class Tools extends BaseService {
 				item = bmp;
 			} else if (this.toolType == 4) {
 				item = new CanSlicedBitmap(Assets.getBitmapData("toolfoot_1_selected"), new Rectangle(22, 24, 4, 4));
+			} else if (this.toolType == 5) {
+				var txt = new CanText();
+				txt.defaultTextFormat = new TextFormat(Assets.getFont("IRANSans").fontName, 32, 0xFF);
+				txt.type = TextFieldType.INPUT;
+				txt.border = true;
+				txt.embedFonts = true;
+				txt.text = "123";
+				item = txt;
 			}
 
 			item.x = Math.random() * 320;

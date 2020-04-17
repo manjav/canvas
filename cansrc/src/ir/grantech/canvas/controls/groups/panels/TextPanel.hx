@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
 import feathers.data.ArrayCollection;
 import feathers.layout.AnchorLayout;
@@ -9,6 +10,7 @@ import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.services.Fonts;
 import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
+import openfl.events.FocusEvent;
 import openfl.text.Font;
 
 class TextPanel extends Panel {
@@ -26,6 +28,8 @@ class TextPanel extends Panel {
 	private var families:Array<FontFamily>;
 	private var familyList:ComboBox;
 	private var styleList:ComboBox;
+	private var sizeInput:CanRangeInput;
+
 	override private function initialize() {
 		super.initialize();
 		this.layout = new AnchorLayout();
@@ -44,13 +48,18 @@ class TextPanel extends Panel {
 		this.styleList.itemToText = (style:FontStyle) -> {
 			return style.styleName;
 		};
+
+		// font size
+		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 7, padding));
+		this.sizeInput.step = 1;
+
 		this.height = padding * 15;
 	}
 
 	override private function popupListView_changeHandler(event:Event):Void {
 		if (this.updating || cast(event.currentTarget, ComboBox).selectedIndex == -1)
 			return;
-			var family = cast(this.familyList.selectedItem, FontFamily);
+		var family = cast(this.familyList.selectedItem, FontFamily);
 		if (event.currentTarget == this.familyList) {
 			this.changeFont(family.styles[0]);
 			this.updating = true;
@@ -61,6 +70,21 @@ class TextPanel extends Panel {
 		}
 	}
 
+	override private function textInputs_focusInHandler(event:FocusEvent):Void {
+		cast(event.currentTarget, CanRangeInput).addEventListener(Event.CHANGE, this.textInputs_changeHandler);
+	}
+
+	override private function textInputs_focusOutHandler(event:FocusEvent):Void {
+		cast(event.currentTarget, CanRangeInput).removeEventListener(Event.CHANGE, this.textInputs_changeHandler);
+	}
+
+	private function textInputs_changeHandler(event:Event):Void {
+		if (this.target == null)
+			return;
+		var textFormat = this.target.getTextFormat();
+		if (event.currentTarget == this.sizeInput)
+			textFormat.size = Math.round(this.sizeInput.value);
+		this.target.setTextFormat(textFormat);
 	}
 
 	function changeFont(font:FontStyle):Void {
@@ -71,7 +95,7 @@ class TextPanel extends Panel {
 	}
 
 	override public function updateData():Void {
-		if (this.target == null || !this.targets.filled)
+		if (this.target == null)
 			return;
 		this.updating = true;
 
@@ -79,6 +103,7 @@ class TextPanel extends Panel {
 		var style:FontStyle = FontFamily.findByStyle(this.families, textFormat.font);
 		this.familyList.selectedItem = style.family;
 		this.styleList.selectedItem = style;
+		this.sizeInput.value = textFormat.size;
 
 		this.updating = false;
 	}

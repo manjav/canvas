@@ -22,4 +22,11 @@ class Utils {
 		}
 		return val;
 	}
+	
+	static public function getExtension(path:String):String {
+		var cp = path.lastIndexOf(".");
+		if (cp != -1)
+			return path.substr(cp + 1);
+		return null;
+	}
 }

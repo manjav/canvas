@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.controls.ComboBox;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
@@ -67,6 +68,16 @@ class Panel extends CanView {
 		element.layoutData = layoutData;
 		element.height = CanTheme.CONTROL_SIZE;
 		element.addEventListener(Event.CHANGE, this.sliders_changeHandler);
+		this.addChild(element);
+		return element;
+	}
+
+	private function createComboBox(items:Array<Dynamic>, layoutData:AnchorLayoutData):ComboBox {
+		var element = new ComboBox();
+		element.dataProvider = new ArrayCollection(items);
+		element.layoutData = layoutData;
+		element.height = CanTheme.CONTROL_SIZE;
+		element.addEventListener(Event.CHANGE, this.popupListView_changeHandler);
 		this.addChild(element);
 		return element;
 	}

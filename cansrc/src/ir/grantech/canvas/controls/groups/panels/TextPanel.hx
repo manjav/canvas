@@ -25,6 +25,7 @@ class TextPanel extends Panel {
 
 	private var families:Array<FontFamily>;
 	private var familyList:ComboBox;
+	private var styleList:ComboBox;
 	override private function initialize() {
 		super.initialize();
 		this.layout = new AnchorLayout();
@@ -38,6 +39,11 @@ class TextPanel extends Panel {
 			return family.name;
 		};
 
+		// font styles
+		this.styleList = this.createComboBox(null, new AnchorLayoutData(padding * 7, padding, null, padding * 7));
+		this.styleList.itemToText = (style:FontStyle) -> {
+			return style.styleName;
+		};
 		this.height = padding * 15;
 	}
 
@@ -50,6 +56,11 @@ class TextPanel extends Panel {
 			this.updating = true;
 			this.styleList.dataProvider = new ArrayCollection(family.styles);
 			this.updating = false;
+		} else if (event.currentTarget == this.styleList) {
+			this.changeFont(family.styles[this.styleList.selectedIndex]);
+		}
+	}
+
 	}
 
 	function changeFont(font:FontStyle):Void {
@@ -67,6 +78,7 @@ class TextPanel extends Panel {
 		var textFormat = this.target.getTextFormat();
 		var style:FontStyle = FontFamily.findByStyle(this.families, textFormat.font);
 		this.familyList.selectedItem = style.family;
+		this.styleList.selectedItem = style;
 
 		this.updating = false;
 	}

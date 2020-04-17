@@ -7,7 +7,6 @@ class Fonts {
 	static public function load():Array<FontFamily> {
 		var fonts:Array<Font> = Font.enumerateFonts(true);
 		#if !(flash || html5)
-		fonts = new Array<Font>();
 		var fontsPath = lime.system.System.fontsDirectory.toLowerCase();
 		var index = fontsPath.lastIndexOf("fonts");
 		if (fontsPath.substr(index) != "fonts\\")
@@ -36,7 +35,6 @@ class Fonts {
 // Typesettg Bold Italic Black Fixed Semibold Semilight Light Emoji Negreta Cursiva Historic
 
 class FontFamily {
-
 	public var name:String;
 	public var styles:Array<Font>;
 	public var styleNames:Array<String>;

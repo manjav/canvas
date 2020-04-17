@@ -1,5 +1,7 @@
 package ir.grantech.canvas.services;
 
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFieldType;
 import ir.grantech.canvas.drawables.CanBitmap;
@@ -72,9 +74,10 @@ class Tools extends BaseService {
 				var txt = new CanText();
 				txt.defaultTextFormat = new TextFormat(Assets.getFont("IRANSans").fontName, 32, 0xFF);
 				txt.type = TextFieldType.INPUT;
+				// txt.autoSize = TextFieldAutoSize.LEFT;
 				txt.border = true;
 				txt.embedFonts = true;
-				txt.text = "123";
+				txt.text = "123 asd شیس";
 				item = txt;
 			}
 

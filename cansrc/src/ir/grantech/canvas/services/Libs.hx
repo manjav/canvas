@@ -1,7 +1,7 @@
 package ir.grantech.canvas.services;
 
-import openfl.display.Stage;
 import openfl.display.BitmapData;
+import openfl.display.Stage;
 
 class Libs extends BaseService {
 	private var map:Map<Int, BitmapData>;

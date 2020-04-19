@@ -10,12 +10,12 @@ import openfl.display.InteractiveObject;
 import openfl.events.MouseEvent;
 
 class AlignPanel extends Panel {
-	private var alignT:Button;
-	private var alignM:Button;
-	private var alignB:Button;
 	private var alignL:Button;
 	private var alignC:Button;
 	private var alignR:Button;
+	private var alignT:Button;
+	private var alignM:Button;
+	private var alignB:Button;
 	private var distrH:Button;
 	private var distrV:Button;
 
@@ -34,12 +34,12 @@ class AlignPanel extends Panel {
 		layout.gap = layout.paddingLeft = layout.paddingRight = Math.floor(CanTheme.DEFAULT_PADDING * 0.3);
 		this.layout = layout;
 
-		this.alignT = this.createButton("align-t", null);
-		this.alignM = this.createButton("align-m", null);
-		this.alignB = this.createButton("align-b", null);
 		this.alignL = this.createButton("align-l", null);
 		this.alignC = this.createButton("align-c", null);
 		this.alignR = this.createButton("align-r", null);
+		this.alignT = this.createButton("align-t", null);
+		this.alignM = this.createButton("align-m", null);
+		this.alignB = this.createButton("align-b", null);
 		this.distrH = this.createButton("distr-h", null);
 		this.distrV = this.createButton("distr-v", null);
 

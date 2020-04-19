@@ -31,12 +31,12 @@
   <assets id="toolhead_2_selected" path="assets/img/circle-blue.png"/>
   <assets id="toolhead_3" path="assets/img/text.png"/>
   <assets id="toolhead_3_selected" path="assets/img/text-blue.png"/>
-  <assets id="toolhead_4" path="assets/img/triangle.png"/>
+  <!-- <assets id="toolhead_4" path="assets/img/triangle.png"/>
   <assets id="toolhead_4_selected" path="assets/img/triangle-blue.png"/>
   <assets id="toolhead_5" path="assets/img/line.png"/>
   <assets id="toolhead_5_selected" path="assets/img/line-blue.png"/>
   <assets id="toolhead_6" path="assets/img/pen.png"/>
-  <assets id="toolhead_6_selected" path="assets/img/pen-blue.png"/>
+  <assets id="toolhead_6_selected" path="assets/img/pen-blue.png"/> -->
   <assets id="toolhead_7" path="assets/img/zoom.png"/>
   <assets id="toolhead_7_selected" path="assets/img/zoom-blue.png"/>
   <assets id="toolfoot_0" path="assets/img/layers.png"/>

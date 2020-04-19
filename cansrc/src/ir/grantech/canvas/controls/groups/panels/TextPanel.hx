@@ -100,10 +100,13 @@ class TextPanel extends Panel {
 		this.updating = true;
 
 		var textFormat = this.target.getTextFormat();
-		var style:FontStyle = FontFamily.findByStyle(this.families, textFormat.font);
-		this.familyList.selectedItem = style.family;
-		this.styleList.selectedItem = style;
-		this.sizeInput.value = textFormat.size;
+		if (textFormat.font != null) {
+			var style:FontStyle = FontFamily.findByStyle(this.families, textFormat.font);
+			this.familyList.selectedItem = style.family;
+			this.styleList.selectedItem = style;
+		}
+		if (textFormat.size != null)
+			this.sizeInput.value = textFormat.size;
 
 		this.updating = false;
 	}

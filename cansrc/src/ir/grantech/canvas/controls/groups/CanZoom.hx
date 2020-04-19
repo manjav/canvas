@@ -134,11 +134,10 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
+		this.performSelection(input.pointPhase, input.beganCanItem, input.selectedItems, input.shiftKey || input.ctrlKey);
+
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
-
-		if (!input.beganCanItem)
-			this.scene.updateSlection(input.pointPhase);
 
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
 			this.scene.transformHint.updateBounds();
@@ -147,6 +146,27 @@ class CanZoom extends LayoutGroup {
 
 		if (this.input.selectedItems.filled)
 			this.scene.transformHint.perform(input.pointPhase);
+	}
+
+	function performSelection(pointPhase:Int, beganCanItem:Bool, selectedItems:CanItems, fixed:Bool):Void {
+		if (beganCanItem || !focused)
+			return;
+
+		this.scene.updateSlection(input.pointPhase, fixed);
+		var selectionBounds = this.scene.selection.getBounds(this.scene);
+		if (pointPhase < Inputs.PHASE_ENDED || this.scene.selection.width < 10)
+			return;
+
+		if (Tools.instance.toolType == Tool.SELECT) {
+			if (!Inputs.instance.shiftKey && !Inputs.instance.ctrlKey)
+				selectedItems.removeAll(false);
+			for (i in 0...this.scene.container.numChildren)
+				if (selectionBounds.containsRect(this.scene.container.getChildAt(i).getBounds(this.scene)))
+					selectedItems.add(cast(this.scene.container.getChildAt(i), ICanItem), false);
+			selectedItems.calculateBounds();
+			Commands.instance.commit(Commands.SELECT, [selectedItems]);
+			return;
+		}
 	}
 
 	private function setZoom(value:Float):Void {

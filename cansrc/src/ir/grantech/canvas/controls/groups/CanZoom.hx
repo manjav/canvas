@@ -1,5 +1,11 @@
 package ir.grantech.canvas.controls.groups;
 
+import openfl.Assets;
+import openfl.text.TextFormatAlign;
+import openfl.text.TextFieldType;
+import ir.grantech.canvas.drawables.CanText;
+import openfl.text.TextFormat;
+import ir.grantech.canvas.drawables.CanShape;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
@@ -165,6 +171,35 @@ class CanZoom extends LayoutGroup {
 					selectedItems.add(cast(this.scene.container.getChildAt(i), ICanItem), false);
 			selectedItems.calculateBounds();
 			Commands.instance.commit(Commands.SELECT, [selectedItems]);
+			return;
+		}
+
+		if (Tools.instance.toolType == Tool.RECTANGLE || Tools.instance.toolType == Tool.ELLIPSE) {
+			var sh = new CanShape();
+			sh.graphics.beginFill(0xFFFF);
+			sh.graphics.lineStyle(1, 1);
+			if (Tools.instance.toolType == Tool.RECTANGLE)
+				sh.graphics.drawRect(0, 0, selectionBounds.width, selectionBounds.height);
+			else
+				sh.graphics.drawEllipse(0, 0, selectionBounds.width, selectionBounds.height);
+			// sh.scale9Grid = new Rectangle(r, r, r, r);
+			sh.x = selectionBounds.x;
+			sh.y = selectionBounds.y;
+			Commands.instance.commands.commit(Commands.ADDED, [sh]);
+			return;
+		}
+
+		if (Tools.instance.toolType == Tool.TEXT) {
+			var txt = new CanText();
+			txt.x = selectionBounds.x;
+			txt.y = selectionBounds.y;
+			txt.width = selectionBounds.width;
+			txt.height = selectionBounds.height;
+			txt.wordWrap = txt.multiline = true;
+			txt.type = TextFieldType.INPUT;
+			txt.border = true;
+			txt.defaultTextFormat = new TextFormat(Assets.getFont("IRANSans").fontName, 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
+			Commands.instance.commands.commit(Commands.ADDED, [txt]);
 			return;
 		}
 	}

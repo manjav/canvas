@@ -1,20 +1,20 @@
 package feathers.controls.colors;
 
-import ir.grantech.canvas.utils.Utils;
-import openfl.Assets;
 import feathers.core.InvalidationFlag;
-import feathers.core.PopUpManager;
 import feathers.layout.AnchorLayout;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
-import openfl.display.Shape;
-import openfl.geom.Matrix;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.utils.Utils;
 import lime.math.RGBA;
+import openfl.Assets;
 import openfl.display.GradientType;
+import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
+import openfl.geom.Matrix;
 
 class ColorPopup extends LayoutGroup {
 	public var data(default, set):RGBA;
@@ -41,8 +41,8 @@ class ColorPopup extends LayoutGroup {
 	private var matrixV:Matrix;
 	private var matrixH:Matrix;
 	private var hueSlider:Sprite;
-	private var alphaSlider:Sprite;
-	private var saturationSlider:Sprite;
+	private var alphaSlider:Shape;
+	private var saturationSlider:Shape;
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function initialize() {
@@ -87,7 +87,7 @@ class ColorPopup extends LayoutGroup {
 		alphaContainer.filters = [innerGlow];
 		this.addChild(alphaContainer);
 
-		this.alphaSlider = new Sprite();
+		this.alphaSlider = new Shape();
 		alphaContainer.addChild(this.alphaSlider);
 
 		// saturation / value slider
@@ -98,7 +98,7 @@ class ColorPopup extends LayoutGroup {
 		saturationContainer.filters = [innerGlow];
 		this.addChild(saturationContainer);
 
-		this.saturationSlider = new Sprite();
+		this.saturationSlider = new Shape();
 		saturationContainer.addChild(this.saturationSlider);
 
 		var valueGradient = new Shape();
@@ -143,7 +143,6 @@ class ColorPopup extends LayoutGroup {
 	}
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
-		event.updateAfterEvent();
 		var x = 0.0, y = 0.0;
 		if (this.activeSlider == 0) {
 			x = Math.max(0, Math.min(1, this.saturationSlider.mouseX / this.columnSize));
@@ -151,13 +150,11 @@ class ColorPopup extends LayoutGroup {
 			this._saturation = x * 100;
 			this._value = 100 - y * 100;
 			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
-			this.saturateUI(Utils.RGBA2RGB(this.data));
 			// trace("sv", this._saturation, this._value, StringTools.hex(this.data, 8));
 		} else if (this.activeSlider == 1) {
 			this._hue = Math.round(Math.max(0, Math.min(1, this.hueSlider.mouseY / this.columnSize)) * 360);
 			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
 			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this._hue, 100, 100, 1)));
-			this.saturateUI(Utils.RGBA2RGB(this.data));
 			// trace("h", this._hue, this.data, StringTools.hex(this.data, 8));
 		} else if (this.activeSlider == 2) {
 			this._alpha = 1 - Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize));
@@ -167,8 +164,7 @@ class ColorPopup extends LayoutGroup {
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
-		if (stage != null)
-			this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
 	}
 
@@ -182,5 +178,12 @@ class ColorPopup extends LayoutGroup {
 		this.alphaSlider.graphics.clear();
 		this.alphaSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [1, 0], [0, 0xFF], this.matrixV);
 		this.alphaSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+	}
+
+	override private function update():Void {
+		if (this.isInvalid(InvalidationFlag.DATA)) {
+			this.saturateUI(Utils.RGBA2RGB(this.data));
+		}
+		super.update();
 	}
 }

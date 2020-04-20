@@ -4,6 +4,8 @@ import feathers.core.FeathersControl;
 import feathers.core.InvalidationFlag;
 import feathers.layout.RelativePosition;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.utils.Utils;
+import lime.math.RGBA;
 import openfl.Assets;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -52,6 +54,7 @@ class ColorPicker extends FeathersControl {
 	public function showSpectrum():Void {
 		if (this.spectrumDisplay == null) {
 			this.spectrumDisplay = new ColorPopup();
+			this.spectrumDisplay.data = data;
 			this.spectrumDisplay.addEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
 		}
 		Callout.show(this.spectrumDisplay, this, [RelativePosition.LEFT]);
@@ -65,9 +68,9 @@ class ColorPicker extends FeathersControl {
 
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
-			this.graphics.clear();
-			this.graphics.beginFill(data);
-			this.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.CONTROL_SIZE * 0.3, CanTheme.CONTROL_SIZE * 0.3);
+			this.colorDisplay.graphics.clear();
+			this.colorDisplay.graphics.beginFill(Utils.RGBA2RGB(data), data.a / 0xFF);
+			this.colorDisplay.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.DPI * 2, CanTheme.DPI * 2);
 		}
 		super.update();
 	}

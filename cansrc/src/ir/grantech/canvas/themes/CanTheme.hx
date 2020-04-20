@@ -37,7 +37,7 @@ class CanTheme extends BaseSteelTheme {
 	public function new() {
 		super();
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
-		DEFAULT_PADDING = DPI * 6;
+		DEFAULT_PADDING = DPI * 8;
 		CONTROL_SIZE = DPI * 18;
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
@@ -65,7 +65,7 @@ class CanTheme extends BaseSteelTheme {
 	// private var fontSize = 50;
 	// private var textColor = 0xf1f1f1;
 	private var activeColor = 0xff9500;
-	private var controlColor = 0xfafafa;
+	// private var controlColor = 0xfafafa;
 	private var operationColor = 0xff9500;
 	
 	override private function refreshFonts():Void {
@@ -89,7 +89,7 @@ class CanTheme extends BaseSteelTheme {
 	public function setPanelStyles(bar:LayoutGroup):Void {
 		if (bar.backgroundSkin == null) {
 			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.controlColor);
+			skin.fill = SolidColor(this.controlFillColor1);
 			bar.backgroundSkin = skin;
 		}
 	}
@@ -97,7 +97,7 @@ class CanTheme extends BaseSteelTheme {
 	private function setButtonStyles(button:Button):Void {
 		if (button.backgroundSkin == null) {
 			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.controlColor, 0);
+			skin.fill = SolidColor(this.controlFillColor1, 0);
 			button.backgroundSkin = skin;
 		}
 
@@ -115,7 +115,7 @@ class CanTheme extends BaseSteelTheme {
 		if (button.backgroundSkin == null) {
 			var skin = new RectangleSkin();
 			skin.cornerRadius = DPI * 4;
-			skin.fill = SolidColor(this.controlColor, 1);
+			skin.fill = SolidColor(this.controlFillColor1, 1);
 			skin.border = LineStyle.SolidColor(DPI * 0.5, this.disabledTextColor);
 			skin.setBorderForState(ButtonState.DISABLED, LineStyle.SolidColor(DPI * 0.5, this.disabledTextColor, 0.5));
 			button.backgroundSkin = skin;
@@ -204,7 +204,7 @@ class CanTheme extends BaseSteelTheme {
 			var thumbSkin = new CircleSkin();
 			thumbSkin.border = LineStyle.SolidColor(DPI, this.textColor);
 			thumbSkin.setBorderForState(ButtonState.DISABLED, LineStyle.SolidColor(DPI, this.textColor));
-			thumbSkin.fill = SolidColor(this.controlColor, 1);
+			thumbSkin.fill = SolidColor(this.controlFillColor1, 1);
 			thumbSkin.setFillForState(ButtonState.DOWN, SolidColor(this.textColor, 1));
 			thumbSkin.width = DPI * 8;
 			thumbSkin.height = DPI * 8;

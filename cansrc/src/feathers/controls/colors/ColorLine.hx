@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import ir.grantech.canvas.utils.Utils;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
 import feathers.layout.AnchorLayout;
@@ -8,7 +9,6 @@ import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.utils.Utils;
 import lime.math.RGBA;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;

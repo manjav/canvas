@@ -140,7 +140,7 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
-		this.performSelection(input.pointPhase, input.beganCanItem, input.selectedItems, input.shiftKey || input.ctrlKey);
+		this.performSelection(input.pointPhase, input.beganFrom, input.selectedItems, input.shiftKey || input.ctrlKey);
 
 		if (Tools.instance.toolType != Tool.SELECT)
 			return;
@@ -154,15 +154,15 @@ class CanZoom extends LayoutGroup {
 			this.scene.transformHint.perform(input.pointPhase);
 	}
 
-	function performSelection(pointPhase:Int, beganCanItem:Bool, selectedItems:CanItems, fixed:Bool):Void {
-		if (beganCanItem || !focused)
+	function performSelection(pointPhase:Int, beganFrom:Int, selectedItems:CanItems, fixed:Bool):Void {
+		if (beganFrom != Inputs.TARGET_SCENE || !focused)
 			return;
 
 		this.scene.updateSlection(input.pointPhase, fixed);
-		var selectionBounds = this.scene.selection.getBounds(this.scene);
 		if (pointPhase < Inputs.PHASE_ENDED || this.scene.selection.width < 10)
 			return;
 
+		var selectionBounds = this.scene.selection.getBounds(this.scene);
 		if (Tools.instance.toolType == Tool.SELECT) {
 			if (!Inputs.instance.shiftKey && !Inputs.instance.ctrlKey)
 				selectedItems.removeAll(false);

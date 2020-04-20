@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.CanItems;
@@ -13,6 +14,11 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 
 class Inputs extends BaseService {
+
+	static public final TARGET_NONE:Int = -1;
+	static public final TARGET_ITEM:Int = 0;
+	static public final TARGET_SCENE:Int = 1;
+
 	static public final PHASE_BEGAN:Int = 0;
 	static public final PHASE_UPDATE:Int = 1;
 	static public final PHASE_ENDED:Int = 2;
@@ -41,7 +47,7 @@ class Inputs extends BaseService {
 	private var reservedX:Float = 0;
 	private var reservedY:Float = 0;
 	private var stage:Stage;
-	private var beganCanItem:Bool;
+	private var beganFrom:Int = -1;
 
 	/**
 		The singleton method of Inputs.
@@ -138,7 +144,7 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
-			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.filled ) { // ctrl + shift + z
+			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.filled) { // ctrl + shift + z
 				this.commands.commit(Commands.RESET, [this.selectedItems]);
 			} else if (this.lastKeyUp == 219 && this.selectedItems.filled) { // ctrl + [
 				this.commands.commit(Commands.ORDER, [this.selectedItems.get(0).layer.order, 1]);
@@ -166,14 +172,20 @@ class Inputs extends BaseService {
 			return;
 		}
 
-	 	this.canZoom.focused = event.stageX > this.canZoom.x
+		this.canZoom.focused = event.stageX > this.canZoom.x
 			&& event.stageY > this.canZoom.y
 			&& event.stageX < this.canZoom.x + this.canZoom.width
 			&& event.stageY < this.canZoom.y + this.canZoom.height;
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
-		this.beganCanItem = Std.is(item, ICanItem) || Std.is(item, TransformHint);
+		if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
+			this.beganFrom = TARGET_ITEM;
+		else if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene))
+			this.beganFrom = TARGET_SCENE;
+		else
+			this.beganFrom = TARGET_NONE;
+
 		if (!Std.is(item, TransformHint)) {
-			if (this.beganCanItem) {
+			if (this.beganFrom == 0) {
 				var item = cast(item, ICanItem);
 				var exists = this.selectedItems.indexOf(item) > -1;
 				if (this.shiftKey || this.ctrlKey) {
@@ -185,7 +197,7 @@ class Inputs extends BaseService {
 					this.selectedItems.removeAll(false);
 					this.selectedItems.add(item);
 				}
-			} else if (this.canZoom.focused) {
+			} else if (this.beganFrom == TARGET_SCENE && this.canZoom.focused) {
 				this.selectedItems.removeAll();
 			}
 		}

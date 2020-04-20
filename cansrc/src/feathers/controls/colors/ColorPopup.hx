@@ -21,12 +21,19 @@ class ColorPopup extends LayoutGroup {
 
 	private function set_data(value:RGBA):RGBA {
 		if (this.data == value)
-			return this.data;
+			return value;
 		this.data = value;
+		if (this.hasEventListener(Event.CHANGE))
+			this.dispatchEvent(new Event(Event.CHANGE));
 		this.setInvalid(InvalidationFlag.DATA);
-		return this.data;
+		return value;
 	}
 
+	private var activeSlider:Int = -1;
+	private var _hue:Float = 0;
+	private var _alpha:Float = 1.0;
+	private var _saturation:Float = 100;
+	private var _value:Float = 100;
 	private var roundness = CanTheme.DPI * 3;
 	private var columnSize = CanTheme.DPI * 90;
 	private var padding = CanTheme.DEFAULT_PADDING;
@@ -110,6 +117,26 @@ class ColorPopup extends LayoutGroup {
 			PopUpManager.removePopUp(this);
 			return;
 		}
+	private function mouseDownHandler(event:MouseEvent):Void {
+		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+
+		if (this.saturationSlider.mouseX >= 0
+			&& this.saturationSlider.mouseX <= this.columnSize
+			&& this.saturationSlider.mouseY >= 0
+			&& this.saturationSlider.mouseY <= this.columnSize)
+			this.activeSlider = 0;
+		else if (this.hueSlider.mouseX >= 0
+			&& this.hueSlider.mouseX <= this.padding
+			&& this.hueSlider.mouseX >= 0
+			&& this.hueSlider.mouseX <= this.columnSize)
+			this.activeSlider = 1;
+		else if (this.alphaSlider.mouseX >= 0
+			&& this.alphaSlider.mouseX <= this.padding
+			&& this.alphaSlider.mouseX >= 0
+			&& this.alphaSlider.mouseX <= this.columnSize)
+			this.activeSlider = 2;
+		else
+			this.activeSlider = -1;
 
 		this.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
 		stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
@@ -117,6 +144,26 @@ class ColorPopup extends LayoutGroup {
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
 		event.updateAfterEvent();
+		var x = 0.0, y = 0.0;
+		if (this.activeSlider == 0) {
+			x = Math.max(0, Math.min(1, this.saturationSlider.mouseX / this.columnSize));
+			y = Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize));
+			this._saturation = x * 100;
+			this._value = 100 - y * 100;
+			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
+			this.saturateUI(Utils.RGBA2RGB(this.data));
+			// trace("sv", this._saturation, this._value, StringTools.hex(this.data, 8));
+		} else if (this.activeSlider == 1) {
+			this._hue = Math.round(Math.max(0, Math.min(1, this.hueSlider.mouseY / this.columnSize)) * 360);
+			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
+			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this._hue, 100, 100, 1)));
+			this.saturateUI(Utils.RGBA2RGB(this.data));
+			// trace("h", this._hue, this.data, StringTools.hex(this.data, 8));
+		} else if (this.activeSlider == 2) {
+			this._alpha = 1 - Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize));
+			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
+			// trace("a", this._alpha, this.data, StringTools.hex(this.data, 8));
+		}
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {

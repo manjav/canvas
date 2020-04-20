@@ -106,17 +106,11 @@ class ColorPopup extends LayoutGroup {
 		valueGradient.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
 		saturationContainer.addChild(valueGradient);
 
-		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
+		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 	}
 
-	private function stage_mouseDownHandler(event:MouseEvent):Void {
-		this.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
-		// point outside detection
-		var b = this.getBounds(stage);
-		if (!b.contains(event.stageX, event.stageY)) {
-			PopUpManager.removePopUp(this);
-			return;
 		}
+	
 	private function mouseDownHandler(event:MouseEvent):Void {
 		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 

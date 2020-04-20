@@ -19,6 +19,7 @@
 	<haxelib name="feathersui" />
 
 	<haxdef name="openfl_pool_events"/>	
+  <haxdef name="advanced-telemetry" if="debug" />
 
 	<!-- sync/embedded -->
 	<assets id="transparent" path="assets/img/transparent.png"/>

@@ -1,6 +1,5 @@
 package feathers.controls.colors;
 
-import openfl.geom.Rectangle;
 import feathers.layout.AnchorLayout;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
@@ -190,7 +189,19 @@ class ColorPopup extends LayoutGroup {
 		alphaContainer.mask = alphaMask;
 		this.addChild(alphaMask);
 
+		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
+	}
+
+	private function addedToStageHandler(event:Event):Void {
+		this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removedFromStageHandler);
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+	}
+
+	private function removedFromStageHandler(event:Event):Void {
+		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+		this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removedFromStageHandler);
+		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 	}
 
 	private function createTrack():Shape {
@@ -205,6 +216,8 @@ class ColorPopup extends LayoutGroup {
 
 	private function mouseDownHandler(event:MouseEvent):Void {
 		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 
 		if (this.hueSlider.mouseX >= 0
 			&& this.hueSlider.mouseX <= this.padding
@@ -223,12 +236,9 @@ class ColorPopup extends LayoutGroup {
 			this.activeSlider = FLAG_A;
 		else
 			this.activeSlider = null;
-
-		this.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-		stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 	}
 
-	private function mouseMoveHandler(event:MouseEvent):Void {
+	private function stage_mouseMoveHandler(event:MouseEvent):Void {
 		if (this.activeSlider == null)
 			return;
 		if (this.activeSlider == FLAG_H)
@@ -245,7 +255,10 @@ class ColorPopup extends LayoutGroup {
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-		this.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
+		if (this.stage == null)
+			return;
+		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 	}
 
 	private function hueUI(color:UInt):Void {

@@ -58,10 +58,11 @@ class ColorPicker extends FeathersControl {
 			this.spectrumDisplay.data = data;
 			this.spectrumDisplay.addEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
 		}
-		var callout = new Callout();
+		var callout = new FixableCallout();
 		callout.origin = this;
 		callout.backgroundSkin = null;
 		callout.content = this.spectrumDisplay;
+		this.spectrumDisplay.callout = callout;
 		callout.paddingRight = CanTheme.DEFAULT_PADDING;
 		callout.supportedPositions = [RelativePosition.LEFT];
 		PopUpManager.addPopUp(callout, callout.origin, false, false, null);

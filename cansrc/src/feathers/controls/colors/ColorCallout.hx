@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import feathers.controls.FixableCallout;
 import feathers.layout.AnchorLayout;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
@@ -65,6 +66,8 @@ class ColorCallout extends LayoutGroup {
 		this.setInvalid(FLAG_A);
 		return value;
 	}
+
+	public var callout:FixableCallout;
 
 	private var activeSlider:String = null;
 	private var roundness = CanTheme.DPI * 3;

@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import feathers.core.PopUpManager;
 import feathers.core.FeathersControl;
 import feathers.core.InvalidationFlag;
 import feathers.layout.RelativePosition;
@@ -39,7 +40,7 @@ class ColorPicker extends FeathersControl {
 		this.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
 		this.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.DPI * 2, CanTheme.DPI * 2);
 		this.data = 0xFF;
-		this.filters = [new GlowFilter(0, 1, CanTheme.DPI, CanTheme.DPI, 1, 1, true)];
+		this.filters = [new GlowFilter(0, 1, CanTheme.DPI * 1.5, CanTheme.DPI * 1.5, 1, 1, true)];
 
 		this.colorDisplay = new Shape();
 		this.addChild(this.colorDisplay);
@@ -57,7 +58,13 @@ class ColorPicker extends FeathersControl {
 			this.spectrumDisplay.data = data;
 			this.spectrumDisplay.addEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
 		}
-		Callout.show(this.spectrumDisplay, this, [RelativePosition.LEFT]);
+		var callout = new Callout();
+		callout.origin = this;
+		callout.backgroundSkin = null;
+		callout.content = this.spectrumDisplay;
+		callout.paddingRight = CanTheme.DEFAULT_PADDING;
+		callout.supportedPositions = [RelativePosition.LEFT];
+		PopUpManager.addPopUp(callout, callout.origin, false, false, null);
 	}
 
 	private function spectrumDisplay_changeHandler(event:Event):Void {

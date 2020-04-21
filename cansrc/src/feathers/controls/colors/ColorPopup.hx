@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import openfl.geom.Rectangle;
 import feathers.layout.AnchorLayout;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
@@ -75,10 +76,10 @@ class ColorPopup extends LayoutGroup {
 	private var matrixH:Matrix;
 	private var hueTrack:Shape;
 	private var hueSlider:Sprite;
-	private var alphaTrack:Shape;
-	private var alphaSlider:Shape;
 	private var saturationTrack:Shape;
 	private var saturationSlider:Shape;
+	private var alphaTrack:Shape;
+	private var alphaSlider:Shape;
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function initialize() {
@@ -106,12 +107,16 @@ class ColorPopup extends LayoutGroup {
 
 		// hue slider
 		this.hueSlider = new Sprite();
+		#if flash
+		this.hueSlider.filters = [innerGlow];
+		#else
+		this.hueSlider.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
+		#end
 		this.hueSlider.graphics.beginGradientFill(GradientType.LINEAR, [0xff0000, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00ff, 0xff0000],
 			[1, 1, 1, 1, 1, 1, 1], [0, 43, 86, 129, 172, 212, 255], this.matrixV);
 		this.hueSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
 		this.hueSlider.x = this.columnSize + this.padding * 2;
 		this.hueSlider.y = this.padding;
-		this.hueSlider.filters = [innerGlow];
 		this.addChild(this.hueSlider);
 
 		this.hueTrack = this.createTrack();
@@ -126,36 +131,16 @@ class ColorPopup extends LayoutGroup {
 		this.hueSlider.mask = hueMask;
 		this.addChild(hueMask);
 
-		// alpha slider
-		var alphaContainer:Sprite = new Sprite();
-		alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
-		alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
-		alphaContainer.x = this.columnSize + this.padding * 4;
-		alphaContainer.y = this.padding;
-		alphaContainer.filters = [innerGlow];
-		this.addChild(alphaContainer);
-
-		this.alphaSlider = new Shape();
-		alphaContainer.addChild(this.alphaSlider);
-
-		this.alphaTrack = this.createTrack();
-		this.alphaTrack.x = this.padding * 0.5;
-		alphaContainer.addChild(this.alphaTrack);
-
-		var alphaMask:Shape = new Shape();
-		alphaMask.graphics.beginFill();
-		alphaMask.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
-		alphaMask.x = alphaContainer.x;
-		alphaMask.y = alphaContainer.y;
-		alphaContainer.mask = alphaMask;
-		this.addChild(alphaMask);
-
 		// saturation / value slider
 		var saturationContainer:Sprite = new Sprite();
+		#if flash
+		saturationContainer.filters = [innerGlow];
+		#else
+		saturationContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
+		#end
 		saturationContainer.graphics.beginFill(0xFFFFFF);
 		saturationContainer.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
 		saturationContainer.x = saturationContainer.y = this.padding;
-		saturationContainer.filters = [innerGlow];
 		this.addChild(saturationContainer);
 
 		var svMask:Shape = new Shape();
@@ -177,13 +162,44 @@ class ColorPopup extends LayoutGroup {
 		this.saturationTrack = this.createTrack();
 		saturationContainer.addChild(this.saturationTrack);
 
+		// alpha slider
+		var alphaContainer:Sprite = new Sprite();
+		#if flash
+		alphaContainer.filters = [innerGlow];
+		#else
+		alphaContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
+		#end
+		alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
+		alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		alphaContainer.x = this.columnSize + this.padding * 4;
+		alphaContainer.y = this.padding;
+		this.addChild(alphaContainer);
+
+		this.alphaSlider = new Shape();
+		alphaContainer.addChild(this.alphaSlider);
+
+		this.alphaTrack = this.createTrack();
+		this.alphaTrack.x = this.padding * 0.5;
+		alphaContainer.addChild(this.alphaTrack);
+
+		var alphaMask:Shape = new Shape();
+		alphaMask.graphics.beginFill();
+		alphaMask.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		alphaMask.x = alphaContainer.x;
+		alphaMask.y = alphaContainer.y;
+		alphaContainer.mask = alphaMask;
+		this.addChild(alphaMask);
+
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 	}
 
 	private function createTrack():Shape {
 		var ret = new Shape();
+		ret.graphics.lineStyle(CanTheme.DPI * 1.5, 0x848484);
+		ret.graphics.drawCircle(0, CanTheme.DPI * 0.2, CanTheme.DPI * 3);
 		ret.graphics.lineStyle(CanTheme.DPI, 0xFFFFFF);
 		ret.graphics.drawCircle(0, 0, CanTheme.DPI * 3);
+		ret.graphics.endFill();
 		return ret;
 	}
 
@@ -246,15 +262,15 @@ class ColorPopup extends LayoutGroup {
 
 	override private function update():Void {
 		var hueChanged = this.isInvalid(FLAG_H);
-		if (this.isInvalid(FLAG_SV) || hueChanged) {
-			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
-			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
-			this.saturateUI(Utils.RGBA2RGB(this.data));
-		}
-
 		if (hueChanged) {
 			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this.h, 100, 100, 1)));
 			this.hueTrack.y = this.h / 360 * this.columnSize;
+		}
+
+		if (hueChanged || this.isInvalid(FLAG_SV)) {
+			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
+			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
+			this.saturateUI(Utils.RGBA2RGB(this.data));
 		}
 
 		if (this.isInvalid(FLAG_A))

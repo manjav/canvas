@@ -73,6 +73,7 @@ class ColorPopup extends LayoutGroup {
 
 	private var matrixV:Matrix;
 	private var matrixH:Matrix;
+	private var hueTrack:Shape;
 	private var hueSlider:Sprite;
 	private var alphaSlider:Shape;
 	private var saturationSlider:Shape;
@@ -110,6 +111,18 @@ class ColorPopup extends LayoutGroup {
 		this.hueSlider.y = this.padding;
 		this.hueSlider.filters = [innerGlow];
 		this.addChild(this.hueSlider);
+
+		this.hueTrack = this.createTrack();
+		this.hueTrack.x = this.padding * 0.5;
+		hueSlider.addChild(this.hueTrack);
+
+		var hueMask:Shape = new Shape();
+		hueMask.graphics.beginFill();
+		hueMask.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		hueMask.x = this.hueSlider.x;
+		hueMask.y = this.hueSlider.y;
+		this.hueSlider.mask = hueMask;
+		this.addChild(hueMask);
 
 		// alpha slider
 		var alphaContainer:Sprite = new Sprite();
@@ -210,6 +223,7 @@ class ColorPopup extends LayoutGroup {
 
 		if (hueChanged) {
 			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this.h, 100, 100, 1)));
+			this.hueTrack.y = this.h / 360 * this.columnSize;
 		}
 
 		super.update();

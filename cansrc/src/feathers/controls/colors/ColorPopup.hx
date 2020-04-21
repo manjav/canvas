@@ -1,6 +1,5 @@
 package feathers.controls.colors;
 
-import feathers.core.InvalidationFlag;
 import feathers.layout.AnchorLayout;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
@@ -17,6 +16,10 @@ import openfl.filters.GlowFilter;
 import openfl.geom.Matrix;
 
 class ColorPopup extends LayoutGroup {
+	static private final FLAG_H:String = "hue";
+	static private final FLAG_SV:String = "saturationValue";
+	static private final FLAG_A:String = "alpha";
+
 	public var data(default, set):RGBA;
 
 	private function set_data(value:RGBA):RGBA {
@@ -25,15 +28,45 @@ class ColorPopup extends LayoutGroup {
 		this.data = value;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
-		this.setInvalid(InvalidationFlag.DATA);
+		var hsv = Utils.RGBtoHSV(value.r, value.g, value.b);
+		this.h = hsv[0];
+		this.setSV(hsv[1], hsv[2]);
+		this.a = value.a;
 		return value;
 	}
 
-	private var activeSlider:Int = -1;
-	private var _hue:Float = 0;
-	private var _alpha:Float = 1.0;
-	private var _saturation:Float = 100;
-	private var _value:Float = 100;
+	public var h(default, set):UInt = 0;
+
+	private function set_h(value:UInt):UInt {
+		if (this.h == value)
+			return value;
+		this.h = value;
+		this.setInvalid(FLAG_H);
+		return value;
+	}
+
+	public var s(default, null):UInt = 100;
+	public var v(default, null):UInt = 100;
+
+	private function setSV(s:UInt, v:UInt):Void {
+		if (this.s == s && this.v == v)
+			return;
+		this.s = s;
+		this.v = v;
+		this.setInvalid(FLAG_SV);
+	}
+
+	public var a(default, set):UInt = 255;
+
+	private function set_a(value:UInt):UInt {
+		if (this.a == value)
+			return value;
+		this.a = value;
+		this.setInvalid(FLAG_A);
+		return value;
+	}
+
+	private var activeSlider:String = null;
 	private var roundness = CanTheme.DPI * 3;
 	private var columnSize = CanTheme.DPI * 90;
 	private var padding = CanTheme.DEFAULT_PADDING;
@@ -114,47 +147,41 @@ class ColorPopup extends LayoutGroup {
 	private function mouseDownHandler(event:MouseEvent):Void {
 		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 
-		if (this.saturationSlider.mouseX >= 0
-			&& this.saturationSlider.mouseX <= this.columnSize
-			&& this.saturationSlider.mouseY >= 0
-			&& this.saturationSlider.mouseY <= this.columnSize)
-			this.activeSlider = 0;
-		else if (this.hueSlider.mouseX >= 0
+		if (this.hueSlider.mouseX >= 0
 			&& this.hueSlider.mouseX <= this.padding
 			&& this.hueSlider.mouseX >= 0
 			&& this.hueSlider.mouseX <= this.columnSize)
-			this.activeSlider = 1;
+			this.activeSlider = FLAG_H;
+		else if (this.saturationSlider.mouseX >= 0
+			&& this.saturationSlider.mouseX <= this.columnSize
+			&& this.saturationSlider.mouseY >= 0
+			&& this.saturationSlider.mouseY <= this.columnSize)
+			this.activeSlider = FLAG_SV;
 		else if (this.alphaSlider.mouseX >= 0
 			&& this.alphaSlider.mouseX <= this.padding
 			&& this.alphaSlider.mouseX >= 0
 			&& this.alphaSlider.mouseX <= this.columnSize)
-			this.activeSlider = 2;
+			this.activeSlider = FLAG_A;
 		else
-			this.activeSlider = -1;
+			this.activeSlider = null;
 
 		this.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
 		stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 	}
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
-		var x = 0.0, y = 0.0;
-		if (this.activeSlider == 0) {
-			x = Math.max(0, Math.min(1, this.saturationSlider.mouseX / this.columnSize));
-			y = Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize));
-			this._saturation = x * 100;
-			this._value = 100 - y * 100;
-			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
-			// trace("sv", this._saturation, this._value, StringTools.hex(this.data, 8));
-		} else if (this.activeSlider == 1) {
-			this._hue = Math.round(Math.max(0, Math.min(1, this.hueSlider.mouseY / this.columnSize)) * 360);
-			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
-			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this._hue, 100, 100, 1)));
-			// trace("h", this._hue, this.data, StringTools.hex(this.data, 8));
-		} else if (this.activeSlider == 2) {
-			this._alpha = 1 - Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize));
-			this.data = Utils.HSVAtoRGBA(this._hue, this._saturation, this._value, this._alpha);
-			// trace("a", this._alpha, this.data, StringTools.hex(this.data, 8));
-		}
+		if (this.activeSlider == null)
+			return;
+		if (this.activeSlider == FLAG_H)
+			this.h = Math.round(Math.max(0, Math.min(1, this.hueSlider.mouseY / this.columnSize)) * 360);
+		else if (this.activeSlider == FLAG_SV)
+			this.setSV(Math.round(Math.max(0, Math.min(1, this.saturationSlider.mouseX / this.columnSize)) * 100),
+				100 - Math.round(Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize)) * 100));
+		else if (this.activeSlider == FLAG_A)
+			this.a = 255 - Math.round(Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize)) * 255);
+		
+		this.data = Utils.HSVtoRGB(this.h, this.s, this.v, this.a);
+		// trace("h", this.h, "sv", this.s, this.v, "a", this.a);
 	}
 
 	private function stage_mouseUpHandler(event:MouseEvent):Void {
@@ -175,9 +202,16 @@ class ColorPopup extends LayoutGroup {
 	}
 
 	override private function update():Void {
-		if (this.isInvalid(InvalidationFlag.DATA)) {
+		var hueChanged = this.isInvalid(FLAG_H);
+		if (this.isInvalid(FLAG_SV) || hueChanged) {
+			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
 			this.saturateUI(Utils.RGBA2RGB(this.data));
 		}
+
+		if (hueChanged) {
+			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this.h, 100, 100, 1)));
+		}
+
 		super.update();
 	}
 }

@@ -75,6 +75,7 @@ class ColorPopup extends LayoutGroup {
 	private var matrixH:Matrix;
 	private var hueTrack:Shape;
 	private var hueSlider:Sprite;
+	private var alphaTrack:Shape;
 	private var alphaSlider:Shape;
 	private var saturationTrack:Shape;
 	private var saturationSlider:Shape;
@@ -137,6 +138,18 @@ class ColorPopup extends LayoutGroup {
 		this.alphaSlider = new Shape();
 		alphaContainer.addChild(this.alphaSlider);
 
+		this.alphaTrack = this.createTrack();
+		this.alphaTrack.x = this.padding * 0.5;
+		alphaContainer.addChild(this.alphaTrack);
+
+		var alphaMask:Shape = new Shape();
+		alphaMask.graphics.beginFill();
+		alphaMask.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		alphaMask.x = alphaContainer.x;
+		alphaMask.y = alphaContainer.y;
+		alphaContainer.mask = alphaMask;
+		this.addChild(alphaMask);
+
 		// saturation / value slider
 		var saturationContainer:Sprite = new Sprite();
 		saturationContainer.graphics.beginFill(0xFFFFFF);
@@ -172,8 +185,8 @@ class ColorPopup extends LayoutGroup {
 		ret.graphics.lineStyle(CanTheme.DPI, 0xFFFFFF);
 		ret.graphics.drawCircle(0, 0, CanTheme.DPI * 3);
 		return ret;
-		}
-	
+	}
+
 	private function mouseDownHandler(event:MouseEvent):Void {
 		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 
@@ -209,7 +222,7 @@ class ColorPopup extends LayoutGroup {
 				100 - Math.round(Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize)) * 100));
 		else if (this.activeSlider == FLAG_A)
 			this.a = 255 - Math.round(Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize)) * 255);
-		
+
 		this.data = Utils.HSVtoRGB(this.h, this.s, this.v, this.a);
 		// trace("h", this.h, "sv", this.s, this.v, "a", this.a);
 	}
@@ -243,6 +256,9 @@ class ColorPopup extends LayoutGroup {
 			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this.h, 100, 100, 1)));
 			this.hueTrack.y = this.h / 360 * this.columnSize;
 		}
+
+		if (this.isInvalid(FLAG_A))
+			this.alphaTrack.y = (1 - this.a / 255) * this.columnSize;
 
 		super.update();
 	}

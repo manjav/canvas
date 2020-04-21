@@ -46,6 +46,10 @@ class CanTextInput extends TextInput {
 		return super.enabled = value;
 	}
 
+	public function new() {
+		super();
+	}
+	
 	override private function layoutContent():Void {
 		super.layoutContent();
 		if (iconDisplay == null)

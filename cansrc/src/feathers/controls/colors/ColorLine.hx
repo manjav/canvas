@@ -19,8 +19,8 @@ class ColorLine extends LayoutGroup {
 	private var inputDisplay:TextInput;
 	private var pickerDisplay:ColorPicker;
 
-	static private function defaultSpctrumFactory():ColorSpectrum {
-		return new ColorSpectrum();
+	static private function defaultCallout():ColorCallout {
+		return new ColorCallout();
 	}
 
 	/* private var _spectrumFactory:Function;

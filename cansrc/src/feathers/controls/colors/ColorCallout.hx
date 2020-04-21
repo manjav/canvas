@@ -82,6 +82,11 @@ class ColorCallout extends LayoutGroup {
 	private var saturationSlider:Shape;
 	private var alphaTrack:Shape;
 	private var alphaSlider:Shape;
+	private var alphaInput:CanRangeInput;
+
+	public function new() {
+		super();
+	}
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function initialize() {
@@ -192,6 +197,20 @@ class ColorCallout extends LayoutGroup {
 		alphaContainer.mask = alphaMask;
 		this.addChild(alphaMask);
 
+		this.alphaInput = new CanRangeInput();
+		this.alphaInput.valueFormatter = (v:Float) -> {
+			return Math.round(v) + " %";
+		};
+		this.alphaInput.step = 1;
+		this.alphaInput.minimum = 0;
+		this.alphaInput.maximum = 100;
+		this.alphaInput.value = this.a;
+		this.alphaInput.width = CanTheme.CONTROL_SIZE * 2;
+		this.alphaInput.height = CanTheme.CONTROL_SIZE;
+		this.alphaInput.layoutData = AnchorLayoutData.bottomRight(this.padding, this.padding * 5);
+		this.alphaInput.addEventListener(Event.CHANGE, this.alphaInput_changeHandler);
+		this.addChild(this.alphaInput);
+
 		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
 	}
 
@@ -222,6 +241,8 @@ class ColorCallout extends LayoutGroup {
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 
+		if (this.mouseY > this.columnSize + padding)
+			return;
 		if (this.hueSlider.mouseX >= 0
 			&& this.hueSlider.mouseX <= this.padding
 			&& this.hueSlider.mouseX >= 0
@@ -264,6 +285,14 @@ class ColorCallout extends LayoutGroup {
 		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 	}
 
+	private function alphaInput_changeHandler(event:Event):Void {
+		if (this.isInvalid(FLAG_A))
+			return;
+		var d = new RGBA(this.data);
+		d.a = this.a = Math.round(this.alphaInput.value * 2.55);
+		this.data = d;
+	}
+
 	private function hueUI(color:UInt):Void {
 		this.saturationSlider.graphics.clear();
 		this.saturationSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [0, 1], [0, 0xFF], this.matrixH);
@@ -289,8 +318,10 @@ class ColorCallout extends LayoutGroup {
 			this.saturateUI(Utils.RGBA2RGB(this.data));
 		}
 
-		if (this.isInvalid(FLAG_A))
+		if (this.isInvalid(FLAG_A)) {
 			this.alphaTrack.y = (1 - this.a / 255) * this.columnSize;
+			this.alphaInput.value = this.a / 2.55;
+		}
 
 		super.update();
 	}

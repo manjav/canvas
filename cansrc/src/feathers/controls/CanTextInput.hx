@@ -8,9 +8,27 @@ class CanTextInput extends TextInput {
 	private var iconDisplay:Bitmap;
 
 	/**
-		The icon side of text.
+		The maximum number of characters that the text input can contain, as
+		entered by a user. A script can insert more text than
+		`maxChars` allows; the `maxChars` property indicates
+		only how much text a user can enter. If the value of this property is
+		`0`, a user can enter an unlimited amount of text.
 
-		@since 1.0.0
+		@default 0
+	**/
+	public var maxChars(default, set):UInt = 0;
+
+	private function set_maxChars(value:UInt):UInt {
+		if (this.maxChars == value)
+			return value;
+		if (this.textField != null)
+			this.textField.maxChars = value;
+		this.maxChars = value;
+		return value;
+	}
+
+	/**
+		The icon side of text.
 	**/
 	@:isVar
 	public var icon(default, set):String;
@@ -49,7 +67,12 @@ class CanTextInput extends TextInput {
 	public function new() {
 		super();
 	}
-	
+
+	override private function initialize():Void {
+		super.initialize();
+		this.textField.maxChars = this.maxChars;
+	}
+
 	override private function layoutContent():Void {
 		super.layoutContent();
 		if (iconDisplay == null)

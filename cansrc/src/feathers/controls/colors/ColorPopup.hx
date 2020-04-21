@@ -76,6 +76,7 @@ class ColorPopup extends LayoutGroup {
 	private var hueTrack:Shape;
 	private var hueSlider:Sprite;
 	private var alphaSlider:Shape;
+	private var saturationTrack:Shape;
 	private var saturationSlider:Shape;
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
@@ -144,6 +145,14 @@ class ColorPopup extends LayoutGroup {
 		saturationContainer.filters = [innerGlow];
 		this.addChild(saturationContainer);
 
+		var svMask:Shape = new Shape();
+		svMask.graphics.beginFill();
+		svMask.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
+		svMask.x = saturationContainer.x;
+		svMask.y = saturationContainer.y;
+		saturationContainer.mask = svMask;
+		this.addChild(svMask);
+
 		this.saturationSlider = new Shape();
 		saturationContainer.addChild(this.saturationSlider);
 
@@ -152,9 +161,17 @@ class ColorPopup extends LayoutGroup {
 		valueGradient.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
 		saturationContainer.addChild(valueGradient);
 
+		this.saturationTrack = this.createTrack();
+		saturationContainer.addChild(this.saturationTrack);
+
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 	}
 
+	private function createTrack():Shape {
+		var ret = new Shape();
+		ret.graphics.lineStyle(CanTheme.DPI, 0xFFFFFF);
+		ret.graphics.drawCircle(0, 0, CanTheme.DPI * 3);
+		return ret;
 		}
 	
 	private function mouseDownHandler(event:MouseEvent):Void {
@@ -218,6 +235,7 @@ class ColorPopup extends LayoutGroup {
 		var hueChanged = this.isInvalid(FLAG_H);
 		if (this.isInvalid(FLAG_SV) || hueChanged) {
 			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
+			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
 			this.saturateUI(Utils.RGBA2RGB(this.data));
 		}
 

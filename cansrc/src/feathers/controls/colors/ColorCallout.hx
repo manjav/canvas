@@ -263,6 +263,7 @@ class ColorCallout extends LayoutGroup {
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 
+		this.activeSlider = null;
 		if (this.mouseY > this.columnSize + padding)
 			return;
 		if (this.hueSlider.mouseX >= 0
@@ -280,8 +281,6 @@ class ColorCallout extends LayoutGroup {
 			&& this.alphaSlider.mouseX >= 0
 			&& this.alphaSlider.mouseX <= this.columnSize)
 			this.activeSlider = FLAG_A;
-		else
-			this.activeSlider = null;
 	}
 
 	private function stage_mouseMoveHandler(event:MouseEvent):Void {

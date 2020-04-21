@@ -100,7 +100,7 @@ class ColorLine extends LayoutGroup {
 
 	private function textToColor(color:String):Void {
 		var hexText:String = Utils.normalizeHEX(color);
-		this.data = Utils.hexToRGBA(hexText);
+		this.data = Utils.hexToDecimal(hexText);
 		this.pickerDisplay.data = this.data;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));

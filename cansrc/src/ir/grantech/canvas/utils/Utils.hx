@@ -13,7 +13,7 @@ class Utils {
 		return text;
 	}
 
-	static public function hexToRGBA(text:String):UInt {
+	static public function hexToDecimal(text:String):UInt {
 		var digits = "0123456789ABCDEF";
 		var val = 0;
 		var hex = text.toUpperCase();

@@ -1,11 +1,15 @@
 package feathers.controls.colors;
 
+import openfl.events.KeyboardEvent;
+import feathers.controls.CanTextInput;
 import feathers.controls.FixableCallout;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.utils.Utils;
+import lime.math.ARGB;
 import lime.math.RGBA;
 import openfl.Assets;
 import openfl.display.GradientType;
@@ -80,6 +84,7 @@ class ColorCallout extends LayoutGroup {
 	private var hueSlider:Sprite;
 	private var saturationTrack:Shape;
 	private var saturationSlider:Shape;
+	private var colorInput:CanTextInput;
 	private var alphaTrack:Shape;
 	private var alphaSlider:Shape;
 	private var alphaInput:CanRangeInput;
@@ -168,6 +173,23 @@ class ColorCallout extends LayoutGroup {
 
 		this.saturationTrack = this.createTrack();
 		saturationContainer.addChild(this.saturationTrack);
+
+		this.colorInput = new CanTextInput();
+		this.colorInput.width = 32 * CanTheme.DPI;
+		this.colorInput.height = 16 * CanTheme.DPI;
+		this.colorInput.maxChars = 6;
+		this.colorInput.restrict = "0-9a-fA-F";
+		this.colorInput.paddingLeft = CanTheme.DPI;
+		this.colorInput.paddingRight = CanTheme.DPI * 0.5;
+		this.colorInput.layoutData = AnchorLayoutData.bottomLeft(this.padding, this.padding);
+		this.colorInput.addEventListener(KeyboardEvent.KEY_UP, this.textInput_KyeboardEventHandler);
+		this.addChild(this.colorInput);
+		
+		var numSignDisplay:Label = new Label();
+		numSignDisplay.layoutData = AnchorLayoutData.bottomLeft(this.padding * 1.5, this.padding);
+		numSignDisplay.mouseEnabled = false;
+		numSignDisplay.text = "#";
+		this.addChild(numSignDisplay);
 
 		// alpha slider
 		var alphaContainer:Sprite = new Sprite();
@@ -293,6 +315,14 @@ class ColorCallout extends LayoutGroup {
 		this.data = d;
 	}
 
+	private function textInput_KyeboardEventHandler(event:KeyboardEvent):Void {
+		if (event.keyCode == 13 || event.keyCode == 1073741912) { // enter
+			var color:ARGB = Utils.hexToDecimal(this.colorInput.text);
+			var _data = this.data;
+			_data.set(color.r, color.g, color.b, _data.a);
+			this.data = _data;
+		}
+	}
 	private function hueUI(color:UInt):Void {
 		this.saturationSlider.graphics.clear();
 		this.saturationSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [0, 1], [0, 0xFF], this.matrixH);
@@ -315,7 +345,9 @@ class ColorCallout extends LayoutGroup {
 		if (hueChanged || this.isInvalid(FLAG_SV)) {
 			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
 			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
-			this.saturateUI(Utils.RGBA2RGB(this.data));
+			var rgb = Utils.RGBA2RGB(this.data);
+			this.saturateUI(rgb);
+			this.colorInput.text = StringTools.hex(rgb, 6);
 		}
 
 		if (this.isInvalid(FLAG_A)) {

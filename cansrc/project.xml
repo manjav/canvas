@@ -23,6 +23,7 @@
 
 	<!-- sync/embedded -->
 	<assets id="transparent" path="assets/img/transparent.png"/>
+  <assets id="sampler" path="assets/img/sampler.png"/>
 
 	<assets id="toolhead_0" path="assets/img/select.png"/>
 	<assets id="toolhead_0_selected" path="assets/img/select-blue.png"/>

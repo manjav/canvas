@@ -19,11 +19,13 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import openfl.geom.Matrix;
+import openfl.ui.Mouse;
 
 class ColorCallout extends LayoutGroup {
 	static private final FLAG_H:String = "hue";
 	static private final FLAG_SV:String = "saturationValue";
 	static private final FLAG_A:String = "alpha";
+	static private final FLAG_S:String = "sampler";
 
 	public var data(default, set):RGBA;
 
@@ -233,6 +235,12 @@ class ColorCallout extends LayoutGroup {
 		this.alphaInput.addEventListener(Event.CHANGE, this.alphaInput_changeHandler);
 		this.addChild(this.alphaInput);
 
+		var samplerButton = new Button();
+		samplerButton.icon = new Bitmap(Assets.getBitmapData("sampler"));
+		samplerButton.layoutData = AnchorLayoutData.bottomRight(this.padding, this.padding);
+		samplerButton.addEventListener(MouseEvent.CLICK, this.samplerButtonClickHandler);
+		this.addChild(samplerButton);
+
 		this.addEventListener(Event.ADDED_TO_STAGE, this.addedToStageHandler);
 	}
 
@@ -322,6 +330,24 @@ class ColorCallout extends LayoutGroup {
 			this.data = _data;
 		}
 	}
+
+	private function samplerButtonClickHandler(event:MouseEvent):Void {
+		event.stopImmediatePropagation();
+		Mouse.hide();
+		this.activeSlider = FLAG_S;
+		this.callout.fixed = true;
+		this.stage.addEventListener(MouseEvent.CLICK, this.stage_clickHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+	}
+
+	private function stage_clickHandler(event:MouseEvent):Void {
+		this.stage.removeEventListener(MouseEvent.CLICK, this.stage_clickHandler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+		Mouse.show();
+		this.callout.fixed = false;
+		this.activeSlider = null;
+	}
+
 	private function hueUI(color:UInt):Void {
 		this.saturationSlider.graphics.clear();
 		this.saturationSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [0, 1], [0, 0xFF], this.matrixH);

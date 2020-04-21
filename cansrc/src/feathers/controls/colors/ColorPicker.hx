@@ -15,7 +15,7 @@ import openfl.filters.GlowFilter;
 
 class ColorPicker extends FeathersControl {
 	private var colorDisplay:Shape;
-	private var spectrumDisplay:ColorPopup;
+	private var spectrumDisplay:ColorCallout;
 
 	@isVar
 	public var data(default, set):RGBA = 0xFF;
@@ -54,7 +54,7 @@ class ColorPicker extends FeathersControl {
 
 	public function showSpectrum():Void {
 		if (this.spectrumDisplay == null) {
-			this.spectrumDisplay = new ColorPopup();
+			this.spectrumDisplay = new ColorCallout();
 			this.spectrumDisplay.data = data;
 			this.spectrumDisplay.addEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
 		}

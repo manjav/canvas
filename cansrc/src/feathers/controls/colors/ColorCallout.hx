@@ -15,7 +15,7 @@ import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import openfl.geom.Matrix;
 
-class ColorPopup extends LayoutGroup {
+class ColorCallout extends LayoutGroup {
 	static private final FLAG_H:String = "hue";
 	static private final FLAG_SV:String = "saturationValue";
 	static private final FLAG_A:String = "alpha";

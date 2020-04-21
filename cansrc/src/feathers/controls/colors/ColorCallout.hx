@@ -16,6 +16,7 @@ import openfl.display.GradientType;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import openfl.geom.Matrix;
@@ -294,6 +295,10 @@ class ColorCallout extends LayoutGroup {
 	private function stage_mouseMoveHandler(event:MouseEvent):Void {
 		if (this.activeSlider == null)
 			return;
+		if (this.activeSlider == FLAG_S) {
+			this.sampler.update(event.stageX, event.stageY);
+			return;
+		}
 		if (this.activeSlider == FLAG_H)
 			this.h = Math.round(Math.max(0, Math.min(1, this.hueSlider.mouseY / this.columnSize)) * 360);
 		else if (this.activeSlider == FLAG_SV)
@@ -301,7 +306,6 @@ class ColorCallout extends LayoutGroup {
 				100 - Math.round(Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize)) * 100));
 		else if (this.activeSlider == FLAG_A)
 			this.a = 255 - Math.round(Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize)) * 255);
-
 		this.data = Utils.HSVAtoRGBA(this.h, this.s, this.v, this.a);
 		// trace("h", this.h, "sv", this.s, this.v, "a", this.a);
 	}

@@ -32,33 +32,45 @@ class Utils {
 	 * @return Returns an object with the properties r, g, and b defined.
 	 */
 	static public function HSVAtoRGBA(h:Float, s:Float, v:Float, a:Float):RGBA {
-		var rgba:RGBA = new RGBA(),
+		var r:Float = 0;
+		var g:Float = 0;
+		var b:Float = 0;
+		var tempS:Float = s / 100;
+		var tempV:Float = v / 100;
+		var hi:Int = Math.floor(h / 60) % 6;
+		var f:Float = h / 60 - Math.floor(h / 60);
+		var p:Float = (tempV * (1 - tempS));
+		var q:Float = (tempV * (1 - f * tempS));
+		var t:Float = (tempV * (1 - (1 - f) * tempS));
 
-			tempS:Float = s / 100,
-			tempV:Float = v / 100,
-
-			hi:Int = Math.floor(h / 60) % 6,
-			f:Float = h / 60 - Math.floor(h / 60),
-			p:Float = (tempV * (1 - tempS)),
-			q:Float = (tempV * (1 - f * tempS)),
-			t:Float = (tempV * (1 - (1 - f) * tempS));
-
-		var rates = switch (hi) {
+		switch (hi) {
 			case 0:
-				[tempV, t, p];
+				r = tempV;
+				g = t;
+				b = p;
 			case 1:
-				[q, tempV, p];
+				r = q;
+				g = tempV;
+				b = p;
 			case 2:
-				[p, tempV, t];
+				r = p;
+				g = tempV;
+				b = t;
 			case 3:
-				[q, p, tempV];
+				r = p;
+				g = q;
+				b = tempV;
 			case 4:
-				[t, p, tempV];
-			default:
-				[tempV, p, q];
+				r = t;
+				g = p;
+				b = tempV;
+			case 5:
+				r = tempV;
+				g = p;
+				b = q;
 		}
-
-		rgba.set(Math.round(rates[0] * 0xFF), Math.round(rates[1] * 0xFF), Math.round(rates[2] * 0xFF), Math.round(a * 0xFF));
+		var rgba:RGBA = new RGBA();
+		rgba.set(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255), Math.round(a));
 		return rgba;
 	}
 
@@ -69,7 +81,7 @@ class Utils {
 	 * @param b: A uint from 0 to 255 representing the blue color value.
 	 * @return Returns an object with the properties h, s, and v defined.
 	 */
-	public static function RGBtoHSV(r:Float, g:Float, b:Float):Array<UInt> {
+	static public function RGBtoHSV(r:Float, g:Float, b:Float):Array<UInt> {
 		var max:Float = Math.max(r, g);
 		max = Math.max(max, b);
 

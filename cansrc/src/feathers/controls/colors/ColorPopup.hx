@@ -239,7 +239,7 @@ class ColorPopup extends LayoutGroup {
 		else if (this.activeSlider == FLAG_A)
 			this.a = 255 - Math.round(Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize)) * 255);
 
-		this.data = Utils.HSVtoRGB(this.h, this.s, this.v, this.a);
+		this.data = Utils.HSVAtoRGBA(this.h, this.s, this.v, this.a);
 		// trace("h", this.h, "sv", this.s, this.v, "a", this.a);
 	}
 

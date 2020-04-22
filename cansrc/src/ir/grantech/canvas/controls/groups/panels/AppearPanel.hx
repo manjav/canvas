@@ -1,16 +1,19 @@
 package ir.grantech.canvas.controls.groups.panels;
 
-import openfl.display.BlendMode;
 import feathers.controls.CanHSlider;
 import feathers.controls.PopUpListView;
+import feathers.controls.colors.ColorLine;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.services.Commands;
+import openfl.display.BlendMode;
 import openfl.events.Event;
 
 class AppearPanel extends Panel {
 	private var alphaSlider:CanHSlider;
 	private var modesList:PopUpListView;
+	private var fillPicker:ColorLine;
+	private var borderPicker:ColorLine;
 
 	override private function initialize() {
 		super.initialize();
@@ -35,14 +38,17 @@ class AppearPanel extends Panel {
 		];
 
 		var data = [];
-		for(i in 0...modes.length)
-			data.push({text:names[i], value:modes[i]});
+		for (i in 0...modes.length)
+			data.push({text: names[i], value: modes[i]});
 		this.modesList = this.createPopupList(data, new AnchorLayoutData(padding * 10.7, padding, null, padding));
 		this.modesList.itemToText = (item:Dynamic) -> {
 			return item.text;
 		};
 
-		this.height = padding * 15;
+		this.fillPicker = this.createColorLine("Fill", 0, 1, true, new AnchorLayoutData(padding * 15, padding, null, padding));
+		this.borderPicker = this.createColorLine("Border", 0, 1, false, new AnchorLayoutData(padding * 18, padding, null, padding));
+
+		this.height = padding * 21;
 	}
 
 	override private function sliders_changeHandler(event:Event) {
@@ -64,10 +70,10 @@ class AppearPanel extends Panel {
 		this.updating = false;
 	}
 
-	private function findBlendMode(blendMode:BlendMode):Int{
+	private function findBlendMode(blendMode:BlendMode):Int {
 		for (i in 0...this.modesList.dataProvider.length)
-			if( this.modesList.dataProvider.get(i).value == blendMode)
-				return i;	
+			if (this.modesList.dataProvider.get(i).value == blendMode)
+				return i;
 		return -1;
 	}
 }

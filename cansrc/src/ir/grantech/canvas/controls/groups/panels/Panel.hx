@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups.panels;
 
+import feathers.controls.colors.ColorLine;
+import lime.math.RGB;
 import feathers.controls.ComboBox;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
@@ -60,6 +62,17 @@ class Panel extends CanView {
 
 	public function updateData():Void {}
 
+	private function createColorLine(label:String, color:RGB, alpha:UInt = 0xFF, selected:Bool = true, layoutData:AnchorLayoutData = null):ColorLine {
+		var element = new ColorLine();
+		element.a = alpha;
+		element.rgb = color;
+		element.label = label;
+		element.selected = selected;
+		element.layoutData = layoutData;
+		this.addChild(element);
+		return element;
+	}
+
 	private function createSlider(minimum:Float, value:Float, maximum:Float, layoutData:AnchorLayoutData):CanHSlider {
 		var element = new CanHSlider();
 		element.minimum = minimum;
@@ -97,7 +110,7 @@ class Panel extends CanView {
 			layoutData:AnchorLayoutData = null):ListView {
 		var element = new ListView();
 		element.variant = ListView.VARIANT_BORDERLESS;
-				if (items != null)
+		if (items != null)
 			element.dataProvider = new ArrayCollection(items);
 		if (itemRendererRecycler != null)
 			element.itemRendererRecycler = itemRendererRecycler;

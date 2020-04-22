@@ -1,5 +1,7 @@
 package ir.grantech.canvas.themes;
 
+import openfl.display.Shape;
+import feathers.controls.Check;
 import feathers.controls.Application;
 import feathers.controls.BasicButton;
 import feathers.controls.Button;
@@ -41,7 +43,7 @@ class CanTheme extends BaseSteelTheme {
 		CONTROL_SIZE = DPI * 18;
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
-		this.textColor = this.darkMode ? 0x646464 : 0x646464;
+		this.textColor = this.darkMode ? 0x646464 : 0x464646;
 		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0xAaAaAa : 0xAaAaAa;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
@@ -51,6 +53,7 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
+		this.styleProvider.setStyleFunction(Check, null, setCheckStyles);
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(HSlider, null, setHSliderStyles);
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
@@ -67,7 +70,7 @@ class CanTheme extends BaseSteelTheme {
 	private var activeColor = 0xff9500;
 	// private var controlColor = 0xfafafa;
 	private var operationColor = 0xff9500;
-	
+
 	override private function refreshFonts():Void {
 		this.fontName = "IRANSans Light";
 		this.refreshFontSizes();
@@ -261,6 +264,43 @@ class CanTheme extends BaseSteelTheme {
 		itemRenderer.paddingBottom = DEFAULT_PADDING;
 		itemRenderer.paddingLeft = DEFAULT_PADDING;
 		itemRenderer.horizontalAlign = LEFT;
+	}
+
+	private function setCheckStyles(check:Check):Void {
+		if (check.textFormat == null)
+			check.textFormat = this.getTextFormat();
+
+		if (check.disabledTextFormat == null)
+			check.disabledTextFormat = this.getDisabledTextFormat();
+
+		var icon = new RectangleSkin();
+		icon.cornerRadius = DPI * 3;
+		icon.minHeight = icon.minWidth = icon.height = icon.width = DPI * 8;
+		icon.border = SolidColor(DPI, this.textColor);
+		icon.fill = this.getControlDisabledFill();
+		icon.disabledFill = this.getDisabledInsetFill();
+		icon.setFillForState(DOWN(false), SolidColor(0));
+		check.icon = icon;
+
+		var selectedIcon = new RectangleSkin();
+		selectedIcon.cornerRadius = icon.cornerRadius;
+		selectedIcon.minHeight = selectedIcon.minWidth = selectedIcon.height = selectedIcon.width = icon.width;
+		selectedIcon.fill = SolidColor(this.textColor);
+		selectedIcon.disabledFill = SolidColor(this.disabledTextColor);
+
+		var checkMark = new Shape();
+		checkMark.graphics.beginFill(this.controlFillColor1);
+		checkMark.graphics.drawRoundRect(-DPI, -DPI * 5.6, DPI, DPI * 5.6, DPI, DPI);
+		checkMark.graphics.beginFill(this.controlFillColor1);
+		checkMark.graphics.drawRoundRect(-DPI * 3, -DPI, DPI * 3, DPI, DPI, DPI);
+		checkMark.graphics.endFill();
+		checkMark.rotation = 45.0;
+		checkMark.x = DPI * 3.2;
+		checkMark.y = DPI * 6.2;
+		selectedIcon.addChild(checkMark);
+
+		check.selectedIcon = selectedIcon;
+		check.gap = 0;
 	}
 
 	override private function getHeaderTextFormat():TextFormat {

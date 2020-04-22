@@ -1,5 +1,6 @@
 package feathers.controls.colors;
 
+import lime.math.RGB;
 import ir.grantech.canvas.utils.Utils;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
@@ -37,9 +38,9 @@ class ColorLine extends LayoutGroup {
 			this.invalidate(INVALIDATION_FLAG_COLOR_PICKER_ELEMENT_FACTORY);
 	}*/
 	@isVar
-	public var data(default, set):RGBA = 0;
+	public var data(default, set):RGB = 0;
 
-	private function set_data(value:RGBA):RGBA {
+	private function set_data(value:RGB):RGB {
 		if (value == this.data)
 			return this.data;
 		this.data = value;
@@ -56,52 +57,13 @@ class ColorLine extends LayoutGroup {
 
 		this.pickerDisplay = new ColorPicker();
 		this.pickerDisplay.width = CanTheme.CONTROL_SIZE;
-		this.pickerDisplay.data = this.data;
+		this.pickerDisplay.rgb = this.data;
 		this.pickerDisplay.addEventListener(Event.CHANGE, this.pickerDisplay_changeHandler);
 		this.addChild(this.pickerDisplay);
-
-		var textLayout:LayoutGroup = new LayoutGroup();
-		textLayout.layout = new AnchorLayout();
-		textLayout.layoutData = new HorizontalLayoutData(100);
-		this.addChild(textLayout);
-
-		this.inputDisplay = new TextInput();
-		this.inputDisplay.paddingLeft = 16;
-		this.inputDisplay.paddingRight = 6;
-		// this.inputDisplay.maxChars = 8;
-		this.inputDisplay.restrict = "0-9a-fA-F";
-		this.inputDisplay.addEventListener(KeyboardEvent.KEY_UP, this.inputDisplay_keyUpHandler);
-		this.inputDisplay.addEventListener(FeathersEvent.STATE_CHANGE, this.inputDisplay_stateChangeHandler);
-		this.inputDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
-		textLayout.addChild(this.inputDisplay);
-
-		var numSignDisplay:Label = new Label();
-		numSignDisplay.layoutData = new AnchorLayoutData(null, null, null, 6, null, 0);
-		numSignDisplay.mouseEnabled = false;
-		numSignDisplay.text = "#";
-		textLayout.addChild(numSignDisplay);
 	}
 
 	private function pickerDisplay_changeHandler(event:Event):Void {
-		this.data = this.pickerDisplay.data;
-		if (this.hasEventListener(Event.CHANGE))
-			this.dispatchEvent(new Event(Event.CHANGE));
-	}
-
-	private function inputDisplay_keyUpHandler(event:KeyboardEvent):Void {
-		if (event.keyCode == 13 || event.keyCode == 1073741912) // enter
-			this.textToColor(this.inputDisplay.text);
-	}
-
-	private function inputDisplay_stateChangeHandler(event:Event):Void {
-		if (this.inputDisplay.currentState == TextInputState.ENABLED)
-			this.textToColor(this.inputDisplay.text);
-	}
-
-	private function textToColor(color:String):Void {
-		var hexText:String = Utils.normalizeHEX(color);
-		this.data = Utils.hexToDecimal(hexText);
-		this.pickerDisplay.data = this.data;
+		this.data = this.pickerDisplay.rgb;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
 	}
@@ -109,7 +71,7 @@ class ColorLine extends LayoutGroup {
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			if (this.pickerDisplay != null)
-				this.pickerDisplay.data = this.data;
+				this.pickerDisplay.rgb = this.data;
 
 			if (this.inputDisplay != null)
 				this.inputDisplay.text = StringTools.hex(this.data, 2).toLowerCase();

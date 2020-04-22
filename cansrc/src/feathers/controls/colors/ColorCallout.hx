@@ -8,9 +8,9 @@ import feathers.layout.AnchorLayoutData;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.utils.ColorUtils;
 import ir.grantech.canvas.utils.Utils;
-import lime.math.ARGB;
-import lime.math.RGBA;
+import lime.math.RGB;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -30,19 +30,18 @@ class ColorCallout extends LayoutGroup {
 	static private final FLAG_A:String = "alpha";
 	static private final FLAG_S:String = "sampler";
 
-	public var data(default, set):RGBA;
+	public var rgb(default, set):RGB;
 
-	private function set_data(value:RGBA):RGBA {
-		if (this.data == value)
+	private function set_rgb(value:RGB):RGB {
+		if (this.rgb == value)
 			return value;
-		this.data = value;
+		this.rgb = value;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
-		var hsv = Utils.RGBtoHSV(value.r, value.g, value.b);
+		var hsv = ColorUtils.RGB2HSV(value.r, value.g, value.b);
 		if( !this.isInvalid(FLAG_SV) )
 		this.h = hsv[0];
 		this.setSV(hsv[1], hsv[2]);
-		this.a = value.a;
 		return value;
 	}
 
@@ -59,7 +58,7 @@ class ColorCallout extends LayoutGroup {
 	public var s(default, null):UInt = 100;
 	public var v(default, null):UInt = 100;
 
-	private function setSV(s:UInt, v:UInt):Void {
+	public function setSV(s:UInt, v:UInt):Void {
 		if (this.s == s && this.v == v)
 			return;
 		this.s = s;
@@ -67,12 +66,14 @@ class ColorCallout extends LayoutGroup {
 		this.setInvalid(FLAG_SV);
 	}
 
-	public var a(default, set):UInt = 255;
+	public var a(default, set):UInt = 0xFF;
 
 	private function set_a(value:UInt):UInt {
 		if (this.a == value)
 			return value;
 		this.a = value;
+		if (this.hasEventListener(Event.CHANGE))
+			this.dispatchEvent(new Event(Event.CHANGE));
 		this.setInvalid(FLAG_A);
 		return value;
 	}
@@ -307,7 +308,7 @@ class ColorCallout extends LayoutGroup {
 				100 - Math.round(Math.max(0, Math.min(1, this.saturationSlider.mouseY / this.columnSize)) * 100));
 		else if (this.activeSlider == FLAG_A)
 			this.a = 255 - Math.round(Math.max(0, Math.min(1, this.alphaSlider.mouseY / this.columnSize)) * 255);
-		this.data = Utils.HSVAtoRGBA(this.h, this.s, this.v, this.a);
+		this.rgb = ColorUtils.HSV2RGB(this.h, this.s, this.v);
 		// trace("h", this.h, "sv", this.s, this.v, "a", this.a);
 	}
 
@@ -322,17 +323,12 @@ class ColorCallout extends LayoutGroup {
 	private function alphaInput_changeHandler(event:Event):Void {
 		if (this.isInvalid(FLAG_A))
 			return;
-		var d = new RGBA(this.data);
-		d.a = this.a = Math.round(this.alphaInput.value * 2.55);
-		this.data = d;
+		this.a = Math.round(this.alphaInput.value * 2.55);
 	}
 
 	private function textInput_KyeboardEventHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 13 || event.keyCode == 1073741912) { // enter
-			var color:ARGB = Utils.hexToDecimal(this.colorInput.text);
-			var _data = this.data;
-			_data.set(color.r, color.g, color.b, _data.a);
-			this.data = _data;
+			this.rgb = Utils.hexToDecimal(this.colorInput.text);
 		}
 	}
 
@@ -355,10 +351,7 @@ class ColorCallout extends LayoutGroup {
 		this.stage.removeEventListener(MouseEvent.CLICK, this.stage_clickHandler);
 		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 
-		var pixel:ARGB = this.sampler.pick();
-		var _data = this.data;
-		_data.set(pixel.r, pixel.g, pixel.b, _data.a);
-		this.data = _data;
+		this.rgb = this.sampler.pick();
 
 		Mouse.show();
 		this.stage.removeChild(this.sampler);
@@ -366,31 +359,26 @@ class ColorCallout extends LayoutGroup {
 		this.activeSlider = null;
 	}
 
-	private function hueUI(color:UInt):Void {
-		this.saturationSlider.graphics.clear();
-		this.saturationSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [0, 1], [0, 0xFF], this.matrixH);
-		this.saturationSlider.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
-	}
-
-	private function saturateUI(color:UInt):Void {
-		this.alphaSlider.graphics.clear();
-		this.alphaSlider.graphics.beginGradientFill(GradientType.LINEAR, [color, color], [1, 0], [0, 0xFF], this.matrixV);
-		this.alphaSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
-	}
-
 	override private function update():Void {
 		var hueChanged = this.isInvalid(FLAG_H);
 		if (hueChanged) {
-			this.hueUI(Utils.RGBA2RGB(Utils.HSVAtoRGBA(this.h, 100, 100, 1)));
+			var normalRGB = ColorUtils.HSV2RGB(this.h, 100, 100);
+		this.saturationSlider.graphics.clear();
+			this.saturationSlider.graphics.beginGradientFill(GradientType.LINEAR, [normalRGB, normalRGB], [0, 1], [0, 0xFF], this.matrixH);
+		this.saturationSlider.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
+
 			this.hueTrack.y = this.h / 360 * this.columnSize;
 		}
 
 		if (hueChanged || this.isInvalid(FLAG_SV)) {
 			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
 			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
-			var rgb = Utils.RGBA2RGB(this.data);
-			this.saturateUI(rgb);
-			this.colorInput.text = StringTools.hex(rgb, 6);
+
+			this.alphaSlider.graphics.clear();
+			this.alphaSlider.graphics.beginGradientFill(GradientType.LINEAR, [this.rgb, this.rgb], [1, 0], [0, 0xFF], this.matrixV);
+			this.alphaSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+			
+			this.colorInput.text = StringTools.hex(this.rgb, 6);
 		}
 
 		if (this.isInvalid(FLAG_A)) {
@@ -458,8 +446,8 @@ class Sampler extends Sprite {
 		this.addEventListener(Event.REMOVED_FROM_STAGE, this.removedFromStageHandler);
 	}
 
-	public function pick():ARGB {
-		return this.sampleData.getPixel32(Math.round(this.pointer.x), Math.round(this.pointer.y));
+	public function pick():RGB {
+		return this.sampleData.getPixel(Math.round(this.pointer.x), Math.round(this.pointer.y));
 	}
 
 	private function removedFromStageHandler(event:Event):Void {

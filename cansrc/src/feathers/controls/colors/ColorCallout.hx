@@ -39,6 +39,7 @@ class ColorCallout extends LayoutGroup {
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
 		var hsv = Utils.RGBtoHSV(value.r, value.g, value.b);
+		if( !this.isInvalid(FLAG_SV) )
 		this.h = hsv[0];
 		this.setSV(hsv[1], hsv[2]);
 		this.a = value.a;

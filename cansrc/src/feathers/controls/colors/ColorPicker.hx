@@ -1,20 +1,16 @@
 package feathers.controls.colors;
 
-import feathers.style.Theme;
-import feathers.skins.RectangleSkin;
-import lime.math.RGB;
-import feathers.core.PopUpManager;
-import feathers.core.FeathersControl;
 import feathers.core.InvalidationFlag;
+import feathers.core.PopUpManager;
 import feathers.layout.RelativePosition;
+import feathers.skins.RectangleSkin;
+import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.canvas.utils.Utils;
-import lime.math.RGBA;
+import lime.math.RGB;
 import openfl.Assets;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
-import openfl.filters.GlowFilter;
 
 class ColorPicker extends LayoutGroup {
 	private var colorDisplay:Shape;
@@ -46,13 +42,18 @@ class ColorPicker extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override function initialize() {
-		this.width = CanTheme.CONTROL_SIZE;
-		this.height = CanTheme.CONTROL_SIZE * 0.5;
+		var theme = Std.downcast(Theme.getTheme(), CanTheme);
+
 		super.initialize();
-		this.buttonMode = true;
-		this.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
-		this.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.DPI * 2, CanTheme.DPI * 2);
-		this.filters = [new GlowFilter(0, 1, CanTheme.DPI * 1.5, CanTheme.DPI * 1.5, 1, 1, true)];
+		var icon = new RectangleSkin();
+		icon.cornerRadius = CanTheme.DPI * 3;
+		icon.border = SolidColor(CanTheme.DPI, theme.textColor);
+		icon.fill = Bitmap(Assets.getBitmapData("transparent"));
+
+		this.width = Math.round(CanTheme.CONTROL_SIZE * 0.88);
+		this.height = Math.round(CanTheme.CONTROL_SIZE * 0.45);
+		backgroundSkin = icon;
+		// this.filters = [new GlowFilter(0, 0.5, CanTheme.DPI * 2, CanTheme.DPI * 2, 1, 1, true)];
 
 		this.colorDisplay = new Shape();
 		this.addChild(this.colorDisplay);
@@ -92,7 +93,8 @@ class ColorPicker extends LayoutGroup {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			this.colorDisplay.graphics.clear();
 			this.colorDisplay.graphics.beginFill(this.rgb, this.a / 0xFF);
-			this.colorDisplay.graphics.drawRoundRect(0, 0, this.width, this.height, CanTheme.DPI * 2, CanTheme.DPI * 2);
+			this.colorDisplay.graphics.drawRoundRect(CanTheme.DPI * 0.5, CanTheme.DPI * 0.5, this.width - CanTheme.DPI, this.height - CanTheme.DPI,
+				CanTheme.DPI * 3, CanTheme.DPI * 3);
 		}
 		super.update();
 	}

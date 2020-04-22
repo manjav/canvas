@@ -1,87 +1,163 @@
 package feathers.controls.colors;
 
-import lime.math.RGB;
-import ir.grantech.canvas.utils.Utils;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.HorizontalLayout;
-import feathers.layout.HorizontalLayoutData;
-import feathers.layout.VerticalAlign;
 import ir.grantech.canvas.themes.CanTheme;
-import lime.math.RGBA;
+import lime.math.RGB;
+import openfl.Assets;
+import openfl.display.Bitmap;
 import openfl.events.Event;
-import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 
-class ColorLine extends LayoutGroup {
-	static public final INVALIDATION_FLAG_COLOR_PICKER_ELEMENT_FACTORY:String = "colorPickerElementFactory";
+class ColorLine extends LayoutGroup implements IToggle {
+	/**
+		Indicates if the color set is enabled or not. The button may be selected
+		programmatically, even if `toggleable` is `false`, but generally,
+		`toggleable` should be set to `true` to allow the user to select and
+		deselect it by triggering the button with a click or tap. If focus
+		management is enabled, and the button has focus, a button may also be
+		triggered with the spacebar.
 
-	private var inputDisplay:TextInput;
+		**Warning:** Do not listen for `TriggerEvent.TRIGGER` to be notified
+		when the `selected` property changes. You must listen for
+		`Event.CHANGE`, which is dispatched after `TriggerEvent.TRIGGER`.
+
+		@default false
+
+		@see `BasicToggleButton.toggleable`
+
+		@since 1.0.0
+	**/
+	@:isVar
+	public var selected(get, set):Bool = false;
+
+	private function get_selected():Bool {
+		return this.selected;
+	}
+
+	private function set_selected(value:Bool):Bool {
+		if (this.selected == value)
+			return value;
+
+		this.selected = value;
+		this.setInvalid(InvalidationFlag.SELECTION);
+		FeathersEvent.dispatch(this, Event.CHANGE);
+		return value;
+	}
+
+	private var checkBox:Check;
+	private var labelDisplay:Label;
+	private var samplerButton:Button;
 	private var pickerDisplay:ColorPicker;
 
 	static private function defaultCallout():ColorCallout {
 		return new ColorCallout();
 	}
 
-	/* private var _spectrumFactory:Function;
-		public function get colorPickerElementFactory():Function
-		{
-			return this._spectrumFactory;
-		}
-		public function set colorPickerElementFactory(value:Function):Void
-		{
-			if( this._spectrumFactory == value )
-				return;
+	public var label(default, set):String = "Label";
 
-			this._spectrumFactory = value;
-			this.invalidate(INVALIDATION_FLAG_COLOR_PICKER_ELEMENT_FACTORY);
-	}*/
-	@isVar
-	public var data(default, set):RGB = 0;
+	private function set_label(value:String):String {
+		if (this.label == value)
+			return value;
+		this.label = value;
+		if (labelDisplay != null)
+			labelDisplay.text = value;
+		return value;
+	}
 
-	private function set_data(value:RGB):RGB {
-		if (value == this.data)
-			return this.data;
-		this.data = value;
+	public var rgb(default, set):RGB = 0;
+
+	private function set_rgb(value:RGB):RGB {
+		if (this.rgb == value)
+			return value;
+		this.rgb = value;
 		this.setInvalid(InvalidationFlag.DATA);
-		return this.data;
+		return value;
+	}
+
+	public var a(default, set):UInt = 0xFF;
+
+	private function set_a(value:UInt):UInt {
+		if (this.a == value)
+			return value;
+		this.a = value;
+		this.setInvalid(InvalidationFlag.DATA);
+		return value;
 	}
 
 	override private function initialize():Void {
 		super.initialize();
-		var hLayout:HorizontalLayout = new HorizontalLayout();
-		hLayout.verticalAlign = VerticalAlign.JUSTIFY;
-		hLayout.gap = 4;
-		this.layout = hLayout;
+		this.layout = new AnchorLayout();
+		var padding = CanTheme.DEFAULT_PADDING;
+
+		this.checkBox = new Check();
+		this.checkBox.width = CanTheme.CONTROL_SIZE;
+		this.checkBox.paddingLeft = 0;
+		this.checkBox.paddingRight = 0;
+		this.checkBox.selected = this.selected;
+		this.checkBox.layoutData = AnchorLayoutData.middleLeft(0, -padding * 0.5);
+		this.checkBox.addEventListener(Event.CHANGE, this.checkBox_changeHandler);
+		this.addChild(this.checkBox);
 
 		this.pickerDisplay = new ColorPicker();
 		this.pickerDisplay.width = CanTheme.CONTROL_SIZE;
-		this.pickerDisplay.rgb = this.data;
+		this.pickerDisplay.rgb = this.rgb;
+		this.pickerDisplay.a = this.a;
 		this.pickerDisplay.addEventListener(Event.CHANGE, this.pickerDisplay_changeHandler);
+		this.pickerDisplay.layoutData = AnchorLayoutData.middleLeft(0, padding * 2);
 		this.addChild(this.pickerDisplay);
+
+		this.labelDisplay = new Label();
+		this.labelDisplay.embedFonts = true;
+		this.labelDisplay.text = this.label;
+		// this.labelDisplay.variant = Label.VARIANT_HEADING;
+		this.labelDisplay.layoutData = AnchorLayoutData.middleLeft(0, padding * 5);
+		this.addChild(this.labelDisplay);
+
+		this.samplerButton = new Button();
+		this.samplerButton.icon = new Bitmap(Assets.getBitmapData("sampler"));
+		this.samplerButton.addEventListener(MouseEvent.CLICK, this.samplerButtonClickHandler);
+		this.samplerButton.layoutData = AnchorLayoutData.middleRight(0, -padding);
+		this.addChild(this.samplerButton);
+	}
+
+	private function checkBox_changeHandler(event:Event):Void {
+		this.selected = checkBox.selected;
+		if (this.hasEventListener(Event.CHANGE))
+			this.dispatchEvent(new Event(Event.CHANGE));
+	}
+
+	private function samplerButtonClickHandler(event:MouseEvent):Void {
+		event.stopImmediatePropagation();
+		var sampler = ColorSampler.create(CanTheme.DPI * 30, CanTheme.DPI * 0.5);
+		sampler.addEventListener(Event.CHANGE, this.sampler_changeHandler);
+		this.stage.addChild(sampler);
+	}
+
+	private function sampler_changeHandler(event:Event):Void {
+		var sampler = cast(event.currentTarget, ColorSampler);
+		sampler.removeEventListener(Event.CHANGE, this.sampler_changeHandler);
+		this.rgb = sampler.rgb;
 	}
 
 	private function pickerDisplay_changeHandler(event:Event):Void {
-		this.data = this.pickerDisplay.rgb;
+		this.rgb = this.pickerDisplay.rgb;
+		this.a = this.pickerDisplay.a;
 		if (this.hasEventListener(Event.CHANGE))
 			this.dispatchEvent(new Event(Event.CHANGE));
 	}
 
 	override private function update():Void {
-		if (this.isInvalid(InvalidationFlag.DATA)) {
-			if (this.pickerDisplay != null)
-				this.pickerDisplay.rgb = this.data;
+		if (this.isInvalid(InvalidationFlag.SELECTION))
+			this.checkBox.selected = this.selected;
 
-			if (this.inputDisplay != null)
-				this.inputDisplay.text = StringTools.hex(this.data, 2).toLowerCase();
+		if (this.isInvalid(InvalidationFlag.DATA)) {
+			this.pickerDisplay.rgb = this.rgb;
+			this.pickerDisplay.a = this.a;
 		}
+
 		super.update();
 	}
-	/* override public function dispose():Void {
-		this.pickerDisplay.removeEventListener(Event.TRIGGERED, this.buttonDisplay_triggeredHandler);
-		this.spectrumDisplay.removeEventListener(Event.CHANGE, this.spectrumDisplay_changeHandler);
-		this.inputDisplay.removeEventListener(FeathersEventType.ENTER, this.inputDisplay_enterHandler);
-		super.dispose();
-	}*/
 }

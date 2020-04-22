@@ -435,7 +435,7 @@ class Sampler extends Sprite {
 		if (this.sampleData != null)
 			this.sampleData.dispose();
 		this.sampleData = new BitmapData(stage.stageWidth, stage.stageHeight, false);
-		this.sampleData.draw(stage);
+		this.sampleData.draw(stage.root);
 
 		if (this.sampleImage != null)
 			this.sampleImage.bitmapData = this.sampleData;

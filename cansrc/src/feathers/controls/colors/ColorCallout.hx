@@ -1,6 +1,6 @@
 package feathers.controls.colors;
 
-import openfl.events.KeyboardEvent;
+import lime.system.System;
 import feathers.controls.CanTextInput;
 import feathers.controls.FixableCallout;
 import feathers.layout.AnchorLayout;
@@ -12,6 +12,8 @@ import ir.grantech.canvas.utils.Utils;
 import lime.math.ARGB;
 import lime.math.RGBA;
 import openfl.Assets;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.GradientType;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -91,6 +93,7 @@ class ColorCallout extends LayoutGroup {
 	private var alphaTrack:Shape;
 	private var alphaSlider:Shape;
 	private var alphaInput:CanRangeInput;
+	private var sampler:Sampler;
 
 	public function new() {
 		super();
@@ -122,9 +125,7 @@ class ColorCallout extends LayoutGroup {
 
 		// hue slider
 		this.hueSlider = new Sprite();
-		#if flash
-		this.hueSlider.filters = [innerGlow];
-		#else
+		#if hl
 		this.hueSlider.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
 		#end
 		this.hueSlider.graphics.beginGradientFill(GradientType.LINEAR, [0xff0000, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00ff, 0xff0000],
@@ -132,6 +133,7 @@ class ColorCallout extends LayoutGroup {
 		this.hueSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
 		this.hueSlider.x = this.columnSize + this.padding * 2;
 		this.hueSlider.y = this.padding;
+		this.hueSlider.filters = [innerGlow];
 		this.addChild(this.hueSlider);
 
 		this.hueTrack = this.createTrack();
@@ -148,14 +150,13 @@ class ColorCallout extends LayoutGroup {
 
 		// saturation / value slider
 		var saturationContainer:Sprite = new Sprite();
-		#if flash
-		saturationContainer.filters = [innerGlow];
-		#else
+		#if hl
 		saturationContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
 		#end
 		saturationContainer.graphics.beginFill(0xFFFFFF);
 		saturationContainer.graphics.drawRoundRect(0, 0, this.columnSize, this.columnSize, roundness, roundness);
 		saturationContainer.x = saturationContainer.y = this.padding;
+		saturationContainer.filters = [innerGlow];
 		this.addChild(saturationContainer);
 
 		var svMask:Shape = new Shape();
@@ -187,7 +188,7 @@ class ColorCallout extends LayoutGroup {
 		this.colorInput.layoutData = AnchorLayoutData.bottomLeft(this.padding, this.padding);
 		this.colorInput.addEventListener(KeyboardEvent.KEY_UP, this.textInput_KyeboardEventHandler);
 		this.addChild(this.colorInput);
-		
+
 		var numSignDisplay:Label = new Label();
 		numSignDisplay.layoutData = AnchorLayoutData.bottomLeft(this.padding * 1.5, this.padding);
 		numSignDisplay.mouseEnabled = false;
@@ -196,15 +197,14 @@ class ColorCallout extends LayoutGroup {
 
 		// alpha slider
 		var alphaContainer:Sprite = new Sprite();
-		#if flash
-		alphaContainer.filters = [innerGlow];
-		#else
+		#if hl
 		alphaContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
 		#end
 		alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
 		alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
 		alphaContainer.x = this.columnSize + this.padding * 4;
 		alphaContainer.y = this.padding;
+		alphaContainer.filters = [innerGlow];
 		this.addChild(alphaContainer);
 
 		this.alphaSlider = new Shape();
@@ -340,6 +340,12 @@ class ColorCallout extends LayoutGroup {
 		Mouse.hide();
 		this.activeSlider = FLAG_S;
 		this.callout.fixed = true;
+		if (this.sampler == null)
+			this.sampler = new Sampler(CanTheme.DPI * 30);
+		this.stage.addChild(this.sampler);
+		this.sampler.capture();
+
+		this.sampler.update(event.stageX, event.stageY);
 		this.stage.addEventListener(MouseEvent.CLICK, this.stage_clickHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 	}
@@ -347,7 +353,14 @@ class ColorCallout extends LayoutGroup {
 	private function stage_clickHandler(event:MouseEvent):Void {
 		this.stage.removeEventListener(MouseEvent.CLICK, this.stage_clickHandler);
 		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
+
+		var pixel:ARGB = this.sampler.pick();
+		var _data = this.data;
+		_data.set(pixel.r, pixel.g, pixel.b, _data.a);
+		this.data = _data;
+
 		Mouse.show();
+		this.stage.removeChild(this.sampler);
 		this.callout.fixed = false;
 		this.activeSlider = null;
 	}
@@ -385,5 +398,73 @@ class ColorCallout extends LayoutGroup {
 		}
 
 		super.update();
+	}
+}
+
+class Sampler extends Sprite {
+	private var radius:Float;
+	private var matrix:Matrix;
+	private var magnify:Shape;
+	private var pointer:Sprite;
+	private var sampleImage:Bitmap;
+	private var sampleData:BitmapData;
+
+	public function new(radius:Float) {
+		super();
+
+		this.radius = radius;
+		this.mouseEnabled = false;
+		this.matrix = new Matrix();
+
+		// pointer
+		this.pointer = new Sprite();
+
+		this.magnify = new Shape();
+		this.magnify.scaleX = this.magnify.scaleY = 20;
+		this.pointer.addChild(this.magnify);
+
+		var overlay = new Shape();
+		overlay.graphics.lineStyle(CanTheme.DPI * 0.5, 0x646464);
+		overlay.graphics.drawCircle(0, 0, this.radius);
+		overlay.graphics.drawRect(-this.magnify.scaleX * 0.5, -this.magnify.scaleY * 0.5, this.magnify.scaleX, this.magnify.scaleY);
+		this.pointer.addChild(overlay);
+	}
+
+	public function update(x:Float, y:Float):Void {
+		this.pointer.x = x;
+		this.pointer.y = y;
+
+		this.matrix.tx = -x - 0.5;
+		this.matrix.ty = -y - 0.5;
+		this.magnify.graphics.clear();
+		this.magnify.graphics.beginBitmapFill(this.sampleData, this.matrix, false);
+		this.magnify.graphics.drawCircle(0, 0, this.radius / this.magnify.scaleX);
+		this.magnify.graphics.endFill();
+	}
+
+	public function capture():Void {
+		if (this.sampleData != null)
+			this.sampleData.dispose();
+		this.sampleData = new BitmapData(stage.stageWidth, stage.stageHeight, false);
+		this.sampleData.draw(stage);
+
+		if (this.sampleImage != null)
+			this.sampleImage.bitmapData = this.sampleData;
+		else
+			this.sampleImage = new Bitmap(this.sampleData);
+		this.addChild(this.sampleImage);
+		this.addChild(this.pointer);
+		this.addEventListener(Event.REMOVED_FROM_STAGE, this.removedFromStageHandler);
+	}
+
+	public function pick():ARGB {
+		return this.sampleData.getPixel32(Math.round(this.pointer.x), Math.round(this.pointer.y));
+	}
+
+	private function removedFromStageHandler(event:Event):Void {
+		this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removedFromStageHandler);
+		this.removeChild(this.sampleImage);
+		this.removeChild(this.pointer);
+		this.sampleData.dispose();
 	}
 }

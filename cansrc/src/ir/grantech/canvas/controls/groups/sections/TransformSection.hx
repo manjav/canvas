@@ -62,7 +62,7 @@ class TransformSection extends CanSection {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (!this.targets.filled)
+		if (this.targets.isEmpty)
 			return;
 
 		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
@@ -80,7 +80,7 @@ class TransformSection extends CanSection {
 	}
 
 	override public function updateData():Void {
-		if (this.targets == null || !this.targets.filled)
+		if (this.targets == null || this.targets.isEmpty)
 			return;
 		this.updating = true;
 		this.inputR.value = this.targets.length == 1 ? this.targets.get(0).rotation : 0;

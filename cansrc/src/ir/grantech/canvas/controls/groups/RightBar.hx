@@ -62,7 +62,7 @@ class RightBar extends ScrollContainer {
 
 	private function commands_selectHandler(event:CanEvent):Void {
 		var items = cast(event.data[0], CanItems);
-		this.enabled = items.filled;
+		this.enabled = items.isFill;
 		this.textSection.targets = items;
 		this.alignSection.targets = items;
 		this.appearSection.targets = items;

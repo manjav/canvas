@@ -18,10 +18,16 @@ class CanItems {
 		return this.items.length;
 	}
 
-	public var filled(get, never):Bool;
+	public var isFill(get, never):Bool;
 
-	public function get_filled():Bool {
+	public function get_isFill():Bool {
 		return this.length > 0;
+	}
+
+	public var isEmpty(get, never):Bool;
+
+	public function get_isEmpty():Bool {
+		return this.length < 1;
 	}
 
 	/**
@@ -30,7 +36,7 @@ class CanItems {
 	public var type(get, never):String;
 
 	public function get_type():String {
-		if (this.length < 1)
+		if (this.isEmpty)
 			return Layer.TYPE_NONE;
 
 		var t = this.items[0].layer.type;
@@ -72,8 +78,8 @@ class CanItems {
 	public var blendMode(get, set):BlendMode;
 
 	private function get_blendMode():BlendMode {
-		if (this.length < 1)
-			return "";
+		if (this.isEmpty)
+			return this.blendMode;
 
 		var b:BlendMode = this.items[0].blendMode;
 		for (i in 1...this.length)
@@ -98,8 +104,8 @@ class CanItems {
 	public var fillColor(get, set):RGB;
 
 	private function get_fillColor():RGB {
-		if (this.length < 1)
-			return 0xFFFFFF;
+		if (this.isEmpty)
+			return this.fillColor;
 		var fc:RGB = this.items[0].layer.fillColor;
 		for (i in 1...this.length)
 			if (fc != this.items[i].layer.fillColor)
@@ -123,8 +129,8 @@ class CanItems {
 	public var fillAlpha(get, set):Float = 1;
 
 	private function get_fillAlpha():Float {
-		if (this.length < 1)
-			return 1.0;
+		if (this.isEmpty)
+			return this.fillAlpha;
 		var fa:Float = this.items[0].layer.fillAlpha;
 		for (i in 1...this.length)
 			if (fa != this.items[i].layer.fillAlpha)
@@ -198,8 +204,8 @@ class CanItems {
 	public var borderAlpha(get, set):Float;
 
 	private function get_borderAlpha():Float {
-		if (this.length < 1)
-			return 1.0;
+		if (this.isEmpty)
+			return this.borderAlpha;
 		var la:Float = this.items[0].layer.borderAlpha;
 		for (i in 1...this.length)
 			if (la != this.items[i].layer.borderAlpha)

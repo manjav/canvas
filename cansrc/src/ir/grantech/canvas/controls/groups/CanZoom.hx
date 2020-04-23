@@ -144,7 +144,7 @@ class CanZoom extends LayoutGroup {
 			return;
 		}
 
-		if (this.input.selectedItems.filled)
+		if (this.input.selectedItems.isFill)
 			this.scene.transformHint.perform(input.pointPhase);
 	}
 

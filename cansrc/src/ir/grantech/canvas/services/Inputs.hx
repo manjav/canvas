@@ -105,7 +105,7 @@ class Inputs extends BaseService {
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 16 || event.keyCode == 17 || event.keyCode > 36 && event.keyCode < 41) {
-			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || !this.selectedItems.filled)
+			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItems.isEmpty)
 				return;
 			if (event.keyCode == 37)
 				this.selectedItems.translate(event.shiftKey ? -10 : -1, 0);

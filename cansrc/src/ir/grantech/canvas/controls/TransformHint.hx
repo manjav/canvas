@@ -155,7 +155,7 @@ class TransformHint extends Sprite {
 	public function set(targets:CanItems):Void {
 		this.targets = targets;
 
-		if (targets.filled) {
+		if (targets.isFill) {
 			this.owner.addChild(this);
 			this.owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		} else if (this.owner == parent) {
@@ -169,7 +169,7 @@ class TransformHint extends Sprite {
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
 		this.cursor.mode = Cursor.MODE_NONE;
-		if (this.targets == null || !this.targets.filled)
+		if (this.targets == null || this.targets.isEmpty)
 			return;
 		this.setVisible(true, true);
 
@@ -237,7 +237,7 @@ class TransformHint extends Sprite {
 	}
 
 	public function perform(state:Int):Void {
-		if (this.targets == null || !this.targets.filled)
+		if (this.targets == null || this.targets.isEmpty)
 			return;
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point

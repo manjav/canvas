@@ -46,6 +46,6 @@ class LayersSection extends ListSection {
 
 	private function commads_selectHandler(event:CanEvent):Void {
 		var items = cast(event.data[0], CanItems);
-		this.listView.selectedItem = items.filled ? items.get(0).layer : null;
+		this.listView.selectedItem = items.isFill ? items.get(0).layer : null;
 	}
 }

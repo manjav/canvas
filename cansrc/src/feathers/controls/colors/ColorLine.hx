@@ -42,6 +42,7 @@ class ColorLine extends LayoutGroup implements IToggle {
 			return value;
 
 		this.selected = value;
+		FeathersEvent.dispatch(this, Event.SELECT);
 		this.setInvalid(InvalidationFlag.SELECTION);
 		return value;
 	}
@@ -84,6 +85,7 @@ class ColorLine extends LayoutGroup implements IToggle {
 		if (this.rgb == value)
 			return value;
 		this.rgb = value;
+		FeathersEvent.dispatch(this, Event.CHANGE);
 		this.setInvalid(InvalidationFlag.DATA);
 		return value;
 	}
@@ -94,6 +96,7 @@ class ColorLine extends LayoutGroup implements IToggle {
 		if (this.a == value)
 			return value;
 		this.a = value;
+		FeathersEvent.dispatch(this, Event.CHANGE);
 		this.setInvalid(InvalidationFlag.DATA);
 		return value;
 	}

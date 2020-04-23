@@ -1,6 +1,8 @@
 package ir.grantech.canvas.controls.groups;
 
-import feathers.layout.VerticalLayoutData;
+import feathers.controls.ScrollContainer;
+import feathers.layout.HorizontalAlign;
+import feathers.layout.VerticalLayout;
 import ir.grantech.canvas.controls.groups.sections.AlignSection;
 import ir.grantech.canvas.controls.groups.sections.AppearSection;
 import ir.grantech.canvas.controls.groups.sections.FiltersSection;
@@ -14,7 +16,7 @@ import ir.grantech.canvas.services.Tools;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.events.Event;
 
-class RightBar extends VGroup {
+class RightBar extends ScrollContainer {
 	private var textSection:TextSection;
 	private var alignSection:AlignSection;
 	private var appearSection:AppearSection;
@@ -23,8 +25,12 @@ class RightBar extends VGroup {
 
 	override private function initialize() {
 		super.initialize();
-		this.padding = 0;
-		this.gap = CanTheme.DPI;
+
+		var layout = new VerticalLayout();
+		layout.horizontalAlign = HorizontalAlign.JUSTIFY;
+		layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = 0;
+		layout.gap = CanTheme.DPI;
+		this.layout = layout;
 
 		this.alignSection = new AlignSection();
 		this.addChild(this.alignSection);
@@ -39,11 +45,11 @@ class RightBar extends VGroup {
 		this.addChild(this.appearSection);
 
 		this.filtersSection = new FiltersSection();
-		this.filtersSection.layoutData = new VerticalLayoutData(100, 100);
+		// this.filtersSection.layoutData = new VerticalLayoutData(100, 100);
 		this.addChild(this.filtersSection);
 
 		Inputs.instance.addEventListener(Inputs.POINT, this.input_pointHandler);
-		this.commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
+		Commands.instance.addEventListener(Commands.SELECT, this.commands_selectHandler);
 		this.enabled = false;
 	}
 

@@ -75,6 +75,23 @@ class ColorCallout extends LayoutGroup {
 		return value;
 	}
 
+	public var hasAlpha(default, set):Bool = true;
+
+	private function set_hasAlpha(value:Bool):Bool {
+		if (this.hasAlpha == value)
+			return value;
+
+		this.hasAlpha = value;
+		if (this.alphaContainer != null)
+			this.alphaContainer.alpha = value ? 1 : 0.5;
+		if (this.alphaInput != null) {
+			this.alphaInput.alpha = value ? 1 : 0.5;
+			this.alphaInput.enabled = value;
+		}
+
+		return value;
+	}
+
 	public var callout:FixableCallout;
 
 	private var activeSlider:String = null;
@@ -89,6 +106,7 @@ class ColorCallout extends LayoutGroup {
 	private var saturationTrack:Shape;
 	private var saturationSlider:Shape;
 	private var colorInput:CanTextInput;
+	private var alphaContainer:Sprite;
 	private var alphaTrack:Shape;
 	private var alphaSlider:Shape;
 	private var alphaInput:CanRangeInput;
@@ -195,33 +213,35 @@ class ColorCallout extends LayoutGroup {
 		this.addChild(numSignDisplay);
 
 		// alpha slider
-		var alphaContainer:Sprite = new Sprite();
+		this.alphaContainer = new Sprite();
 		#if hl
-		alphaContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
+		this.alphaContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
 		#end
-		alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
-		alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
-		alphaContainer.x = this.columnSize + this.padding * 4;
-		alphaContainer.y = this.padding;
-		alphaContainer.filters = [innerGlow];
-		this.addChild(alphaContainer);
+		this.alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
+		this.alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		this.alphaContainer.x = this.columnSize + this.padding * 4;
+		this.alphaContainer.y = this.padding;
+		this.alphaContainer.filters = [innerGlow];
+		this.alphaContainer.alpha = this.hasAlpha ? 1 : 0.5;
+		this.addChild(this.alphaContainer);
 
 		this.alphaSlider = new Shape();
-		alphaContainer.addChild(this.alphaSlider);
+		this.alphaContainer.addChild(this.alphaSlider);
 
 		this.alphaTrack = this.createTrack();
 		this.alphaTrack.x = this.padding * 0.5;
-		alphaContainer.addChild(this.alphaTrack);
+		this.alphaContainer.addChild(this.alphaTrack);
 
 		var alphaMask:Shape = new Shape();
 		alphaMask.graphics.beginFill();
 		alphaMask.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
-		alphaMask.x = alphaContainer.x;
-		alphaMask.y = alphaContainer.y;
-		alphaContainer.mask = alphaMask;
+		alphaMask.x = this.alphaContainer.x;
+		alphaMask.y = this.alphaContainer.y;
+		this.alphaContainer.mask = alphaMask;
 		this.addChild(alphaMask);
 
 		this.alphaInput = new CanRangeInput();
+		this.alphaInput.alpha = this.hasAlpha ? 1 : 0.5;
 		this.alphaInput.valueFormatter = (v:Float) -> {
 			return Math.round(v) + " %";
 		};
@@ -235,9 +255,10 @@ class ColorCallout extends LayoutGroup {
 		this.alphaInput.addEventListener(Event.CHANGE, this.alphaInput_changeHandler);
 		this.addChild(this.alphaInput);
 
+		// sampler button
 		var samplerButton = new Button();
 		samplerButton.icon = new Bitmap(Assets.getBitmapData("sampler"));
-		samplerButton.layoutData = AnchorLayoutData.bottomRight(this.padding, this.padding);
+		samplerButton.layoutData = AnchorLayoutData.bottomRight(this.padding, this.padding * 0.2);
 		samplerButton.addEventListener(MouseEvent.CLICK, this.samplerButtonClickHandler);
 		this.addChild(samplerButton);
 
@@ -284,7 +305,8 @@ class ColorCallout extends LayoutGroup {
 			&& this.saturationSlider.mouseY >= 0
 			&& this.saturationSlider.mouseY <= this.columnSize)
 			this.activeSlider = FLAG_SV;
-		else if (this.alphaSlider.mouseX >= 0
+		else if (this.hasAlpha
+			&& this.alphaSlider.mouseX >= 0
 			&& this.alphaSlider.mouseX <= this.padding
 			&& this.alphaSlider.mouseX >= 0
 			&& this.alphaSlider.mouseX <= this.columnSize)
@@ -360,14 +382,16 @@ class ColorCallout extends LayoutGroup {
 			this.saturationTrack.x = this.s * 0.01 * this.columnSize;
 			this.saturationTrack.y = (1 - this.v * 0.01) * this.columnSize;
 
-			this.alphaSlider.graphics.clear();
-			this.alphaSlider.graphics.beginGradientFill(GradientType.LINEAR, [this.rgb, this.rgb], [1, 0], [0, 0xFF], this.matrixV);
-			this.alphaSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+			if (this.hasAlpha) {
+				this.alphaSlider.graphics.clear();
+				this.alphaSlider.graphics.beginGradientFill(GradientType.LINEAR, [this.rgb, this.rgb], [1, 0], [0, 0xFF], this.matrixV);
+				this.alphaSlider.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+			}
 
 			this.colorInput.text = StringTools.hex(this.rgb, 6);
 		}
 
-		if (this.isInvalid(FLAG_A)) {
+		if (this.hasAlpha && this.isInvalid(FLAG_A)) {
 			this.alphaTrack.y = (1 - this.a / 255) * this.columnSize;
 			this.alphaInput.value = this.a / 2.55;
 		}

@@ -43,7 +43,18 @@ class ColorLine extends LayoutGroup implements IToggle {
 
 		this.selected = value;
 		this.setInvalid(InvalidationFlag.SELECTION);
-		FeathersEvent.dispatch(this, Event.CHANGE);
+		return value;
+	}
+
+	public var hasAlpha(default, set):Bool = true;
+
+	private function set_hasAlpha(value:Bool):Bool {
+		if (this.hasAlpha == value)
+			return value;
+
+		this.hasAlpha = value;
+		if (this.pickerDisplay != null)
+			this.pickerDisplay.hasAlpha = value;
 		return value;
 	}
 
@@ -62,8 +73,8 @@ class ColorLine extends LayoutGroup implements IToggle {
 		if (this.label == value)
 			return value;
 		this.label = value;
-		if (labelDisplay != null)
-			labelDisplay.text = value;
+		if (this.labelDisplay != null)
+			this.labelDisplay.text = value;
 		return value;
 	}
 
@@ -103,6 +114,7 @@ class ColorLine extends LayoutGroup implements IToggle {
 
 		this.pickerDisplay = new ColorPicker();
 		this.pickerDisplay.width = CanTheme.CONTROL_SIZE;
+		this.pickerDisplay.hasAlpha = this.hasAlpha;
 		this.pickerDisplay.rgb = this.rgb;
 		this.pickerDisplay.a = this.a;
 		this.pickerDisplay.addEventListener(Event.CHANGE, this.pickerDisplay_changeHandler);
@@ -125,8 +137,6 @@ class ColorLine extends LayoutGroup implements IToggle {
 
 	private function checkBox_changeHandler(event:Event):Void {
 		this.selected = checkBox.selected;
-		if (this.hasEventListener(Event.CHANGE))
-			this.dispatchEvent(new Event(Event.CHANGE));
 	}
 
 	private function samplerButtonClickHandler(event:MouseEvent):Void {

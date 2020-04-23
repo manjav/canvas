@@ -36,6 +36,18 @@ class ColorPicker extends LayoutGroup {
 		return value;
 	}
 
+	public var hasAlpha(default, set):Bool = true;
+
+	private function set_hasAlpha(value:Bool):Bool {
+		if (this.hasAlpha == value)
+			return value;
+
+		this.hasAlpha = value;
+		if (this.callout != null)
+			this.callout.hasAlpha = value;
+		return value;
+	}
+
 	public function new() {
 		super();
 	}
@@ -46,8 +58,8 @@ class ColorPicker extends LayoutGroup {
 
 		super.initialize();
 		var icon = new RectangleSkin();
-		icon.cornerRadius = CanTheme.DPI * 3;
-		icon.border = SolidColor(CanTheme.DPI, theme.textColor);
+		icon.cornerRadius = CanTheme.DPI * 2.4;
+		icon.border = SolidColor(CanTheme.DPI * 0.5, theme.textColor);
 		icon.fill = Bitmap(Assets.getBitmapData("transparent"));
 
 		this.width = Math.round(CanTheme.CONTROL_SIZE * 0.88);
@@ -68,6 +80,7 @@ class ColorPicker extends LayoutGroup {
 	public function showCallout():Void {
 		if (this.callout == null) {
 			this.callout = new ColorCallout();
+			this.callout.hasAlpha = this.hasAlpha;
 			this.callout.addEventListener(Event.CHANGE, this.callout_changeHandler);
 		}
 		this.callout.rgb = this.rgb;

@@ -1,19 +1,5 @@
 package ir.grantech.canvas.services;
 
-import openfl.text.TextFormatAlign;
-import openfl.text.TextFieldAutoSize;
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFieldType;
-import ir.grantech.canvas.drawables.CanBitmap;
-import ir.grantech.canvas.drawables.CanShape;
-import ir.grantech.canvas.drawables.CanSlicedBitmap;
-import ir.grantech.canvas.drawables.CanSprite;
-import ir.grantech.canvas.drawables.CanText;
-import ir.grantech.canvas.drawables.ICanItem;
-import openfl.Assets;
-import openfl.geom.Rectangle;
-
 class Tools extends BaseService {
 	private var tools:Map<Int, Tool>;
 

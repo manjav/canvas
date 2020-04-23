@@ -43,7 +43,9 @@ class Commands extends BaseService {
 	public function commit(command:String, args:Array<Dynamic> = null):Void {
 		switch (command) {
 			case ADDED:
-				this.layers.add(new Layer(args[0]));
+				var layer = new Layer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+				this.layers.add(layer);
+				args = [layer.item];
 			case REMOVED:
 				var items = cast(args[0], CanItems).items;
 				for (i in items)

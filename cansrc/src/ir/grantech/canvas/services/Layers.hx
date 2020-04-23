@@ -64,7 +64,7 @@ class Layers extends ArrayCollection<Layer> {
 }
 
 class Layer {
-	static private final TYPES = [TYPE_NONE, TYPE_RECT, TYPE_ELLIPSE, TYPE_TEXT];
+	static public var TYPES:Array<String>;
 	static public final TYPE_NONE:String = "none";
 	static public final TYPE_RECT:String = "rect";
 	static public final TYPE_ELLIPSE:String = "ellipse";
@@ -155,6 +155,7 @@ class Layer {
 			return value;
 		this.borderSize = value;
 		this.setInvalid(InvalidationFlag.STYLES);
+		
 		return value;
 	}
 
@@ -213,10 +214,13 @@ class Layer {
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
 	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, borderRadius:Float) {
+		if(Layer.TYPES == null)
+			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
+
 		this._invalidationFlags = new Map<String, Bool>();
 		this.id = Math.floor(Timer.stamp() * 100);
 
-		this.type = TYPES[type];
+		this.type = Layer.TYPES[type];
 		this.name = type + " " + id;
 
 		this.fillColor = fillColor;

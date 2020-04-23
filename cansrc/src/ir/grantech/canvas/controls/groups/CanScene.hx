@@ -87,7 +87,7 @@ class CanScene extends LayoutGroup {
 			this.hitHint.graphics.drawRect(0, 0, bmp.bitmapData.width, bmp.bitmapData.height);
 		}
 		#else
-		var bounds = target.getBounds(cast(target, DisplayObject));
+		var bounds = target.getBounds(cast(target, openfl.display.DisplayObject));
 		this.hitHint.graphics.drawRect(0, 0, bounds.width, bounds.height);
 		#end
 

@@ -1,24 +1,26 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
-import feathers.controls.colors.ColorLine;
-import lime.math.RGB;
-import feathers.controls.ComboBox;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
 import feathers.controls.CanRangeInput;
 import feathers.controls.CanTextInput;
+import feathers.controls.ComboBox;
 import feathers.controls.Label;
 import feathers.controls.ListView;
 import feathers.controls.PopUpListView;
+import feathers.controls.colors.ColorLine;
 import feathers.data.ArrayCollection;
 import feathers.data.ListViewItemState;
 import feathers.layout.AnchorLayoutData;
+import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
+import feathers.themes.steel.BaseSteelTheme;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.popups.DropCenterPopUpAdapter;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.themes.CanTheme;
+import lime.math.RGB;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
@@ -26,7 +28,7 @@ import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
 
-class Panel extends CanView {
+class CanSection extends CanView {
 	public var title(default, set):String;
 
 	private function set_title(value:String):String {
@@ -45,10 +47,13 @@ class Panel extends CanView {
 	private var titleDisplay:Label;
 	private var updating = false;
 
-	@:access(feathers.themes.steel.CanTheme)
+	@:access(feathers.themes.steel.BaseSteelTheme)
 	override private function initialize() {
 		super.initialize();
-		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
+		var theme = Std.downcast(Theme.getTheme(), BaseSteelTheme);
+		var skin = new RectangleSkin();
+		skin.fill = SolidColor(theme.controlFillColor1);
+		this.backgroundSkin = skin;
 	}
 
 	public var targets(default, set):CanItems;

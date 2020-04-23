@@ -1,6 +1,6 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
-class AssetsPanel extends ListPanel {
+class AssetsSection extends ListSection {
 	override private function initialize() {
 		this.title = "ASSETS";
 		super.initialize();

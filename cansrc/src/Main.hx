@@ -9,9 +9,9 @@ import haxe.Timer;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.RightBar;
 import ir.grantech.canvas.controls.groups.ToolBar;
-import ir.grantech.canvas.controls.groups.panels.AssetsPanel;
-import ir.grantech.canvas.controls.groups.panels.LayersPanel;
-import ir.grantech.canvas.controls.groups.panels.Panel;
+import ir.grantech.canvas.controls.groups.sections.AssetsSection;
+import ir.grantech.canvas.controls.groups.sections.LayersSection;
+import ir.grantech.canvas.controls.groups.sections.CanSection;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Libs;
@@ -21,11 +21,11 @@ import openfl.display.StageScaleMode;
 
 class Main extends Application {
 	private var zoom:CanZoom;
-	private var header:Panel;
+	private var header:CanSection;
 	private var right:RightBar;
 	private var left:ToolBar;
-	private var leftExtension:Panel;
-	private var extensions:Map<Int, Panel>;
+	private var leftExtension:CanSection;
+	private var extensions:Map<Int, CanSection>;
 	private var zoomLayout:AnchorLayoutData;
 
 	public function new() {
@@ -43,12 +43,12 @@ class Main extends Application {
 
 		var p = CanTheme.DPI;
 		this.layout = new AnchorLayout();
-		this.extensions = new Map<Int, Panel>();
+		this.extensions = new Map<Int, CanSection>();
 		this.zoom = new CanZoom();
 		this.zoom.layoutData = this.zoomLayout = new AnchorLayoutData(0, 0, p);
 		this.addChild(this.zoom);
 
-		this.header = new Panel();
+		this.header = new CanSection();
 		this.header.height = CanTheme.DPI * 20;
 		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
 		this.addChild(this.header);
@@ -79,17 +79,17 @@ class Main extends Application {
 		if (event.data == -1) {
 			this.zoomLayout.left = this.left.width + CanTheme.DPI * 2;
 		} else {
-			this.leftExtension = this.createPanel(event.data);
+			this.leftExtension = this.createSection(event.data);
 			this.addChild(this.leftExtension);
 			this.zoomLayout.left = this.left.width + this.leftExtension.width + CanTheme.DPI * 3;
 		}
 		Timer.delay(this.zoom.resetZoomAndPan, 0);
 	}
 
-	private function createPanel(index:Int):Panel {
+	private function createSection(index:Int):CanSection {
 		if (!this.extensions.exists(index)) {
 			var p = CanTheme.DPI * 2;
-			var pnl:Panel = index == 0 ? new LayersPanel() : new AssetsPanel();
+			var pnl:CanSection = index == 0 ? new LayersSection() : new AssetsSection();
 			pnl.layoutData = new AnchorLayoutData(this.header.height + p, null, CanTheme.DPI, this.left.width + p);
 			pnl.width = CanTheme.DPI * 120;
 			this.extensions.set(index, pnl);

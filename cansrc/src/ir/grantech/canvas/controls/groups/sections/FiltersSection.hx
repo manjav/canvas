@@ -1,8 +1,8 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.layout.AnchorLayout;
 
-class FiltersPanel extends Panel {
+class FiltersSection extends CanSection {
 	override private function initialize() {
 		super.initialize();
 		this.layout = new AnchorLayout();

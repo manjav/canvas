@@ -1,11 +1,11 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.themes.CanTheme;
 
-class ListPanel extends Panel {
+class ListSection extends CanSection {
 	private var searchInput:CanTextInput;
 
 	override private function initialize() {

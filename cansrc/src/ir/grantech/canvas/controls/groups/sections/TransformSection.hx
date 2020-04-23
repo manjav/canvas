@@ -1,8 +1,7 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.Button;
 import feathers.controls.CanRangeInput;
-import feathers.controls.CanTextInput;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.drawables.CanItems;
@@ -12,7 +11,7 @@ import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
 
-class TransformPanel extends Panel {
+class TransformSection extends CanSection {
 	override private function set_targets(value:CanItems):CanItems {
 		super.set_targets(value);
 		this.buttonFlipH.enabled = value.length == 1;
@@ -32,13 +31,13 @@ class TransformPanel extends Panel {
 		super.initialize();
 		this.layout = new AnchorLayout();
 		this.title = "TRANSFORM";
-		
+
 		this.inputX = this.createRangeInput("x", new AnchorLayoutData(padding * 3, null, null, padding));
 		this.inputY = this.createRangeInput("y", new AnchorLayoutData(padding * 7, null, null, padding));
 		this.inputW = this.createRangeInput("w", new AnchorLayoutData(padding * 3, null, null, null, 0));
 		this.inputH = this.createRangeInput("h", new AnchorLayoutData(padding * 7, null, null, null, 0));
 		this.inputR = this.createRangeInput("rotate", new AnchorLayoutData(padding * 3, padding));
-		
+
 		this.buttonFlipH = this.createButton("flip-h", new AnchorLayoutData(padding * 7, padding * 4));
 		this.buttonFlipV = this.createButton("flip-v", new AnchorLayoutData(padding * 7, padding * 1));
 
@@ -67,7 +66,11 @@ class TransformPanel extends Panel {
 			return;
 
 		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
-			this.commands.commit(Commands.TRANSLATE, [this.targets, this.inputX.value - this.targets.bounds.x, this.inputY.value - this.targets.bounds.y]);
+			this.commands.commit(Commands.TRANSLATE, [
+				this.targets,
+				this.inputX.value - this.targets.bounds.x,
+				this.inputY.value - this.targets.bounds.y
+			]);
 		else if (event.currentTarget == this.inputW)
 			this.commands.commit(Commands.DIMENTIONS, [this.targets, this.inputW.value, this.targets.bounds.height]);
 		else if (event.currentTarget == this.inputH)
@@ -76,7 +79,7 @@ class TransformPanel extends Panel {
 			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
 	}
 
-override public function updateData():Void {
+	override public function updateData():Void {
 		if (this.targets == null || !this.targets.filled)
 			return;
 		this.updating = true;

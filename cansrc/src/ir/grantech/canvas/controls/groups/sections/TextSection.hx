@@ -1,4 +1,4 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
@@ -13,7 +13,7 @@ import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.text.Font;
 
-class TextPanel extends Panel {
+class TextSection extends CanSection {
 	private var target:CanText;
 
 	override private function set_targets(value:CanItems):CanItems {

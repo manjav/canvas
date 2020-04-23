@@ -1,15 +1,14 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.Button;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
-import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.InteractiveObject;
 import openfl.events.MouseEvent;
 
-class AlignPanel extends Panel {
+class AlignSection extends CanSection {
 	private var alignL:Button;
 	private var alignC:Button;
 	private var alignR:Button;
@@ -31,7 +30,8 @@ class AlignPanel extends Panel {
 
 		var layout = new HorizontalLayout();
 		layout.verticalAlign = VerticalAlign.JUSTIFY;
-		layout.gap = layout.paddingLeft = layout.paddingRight = Math.floor(CanTheme.DEFAULT_PADDING * 0.3);
+		layout.paddingLeft = layout.paddingRight = padding * 0.4;
+		layout.gap = Math.floor(padding * 0.2);
 		this.layout = layout;
 
 		this.alignL = this.createButton("align-l", null);

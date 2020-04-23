@@ -5,37 +5,44 @@ import feathers.controls.ListView;
 import feathers.data.ArrayCollection;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
+import feathers.themes.steel.BaseSteelTheme;
 import feathers.utils.DisplayObjectRecycler;
 import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.services.Tools;
 import openfl.Assets;
 import openfl.events.Event;
 import openfl.utils.AssetType;
 
 class ToolBar extends LayoutGroup {
-	private var selectedPanel(default, set):Int = -1;
+	private var selectedSection(default, set):Int = -1;
 
-	private function set_selectedPanel(value:Int):Int {
-		if (this.selectedPanel == value) {
-			this.bottomList.selectedIndex = this.selectedPanel = -1;
-			CanEvent.dispatch(this, Event.CHANGE, this.selectedPanel);
-			return this.selectedPanel;
+	private function set_selectedSection(value:Int):Int {
+		if (this.selectedSection == value) {
+			this.bottomList.selectedIndex = this.selectedSection = -1;
+			CanEvent.dispatch(this, Event.CHANGE, -1);
+			return -1;
 		}
-		this.selectedPanel = value;
-		CanEvent.dispatch(this, Event.CHANGE, this.selectedPanel);
-		return this.selectedPanel;
+		this.selectedSection = value;
+		CanEvent.dispatch(this, Event.CHANGE, this.selectedSection);
+		return value;
 	}
 
 	private var topList:ListView;
 	private var bottomList:ListView;
 
+	@:access(feathers.themes.steel.BaseSteelTheme)
 	override private function initialize() {
 		super.initialize();
-		Std.downcast(Theme.getTheme(), CanTheme).setPanelStyles(this);
+		var theme = Std.downcast(Theme.getTheme(), BaseSteelTheme);
+
+		var skin = new RectangleSkin();
+		skin.fill = SolidColor(theme.controlFillColor1);
+		this.backgroundSkin = skin;
+
 		ToolBarItemRenderer.SIZE = this.width;
 
 		this.layout = new AnchorLayout();
@@ -79,7 +86,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function listView_itemSelectHandler(event:CanEvent):Void {
-		this.selectedPanel = event.data.index;
+		this.selectedSection = event.data.index;
 	}
 
 	private function listView_changeHandler(event:Event):Void {

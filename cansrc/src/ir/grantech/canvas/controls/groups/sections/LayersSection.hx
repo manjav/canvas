@@ -1,4 +1,4 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayoutData;
@@ -13,7 +13,7 @@ import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
 
 @:access(ir.grantech.canvas.services.Commands)
-class LayersPanel extends ListPanel {
+class LayersSection extends ListSection {
 	private var listView:ListView;
 
 	override private function initialize() {

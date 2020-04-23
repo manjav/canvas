@@ -1,4 +1,4 @@
-package ir.grantech.canvas.controls.groups.panels;
+package ir.grantech.canvas.controls.groups.sections;
 
 import feathers.controls.CanHSlider;
 import feathers.controls.PopUpListView;
@@ -9,7 +9,7 @@ import ir.grantech.canvas.services.Commands;
 import openfl.display.BlendMode;
 import openfl.events.Event;
 
-class AppearPanel extends Panel {
+class AppearSection extends CanSection {
 	private var alphaSlider:CanHSlider;
 	private var modesList:PopUpListView;
 	private var fillPicker:ColorLine;
@@ -67,6 +67,8 @@ class AppearPanel extends Panel {
 		this.updating = true;
 		this.alphaSlider.value = this.targets.length == 1 ? this.targets.get(0).alpha * 100 : 100;
 		this.modesList.selectedIndex = this.findBlendMode(this.targets.blendMode);
+		this.fillPicker.rgb = this.targets.fillColor;
+		this.fillPicker.a = Math.round(this.targets.fillAlpha * 0xFF);
 		this.updating = false;
 	}
 

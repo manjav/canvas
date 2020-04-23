@@ -5,4 +5,7 @@ import openfl.display.Shape;
 
 class CanShape extends Shape implements ICanItem {
   public var layer(default, default):Layer;
+
+	private function update():Void {
+	}
 }

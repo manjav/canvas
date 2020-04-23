@@ -30,6 +30,8 @@ interface ICanItem extends IDisplayObject {
 	#end
 
 	public var parent(default, never):DisplayObjectContainer;
-	
+
 	public function getBounds(targetCoordinateSpace:DisplayObject):Rectangle;
+
+	private function update():Void;
 }

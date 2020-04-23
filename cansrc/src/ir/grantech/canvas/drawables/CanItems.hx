@@ -4,6 +4,8 @@ import flash.geom.Matrix;
 import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Layers.Layer;
+import lime.math.RGB;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.geom.Point;
@@ -22,6 +24,25 @@ class CanItems {
 		return this.length > 0;
 	}
 
+	/**
+		get agreegated type of the items
+	**/
+	public var type(get, never):String;
+
+	public function get_type():String {
+		if (this.length < 1)
+			return Layer.TYPE_NONE;
+
+		var t = this.items[0].layer.type;
+		for (i in 1...this.length)
+			if (t != this.items[i].blendMode)
+				return Layer.TYPE_NONE;
+		return t;
+	}
+
+	/**
+		Accesses the visible of the items
+	**/
 	public var visible(default, set):Bool = true;
 
 	private function set_visible(value:Bool):Bool {
@@ -44,6 +65,9 @@ class CanItems {
 		return value;
 	}
 
+	/**
+		Accesses the blendMode of the items
+	**/
 	@:isVar
 	public var blendMode(get, set):BlendMode;
 
@@ -62,8 +86,158 @@ class CanItems {
 		if (this.blendMode == value)
 			return value;
 		this.blendMode = value;
-		for (i in this.items)
-			i.blendMode = value;
+		for (item in this.items)
+			item.blendMode = value;
+		return value;
+	}
+
+	/**
+		Accesses the fillColor of the items
+	**/
+	@:isVar
+	public var fillColor(get, set):RGB;
+
+	private function get_fillColor():RGB {
+		if (this.length < 1)
+			return 0xFFFFFF;
+		var fc:RGB = this.items[0].layer.fillColor;
+		for (i in 1...this.length)
+			if (fc != this.items[i].layer.fillColor)
+				return 0xFFFFFF;
+		return fc;
+	}
+
+	private function set_fillColor(value:RGB):RGB {
+		if (this.fillColor == value)
+			return value;
+		this.fillColor = value;
+		for (item in this.items)
+			item.layer.fillColor = value;
+		return value;
+	}
+
+	/**
+		Accesses the fillAlpha of the items
+	**/
+	@:isVar
+	public var fillAlpha(get, set):Float = 1;
+
+	private function get_fillAlpha():Float {
+		if (this.length < 1)
+			return 1.0;
+		var fa:Float = this.items[0].layer.fillAlpha;
+		for (i in 1...this.length)
+			if (fa != this.items[i].layer.fillAlpha)
+				return 1.0;
+		return fa;
+	}
+
+	private function set_fillAlpha(value:Float):Float {
+		if (this.fillAlpha == value)
+			return value;
+		this.fillAlpha = value;
+		for (item in this.items)
+			item.layer.fillAlpha = value;
+		return value;
+	}
+
+	/**
+		Accesses the borderColor of the items
+	**/
+	@:isVar
+	public var borderColor(get, set):RGB;
+
+	private function get_borderColor():RGB {
+		if (this.length < 1)
+			return 0xFFFFFF;
+		var lc:RGB = this.items[0].layer.borderColor;
+		for (i in 1...this.length)
+			if (lc != this.items[i].layer.borderColor)
+				return 0xFFFFFF;
+		return lc;
+	}
+
+	private function set_borderColor(value:RGB):RGB {
+		if (this.borderColor == value)
+			return value;
+		this.borderColor = value;
+		for (item in this.items)
+			item.layer.borderColor = value;
+		return value;
+	}
+
+	/**
+		Accesses the fillEnabled of the items
+	**/
+	@:isVar
+	public var fillEnabled(get, set):Bool;
+
+	private function get_fillEnabled():Bool {
+		if (this.length < 1)
+			return false;
+		var fe = this.items[0].layer.fillEnabled;
+		for (i in 1...this.length)
+			if (fe != this.items[i].layer.fillEnabled)
+				return false;
+		return fe;
+	}
+
+	private function set_fillEnabled(value:Bool):Bool {
+		if (this.fillEnabled == value)
+			return value;
+		this.fillEnabled = value;
+		for (item in this.items)
+			item.layer.fillEnabled = value;
+		return value;
+	}
+
+	/**
+		Accesses the borderAlpha of the items
+	**/
+	@:isVar
+	public var borderAlpha(get, set):Float;
+
+	private function get_borderAlpha():Float {
+		if (this.length < 1)
+			return 1.0;
+		var la:Float = this.items[0].layer.borderAlpha;
+		for (i in 1...this.length)
+			if (la != this.items[i].layer.borderAlpha)
+				return 1.0;
+		return la;
+	}
+
+	private function set_borderAlpha(value:Float):Float {
+		if (this.borderAlpha == value)
+			return value;
+		this.borderAlpha = value;
+		for (item in this.items)
+			item.layer.borderAlpha = value;
+		return value;
+	}
+
+	/**
+		Accesses the borderEnabled of the items
+	**/
+	@:isVar
+	public var borderEnabled(get, set):Bool;
+
+	private function get_borderEnabled():Bool {
+		if (this.length < 1)
+			return false;
+		var be = this.items[0].layer.borderEnabled;
+		for (i in 1...this.length)
+			if (be != this.items[i].layer.borderEnabled)
+				return false;
+		return be;
+	}
+
+	private function set_borderEnabled(value:Bool):Bool {
+		if (this.borderEnabled == value)
+			return value;
+		this.borderEnabled = value;
+		for (item in this.items)
+			item.layer.borderEnabled = value;
 		return value;
 	}
 

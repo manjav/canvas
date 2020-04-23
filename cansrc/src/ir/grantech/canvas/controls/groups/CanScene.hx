@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.services.Commands;
+import openfl.events.Event;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Inputs;
@@ -41,6 +43,13 @@ class CanScene extends LayoutGroup {
 
 		this.selection.visible = false;
 		this.addChild(this.selection);
+		this.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+	}
+
+	@:access(ir.grantech.canvas.services.Commands)
+	private function enterFrameHandler(event:Event):Void {
+		for (i in 0...Commands.instance.layers.length)
+			Commands.instance.layers.get(i).valiadateAll();
 	}
 
 	public function updateSlection(phase:Int, fixed:Bool):Void {

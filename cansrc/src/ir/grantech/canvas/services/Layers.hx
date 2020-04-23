@@ -1,14 +1,17 @@
 package ir.grantech.canvas.services;
 
-import ir.grantech.canvas.drawables.CanText;
+import feathers.core.InvalidationFlag;
 import feathers.data.ArrayCollection;
 import haxe.Timer;
-import ir.grantech.canvas.drawables.CanBitmap;
 import ir.grantech.canvas.drawables.CanShape;
-import ir.grantech.canvas.drawables.CanSlicedBitmap;
-import ir.grantech.canvas.drawables.CanSprite;
+import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
+import lime.math.RGB;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextFieldType;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
 class Layers extends ArrayCollection<Layer> {
 	/**
@@ -232,7 +235,72 @@ class Layer {
 
 	private function instantiateItem(bounds:Rectangle):ICanItem {
 		var ret:ICanItem = null;
+		if (this.type == TYPE_RECT || this.type == TYPE_ELLIPSE) {
+			this.fillEnabled = true;
+			this.borderEnabled = true;
+			var sh = new CanShape(this);
+			sh.x = bounds.x;
+			sh.y = bounds.y;
+			ret = sh;
+		} else if (this.type == TYPE_TEXT) {
+			this.fillEnabled = false;
+			this.borderEnabled = false;
+			var txt = new CanText();
+			txt.x = bounds.x;
+			txt.y = bounds.y;
+			txt.width = bounds.width;
+			txt.height = bounds.height;
+			txt.wordWrap = txt.multiline = true;
+			txt.type = TextFieldType.INPUT;
+			txt.border = true;
+			txt.defaultTextFormat = new TextFormat("IRANSans Light", 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
+			ret = txt;
+		}
 		return ret;
 	}
 
+	/**
+		Sets an invalidation flag. This will not add the component to the
+		validation queue. It only sets the flag. A subclass might use
+		this function during `draw()` to manipulate the flags that
+		its superclass sees.
+
+		@see `Layer.setInvalid()`
+	**/
+	public function setInvalid(flag:String):Void {
+		if (this._invalidationFlags.exists(flag))
+			return;
+		this._invalidationFlags.set(flag, true);
+	}
+
+	/**
+		Indicates whether the control is pending validation or not. By default,
+		returns `true` if any invalidation flag has been set. If you pass in a
+		specific flag, returns `true` only if that flag has been set (others may
+		be set too, but it checks the specific flag only. If all flags have been
+		marked as invalid, always returns `true`.
+
+		The following example invalidates a component:
+
+		```hx
+		component.setInvalid();
+		trace(component.isInvalid()); // true
+		```
+	**/
+	public function isInvalid(flag:String) {
+		return this._invalidationFlags.exists(flag);
+	}
+
+	/**
+		Immediately validates the display object, if it is invalid. The
+		validation system exists to postpone updating a display object after
+		properties are changed until until the last possible moment the display
+		object is rendered. This allows multiple properties to be changed at a
+		time without requiring a full update every time.
+	**/
+	@:access(ir.grantech.canvas.drawables.ICanItem)
+	public function valiadateAll() {
+		this.item.update();
+		this._invalidationFlags.clear();
+	}
 }

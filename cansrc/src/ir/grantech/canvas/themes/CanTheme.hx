@@ -1,15 +1,13 @@
 package ir.grantech.canvas.themes;
 
-import openfl.display.Shape;
-import feathers.controls.Check;
 import feathers.controls.Application;
 import feathers.controls.BasicButton;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanTextInput;
+import feathers.controls.Check;
 import feathers.controls.HSlider;
 import feathers.controls.Label;
-import feathers.controls.LayoutGroup;
 import feathers.controls.PopUpListView;
 import feathers.controls.TextInput;
 import feathers.controls.TextInputState;
@@ -21,8 +19,8 @@ import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
 import flash.display.Bitmap;
-import ir.grantech.canvas.controls.groups.panels.Panel;
 import openfl.Assets;
+import openfl.display.Shape;
 import openfl.system.Capabilities;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
@@ -49,7 +47,6 @@ class CanTheme extends BaseSteelTheme {
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;
 
 		this.styleProvider.setStyleFunction(Application, null, setApplicationStyles);
-		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_DETAIL, setLabelDetailStyles);
 		this.styleProvider.setStyleFunction(Label, Label.VARIANT_HEADING, setLabelHeadingStyles);
@@ -86,14 +83,6 @@ class CanTheme extends BaseSteelTheme {
 			var skin = new RectangleSkin();
 			skin.fill = SolidColor(app.stage.color);
 			app.backgroundSkin = skin;
-		}
-	}
-
-	public function setPanelStyles(bar:LayoutGroup):Void {
-		if (bar.backgroundSkin == null) {
-			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.controlFillColor1);
-			bar.backgroundSkin = skin;
 		}
 	}
 

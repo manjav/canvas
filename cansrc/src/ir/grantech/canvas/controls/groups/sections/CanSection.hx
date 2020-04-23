@@ -74,14 +74,16 @@ class CanSection extends CanView {
 		element.label = label;
 		element.selected = selected;
 		element.layoutData = layoutData;
+		element.addEventListener(Event.SELECT, this.colorLines_selectHandler);
+		element.addEventListener(Event.CHANGE, this.colorLines_changeHandler);
 		this.addChild(element);
 		return element;
 	}
 
 	private function createSlider(minimum:Float, value:Float, maximum:Float, layoutData:AnchorLayoutData):CanHSlider {
 		var element = new CanHSlider();
-		element.minimum = minimum;
 		element.value = value;
+		element.minimum = minimum;
 		element.maximum = maximum;
 		element.layoutData = layoutData;
 		element.height = CanTheme.CONTROL_SIZE;
@@ -171,6 +173,10 @@ class CanSection extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
+
+	private function colorLines_selectHandler(event:Event):Void {}
+
+	private function colorLines_changeHandler(event:Event):Void {}
 
 	private function popupListView_changeHandler(event:Event):Void {}
 

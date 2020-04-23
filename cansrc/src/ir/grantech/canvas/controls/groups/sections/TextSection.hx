@@ -53,7 +53,7 @@ class TextSection extends CanSection {
 		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 7, padding));
 		this.sizeInput.step = 1;
 
-		this.height = padding * 15;
+		this.height = padding * 12;
 	}
 
 	override private function popupListView_changeHandler(event:Event):Void {

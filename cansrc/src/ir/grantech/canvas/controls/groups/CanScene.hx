@@ -1,18 +1,14 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.services.Tools;
-import ir.grantech.canvas.services.Tools.Tool;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
-import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.Tools;
 import openfl.Vector;
-import openfl.display.DisplayObject;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
 import openfl.display.Shape;
 import openfl.display.Sprite;
-import openfl.events.Event;
 import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
@@ -45,10 +41,6 @@ class CanScene extends LayoutGroup {
 
 		this.selection.visible = false;
 		this.addChild(this.selection);
-	}
-
-	function changed(e:Event):Void {
-		// trace(cast(e.currentTarget, ColorPicker).data);
 	}
 
 	public function updateSlection(phase:Int, fixed:Bool):Void {

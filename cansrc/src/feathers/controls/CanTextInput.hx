@@ -71,6 +71,7 @@ class CanTextInput extends TextInput {
 	override private function initialize():Void {
 		super.initialize();
 		this.textField.maxChars = this.maxChars;
+		this.textField.embedFonts = true;
 	}
 
 	override private function layoutContent():Void {

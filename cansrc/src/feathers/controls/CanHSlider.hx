@@ -141,6 +141,10 @@ class CanHSlider extends FeathersControl implements IRange {
 		return this.enabled = value;
 	}
 
+	public function new() {
+		super();
+	}
+
 	private var sliderDisplay:HSlider;
 	private var inputDisplay:CanRangeInput;
 

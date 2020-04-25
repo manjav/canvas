@@ -27,7 +27,7 @@ class CanShape extends Shape implements ICanItem {
 			this.graphics.lineStyle(this.layer.borderSize, this.layer.borderColor, this.layer.borderAlpha);
 
 		if (this.layer.type == Layer.TYPE_RECT)
-			this.graphics.drawRoundRect(0, 0, this.layer.initialWidth, this.layer.initialHeight, this.layer.borderRadius, this.layer.borderRadius);
+			this.graphics.drawRoundRect(0, 0, this.layer.initialWidth, this.layer.initialHeight, this.layer.cornerRadius, this.layer.cornerRadius);
 		else
 			this.graphics.drawEllipse(0, 0, this.layer.initialWidth, this.layer.initialHeight);
 

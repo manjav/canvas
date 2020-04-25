@@ -107,6 +107,19 @@ class Layer {
 	}
 
 	/**
+		fillEnabled of the item
+	**/
+	public var fillEnabled(default, set):Bool = true;
+
+	private function set_fillEnabled(value:Bool):Bool {
+		if (this.fillEnabled == value)
+			return value;
+		this.fillEnabled = value;
+		this.setInvalid(InvalidationFlag.STYLES);
+		return value;
+	}
+
+	/**
 		fillColor of the item
 	**/
 	public var fillColor(default, set):RGB;
@@ -133,14 +146,14 @@ class Layer {
 	}
 
 	/**
-		fillEnabled of the item
+		cornerRadius of the item
 	**/
-	public var fillEnabled(default, set):Bool = true;
+	public var cornerRadius(default, set):Float = 0;
 
-	private function set_fillEnabled(value:Bool):Bool {
-		if (this.fillEnabled == value)
+	private function set_cornerRadius(value:Float):Float {
+		if (this.cornerRadius == value)
 			return value;
-		this.fillEnabled = value;
+		this.cornerRadius = value;
 		this.setInvalid(InvalidationFlag.STYLES);
 		return value;
 	}
@@ -156,19 +169,6 @@ class Layer {
 		this.borderSize = value;
 		this.setInvalid(InvalidationFlag.STYLES);
 		
-		return value;
-	}
-
-	/**
-		borderRadius of the item
-	**/
-	public var borderRadius(default, set):Float = 0;
-
-	private function set_borderRadius(value:Float):Float {
-		if (this.borderRadius == value)
-			return value;
-		this.borderRadius = value;
-		this.setInvalid(InvalidationFlag.STYLES);
 		return value;
 	}
 
@@ -228,7 +228,7 @@ class Layer {
 		this.borderSize = borderSize;
 		this.borderColor = borderColor;
 		this.borderAlpha = borderAlpha;
-		this.borderRadius = borderRadius;
+		this.cornerRadius = cornerRadius;
 		this.initialWidth = bounds.width;
 		this.initialHeight = bounds.height;
 		// sh.scale9Grid = new Rectangle(r, r, r, r);

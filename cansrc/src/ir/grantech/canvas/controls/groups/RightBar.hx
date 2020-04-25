@@ -26,6 +26,7 @@ class RightBar extends ScrollContainer {
 	override private function initialize() {
 		super.initialize();
 
+		this.scroller.mouseWheelDelta = 100;
 		var layout = new VerticalLayout();
 		layout.horizontalAlign = HorizontalAlign.JUSTIFY;
 		layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = 0;

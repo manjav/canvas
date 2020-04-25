@@ -148,6 +148,7 @@ class CanZoom extends LayoutGroup {
 			this.scene.transformHint.perform(input.pointPhase);
 	}
 
+	@:access(ir.grantech.canvas.services.Inputs)
 	function performSelection(pointPhase:Int, beganFrom:Int, selectedItems:CanItems, fixed:Bool):Void {
 		if (beganFrom != Inputs.TARGET_SCENE || !focused)
 			return;
@@ -169,7 +170,7 @@ class CanZoom extends LayoutGroup {
 		}
 
 		if (Tools.instance.toolType == Tool.RECTANGLE || Tools.instance.toolType == Tool.ELLIPSE || Tools.instance.toolType == Tool.TEXT)
-			Commands.instance.commit(Commands.ADDED, [Tools.instance.toolType, 0xFFFF, 1.0, 3.0, 0xFFFF00, 1.0, selectionBounds, 0]);
+			Commands.instance.commit(Commands.ADDED, [Tools.instance.toolType, input.selectedItems.fillColor, input.selectedItems.fillAlpha, input.selectedItems.borderSize, input.selectedItems.borderColor, input.selectedItems.borderAlpha, selectionBounds, 0]);
 	}
 
 	private function setZoom(value:Float):Void {

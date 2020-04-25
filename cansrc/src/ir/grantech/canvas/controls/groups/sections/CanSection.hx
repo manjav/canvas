@@ -60,7 +60,7 @@ class CanSection extends CanView {
 
 	private function set_targets(value:CanItems):CanItems {
 		this.targets = value;
-		if (value.filled)
+		if (value != null)
 			this.updateData();
 		return value;
 	}

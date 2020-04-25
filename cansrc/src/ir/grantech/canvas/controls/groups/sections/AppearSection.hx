@@ -86,10 +86,10 @@ class AppearSection extends CanSection {
 	}
 
 	override public function updateData():Void {
-		if (this.targets == null || !this.targets.filled)
+		if (this.targets == null)
 			return;
 		this.updating = true;
-		this.alphaSlider.value = this.targets.length == 1 ? this.targets.get(0).alpha * 100 : 100;
+		this.alphaSlider.value = this.targets.alpha * 100;
 		this.modesList.selectedIndex = this.findBlendMode(this.targets.blendMode);
 
 		this.fillPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;

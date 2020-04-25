@@ -60,12 +60,22 @@ class CanItems {
 		return value;
 	}
 
-	public var alpha(default, set):Float = 1;
+	@:isVar
+	public var alpha(get, set):Float;
+
+	private function get_alpha():Float {
+		if (this.isEmpty)
+			return 1.0;
+		var fa:Float = this.items[0].layer.fillAlpha;
+		for (i in 1...this.length)
+			if (fa != this.items[i].layer.fillAlpha)
+				return 1.0;
+		return fa;
+	}
 
 	private function set_alpha(value:Float):Float {
 		if (this.alpha == value)
 			return value;
-		this.alpha = value;
 		for (item in this.items)
 			item.alpha = value;
 		return value;
@@ -89,11 +99,40 @@ class CanItems {
 	}
 
 	private function set_blendMode(value:BlendMode):BlendMode {
-		if (this.blendMode == value)
-			return value;
-		this.blendMode = value;
+		if (this.isEmpty) {
+			if (this.blendMode == value)
+				return value;
+			this.blendMode = value;
+		}
 		for (item in this.items)
 			item.blendMode = value;
+		return value;
+	}
+
+	/**
+		Accesses the fillEnabled of the items
+	**/
+	@:isVar
+	public var fillEnabled(get, set):Bool = true;
+
+	private function get_fillEnabled():Bool {
+		if (this.isEmpty)
+			return this.fillEnabled;
+		var fe = this.items[0].layer.fillEnabled;
+		for (i in 1...this.length)
+			if (fe != this.items[i].layer.fillEnabled)
+				return false;
+		return fe;
+	}
+
+	private function set_fillEnabled(value:Bool):Bool {
+		if (this.isEmpty) {
+			if (this.fillEnabled == value)
+				return value;
+			this.fillEnabled = value;
+		}
+		for (item in this.items)
+			item.layer.fillEnabled = value;
 		return value;
 	}
 
@@ -101,7 +140,7 @@ class CanItems {
 		Accesses the fillColor of the items
 	**/
 	@:isVar
-	public var fillColor(get, set):RGB;
+	public var fillColor(get, set):RGB = 0xFF;
 
 	private function get_fillColor():RGB {
 		if (this.isEmpty)
@@ -109,13 +148,16 @@ class CanItems {
 		var fc:RGB = this.items[0].layer.fillColor;
 		for (i in 1...this.length)
 			if (fc != this.items[i].layer.fillColor)
-				return 0xFFFFFF;
+				return this.fillColor;
 		return fc;
 	}
 
 	private function set_fillColor(value:RGB):RGB {
-		if (this.fillColor == value)
-			return value;
+		if (this.isEmpty) {
+			if (this.fillColor == value)
+				return value;
+			this.fillColor = value;
+		}
 		this.fillColor = value;
 		for (item in this.items)
 			item.layer.fillColor = value;
@@ -126,7 +168,7 @@ class CanItems {
 		Accesses the fillAlpha of the items
 	**/
 	@:isVar
-	public var fillAlpha(get, set):Float = 1;
+	public var fillAlpha(get, set):Float = 1.0;
 
 	private function get_fillAlpha():Float {
 		if (this.isEmpty)
@@ -139,11 +181,40 @@ class CanItems {
 	}
 
 	private function set_fillAlpha(value:Float):Float {
-		if (this.fillAlpha == value)
-			return value;
-		this.fillAlpha = value;
+		if (this.isEmpty) {
+			if (this.fillAlpha == value)
+				return value;
+			this.fillAlpha = value;
+		}
 		for (item in this.items)
 			item.layer.fillAlpha = value;
+		return value;
+	}
+
+	/**
+		Accesses the borderEnabled of the items
+	**/
+	@:isVar
+	public var borderEnabled(get, set):Bool = true;
+
+	private function get_borderEnabled():Bool {
+		if (this.isEmpty)
+			return this.borderEnabled;
+		var be = this.items[0].layer.borderEnabled;
+		for (i in 1...this.length)
+			if (be != this.items[i].layer.borderEnabled)
+				return false;
+		return be;
+	}
+
+	private function set_borderEnabled(value:Bool):Bool {
+		if (this.isEmpty) {
+			if (this.borderEnabled == value)
+				return value;
+			this.borderEnabled = value;
+		}
+		for (item in this.items)
+			item.layer.borderEnabled = value;
 		return value;
 	}
 
@@ -151,11 +222,11 @@ class CanItems {
 		Accesses the borderColor of the items
 	**/
 	@:isVar
-	public var borderColor(get, set):RGB;
+	public var borderColor(get, set):RGB = 0xFF0000;
 
 	private function get_borderColor():RGB {
-		if (this.length < 1)
-			return 0xFFFFFF;
+		if (this.isEmpty)
+			return this.borderColor;
 		var lc:RGB = this.items[0].layer.borderColor;
 		for (i in 1...this.length)
 			if (lc != this.items[i].layer.borderColor)
@@ -164,36 +235,13 @@ class CanItems {
 	}
 
 	private function set_borderColor(value:RGB):RGB {
-		if (this.borderColor == value)
-			return value;
-		this.borderColor = value;
+		if (this.isEmpty) {
+			if (this.borderColor == value)
+				return value;
+			this.borderColor = value;
+		}
 		for (item in this.items)
 			item.layer.borderColor = value;
-		return value;
-	}
-
-	/**
-		Accesses the fillEnabled of the items
-	**/
-	@:isVar
-	public var fillEnabled(get, set):Bool;
-
-	private function get_fillEnabled():Bool {
-		if (this.length < 1)
-			return false;
-		var fe = this.items[0].layer.fillEnabled;
-		for (i in 1...this.length)
-			if (fe != this.items[i].layer.fillEnabled)
-				return false;
-		return fe;
-	}
-
-	private function set_fillEnabled(value:Bool):Bool {
-		if (this.fillEnabled == value)
-			return value;
-		this.fillEnabled = value;
-		for (item in this.items)
-			item.layer.fillEnabled = value;
 		return value;
 	}
 
@@ -201,7 +249,7 @@ class CanItems {
 		Accesses the borderAlpha of the items
 	**/
 	@:isVar
-	public var borderAlpha(get, set):Float;
+	public var borderAlpha(get, set):Float = 1.0;
 
 	private function get_borderAlpha():Float {
 		if (this.isEmpty)
@@ -214,38 +262,43 @@ class CanItems {
 	}
 
 	private function set_borderAlpha(value:Float):Float {
-		if (this.borderAlpha == value)
-			return value;
-		this.borderAlpha = value;
+		if (this.isEmpty) {
+			if (this.borderAlpha == value)
+				return value;
+			this.borderAlpha = value;
+		}
 		for (item in this.items)
 			item.layer.borderAlpha = value;
 		return value;
 	}
-
+	
 	/**
-		Accesses the borderEnabled of the items
+		Accesses the borderSize of the items
 	**/
 	@:isVar
-	public var borderEnabled(get, set):Bool;
+	public var borderSize(get, set):Float = 3.0;
 
-	private function get_borderEnabled():Bool {
-		if (this.length < 1)
-			return false;
-		var be = this.items[0].layer.borderEnabled;
+	private function get_borderSize():Float {
+		if (this.isEmpty)
+			return this.borderAlpha;
+		var la:Float = this.items[0].layer.borderSize;
 		for (i in 1...this.length)
-			if (be != this.items[i].layer.borderEnabled)
-				return false;
-		return be;
+			if (la != this.items[i].layer.borderSize)
+				return 1.0;
+		return la;
 	}
 
-	private function set_borderEnabled(value:Bool):Bool {
-		if (this.borderEnabled == value)
-			return value;
-		this.borderEnabled = value;
+	private function set_borderSize(value:Float):Float {
+		if (this.isEmpty) {
+			if (this.borderSize == value)
+				return value;
+			this.borderSize = value;
+		}
 		for (item in this.items)
-			item.layer.borderEnabled = value;
+			item.layer.borderSize = value;
 		return value;
 	}
+
 
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;

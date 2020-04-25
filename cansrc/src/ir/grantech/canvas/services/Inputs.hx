@@ -144,11 +144,11 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
-			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.filled) { // ctrl + shift + z
+			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.isFill) { // ctrl + shift + z
 				this.commands.commit(Commands.RESET, [this.selectedItems]);
-			} else if (this.lastKeyUp == 219 && this.selectedItems.filled) { // ctrl + [
+			} else if (this.lastKeyUp == 219 && this.selectedItems.isFill) { // ctrl + [
 				this.commands.commit(Commands.ORDER, [this.selectedItems.get(0).layer.order, 1]);
-			} else if (this.lastKeyUp == 221 && this.selectedItems.filled) { // ctrl + ]
+			} else if (this.lastKeyUp == 221 && this.selectedItems.isFill) { // ctrl + ]
 				this.commands.commit(Commands.ORDER, [this.selectedItems.get(0).layer.order, -1]);
 			}
 		}

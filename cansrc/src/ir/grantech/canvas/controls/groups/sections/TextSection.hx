@@ -44,13 +44,13 @@ class TextSection extends CanSection {
 		};
 
 		// font styles
-		this.styleList = this.createComboBox(null, new AnchorLayoutData(padding * 7, padding, null, padding * 7));
+		this.styleList = this.createComboBox(null, new AnchorLayoutData(padding * 6, padding, null, padding * 7));
 		this.styleList.itemToText = (style:FontStyle) -> {
 			return style.styleName;
 		};
 
 		// font size
-		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 7, padding));
+		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
 		this.sizeInput.step = 1;
 
 		this.height = padding * 12;
@@ -79,7 +79,7 @@ class TextSection extends CanSection {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.target == null)
+		if (this.targets.type != Layer.TYPE_TEXT)
 			return;
 		var textFormat = this.target.getTextFormat();
 		if (event.currentTarget == this.sizeInput)

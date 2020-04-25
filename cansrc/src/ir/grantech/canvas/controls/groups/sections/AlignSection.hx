@@ -43,7 +43,7 @@ class AlignSection extends CanSection {
 		this.distrH = this.createButton("distr-h", null);
 		this.distrV = this.createButton("distr-v", null);
 
-		this.height = padding * 4;
+		this.height = padding * 3.2;
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

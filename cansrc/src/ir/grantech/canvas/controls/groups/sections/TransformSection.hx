@@ -30,18 +30,18 @@ class TransformSection extends CanSection {
 	override private function initialize() {
 		super.initialize();
 		this.layout = new AnchorLayout();
-		this.title = "TRANSFORM";
+		// this.title = "TRANSFORM";
 
-		this.inputX = this.createRangeInput("x", new AnchorLayoutData(padding * 3, null, null, padding));
-		this.inputY = this.createRangeInput("y", new AnchorLayoutData(padding * 7, null, null, padding));
-		this.inputW = this.createRangeInput("w", new AnchorLayoutData(padding * 3, null, null, null, 0));
-		this.inputH = this.createRangeInput("h", new AnchorLayoutData(padding * 7, null, null, null, 0));
-		this.inputR = this.createRangeInput("rotate", new AnchorLayoutData(padding * 3, padding));
+		this.inputX = this.createRangeInput("x", new AnchorLayoutData(padding * 1, null, null, padding));
+		this.inputY = this.createRangeInput("y", new AnchorLayoutData(padding * 4, null, null, padding));
+		this.inputW = this.createRangeInput("w", new AnchorLayoutData(padding * 1, null, null, null, 0));
+		this.inputH = this.createRangeInput("h", new AnchorLayoutData(padding * 4, null, null, null, 0));
+		this.inputR = this.createRangeInput("rotate", new AnchorLayoutData(padding * 1, padding));
 
-		this.buttonFlipH = this.createButton("flip-h", new AnchorLayoutData(padding * 7, padding * 4));
-		this.buttonFlipV = this.createButton("flip-v", new AnchorLayoutData(padding * 7, padding * 1));
+		this.buttonFlipH = this.createButton("flip-h", new AnchorLayoutData(padding * 4, padding * 4));
+		this.buttonFlipV = this.createButton("flip-v", new AnchorLayoutData(padding * 4, padding * 1));
 
-		this.height = padding * 11;
+		this.height = padding * 7.5;
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

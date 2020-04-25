@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups.sections;
 
+import openfl.text.TextFormatAlign;
+import feathers.controls.ButtonGroup;
 import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
 import feathers.data.ArrayCollection;
@@ -29,6 +31,7 @@ class TextSection extends CanSection {
 	private var familyList:ComboBox;
 	private var styleList:ComboBox;
 	private var sizeInput:CanRangeInput;
+	private var textAligns:ButtonGroup;
 
 	override private function initialize() {
 		super.initialize();
@@ -52,6 +55,17 @@ class TextSection extends CanSection {
 		// font size
 		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
 		this.sizeInput.step = 1;
+
+		var alignes = [
+			TextFormatAlign.LEFT,
+			TextFormatAlign.CENTER,
+			TextFormatAlign.RIGHT,
+			TextFormatAlign.JUSTIFY
+		];
+		this.textAligns = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 9, padding));
+		this.textAligns.itemToText = (align:String) -> {
+			return "talign-" + align;
+		}
 
 		this.height = padding * 12;
 	}
@@ -85,6 +99,17 @@ class TextSection extends CanSection {
 		if (event.currentTarget == this.sizeInput)
 			textFormat.size = Math.round(this.sizeInput.value);
 		this.target.setTextFormat(textFormat);
+	}
+
+	override private function buttonGroup_changeHandler(event:Event):Void {
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT || this.textAligns.selectedItem == null)
+			return;
+		for (item in this.targets.items) {
+			var textfield = cast(item, CanText);
+			var textFormat = textfield.getTextFormat();
+			textFormat.align = this.textAligns.selectedItem;
+			textfield.setTextFormat(textFormat);
+		}
 	}
 
 	function changeFont(font:FontStyle):Void {

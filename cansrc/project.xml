@@ -68,8 +68,17 @@
   <assets id="align-l" path="assets/img/align-l.png"/>
   <assets id="distr-h" path="assets/img/distr-h.png"/>
   <assets id="distr-v" path="assets/img/distr-v.png"/>
+  
+  <assets id="talign-left" path="assets/img/text-left.png"/>
+  <assets id="talign-left-selected" path="assets/img/text-left-blue.png"/>
+  <assets id="talign-center" path="assets/img/text-center.png"/>
+  <assets id="talign-center-selected" path="assets/img/text-center-blue.png"/>
+  <assets id="talign-right" path="assets/img/text-right.png"/>
+  <assets id="talign-right-selected" path="assets/img/text-right-blue.png"/>
+  <assets id="talign-justify" path="assets/img/text-justify.png"/>
+  <assets id="talign-justify-selected" path="assets/img/text-justify-blue.png"/>
+  
   <assets id="IRANSans" path="assets/IRANSans-Light-web.ttf"/>
-
-	<!-- async/external -->
+  <!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>
 </project>

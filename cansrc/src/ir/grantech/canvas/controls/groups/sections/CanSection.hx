@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.sections;
 
+import feathers.controls.ButtonGroup;
 import feathers.controls.Button;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
@@ -126,6 +127,16 @@ class CanSection extends CanView {
 		return element;
 	}
 
+	private function createButtonGroup(items:Array<Dynamic>, layoutData:AnchorLayoutData):ButtonGroup {
+		var element = new ButtonGroup();
+		element.height = CanTheme.CONTROL_SIZE;
+		element.layoutData = AnchorLayoutData.topLeft(padding * 9, padding);
+		element.dataProvider = new ArrayCollection(items);
+		element.addEventListener(Event.CHANGE, this.buttonGroup_changeHandler);
+		this.addChild(element);
+		return element;
+	}
+
 	private function createLabel(text:String, layoutData:AnchorLayoutData, variant:String = null):Label {
 		var element = new Label();
 		element.embedFonts = true;
@@ -173,6 +184,8 @@ class CanSection extends CanView {
 		element.addEventListener(FocusEvent.FOCUS_OUT, this.textInputs_focusOutHandler);
 		this.addChild(element);
 	}
+
+	private function buttonGroup_changeHandler(event:Event):Void {}
 
 	private function colorLines_selectHandler(event:Event):Void {}
 

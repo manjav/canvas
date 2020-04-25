@@ -168,7 +168,7 @@ class Layer {
 			return value;
 		this.borderSize = value;
 		this.setInvalid(InvalidationFlag.STYLES);
-		
+
 		return value;
 	}
 
@@ -214,7 +214,7 @@ class Layer {
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
 	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, borderRadius:Float) {
-		if(Layer.TYPES == null)
+		if (Layer.TYPES == null)
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 
 		this._invalidationFlags = new Map<String, Bool>();
@@ -249,14 +249,13 @@ class Layer {
 		} else if (this.type == TYPE_TEXT) {
 			this.fillEnabled = false;
 			this.borderEnabled = false;
-			var txt = new CanText();
+			var txt = new CanText(this);
 			txt.x = bounds.x;
 			txt.y = bounds.y;
 			txt.width = bounds.width;
 			txt.height = bounds.height;
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
-			txt.border = true;
 			txt.defaultTextFormat = new TextFormat("IRANSans Light", 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
 			ret = txt;
 		}

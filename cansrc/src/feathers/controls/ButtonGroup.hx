@@ -14,13 +14,9 @@ class ButtonGroup extends ListView {
 		this.itemRendererRecycler = DisplayObjectRecycler.withClass(ButtonGroupRenderer);
 	}
 
-	// override 	private function set_dataProvider(value:IFlatCollection<Dynamic>):IFlatCollection<Dynamic> {
-	// 	if (this.dataProvider == value)
-	// 		return value;
-	// 	var data = super.set_dataProvider(value);
-	// 	this.width = data.length * CanTheme.CONTROL_SIZE;
-	// 	return data;
-	// }
+	override private function refreshScrollRect():Void {}
+
+	override private function refreshBackgroundSkin():Void {}
 
 	override private function createItemRenderer(item:Dynamic, index:Int):DisplayObject {
 		var itemRenderer = cast(super.createItemRenderer(item, index), ButtonGroupRenderer);

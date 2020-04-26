@@ -33,6 +33,7 @@ class TextSection extends CanSection {
 	private var styleList:ComboBox;
 	private var sizeInput:CanRangeInput;
 	private var spaceLineInput:CanRangeInput;
+	private var spaceLetterInput:CanRangeInput;
 	private var alignsButtons:ButtonGroup;
 	private var sutoSizeButtons:ButtonGroup;
 
@@ -59,6 +60,10 @@ class TextSection extends CanSection {
 		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
 		this.sizeInput.step = 1;
 
+		// letter space
+		this.spaceLetterInput = this.createRangeInput("tspace-letter", AnchorLayoutData.topLeft(padding * 9, padding));
+		this.spaceLetterInput.step = 1;
+
 		// lince space
 		this.spaceLineInput = this.createRangeInput("tspace-line", AnchorLayoutData.topLeft(padding * 9, padding * 6));
 		this.spaceLineInput.step = 1;
@@ -70,7 +75,7 @@ class TextSection extends CanSection {
 			TextFormatAlign.RIGHT,
 			TextFormatAlign.JUSTIFY
 		];
-		this.alignsButtons = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 9, padding));
+		this.alignsButtons = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 12, padding));
 		this.alignsButtons.itemToText = (align:TextFormatAlign) -> {
 			return switch (align) {
 				case TextFormatAlign.JUSTIFY: "talign-justify";
@@ -116,8 +121,11 @@ class TextSection extends CanSection {
 		if (this.targets.type != Layer.TYPE_TEXT)
 			return;
 		var textFormat = this.target.getTextFormat();
+
 		if (event.currentTarget == this.sizeInput)
 			textFormat.size = Math.round(this.sizeInput.value);
+		else if (event.currentTarget == this.spaceLetterInput)
+			textFormat.letterSpacing = Math.round(this.spaceLetterInput.value);
 		else if (event.currentTarget == this.spaceLineInput)
 			textFormat.leading = Math.round(this.spaceLineInput.value);
 

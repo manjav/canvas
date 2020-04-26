@@ -81,7 +81,9 @@
   <assets id="tsize-align-selected" path="assets/img/text-sizealign-blue.png"/>
   <assets id="tsize-none" path="assets/img/text-sizenone.png"/>
   <assets id="tsize-none-selected" path="assets/img/text-sizenone-blue.png"/>
-  
+  <assets id="tspace-letter" path="assets/img/text-space-letter.png"/>
+  <assets id="tspace-line" path="assets/img/text-space-line.png"/>
+    
   <assets id="IRANSans" path="assets/IRANSans-Light-web.ttf"/>
   <!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanZoom;
@@ -14,7 +15,6 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 
 class Inputs extends BaseService {
-
 	static public final TARGET_NONE:Int = -1;
 	static public final TARGET_ITEM:Int = 0;
 	static public final TARGET_SCENE:Int = 1;
@@ -90,11 +90,13 @@ class Inputs extends BaseService {
 	public function new(stage:Stage, canZoom:CanZoom) {
 		super();
 		this.stage = stage;
+		this.stage.doubleClickEnabled = true;
 		this.canZoom = canZoom;
 		this.selectedItems = new CanItems();
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 
+		this.stage.addEventListener(MouseEvent.DOUBLE_CLICK, this.stage_doubleClickHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stage_mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.stage_mouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, this.stage_middleMouseDownHandler);
@@ -157,6 +159,12 @@ class Inputs extends BaseService {
 			this.commands.commit(Commands.REMOVED, [this.selectedItems]);
 			return;
 		}
+	}
+
+	private function stage_doubleClickHandler(event:MouseEvent):Void {
+		var toolType = Layer.TYPES.indexOf(selectedItems.type);
+		if (toolType > -1)
+			Tools.instance.toolType = toolType;
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

@@ -248,7 +248,6 @@ class Layer {
 			ret = sh;
 		} else if (this.type == TYPE_TEXT) {
 			this.fillEnabled = false;
-			this.borderEnabled = false;
 			var txt = new CanText(this);
 			txt.x = bounds.x;
 			txt.y = bounds.y;

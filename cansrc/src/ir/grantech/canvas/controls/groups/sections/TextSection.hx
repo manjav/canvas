@@ -1,6 +1,5 @@
 package ir.grantech.canvas.controls.groups.sections;
 
-import openfl.text.TextFormatAlign;
 import feathers.controls.ButtonGroup;
 import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
@@ -14,6 +13,8 @@ import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.text.Font;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormatAlign;
 
 class TextSection extends CanSection {
 	private var target:CanText;
@@ -31,7 +32,8 @@ class TextSection extends CanSection {
 	private var familyList:ComboBox;
 	private var styleList:ComboBox;
 	private var sizeInput:CanRangeInput;
-	private var textAligns:ButtonGroup;
+	private var alignsButtons:ButtonGroup;
+	private var sutoSizeButtons:ButtonGroup;
 
 	override private function initialize() {
 		super.initialize();
@@ -73,6 +75,11 @@ class TextSection extends CanSection {
 				default: null;
 			}
 		}
+
+		// text auto size
+		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topLeft(padding * 9, padding * 10));
+		this.sutoSizeButtons.itemToText = (autosize:Int) -> {
+			return autosize == 0 ? "tsize-align" : "tsize-none";
 		}
 
 		this.height = padding * 12;
@@ -110,13 +117,33 @@ class TextSection extends CanSection {
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT || this.alignsButtons.selectedItem == null)
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
-		for (item in this.targets.items) {
-			var textfield = cast(item, CanText);
-			var textFormat = textfield.getTextFormat();
-			textFormat.align = this.alignsButtons.selectedItem;
-			textfield.setTextFormat(textFormat);
+		if (event.currentTarget == this.alignsButtons) {
+			if (this.alignsButtons.selectedItem == null)
+				return;
+			for (item in this.targets.items) {
+				var textfield = cast(item, CanText);
+				var textFormat = textfield.getTextFormat();
+				textFormat.align = this.alignsButtons.selectedItem;
+				textfield.setTextFormat(textFormat);
+			}
+		} else if (event.currentTarget == this.sutoSizeButtons) {
+			if (this.sutoSizeButtons.selectedItem == null)
+				return;
+			for (item in this.targets.items) {
+				var textfield = cast(item, CanText);
+				if (this.sutoSizeButtons.selectedIndex == 1) {
+					textfield.autoSize = TextFieldAutoSize.NONE;
+				} else {
+					var textFormat = textfield.getTextFormat();
+					textfield.autoSize = switch (textFormat.align) {
+						case TextFormatAlign.CENTER: TextFieldAutoSize.CENTER;
+						case TextFormatAlign.RIGHT: TextFieldAutoSize.RIGHT;
+						default: TextFieldAutoSize.LEFT;
+					}
+				}
+			}
 		}
 	}
 

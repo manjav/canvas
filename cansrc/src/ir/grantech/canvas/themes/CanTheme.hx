@@ -42,6 +42,7 @@ class CanTheme extends BaseSteelTheme {
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
 		this.textColor = this.darkMode ? 0x646464 : 0x464646;
+		this.controlFillColor1 = this.darkMode ? 0x5f5f5f : 0xf4f4f4;
 		this.headerTextColor = this.disabledTextColor = this.darkMode ? 0xAaAaAa : 0xAaAaAa;
 		// this is a dark theme, set set the default theme to dark mode
 		// cast(Theme.fallbackTheme, IDarkModeTheme).darkMode = true;

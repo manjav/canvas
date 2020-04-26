@@ -129,8 +129,8 @@ class CanSection extends CanView {
 
 	private function createButtonGroup(items:Array<Dynamic>, layoutData:AnchorLayoutData):ButtonGroup {
 		var element = new ButtonGroup();
+		element.layoutData = layoutData;
 		element.height = CanTheme.CONTROL_SIZE;
-		element.layoutData = AnchorLayoutData.topLeft(padding * 9, padding);
 		element.dataProvider = new ArrayCollection(items);
 		element.addEventListener(Event.CHANGE, this.buttonGroup_changeHandler);
 		this.addChild(element);

@@ -77,6 +77,10 @@
   <assets id="talign-right-selected" path="assets/img/text-right-blue.png"/>
   <assets id="talign-justify" path="assets/img/text-justify.png"/>
   <assets id="talign-justify-selected" path="assets/img/text-justify-blue.png"/>
+  <assets id="tsize-align" path="assets/img/text-sizealign.png"/>
+  <assets id="tsize-align-selected" path="assets/img/text-sizealign-blue.png"/>
+  <assets id="tsize-none" path="assets/img/text-sizenone.png"/>
+  <assets id="tsize-none-selected" path="assets/img/text-sizenone-blue.png"/>
   
   <assets id="IRANSans" path="assets/IRANSans-Light-web.ttf"/>
   <!-- async/external -->

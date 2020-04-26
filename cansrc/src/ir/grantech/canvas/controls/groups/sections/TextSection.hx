@@ -56,15 +56,23 @@ class TextSection extends CanSection {
 		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
 		this.sizeInput.step = 1;
 
+		// text align
 		var alignes = [
 			TextFormatAlign.LEFT,
 			TextFormatAlign.CENTER,
 			TextFormatAlign.RIGHT,
 			TextFormatAlign.JUSTIFY
 		];
-		this.textAligns = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 9, padding));
-		this.textAligns.itemToText = (align:String) -> {
-			return "talign-" + align;
+		this.alignsButtons = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 9, padding));
+		this.alignsButtons.itemToText = (align:TextFormatAlign) -> {
+			return switch (align) {
+				case TextFormatAlign.JUSTIFY: "talign-justify";
+				case TextFormatAlign.CENTER: "talign-center";
+				case TextFormatAlign.RIGHT: "talign-right";
+				case TextFormatAlign.LEFT: "talign-left";
+				default: null;
+			}
+		}
 		}
 
 		this.height = padding * 12;
@@ -102,12 +110,12 @@ class TextSection extends CanSection {
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT || this.textAligns.selectedItem == null)
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT || this.alignsButtons.selectedItem == null)
 			return;
 		for (item in this.targets.items) {
 			var textfield = cast(item, CanText);
 			var textFormat = textfield.getTextFormat();
-			textFormat.align = this.textAligns.selectedItem;
+			textFormat.align = this.alignsButtons.selectedItem;
 			textfield.setTextFormat(textFormat);
 		}
 	}

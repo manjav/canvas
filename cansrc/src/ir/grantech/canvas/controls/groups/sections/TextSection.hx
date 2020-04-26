@@ -32,6 +32,7 @@ class TextSection extends CanSection {
 	private var familyList:ComboBox;
 	private var styleList:ComboBox;
 	private var sizeInput:CanRangeInput;
+	private var spaceLineInput:CanRangeInput;
 	private var alignsButtons:ButtonGroup;
 	private var sutoSizeButtons:ButtonGroup;
 
@@ -58,6 +59,10 @@ class TextSection extends CanSection {
 		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
 		this.sizeInput.step = 1;
 
+		// lince space
+		this.spaceLineInput = this.createRangeInput("tspace-line", AnchorLayoutData.topLeft(padding * 9, padding * 6));
+		this.spaceLineInput.step = 1;
+
 		// text align
 		var alignes = [
 			TextFormatAlign.LEFT,
@@ -77,12 +82,12 @@ class TextSection extends CanSection {
 		}
 
 		// text auto size
-		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topLeft(padding * 9, padding * 10));
+		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topLeft(padding * 12, padding * 10));
 		this.sutoSizeButtons.itemToText = (autosize:Int) -> {
 			return autosize == 0 ? "tsize-align" : "tsize-none";
 		}
 
-		this.height = padding * 12;
+		this.height = padding * 15;
 	}
 
 	override private function popupListView_changeHandler(event:Event):Void {
@@ -113,6 +118,9 @@ class TextSection extends CanSection {
 		var textFormat = this.target.getTextFormat();
 		if (event.currentTarget == this.sizeInput)
 			textFormat.size = Math.round(this.sizeInput.value);
+		else if (event.currentTarget == this.spaceLineInput)
+			textFormat.leading = Math.round(this.spaceLineInput.value);
+
 		this.target.setTextFormat(textFormat);
 	}
 

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups.sections;
 
+import feathers.controls.colors.ColorPicker;
 import feathers.controls.ButtonGroup;
 import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
@@ -36,6 +37,7 @@ class TextSection extends CanSection {
 	private var spaceLetterInput:CanRangeInput;
 	private var alignsButtons:ButtonGroup;
 	private var sutoSizeButtons:ButtonGroup;
+	private var colorPicker:ColorPicker;
 
 	override private function initialize() {
 		super.initialize();
@@ -56,16 +58,23 @@ class TextSection extends CanSection {
 			return style.styleName;
 		};
 
+		// font color
+		this.colorPicker = new ColorPicker();
+		this.colorPicker.hasAlpha = false;
+		this.colorPicker.addEventListener(Event.CHANGE, this.colorPicker_changeHandler);
+		this.colorPicker.layoutData = AnchorLayoutData.topLeft(padding * 7, padding);
+		this.addChild(this.colorPicker);
+
 		// font size
-		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 6, padding));
+		this.sizeInput = this.createRangeInput(null, AnchorLayoutData.topLeft(padding * 9, padding));
 		this.sizeInput.step = 1;
 
 		// letter space
-		this.spaceLetterInput = this.createRangeInput("tspace-letter", AnchorLayoutData.topLeft(padding * 9, padding));
+		this.spaceLetterInput = this.createRangeInput("tspace-letter", AnchorLayoutData.topLeft(padding * 9, padding * 7));
 		this.spaceLetterInput.step = 1;
 
 		// lince space
-		this.spaceLineInput = this.createRangeInput("tspace-line", AnchorLayoutData.topLeft(padding * 9, padding * 6));
+		this.spaceLineInput = this.createRangeInput("tspace-line", AnchorLayoutData.topRight(padding * 9, padding));
 		this.spaceLineInput.step = 1;
 
 		// text align
@@ -130,6 +139,17 @@ class TextSection extends CanSection {
 			textFormat.leading = Math.round(this.spaceLineInput.value);
 
 		this.target.setTextFormat(textFormat);
+	}
+
+	private function colorPicker_changeHandler(event:Event):Void {
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+			return;
+		for (item in this.targets.items) {
+			var textfield = cast(item, CanText);
+			var textFormat = textfield.getTextFormat();
+			textFormat.color = this.colorPicker.rgb;
+			textfield.setTextFormat(textFormat);
+		}
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {

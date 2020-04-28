@@ -19,10 +19,11 @@ class ButtonGroup extends ListView {
 	override private function refreshBackgroundSkin():Void {}
 
 	override private function createItemRenderer(item:Dynamic, index:Int):DisplayObject {
-		var itemRenderer = cast(super.createItemRenderer(item, index), ButtonGroupRenderer);
-		itemRenderer.index = index;
-		itemRenderer.owner = this;
-		itemRenderer.draw();
+		var itemRenderer = super.createItemRenderer(item, index);
+		var buttonRenderer = cast(super.createItemRenderer(item, index), ButtonGroupRenderer);
+		buttonRenderer.index = index;
+		buttonRenderer.owner = this;
+		buttonRenderer.draw();
 		return itemRenderer;
 	}
 }

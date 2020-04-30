@@ -9,7 +9,7 @@ import openfl.events.MouseEvent;
 
 class CanRangeInput extends CanTextInput implements IRange {
 	private var stepY = 0.0;
-	private var speed = 0.1;
+	private var speed = 1.0;
 	private var diff = 0.0;
 
 	/**

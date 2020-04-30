@@ -20,7 +20,7 @@ class ButtonGroup extends ListView {
 
 	override private function createItemRenderer(item:Dynamic, index:Int):DisplayObject {
 		var itemRenderer = super.createItemRenderer(item, index);
-		var buttonRenderer = cast(super.createItemRenderer(item, index), ButtonGroupRenderer);
+		var buttonRenderer = cast(itemRenderer, ButtonGroupRenderer);
 		buttonRenderer.index = index;
 		buttonRenderer.owner = this;
 		buttonRenderer.draw();

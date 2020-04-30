@@ -44,6 +44,7 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.TRANSLATE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.SCALE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ROTATE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.RESIZE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.RESET, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALIGN, this.commands_itemsEventsHandler);
@@ -102,7 +103,7 @@ class CanZoom extends LayoutGroup {
 			case Commands.ROTATE:
 				items.rotate(event.data[1]);
 			case Commands.RESIZE:
-				items.resize(event.data[1], event.data[2]);
+				items.resize(event.data[1].x, event.data[1].y, event.data[1].width, event.data[1].height);
 			case Commands.RESET:
 				items.resetTransform();
 			case Commands.ALIGN:
@@ -134,7 +135,7 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
-		if( input.beganFrom == Inputs.TARGET_NONE )
+		if (input.beganFrom == Inputs.TARGET_NONE)
 			return;
 		this.performSelection(input.pointPhase, input.beganFrom, input.selectedItems, input.shiftKey || input.ctrlKey);
 
@@ -172,7 +173,16 @@ class CanZoom extends LayoutGroup {
 		}
 
 		if (Tools.instance.toolType == Tool.RECTANGLE || Tools.instance.toolType == Tool.ELLIPSE || Tools.instance.toolType == Tool.TEXT)
-			Commands.instance.commit(Commands.ADDED, [Tools.instance.toolType, input.selectedItems.fillColor, input.selectedItems.fillAlpha, input.selectedItems.borderSize, input.selectedItems.borderColor, input.selectedItems.borderAlpha, selectionBounds, 0]);
+			Commands.instance.commit(Commands.ADDED, [
+				Tools.instance.toolType,
+				input.selectedItems.fillColor,
+				input.selectedItems.fillAlpha,
+				input.selectedItems.borderSize,
+				input.selectedItems.borderColor,
+				input.selectedItems.borderAlpha,
+				selectionBounds,
+				0
+			]);
 	}
 
 	private function setZoom(value:Float):Void {

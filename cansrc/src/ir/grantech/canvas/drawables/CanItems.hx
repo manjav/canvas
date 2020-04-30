@@ -434,8 +434,18 @@ class CanItems {
 		this.calculateBounds();
 	}
 
-	public function setDim(width:Float, height:Float):Void {
-		this.scaleTo(width / this.bounds.width, height / this.bounds.height);
+	public function resize(x:Float, y:Float, width:Float, height:Float):Void {
+		var px = x / this.bounds.x;
+		var py = y / this.bounds.y;
+		var sx = width / this.bounds.width;
+		var sy = height / this.bounds.height;
+		for (item in this.items) {
+			item.x = x + (item.x - this.bounds.x) * px;
+			item.y = y + (item.y - this.bounds.y) * py;
+			item.width *= sx;
+			item.height *= sy;
+		}
+		this.calculateBounds();
 	}
 
 	public function align(mode:String):Void {

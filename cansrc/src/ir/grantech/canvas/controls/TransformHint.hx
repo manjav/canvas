@@ -1,17 +1,17 @@
 package ir.grantech.canvas.controls;
 
-import openfl.display.BlendMode;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
+import openfl.display.BlendMode;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
-import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.ui.Mouse;
@@ -53,6 +53,8 @@ class TransformHint extends Sprite {
 	private var mouseAngleBegin:Float;
 	private var scaleBegin:Point;
 	private var angleBegin:Float;
+	private var resizeBegin:Rectangle;
+	private var resizeUpdate:Rectangle;
 	private var cursor:Cursor;
 
 	public var targets:CanItems;
@@ -74,6 +76,8 @@ class TransformHint extends Sprite {
 		this.mouseTranslateBegin = new Point();
 		this.mouseScaleBegin = new Point();
 		this.scaleBegin = new Point();
+		this.resizeBegin = new Rectangle();
+		this.resizeUpdate = new Rectangle();
 
 		this.register = this.addCircle(0, 0, this.radius + 1);
 		this.register.blendMode = BlendMode.DIFFERENCE;
@@ -175,11 +179,11 @@ class TransformHint extends Sprite {
 
 		var w = 0.0;
 		var h = 0.0;
-			this.rotation = 0;
-			this.x = this.targets.bounds.x;
-			this.y = this.targets.bounds.y;
-			w = this.targets.bounds.width;
-			h = this.targets.bounds.height;
+		this.rotation = 0;
+		this.x = this.targets.bounds.x;
+		this.y = this.targets.bounds.y;
+		w = this.targets.bounds.width;
+		h = this.targets.bounds.height;
 
 		this.main.width = w;
 		this.main.height = h;
@@ -258,10 +262,13 @@ class TransformHint extends Sprite {
 			this.performRegister(state);
 		else if (this.mode == MODE_TRANSLATE)
 			this.performTranslate(state);
-		else if (this.mode == MODE_SCALE)
-			this.performScale(state);
 		else if (this.mode == MODE_ROTATE)
 			this.performRotate(state);
+		else if (this.mode == MODE_SCALE)
+			if (this.targets.type == Layer.TYPE_TEXT)
+				this.performResize(state);
+			else
+				this.performScale(state);
 	}
 
 	private function performRegister(state:Int):Void {
@@ -328,7 +335,40 @@ class TransformHint extends Sprite {
 				sy = this.scaleBegin.y;
 		}
 		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy]);
-		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy, this.targets.pivotV]);
+	}
+
+	private function performResize(state:Int):Void {
+		if (state == Inputs.PHASE_BEGAN) {
+			this.mouseScaleBegin.setTo(this.mouseX, this.mouseY);
+			this.resizeBegin.setTo(this.targets.bounds.x, this.targets.bounds.y, this.targets.bounds.width, this.targets.bounds.height);
+			return;
+		}
+
+		// calculate delta scale
+		var sx = this.mouseX - this.mouseScaleBegin.x;
+		var sy = this.mouseY - this.mouseScaleBegin.y;
+
+		if (Inputs.instance.shiftKey) {
+			sy = sx;
+		} else {
+			if (this.hitAnchor == 1 || this.hitAnchor == 5)
+				sx = 0;
+			else if (this.hitAnchor == 3 || this.hitAnchor == 7)
+				sy = 0;
+		}
+
+		// create rect-scale
+		resizeUpdate.setTo(this.resizeBegin.x, this.resizeBegin.y, this.resizeBegin.width + sx, this.resizeBegin.height + sy);
+		if (this.hitAnchor == 0 || this.hitAnchor == 6 || this.hitAnchor == 7) {
+			resizeUpdate.x = this.resizeBegin.x + sx;
+			resizeUpdate.width = this.resizeBegin.width - sx;
+		}
+		if (this.hitAnchor == 0 || this.hitAnchor == 1 || this.hitAnchor == 2) {
+			resizeUpdate.y = this.resizeBegin.y + sy;
+			resizeUpdate.height = this.resizeBegin.height - sy;
+		}
+
+		Commands.instance.commit(Commands.RESIZE, [this.targets, resizeUpdate]);
 	}
 
 	private function performTranslate(state:Int):Void {

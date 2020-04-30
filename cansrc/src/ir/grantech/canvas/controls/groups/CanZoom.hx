@@ -98,7 +98,7 @@ class CanZoom extends LayoutGroup {
 			case Commands.TRANSLATE:
 				items.translate(event.data[1], event.data[2]);
 			case Commands.SCALE:
-				items.scale(event.data[1], event.data[2]);
+				items.setDim(event.data[1], event.data[2]);
 			case Commands.ROTATE:
 				items.rotate(event.data[1]);
 			case Commands.DIMENTIONS:
@@ -134,6 +134,8 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	private function input_pointHandler(event:CanEvent):Void {
+		if( input.beganFrom == Inputs.TARGET_NONE )
+			return;
 		this.performSelection(input.pointPhase, input.beganFrom, input.selectedItems, input.shiftKey || input.ctrlKey);
 
 		if (Tools.instance.toolType != Tool.SELECT)

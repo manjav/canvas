@@ -271,7 +271,7 @@ class CanItems {
 			item.layer.borderAlpha = value;
 		return value;
 	}
-	
+
 	/**
 		Accesses the borderSize of the items
 	**/
@@ -298,7 +298,6 @@ class CanItems {
 			item.layer.borderSize = value;
 		return value;
 	}
-
 
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
@@ -408,16 +407,25 @@ class CanItems {
 
 	// perform scale with matrix
 	public function scale(sx:Float, sy:Float):Void {
-		if (this.length != 1)
-			return;
-		var mat:Matrix = this.items[0].transform.matrix;
-		var angle = Math.atan2(mat.b, mat.a);
-		mat.translate(-pivotV.x, -pivotV.y);
-		mat.rotate(-angle);
-		mat.scale(sx == 1000000 ? 1 : sx / mat.a, sy == 1000000 ? 1 : (sx == sy ? sx / mat.a : sy / mat.d));
-		mat.rotate(angle);
-		mat.translate(pivotV.x, pivotV.y);
-		this.items[0].transform.matrix = mat;
+		trace(sx, sy);
+		for (item in this.items) {
+			var mat = item.transform.matrix;
+			mat.translate(-this.pivotV.x, -this.pivotV.y);
+			mat.scale(sx / mat.a, sy / mat.d);
+			mat.translate(this.pivotV.x, this.pivotV.y);
+			item.transform.matrix = mat;
+		}
+		this.calculateBounds();
+	}
+
+	public function scaleTo(sx:Float, sy:Float):Void {
+		for (item in this.items) {
+			var mat = item.transform.matrix;
+			mat.translate(-this.pivotV.x, -this.pivotV.y);
+			mat.scale(sx, sy);
+			mat.translate(this.pivotV.x, this.pivotV.y);
+			item.transform.matrix = mat;
+		}
 		this.calculateBounds();
 	}
 
@@ -437,15 +445,7 @@ class CanItems {
 	}
 
 	public function setDim(width:Float, height:Float):Void {
-		var rx = width / this.bounds.width;
-		var ry = height / this.bounds.height;
-		for (item in this.items) {
-			item.width *= rx;
-			item.height *= ry;
-			item.x = this.bounds.x + (item.x - this.bounds.x) * rx;
-			item.y = this.bounds.y + (item.y - this.bounds.y) * ry;
-		}
-		this.calculateBounds();
+		this.scaleTo(width / this.bounds.width, height / this.bounds.height);
 	}
 
 	public function align(mode:String):Void {

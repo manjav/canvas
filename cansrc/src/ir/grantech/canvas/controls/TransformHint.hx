@@ -175,21 +175,11 @@ class TransformHint extends Sprite {
 
 		var w = 0.0;
 		var h = 0.0;
-		if (this.targets.length == 1) {
-			var r = this.targets.get(0).rotation;
-			this.targets.get(0).rotation = 0;
-			w = this.targets.get(0).width;
-			h = this.targets.get(0).height;
-			this.x = this.targets.get(0).x;
-			this.y = this.targets.get(0).y;
-			this.rotation = this.targets.get(0).rotation = r;
-		} else {
 			this.rotation = 0;
 			this.x = this.targets.bounds.x;
 			this.y = this.targets.bounds.y;
 			w = this.targets.bounds.width;
 			h = this.targets.bounds.height;
-		}
 
 		this.main.width = w;
 		this.main.height = h;
@@ -321,11 +311,7 @@ class TransformHint extends Sprite {
 	private function performScale(state:Int):Void {
 		if (state == Inputs.PHASE_BEGAN) {
 			this.mouseScaleBegin.setTo(this.mouseX - this.register.x, this.mouseY - this.register.y);
-			var mat:Matrix = this.targets.get(0).transform.matrix;
-			this.angleBegin = Math.atan2(mat.b, mat.a);
-			mat.rotate(-this.angleBegin);
-			this.scaleBegin.setTo(mat.a, mat.d);
-			mat.rotate(this.angleBegin);
+			this.scaleBegin.setTo(this.targets.bounds.width, this.targets.bounds.height);
 			return;
 		}
 
@@ -337,9 +323,9 @@ class TransformHint extends Sprite {
 			sy = sx;
 		} else {
 			if (this.hitAnchor == 1 || this.hitAnchor == 5)
-				sx = 1000000;
+				sx = this.scaleBegin.x;
 			else if (this.hitAnchor == 3 || this.hitAnchor == 7)
-				sy = 1000000;
+				sy = this.scaleBegin.y;
 		}
 		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy, this.targets.pivotV]);
 	}

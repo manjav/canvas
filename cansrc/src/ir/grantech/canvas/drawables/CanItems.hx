@@ -405,20 +405,10 @@ class CanItems {
 		item.transform.matrix = mat;
 	}
 
-	// perform scale with matrix
-	public function scale(sx:Float, sy:Float):Void {
-		trace(sx, sy);
-		for (item in this.items) {
-			var mat = item.transform.matrix;
-			mat.translate(-this.pivotV.x, -this.pivotV.y);
-			mat.scale(sx / mat.a, sy / mat.d);
-			mat.translate(this.pivotV.x, this.pivotV.y);
-			item.transform.matrix = mat;
-		}
-		this.calculateBounds();
-	}
 
-	public function scaleTo(sx:Float, sy:Float):Void {
+	public function scale(width:Float, height:Float):Void {
+		var sx = width / this.bounds.width;
+		var sy = height / this.bounds.height;
 		for (item in this.items) {
 			var mat = item.transform.matrix;
 			mat.translate(-this.pivotV.x, -this.pivotV.y);

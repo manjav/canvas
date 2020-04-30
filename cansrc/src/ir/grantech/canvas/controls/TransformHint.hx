@@ -327,6 +327,7 @@ class TransformHint extends Sprite {
 			else if (this.hitAnchor == 3 || this.hitAnchor == 7)
 				sy = this.scaleBegin.y;
 		}
+		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy]);
 		Commands.instance.commit(Commands.SCALE, [this.targets, sx, sy, this.targets.pivotV]);
 	}
 

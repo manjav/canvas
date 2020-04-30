@@ -44,7 +44,7 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.TRANSLATE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.SCALE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ROTATE, this.commands_itemsEventsHandler);
-		commands.addEventListener(Commands.DIMENTIONS, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.RESET, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALIGN, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BLEND_MODE, this.commands_itemsEventsHandler);
@@ -98,11 +98,11 @@ class CanZoom extends LayoutGroup {
 			case Commands.TRANSLATE:
 				items.translate(event.data[1], event.data[2]);
 			case Commands.SCALE:
-				items.setDim(event.data[1], event.data[2]);
+				items.scale(event.data[1], event.data[2]);
 			case Commands.ROTATE:
 				items.rotate(event.data[1]);
-			case Commands.DIMENTIONS:
-				items.setDim(event.data[1], event.data[2]);
+			case Commands.RESIZE:
+				items.resize(event.data[1], event.data[2]);
 			case Commands.RESET:
 				items.resetTransform();
 			case Commands.ALIGN:

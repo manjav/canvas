@@ -72,9 +72,9 @@ class TransformSection extends CanSection {
 				this.inputY.value - this.targets.bounds.y
 			]);
 		else if (event.currentTarget == this.inputW)
-			this.commands.commit(Commands.DIMENTIONS, [this.targets, this.inputW.value, this.targets.bounds.height]);
+			this.commands.commit(Commands.RESIZE, [this.targets, this.inputW.value, this.targets.bounds.height]);
 		else if (event.currentTarget == this.inputH)
-			this.commands.commit(Commands.DIMENTIONS, [this.targets, this.targets.bounds.width, this.inputH.value]);
+			this.commands.commit(Commands.RESIZE, [this.targets, this.targets.bounds.width, this.inputH.value]);
 		else if (event.currentTarget == this.inputR)
 			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
 	}

@@ -265,7 +265,7 @@ class TransformHint extends Sprite {
 		else if (this.mode == MODE_ROTATE)
 			this.performRotate(state);
 		else if (this.mode == MODE_SCALE)
-			if (this.targets.type == Layer.TYPE_TEXT)
+			if (this.targets.isUI)
 				this.performResize(state);
 			else
 				this.performScale(state);

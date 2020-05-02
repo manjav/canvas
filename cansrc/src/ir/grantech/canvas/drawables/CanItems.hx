@@ -31,6 +31,12 @@ class CanItems {
 		return this.length < 1;
 	}
 
+	public var isUI(get, never):Bool;
+
+	public function get_isUI():Bool {
+		return this.type == Layer.TYPE_TEXT;
+	}
+
 	/**
 		get agreegated type of the items
 	**/

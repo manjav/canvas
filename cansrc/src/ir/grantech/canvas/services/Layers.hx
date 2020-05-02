@@ -198,6 +198,22 @@ class Layer {
 		return value;
 	}
 
+	
+	/**
+		textFormat of the item
+	**/
+	public var textFormat(default, set):TextFormat;
+
+	private function set_textFormat(value:TextFormat):TextFormat {
+		// if (tf_equals(value))
+		// 	return value;
+		if( this.type != TYPE_TEXT)
+			return value;
+		this.textFormat = value;
+		this.setInvalid(InvalidationFlag.SKIN);
+		return value;
+	}
+
 	/**
 		fillEnabled of the item
 	**/
@@ -255,7 +271,7 @@ class Layer {
 			txt.height = bounds.height;
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
-			txt.defaultTextFormat = new TextFormat("IRANSans Light", 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
+			txt.defaultTextFormat = this.textFormat = new TextFormat("IRANSans Light", 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
 			ret = txt;
 		}
 		return ret;

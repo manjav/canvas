@@ -11,10 +11,16 @@ class CanText extends TextField implements ICanItem {
 		super();
 		this.layer = layer;
 	}
-	
+
 	private function update():Void {
 		if (this.layer.isInvalid(InvalidationFlag.STYLES))
 			this.draw();
+		if (this.layer.isInvalid(InvalidationFlag.SKIN))
+			this.format();
+	}
+
+	public function format():Void {
+		this.setTextFormat(this.layer.textFormat);
 	}
 
 	public function draw():Void {

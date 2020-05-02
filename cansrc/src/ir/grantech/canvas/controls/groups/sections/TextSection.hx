@@ -18,13 +18,8 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormatAlign;
 
 class TextSection extends CanSection {
-	private var target:CanText;
-
 	override private function set_targets(value:CanItems):CanItems {
-		var isText = value.length == 1 && value.get(0).layer.type == Layer.TYPE_TEXT;
-		this.includeInLayout = isText;
-		this.visible = isText;
-		this.target = isText ? cast(value.get(0), CanText) : null;
+		this.visible = this.includeInLayout = value.type == Layer.TYPE_TEXT;
 		super.set_targets(value);
 		return value;
 	}
@@ -127,29 +122,23 @@ class TextSection extends CanSection {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.targets.type != Layer.TYPE_TEXT)
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
-		var textFormat = this.target.getTextFormat();
-
 		if (event.currentTarget == this.sizeInput)
-			textFormat.size = Math.round(this.sizeInput.value);
+			this.targets.textFormat.size = Math.round(this.sizeInput.value);
 		else if (event.currentTarget == this.spaceLetterInput)
-			textFormat.letterSpacing = Math.round(this.spaceLetterInput.value);
+			this.targets.textFormat.letterSpacing = Math.round(this.spaceLetterInput.value);
 		else if (event.currentTarget == this.spaceLineInput)
-			textFormat.leading = Math.round(this.spaceLineInput.value);
+			this.targets.textFormat.leading = Math.round(this.spaceLineInput.value);
 
-		this.target.setTextFormat(textFormat);
+		this.targets.textFormat = this.targets.textFormat;
 	}
 
 	private function colorPicker_changeHandler(event:Event):Void {
 		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
-		for (item in this.targets.items) {
-			var textfield = cast(item, CanText);
-			var textFormat = textfield.getTextFormat();
-			textFormat.color = this.colorPicker.rgb;
-			textfield.setTextFormat(textFormat);
-		}
+		this.targets.textFormat.color = this.colorPicker.rgb;
+		this.targets.textFormat = this.targets.textFormat;
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {
@@ -158,12 +147,8 @@ class TextSection extends CanSection {
 		if (event.currentTarget == this.alignsButtons) {
 			if (this.alignsButtons.selectedItem == null)
 				return;
-			for (item in this.targets.items) {
-				var textfield = cast(item, CanText);
-				var textFormat = textfield.getTextFormat();
-				textFormat.align = this.alignsButtons.selectedItem;
-				textfield.setTextFormat(textFormat);
-			}
+			this.targets.textFormat.align = this.alignsButtons.selectedItem;
+			this.targets.textFormat = this.targets.textFormat;
 		} else if (event.currentTarget == this.sutoSizeButtons) {
 			if (this.sutoSizeButtons.selectedItem == null)
 				return;
@@ -172,8 +157,7 @@ class TextSection extends CanSection {
 				if (this.sutoSizeButtons.selectedIndex == 1) {
 					textfield.autoSize = TextFieldAutoSize.NONE;
 				} else {
-					var textFormat = textfield.getTextFormat();
-					textfield.autoSize = switch (textFormat.align) {
+					textfield.autoSize = switch (this.targets.textFormat.align) {
 						case TextFormatAlign.CENTER: TextFieldAutoSize.CENTER;
 						case TextFormatAlign.RIGHT: TextFieldAutoSize.RIGHT;
 						default: TextFieldAutoSize.LEFT;
@@ -185,24 +169,22 @@ class TextSection extends CanSection {
 
 	function changeFont(font:FontStyle):Void {
 		Font.registerFont(font.font);
-		var textFormat = this.target.getTextFormat();
-		textFormat.font = font.fontName;
-		this.target.setTextFormat(textFormat);
+		this.targets.textFormat.font = font.fontName;
+		this.targets.textFormat = this.targets.textFormat;
 	}
 
 	override public function updateData():Void {
-		if (this.target == null)
+		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
 		this.updating = true;
 
-		var textFormat = this.target.getTextFormat();
-		if (textFormat.font != null) {
-			var style:FontStyle = FontFamily.findByStyle(this.families, textFormat.font);
+		if (this.targets.textFormat.font != null) {
+			var style:FontStyle = FontFamily.findByStyle(this.families, this.targets.textFormat.font);
 			this.familyList.selectedItem = style.family;
 			this.styleList.selectedItem = style;
 		}
-		if (textFormat.size != null)
-			this.sizeInput.value = textFormat.size;
+		if (this.targets.textFormat.size != null)
+			this.sizeInput.value = this.targets.textFormat.size;
 
 		this.updating = false;
 	}

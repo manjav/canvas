@@ -10,6 +10,7 @@ import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
 class CanItems {
 	public var length(get, never):Int;
@@ -41,7 +42,7 @@ class CanItems {
 
 		var t = this.items[0].layer.type;
 		for (i in 1...this.length)
-			if (t != this.items[i].blendMode)
+			if (t != this.items[i].layer.type)
 				return Layer.TYPE_NONE;
 		return t;
 	}
@@ -299,6 +300,31 @@ class CanItems {
 		return value;
 	}
 
+	/**
+		Accesses to textFormat of the items
+	**/
+	@:isVar
+	public var textFormat(get, set):TextFormat = new TextFormat("IRANSans Light", 32, 0xFF);
+
+	private function get_textFormat():TextFormat {
+		// if (this.isEmpty)
+		// 	return this.textFormat;
+		if (this.length == 1)
+			return this.items[0].layer.textFormat;
+		return this.textFormat;
+	}
+
+	private function set_textFormat(value:TextFormat):TextFormat {
+		// if (this.isEmpty) {
+		// 	if (this.textFormat == value)
+		// 		return value;
+		// 	this.textFormat = value;
+		// }
+		for (item in this.items)
+			item.layer.textFormat = value;
+		return value;
+	}
+
 	public var bounds:Rectangle;
 	public var items:Array<ICanItem>;
 	public var pivot:Point;
@@ -404,7 +430,6 @@ class CanItems {
 		mat.translate(dx, dy);
 		item.transform.matrix = mat;
 	}
-
 
 	public function scale(width:Float, height:Float):Void {
 		var sx = width / this.bounds.width;

@@ -10,6 +10,7 @@ import ir.grantech.canvas.services.Inputs;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
 
 class TransformSection extends CanSection {
 	override private function set_targets(value:CanItems):CanItems {
@@ -26,6 +27,7 @@ class TransformSection extends CanSection {
 	private var inputR:CanRangeInput;
 	private var buttonFlipH:Button;
 	private var buttonFlipV:Button;
+	private var sizeRect:Rectangle = new Rectangle();
 
 	override private function initialize() {
 		super.initialize();
@@ -65,18 +67,20 @@ class TransformSection extends CanSection {
 		if (this.targets.isEmpty)
 			return;
 
-		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY)
+		if (event.currentTarget == this.inputX || event.currentTarget == this.inputY) {
 			this.commands.commit(Commands.TRANSLATE, [
 				this.targets,
 				this.inputX.value - this.targets.bounds.x,
 				this.inputY.value - this.targets.bounds.y
 			]);
-		else if (event.currentTarget == this.inputW)
-			this.commands.commit(Commands.RESIZE, [this.targets, this.targets.bounds.x, this.targets.bounds.y, this.inputW.value, this.targets.bounds.height]);
-		else if (event.currentTarget == this.inputH)
-			this.commands.commit(Commands.RESIZE, [this.targets, this.targets.bounds.x, this.targets.bounds.y, this.targets.bounds.width, this.inputH.value]);
-		else if (event.currentTarget == this.inputR)
+		} else if (event.currentTarget == this.inputW || event.currentTarget == this.inputH) {
+			if (event.currentTarget == this.inputW)
+				this.sizeRect.setTo(this.targets.bounds.x, this.targets.bounds.y, this.inputW.value, this.targets.bounds.height);
+			else
+				this.sizeRect.setTo(this.targets.bounds.x, this.targets.bounds.y, this.targets.bounds.width, this.inputH.value);
+		} else if (event.currentTarget == this.inputR) {
 			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
+		}
 	}
 
 	override public function updateData():Void {

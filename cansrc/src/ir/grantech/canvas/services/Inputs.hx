@@ -1,12 +1,12 @@
 package ir.grantech.canvas.services;
 
-import ir.grantech.canvas.services.Layers.Layer;
-import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.TransformHint;
+import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.services.Tools.Tool;
 import lime.ui.KeyCode;
 import openfl.display.DisplayObject;
@@ -107,7 +107,7 @@ class Inputs extends BaseService {
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 16 || event.keyCode == 17 || event.keyCode > 36 && event.keyCode < 41) {
-			if (!this.canZoom.focused || event.keyCode == 16 || event.keyCode == 17 || this.selectedItems.isEmpty)
+			if (this.beganFrom == TARGET_NONE || event.keyCode == 16 || event.keyCode == 17 || this.selectedItems.isEmpty)
 				return;
 			if (event.keyCode == 37)
 				this.selectedItems.translate(event.shiftKey ? -10 : -1, 0);
@@ -155,7 +155,7 @@ class Inputs extends BaseService {
 			}
 		}
 
-		if (this.canZoom.focused && this.lastKeyUp == 46 && this.selectedItems != null) {
+		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) {
 			this.commands.commit(Commands.REMOVED, [this.selectedItems]);
 			return;
 		}
@@ -166,7 +166,7 @@ class Inputs extends BaseService {
 		if (toolType <= 0 || Tools.instance.toolType != Tool.SELECT)
 			return;
 
-			Tools.instance.toolType = toolType;
+		Tools.instance.toolType = toolType;
 		this.selectedItems.removeAll();
 	}
 
@@ -183,10 +183,7 @@ class Inputs extends BaseService {
 			return;
 		}
 
-		this.canZoom.focused = event.stageX > this.canZoom.x
-			&& event.stageY > this.canZoom.y
-			&& event.stageX < this.canZoom.x + this.canZoom.width
-			&& event.stageY < this.canZoom.y + this.canZoom.height;
+		var scenefocused = this.inScene(event);
 		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
 		if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
 			this.beganFrom = TARGET_ITEM;
@@ -208,7 +205,7 @@ class Inputs extends BaseService {
 					this.selectedItems.removeAll(false);
 					this.selectedItems.add(item);
 				}
-			} else if (this.beganFrom == TARGET_SCENE && this.canZoom.focused) {
+			} else if (this.beganFrom == TARGET_SCENE && scenefocused) {
 				this.selectedItems.removeAll();
 			}
 		}
@@ -258,7 +255,7 @@ class Inputs extends BaseService {
 			this.reservedX = this.stage.mouseX;
 			this.reservedY = this.stage.mouseY;
 		} else if (this.mouseDown) {
-			if (this.canZoom.focused) {
+			if (this.beganFrom != TARGET_NONE) {
 				this.pointPhase = PHASE_UPDATE;
 				CanEvent.dispatch(this, POINT);
 			}
@@ -291,6 +288,13 @@ class Inputs extends BaseService {
 			this.pointY += event.delta * 10;
 
 		CanEvent.dispatch(this, PAN);
+	}
+
+	private function inScene(event:MouseEvent):Bool {
+		return event.stageX > this.canZoom.x
+			&& event.stageY > this.canZoom.y
+			&& event.stageX < this.canZoom.x + this.canZoom.width
+			&& event.stageY < this.canZoom.y + this.canZoom.height;
 	}
 
 	public function hitTest(x:Float, y:Float):DisplayObject {

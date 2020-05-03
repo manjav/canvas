@@ -19,7 +19,6 @@ import openfl.ui.MouseCursor;
 
 class CanZoom extends LayoutGroup {
 	public var scene:CanScene;
-	public var focused:Bool;
 
 	private var input:Inputs;
 
@@ -66,7 +65,6 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.TEXT_LETTERPACE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.TEXT_LINESPACE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.TEXT_SIZE, this.commands_itemsEventsHandler);
-
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
 		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
@@ -165,7 +163,7 @@ class CanZoom extends LayoutGroup {
 
 	@:access(ir.grantech.canvas.services.Inputs)
 	function performSelection(pointPhase:Int, beganFrom:Int, selectedItems:CanItems, fixed:Bool):Void {
-		if (beganFrom != Inputs.TARGET_SCENE || !focused)
+		if (beganFrom != Inputs.TARGET_SCENE || beganFrom == Inputs.TARGET_NONE)
 			return;
 
 		this.scene.updateSlection(input.pointPhase, fixed);

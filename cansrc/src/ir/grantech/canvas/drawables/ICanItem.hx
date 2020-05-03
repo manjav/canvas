@@ -34,4 +34,6 @@ interface ICanItem extends IDisplayObject {
 	public function getBounds(targetCoordinateSpace:DisplayObject):Rectangle;
 
 	private function update():Void;
+	private function format():Void;
+	private function draw():Void;
 }

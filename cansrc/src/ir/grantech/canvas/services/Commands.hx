@@ -5,20 +5,44 @@ import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Layers.Layer;
 
 class Commands extends BaseService {
+	// layer commands
 	static public final ADDED:String = "added";
 	static public final REMOVED:String = "removed";
 	static public final SELECT:String = "select";
+	static public final ENABLE:String = "enable";
+	static public final ORDER:String = "order";
+	
+	// transform commands
 	static public final TRANSLATE:String = "translate";
 	static public final SCALE:String = "scale";
 	static public final ROTATE:String = "rotate";
 	static public final RESIZE:String = "resize";
-	static public final BLEND_MODE:String = "blendMode";
-	static public final ALPHA:String = "alpha";
-	static public final ENABLE:String = "enable";
-	static public final VISIBLE:String = "visible";
 	static public final RESET:String = "reset";
-	static public final ORDER:String = "order";
 	static public final ALIGN:String = "align";
+	
+	// base commands
+	static public final ALPHA:String = "alpha";
+	static public final VISIBLE:String = "visible";
+	static public final BLEND_MODE:String = "blendMode";
+	
+	// drawing commands
+	static public final FILL_ENABLED:String = "fillEnabled";
+	static public final FILL_COLOR:String = "fillColor";
+	static public final FILL_ALPHA:String = "fillAlpha";
+	static public final BORDER_ENABLED:String = "borderEnabled";
+	static public final BORDER_COLOR:String = "borderColor";
+	static public final BORDER_ALPHA:String = "borderAlpha";
+	static public final BORDER_SIZE:String = "borderSize";
+	static public final CORNER_RADIUS:String = "cornerRadius";
+
+	// text commands
+	static public final TEXT_FONT:String = "textFont";
+	static public final TEXT_SIZE:String = "textSIze";
+	static public final TEXT_COLOR:String = "textColor";
+	static public final TEXT_ALIGN:String = "textAlign";
+	static public final TEXT_LETTERPACE:String = "textLetterspace";
+	static public final TEXT_LINESPACE:String = "textLineSpace";
+	static public final TEXT_AUTOSIZE:String = "txtAutosize";
 
 	/**
 		The singleton method of Commands.

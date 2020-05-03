@@ -3,14 +3,16 @@ package ir.grantech.canvas.drawables;
 import flash.geom.Matrix;
 import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.groups.CanScene;
+import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
 class CanItems {
 	public var length(get, never):Int;
@@ -53,294 +55,78 @@ class CanItems {
 		return t;
 	}
 
-	/**
-		Accesses the visible of the items
-	**/
-	public var visible(default, set):Bool = true;
-
-	private function set_visible(value:Bool):Bool {
-		if (this.visible == value)
-			return value;
-		this.visible = value;
-		for (item in this.items)
-			item.visible = value;
-		return value;
+	public function getString(key:String):String {
+		return cast(this.getProperty(key), String);
 	}
 
-	@:isVar
-	public var alpha(get, set):Float;
+	public function getInt(key:String):Int {
+		return cast(this.getProperty(key), Int);
+	}
 
-	private function get_alpha():Float {
+	public function getFloat(key:String):Float {
+		return cast(this.getProperty(key), Float);
+	}
+
+	public function getBool(key:String):Bool {
+		return cast(this.getProperty(key), Bool);
+	}
+
+	public function getUInt(key:String):UInt {
+		return cast(this.getProperty(key), UInt);
+	}
+
+	public function getProperty(key:String):Dynamic {
 		if (this.isEmpty)
-			return 1.0;
-		var fa:Float = this.items[0].layer.fillAlpha;
-		for (i in 1...this.length)
-			if (fa != this.items[i].layer.fillAlpha)
-				return 1.0;
-		return fa;
-	}
+			return this.props[key];
 
-	private function set_alpha(value:Float):Float {
-		if (this.alpha == value)
-			return value;
-		for (item in this.items)
-			item.alpha = value;
+		var value = this.items[0].layer.getProperty(key);
+		for (i in 1...this.length)
+			if (value != this.items[i].layer.getProperty(key))
+				return this.props[key];
 		return value;
 	}
 
-	/**
-		Accesses the blendMode of the items
-	**/
-	@:isVar
-	public var blendMode(get, set):BlendMode;
-
-	private function get_blendMode():BlendMode {
+	public function setProperty(key:String, value:Dynamic):Void {
 		if (this.isEmpty)
-			return this.blendMode;
-
-		var b:BlendMode = this.items[0].blendMode;
-		for (i in 1...this.length)
-			if (b != this.items[i].blendMode)
-				return "";
-		return b;
-	}
-
-	private function set_blendMode(value:BlendMode):BlendMode {
-		if (this.isEmpty) {
-			if (this.blendMode == value)
-				return value;
-			this.blendMode = value;
-		}
+			this.props[key] = value;
 		for (item in this.items)
-			item.blendMode = value;
-		return value;
+			item.layer.setProperty(key, value);
 	}
 
-	/**
-		Accesses the fillEnabled of the items
-	**/
-	@:isVar
-	public var fillEnabled(get, set):Bool = true;
-
-	private function get_fillEnabled():Bool {
-		if (this.isEmpty)
-			return this.fillEnabled;
-		var fe = this.items[0].layer.fillEnabled;
-		for (i in 1...this.length)
-			if (fe != this.items[i].layer.fillEnabled)
-				return false;
-		return fe;
-	}
-
-	private function set_fillEnabled(value:Bool):Bool {
-		if (this.isEmpty) {
-			if (this.fillEnabled == value)
-				return value;
-			this.fillEnabled = value;
-		}
-		for (item in this.items)
-			item.layer.fillEnabled = value;
-		return value;
-	}
-
-	/**
-		Accesses the fillColor of the items
-	**/
-	@:isVar
-	public var fillColor(get, set):RGB = 0xFF;
-
-	private function get_fillColor():RGB {
-		if (this.isEmpty)
-			return this.fillColor;
-		var fc:RGB = this.items[0].layer.fillColor;
-		for (i in 1...this.length)
-			if (fc != this.items[i].layer.fillColor)
-				return this.fillColor;
-		return fc;
-	}
-
-	private function set_fillColor(value:RGB):RGB {
-		if (this.isEmpty) {
-			if (this.fillColor == value)
-				return value;
-			this.fillColor = value;
-		}
-		this.fillColor = value;
-		for (item in this.items)
-			item.layer.fillColor = value;
-		return value;
-	}
-
-	/**
-		Accesses the fillAlpha of the items
-	**/
-	@:isVar
-	public var fillAlpha(get, set):Float = 1.0;
-
-	private function get_fillAlpha():Float {
-		if (this.isEmpty)
-			return this.fillAlpha;
-		var fa:Float = this.items[0].layer.fillAlpha;
-		for (i in 1...this.length)
-			if (fa != this.items[i].layer.fillAlpha)
-				return 1.0;
-		return fa;
-	}
-
-	private function set_fillAlpha(value:Float):Float {
-		if (this.isEmpty) {
-			if (this.fillAlpha == value)
-				return value;
-			this.fillAlpha = value;
-		}
-		for (item in this.items)
-			item.layer.fillAlpha = value;
-		return value;
-	}
-
-	/**
-		Accesses the borderEnabled of the items
-	**/
-	@:isVar
-	public var borderEnabled(get, set):Bool = true;
-
-	private function get_borderEnabled():Bool {
-		if (this.isEmpty)
-			return this.borderEnabled;
-		var be = this.items[0].layer.borderEnabled;
-		for (i in 1...this.length)
-			if (be != this.items[i].layer.borderEnabled)
-				return false;
-		return be;
-	}
-
-	private function set_borderEnabled(value:Bool):Bool {
-		if (this.isEmpty) {
-			if (this.borderEnabled == value)
-				return value;
-			this.borderEnabled = value;
-		}
-		for (item in this.items)
-			item.layer.borderEnabled = value;
-		return value;
-	}
-
-	/**
-		Accesses the borderColor of the items
-	**/
-	@:isVar
-	public var borderColor(get, set):RGB = 0xFF0000;
-
-	private function get_borderColor():RGB {
-		if (this.isEmpty)
-			return this.borderColor;
-		var lc:RGB = this.items[0].layer.borderColor;
-		for (i in 1...this.length)
-			if (lc != this.items[i].layer.borderColor)
-				return 0xFFFFFF;
-		return lc;
-	}
-
-	private function set_borderColor(value:RGB):RGB {
-		if (this.isEmpty) {
-			if (this.borderColor == value)
-				return value;
-			this.borderColor = value;
-		}
-		for (item in this.items)
-			item.layer.borderColor = value;
-		return value;
-	}
-
-	/**
-		Accesses the borderAlpha of the items
-	**/
-	@:isVar
-	public var borderAlpha(get, set):Float = 1.0;
-
-	private function get_borderAlpha():Float {
-		if (this.isEmpty)
-			return this.borderAlpha;
-		var la:Float = this.items[0].layer.borderAlpha;
-		for (i in 1...this.length)
-			if (la != this.items[i].layer.borderAlpha)
-				return 1.0;
-		return la;
-	}
-
-	private function set_borderAlpha(value:Float):Float {
-		if (this.isEmpty) {
-			if (this.borderAlpha == value)
-				return value;
-			this.borderAlpha = value;
-		}
-		for (item in this.items)
-			item.layer.borderAlpha = value;
-		return value;
-	}
-
-	/**
-		Accesses the borderSize of the items
-	**/
-	@:isVar
-	public var borderSize(get, set):Float = 3.0;
-
-	private function get_borderSize():Float {
-		if (this.isEmpty)
-			return this.borderAlpha;
-		var la:Float = this.items[0].layer.borderSize;
-		for (i in 1...this.length)
-			if (la != this.items[i].layer.borderSize)
-				return 1.0;
-		return la;
-	}
-
-	private function set_borderSize(value:Float):Float {
-		if (this.isEmpty) {
-			if (this.borderSize == value)
-				return value;
-			this.borderSize = value;
-		}
-		for (item in this.items)
-			item.layer.borderSize = value;
-		return value;
-	}
-
-	/**
-		Accesses to textFormat of the items
-	**/
-	@:isVar
-	public var textFormat(get, set):TextFormat = new TextFormat("IRANSans Light", 32, 0xFF);
-
-	private function get_textFormat():TextFormat {
-		// if (this.isEmpty)
-		// 	return this.textFormat;
-		if (this.length == 1)
-			return this.items[0].layer.textFormat;
-		return this.textFormat;
-	}
-
-	private function set_textFormat(value:TextFormat):TextFormat {
-		// if (this.isEmpty) {
-		// 	if (this.textFormat == value)
-		// 		return value;
-		// 	this.textFormat = value;
-		// }
-		for (item in this.items)
-			item.layer.textFormat = value;
-		return value;
-	}
-
-	public var bounds:Rectangle;
-	public var items:Array<ICanItem>;
 	public var pivot:Point;
 	public var pivotV:Point;
+	public var bounds:Rectangle;
+	public var items:Array<ICanItem>;
+	public var props:Map<String, Dynamic>;
 
 	public function new() {
-		this.items = new Array<ICanItem>();
-		this.bounds = new Rectangle();
-		this.pivot = new Point(0.5, 0.5);
 		this.pivotV = new Point();
+		this.pivot = new Point(0.5, 0.5);
+		this.bounds = new Rectangle();
+		this.items = new Array<ICanItem>();
+		this.props = new Map<String, Dynamic>();
+
+		this.setProperty(ENABLE, true);
+		this.setProperty(VISIBLE, true);
+		this.setProperty(ALPHA, 1.0);
+		this.setProperty(BLEND_MODE, BlendMode.NORMAL);
+
+		this.setProperty(FILL_ENABLED, true);
+		this.setProperty(FILL_COLOR, 0x6868F8);
+		this.setProperty(FILL_ALPHA, 1.0);
+		this.setProperty(BORDER_ENABLED, true);
+		this.setProperty(BORDER_SIZE, 3.0);
+		this.setProperty(BORDER_COLOR, 0xFF00FF);
+		this.setProperty(BORDER_ALPHA, 1.0);
+		this.setProperty(CORNER_RADIUS, 0.0);
+
+		this.setProperty(TEXT_ALIGN, TextFormatAlign.JUSTIFY);
+		this.setProperty(TEXT_AUTOSIZE, 1);
+		this.setProperty(TEXT_COLOR, 0xFF);
+		this.setProperty(TEXT_FONT, "IRANSans Light");
+		this.setProperty(TEXT_LETTERPACE, 0);
+		this.setProperty(TEXT_LINESPACE, 0);
+		this.setProperty(TEXT_SIZE, 12 * CanTheme.DPI);
 	}
 
 	public function add(item:ICanItem, finalize:Bool = true):Bool {
@@ -350,7 +136,7 @@ class CanItems {
 		this.items.push(item);
 		if (finalize) {
 			this.calculateBounds();
-			Commands.instance.commit(Commands.SELECT, [this]);
+			Commands.instance.commit(SELECT, [this]);
 		}
 		return true;
 	}
@@ -361,7 +147,7 @@ class CanItems {
 
 		if (finalize) {
 			this.calculateBounds();
-			Commands.instance.commit(Commands.SELECT, [this]);
+			Commands.instance.commit(SELECT, [this]);
 		}
 	}
 
@@ -371,7 +157,7 @@ class CanItems {
 			return false;
 		if (finalize) {
 			this.calculateBounds();
-			Commands.instance.commit(Commands.SELECT, [this]);
+			Commands.instance.commit(SELECT, [this]);
 		}
 		return true;
 	}
@@ -384,7 +170,7 @@ class CanItems {
 		}
 
 		this.calculateBounds();
-		Commands.instance.commit(Commands.SELECT, [this]);
+		Commands.instance.commit(SELECT, [this]);
 	}
 
 	public function get(index:Int):ICanItem {

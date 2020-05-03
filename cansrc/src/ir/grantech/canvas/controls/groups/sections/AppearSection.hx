@@ -66,9 +66,9 @@ class AppearSection extends CanSection {
 		if (this.updating || this.targets == null)
 			return;
 		if (event.currentTarget == this.fillPicker)
-			this.targets.fillEnabled = this.fillPicker.selected;
+			commands.commit(Commands.FILL_ENABLED, [this.targets, this.fillPicker.selected]);
 		else if (event.currentTarget == this.borderPicker)
-			this.targets.borderEnabled = this.borderPicker.selected;
+			commands.commit(Commands.BORDER_ENABLED, [this.targets, this.borderPicker.selected]);
 	}
 
 	override private function colorLines_changeHandler(event:Event):Void {
@@ -76,12 +76,12 @@ class AppearSection extends CanSection {
 			return;
 		if (event.currentTarget == this.fillPicker) {
 			this.fillPicker.selected = true;
-			this.targets.fillAlpha = this.fillPicker.a / 0xFF;
-			this.targets.fillColor = this.fillPicker.rgb;
+			commands.commit(Commands.FILL_ALPHA, [this.targets, this.fillPicker.a / 0xFF]);
+			commands.commit(Commands.FILL_COLOR, [this.targets, this.fillPicker.rgb]);
 		} else if (event.currentTarget == this.borderPicker) {
 			this.borderPicker.selected = true;
-			this.targets.borderAlpha = this.borderPicker.a / 0xFF;
-			this.targets.borderColor = this.borderPicker.rgb;
+			commands.commit(Commands.BORDER_ALPHA, [this.targets, this.fillPicker.a / 0xFF]);
+			commands.commit(Commands.BORDER_COLOR, [this.targets, this.fillPicker.rgb]);
 		}
 	}
 
@@ -89,21 +89,21 @@ class AppearSection extends CanSection {
 		if (this.targets == null)
 			return;
 		this.updating = true;
-		this.alphaSlider.value = this.targets.alpha * 100;
-		this.modesList.selectedIndex = this.findBlendMode(this.targets.blendMode);
+		this.alphaSlider.value = this.targets.getFloat(Commands.ALPHA) * 100;
+		this.modesList.selectedIndex = this.findBlendMode(this.targets.getProperty(Commands.BLEND_MODE));
 
 		this.fillPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
-		this.fillPicker.selected = this.targets.fillEnabled;
-		if (this.targets.fillEnabled) {
-			this.fillPicker.rgb = this.targets.fillColor;
-			this.fillPicker.a = Math.round(this.targets.fillAlpha * 0xFF);
+		this.fillPicker.selected = this.targets.getBool(Commands.FILL_ENABLED);
+		if (this.fillPicker.selected) {
+			this.fillPicker.rgb = this.targets.getUInt(Commands.FILL_COLOR);
+			this.fillPicker.a = Math.round(this.targets.getFloat(Commands.FILL_ALPHA) * 0xFF);
 		}
 
 		this.borderPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
-		this.borderPicker.selected = this.targets.borderEnabled;
-		if (this.targets.borderEnabled) {
-			this.borderPicker.rgb = this.targets.borderColor;
-			this.borderPicker.a = Math.round(this.targets.borderAlpha * 0xFF);
+		this.borderPicker.selected = this.targets.getBool(Commands.BORDER_ENABLED);
+		if (this.borderPicker.selected) {
+			this.borderPicker.rgb = this.targets.getUInt(Commands.BORDER_COLOR);
+			this.borderPicker.a = Math.round(this.targets.getFloat(Commands.FILL_ALPHA) * 0xFF);
 		}
 
 		this.updating = false;

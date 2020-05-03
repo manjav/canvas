@@ -39,16 +39,34 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
 		commands.addEventListener(Commands.SELECT, this.commands_selectHandler);
 		commands.addEventListener(Commands.ORDER, this.commands_orderHandler);
-		commands.addEventListener(Commands.VISIBLE, this.commands_visibleHandler);
+
 		commands.addEventListener(Commands.RESET, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.TRANSLATE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.SCALE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ROTATE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.RESIZE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.RESET, this.commands_itemsEventsHandler);
-		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.ALIGN, this.commands_itemsEventsHandler);
+
+		commands.addEventListener(Commands.ALPHA, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.VISIBLE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BLEND_MODE, this.commands_itemsEventsHandler);
+
+		commands.addEventListener(Commands.FILL_ENABLED, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.FILL_COLOR, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.FILL_ALPHA, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.BORDER_ENABLED, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.BORDER_COLOR, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.BORDER_ALPHA, this.commands_itemsEventsHandler);
+
+		commands.addEventListener(Commands.TEXT_ALIGN, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_AUTOSIZE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_COLOR, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_FONT, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_LETTERPACE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_LINESPACE, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.TEXT_SIZE, this.commands_itemsEventsHandler);
+
 
 		this.input = cast(BaseService.get(Inputs, [stage, this]), Inputs);
 		this.input.addEventListener(Inputs.HIT, this.input_hitHandler);
@@ -78,10 +96,6 @@ class CanZoom extends LayoutGroup {
 		this.scene.transformHint.set(event.data[0]);
 	}
 
-	private function commands_visibleHandler(event:CanEvent):Void {
-		event.data[0].visible = event.data[1];
-	}
-
 	private function commands_orderHandler(event:CanEvent):Void {
 		var layers = cast(event.data[2], Layers);
 		var len = layers.length;
@@ -92,10 +106,6 @@ class CanZoom extends LayoutGroup {
 	private function commands_itemsEventsHandler(event:CanEvent):Void {
 		var items = cast(event.data[0], CanItems);
 		switch (event.type) {
-			case Commands.ALPHA:
-				items.alpha = event.data[1];
-			case Commands.BLEND_MODE:
-				items.blendMode = event.data[1];
 			case Commands.TRANSLATE:
 				items.translate(event.data[1], event.data[2]);
 			case Commands.SCALE:
@@ -108,6 +118,8 @@ class CanZoom extends LayoutGroup {
 				items.resetTransform();
 			case Commands.ALIGN:
 				items.align(event.data[1]);
+			default:
+				items.setProperty(event.type, event.data[1]);
 		}
 	}
 
@@ -175,11 +187,11 @@ class CanZoom extends LayoutGroup {
 		if (Tools.instance.toolType == Tool.RECTANGLE || Tools.instance.toolType == Tool.ELLIPSE || Tools.instance.toolType == Tool.TEXT)
 			Commands.instance.commit(Commands.ADDED, [
 				Tools.instance.toolType,
-				input.selectedItems.fillColor,
-				input.selectedItems.fillAlpha,
-				input.selectedItems.borderSize,
-				input.selectedItems.borderColor,
-				input.selectedItems.borderAlpha,
+				input.selectedItems.getUInt(Commands.FILL_COLOR),
+				input.selectedItems.getFloat(Commands.FILL_ALPHA),
+				input.selectedItems.getFloat(Commands.BORDER_SIZE),
+				input.selectedItems.getUInt(Commands.BORDER_COLOR),
+				input.selectedItems.getFloat(Commands.BORDER_ALPHA),
 				selectionBounds,
 				0
 			]);

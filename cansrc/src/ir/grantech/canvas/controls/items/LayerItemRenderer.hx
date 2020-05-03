@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.items;
 
+import ir.grantech.canvas.services.Commands.*;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -70,12 +71,12 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.STATE)) {
 			if (this.currentState.equals(ToggleButtonState.HOVER(false))) {
-				this.hideDisplay.alpha = this.layer.visible ? 0.4 : 1.0;
-				this.lockDisplay.alpha = this.layer.enabled ? 0.4 : 1.0;
+				this.hideDisplay.alpha = this.layer.getBool(VISIBLE) ? 0.4 : 1.0;
+				this.lockDisplay.alpha = this.layer.getBool(ENABLE) ? 0.4 : 1.0;
 			} else {
-				this.textField.alpha = this.icon.alpha = this.layer.visible ? 1.0 : 0.4;
-				this.hideDisplay.alpha = this.layer.visible ? 0.0 : 1.0;
-				this.lockDisplay.alpha = this.layer.enabled ? 0.0 : 1.0;
+				this.textField.alpha = this.icon.alpha = this.layer.getBool(VISIBLE) ? 1.0 : 0.4;
+				this.hideDisplay.alpha = this.layer.getBool(VISIBLE) ? 0.0 : 1.0;
+				this.lockDisplay.alpha = this.layer.getBool(ENABLE) ? 0.0 : 1.0;
 			}
 		}
 
@@ -99,9 +100,9 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
 		if (this.mouseX > this.lockDisplay.x) {
 			if (this.mouseX < this.lockDisplay.x + this.lockDisplay.width)
-				this.layer.enabled = !this.layer.enabled;
+				this.layer.setProperty(ENABLE, !this.layer.getBool(ENABLE));
 			else
-				this.layer.visible = !this.layer.visible;
+				this.layer.setProperty(VISIBLE, !this.layer.getBool(VISIBLE));
 			this.setInvalid(InvalidationFlag.STATE);
 			return;
 		} else {

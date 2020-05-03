@@ -6,11 +6,13 @@ import haxe.Timer;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.services.Commands.*;
+import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
+import openfl.display.BlendMode;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.text.TextFieldType;
-import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
 class Layers extends ArrayCollection<Layer> {
@@ -80,156 +82,11 @@ class Layer {
 	public var initialWidth(default, default):Float;
 	public var initialHeight(default, default):Float;
 
-	/**
-		Show / Hide layer
-	**/
-	public var visible(default, set):Bool = true;
-
-	private function set_visible(vlaue:Bool):Bool {
-		if (this.visible == vlaue)
-			return this.visible;
-		this.visible = vlaue;
-		Commands.instance.commit(Commands.VISIBLE, [this.item, vlaue]);
-		return this.visible;
-	}
-
-	/**
-		Lock / Unlock layer
-	**/
-	public var enabled(default, set):Bool = true;
-
-	private function set_enabled(vlaue:Bool):Bool {
-		if (this.enabled == vlaue)
-			return this.enabled;
-		this.enabled = vlaue;
-		Commands.instance.commit(Commands.ENABLE, [this.item, vlaue]);
-		return this.enabled;
-	}
-
-	/**
-		fillEnabled of the item
-	**/
-	public var fillEnabled(default, set):Bool = true;
-
-	private function set_fillEnabled(value:Bool):Bool {
-		if (this.fillEnabled == value)
-			return value;
-		this.fillEnabled = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	/**
-		fillColor of the item
-	**/
-	public var fillColor(default, set):RGB;
-
-	private function set_fillColor(value:RGB):RGB {
-		if (this.fillColor == value)
-			return value;
-		this.fillColor = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	/**
-		fillAlpha of the item
-	**/
-	public var fillAlpha(default, set):Float = 1.0;
-
-	private function set_fillAlpha(value:Float):Float {
-		if (this.fillAlpha == value)
-			return value;
-		this.fillAlpha = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	/**
-		cornerRadius of the item
-	**/
-	public var cornerRadius(default, set):Float = 0;
-
-	private function set_cornerRadius(value:Float):Float {
-		if (this.cornerRadius == value)
-			return value;
-		this.cornerRadius = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	/**
-		borderSize of the item
-	**/
-	public var borderSize(default, set):Float = 3.0;
-
-	private function set_borderSize(value:Float):Float {
-		if (this.borderSize == value)
-			return value;
-		this.borderSize = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-
-		return value;
-	}
-
-	/**
-		borderColor of the item
-	**/
-	public var borderColor(default, set):RGB;
-
-	private function set_borderColor(value:RGB):RGB {
-		if (this.borderColor == value)
-			return value;
-		this.borderColor = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	/**
-		borderAlpha of the item
-	**/
-	public var borderAlpha(default, set):Float = 1.0;
-
-	private function set_borderAlpha(value:Float):Float {
-		if (this.borderAlpha == value)
-			return value;
-		this.borderAlpha = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
-
-	
-	/**
-		textFormat of the item
-	**/
-	public var textFormat(default, set):TextFormat;
-
-	private function set_textFormat(value:TextFormat):TextFormat {
-		// if (tf_equals(value))
-		// 	return value;
-		if( this.type != TYPE_TEXT)
-			return value;
-		this.textFormat = value;
-		this.setInvalid(InvalidationFlag.SKIN);
-		return value;
-	}
-
-	/**
-		fillEnabled of the item
-	**/
-	public var borderEnabled(default, set):Bool = true;
-
-	private function set_borderEnabled(value:Bool):Bool {
-		if (this.borderEnabled == value)
-			return value;
-		this.borderEnabled = value;
-		this.setInvalid(InvalidationFlag.STYLES);
-		return value;
-	}
+	private var props:Map<String, Dynamic>;
 
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
-	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, borderRadius:Float) {
+	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, cornerRadius:Float) {
 		if (Layer.TYPES == null)
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 
@@ -239,12 +96,20 @@ class Layer {
 		this.type = Layer.TYPES[type];
 		this.name = type + " " + id;
 
-		this.fillColor = fillColor;
-		this.fillAlpha = fillAlpha;
-		this.borderSize = borderSize;
-		this.borderColor = borderColor;
-		this.borderAlpha = borderAlpha;
-		this.cornerRadius = cornerRadius;
+		this.props = new Map<String, Dynamic>();
+		this.setProperty(ENABLE, true);
+		this.setProperty(VISIBLE, true);
+		this.setProperty(ALPHA, 1.0);
+		this.setProperty(BLEND_MODE, BlendMode.NORMAL);
+
+		this.setProperty(FILL_COLOR, fillColor);
+		this.setProperty(FILL_ALPHA, fillAlpha);
+		this.setProperty(BORDER_ENABLED, true);
+		this.setProperty(BORDER_SIZE, borderSize);
+		this.setProperty(BORDER_COLOR, borderColor);
+		this.setProperty(BORDER_ALPHA, borderAlpha);
+		this.setProperty(CORNER_RADIUS, cornerRadius);
+
 		this.initialWidth = bounds.width;
 		this.initialHeight = bounds.height;
 		// sh.scale9Grid = new Rectangle(r, r, r, r);
@@ -256,14 +121,21 @@ class Layer {
 	private function instantiateItem(bounds:Rectangle):ICanItem {
 		var ret:ICanItem = null;
 		if (this.type == TYPE_RECT || this.type == TYPE_ELLIPSE) {
-			this.fillEnabled = true;
-			this.borderEnabled = true;
+			this.setProperty(FILL_ENABLED, true);
+			this.setProperty(CORNER_RADIUS, 0);
 			var sh = new CanShape(this);
 			sh.x = bounds.x;
 			sh.y = bounds.y;
 			ret = sh;
 		} else if (this.type == TYPE_TEXT) {
-			this.fillEnabled = false;
+			this.setProperty(FILL_ENABLED, false);
+			this.setProperty(TEXT_ALIGN, TextFormatAlign.JUSTIFY);
+			this.setProperty(TEXT_AUTOSIZE, 1);
+			this.setProperty(TEXT_COLOR, 0xFF);
+			this.setProperty(TEXT_FONT, "IRANSans Light");
+			this.setProperty(TEXT_LETTERPACE, 0);
+			this.setProperty(TEXT_LINESPACE, 0);
+			this.setProperty(TEXT_SIZE, 10 * CanTheme.DPI);
 			var txt = new CanText(this);
 			txt.x = bounds.x;
 			txt.y = bounds.y;
@@ -271,10 +143,42 @@ class Layer {
 			txt.height = bounds.height;
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
-			txt.defaultTextFormat = this.textFormat = new TextFormat("IRANSans Light", 32, 0xFF, null, null, null, null, null, TextFormatAlign.JUSTIFY);
 			ret = txt;
 		}
 		return ret;
+	}
+
+	public function getString(key:String):String {
+		return cast(this.getProperty(key), String);
+	}
+
+	public function getInt(key:String):Int {
+		return cast(this.getProperty(key), Int);
+	}
+
+	public function getFloat(key:String):Float {
+		return cast(this.getProperty(key), Float);
+	}
+
+	public function getBool(key:String):Bool {
+		return cast(this.getProperty(key), Bool);
+	}
+
+	public function getUInt(key:String):UInt {
+		return cast(this.getProperty(key), UInt);
+	}
+
+	public function getProperty(key:String):Dynamic {
+		return this.props[key];
+	}
+
+	public function setProperty(key:String, value:Dynamic):Void {
+		if (key == TEXT_COLOR)
+			trace(this.props[key], value);
+		if (this.props.exists(key) && this.props[key] == value)
+			return;
+		this.props[key] = value;
+		this.setInvalid(key);
 	}
 
 	/**
@@ -318,6 +222,28 @@ class Layer {
 	**/
 	@:access(ir.grantech.canvas.drawables.ICanItem)
 	public function valiadateAll() {
+		var needsDraw = false;
+		var needsFormat = false;
+		var flags = this._invalidationFlags.keys();
+		for (flag in flags) {
+			if (flag == ALPHA)
+				this.item.alpha = this.getFloat(flag);
+			if (flag == VISIBLE)
+				this.item.visible = this.getBool(flag);
+			if (flag == BLEND_MODE)
+				this.item.blendMode = cast(this.getProperty(flag), BlendMode);
+			if (flag == FILL_ENABLED || flag == FILL_COLOR || flag == FILL_ALPHA || flag == BORDER_ENABLED || flag == BORDER_COLOR || flag == BORDER_ALPHA
+				|| flag == BORDER_SIZE || flag == CORNER_RADIUS)
+				needsDraw = true;
+			if (flag == TEXT_ALIGN || flag == TEXT_COLOR || flag == TEXT_FONT || flag == TEXT_LETTERPACE || flag == TEXT_LINESPACE || flag == TEXT_SIZE)
+				needsFormat = true;
+		}
+
+		if (needsDraw)
+			this.item.draw();
+		if (needsFormat)
+			this.item.format();
+
 		this.item.update();
 		this._invalidationFlags.clear();
 	}

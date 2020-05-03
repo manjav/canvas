@@ -1,20 +1,19 @@
 package ir.grantech.canvas.controls.groups.sections;
 
-import feathers.controls.colors.ColorPicker;
 import feathers.controls.ButtonGroup;
 import feathers.controls.CanRangeInput;
 import feathers.controls.ComboBox;
+import feathers.controls.colors.ColorPicker;
 import feathers.data.ArrayCollection;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.drawables.CanItems;
-import ir.grantech.canvas.drawables.CanText;
+import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Fonts;
 import ir.grantech.canvas.services.Layers.Layer;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.text.Font;
-import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormatAlign;
 
 class TextSection extends CanSection {
@@ -122,55 +121,35 @@ class TextSection extends CanSection {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+		if (this.updating || this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
 		if (event.currentTarget == this.sizeInput)
-			this.targets.textFormat.size = Math.round(this.sizeInput.value);
+			commands.commit(TEXT_SIZE, [this.targets, Math.round(this.sizeInput.value)]);
 		else if (event.currentTarget == this.spaceLetterInput)
-			this.targets.textFormat.letterSpacing = Math.round(this.spaceLetterInput.value);
+			commands.commit(TEXT_LETTERPACE, [this.targets, Math.round(this.spaceLetterInput.value)]);
 		else if (event.currentTarget == this.spaceLineInput)
-			this.targets.textFormat.leading = Math.round(this.spaceLineInput.value);
-
-		this.targets.textFormat = this.targets.textFormat;
+			commands.commit(TEXT_LINESPACE, [this.targets, Math.round(this.spaceLineInput.value)]);
 	}
 
 	private function colorPicker_changeHandler(event:Event):Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
-			return;
-		this.targets.textFormat.color = this.colorPicker.rgb;
-		this.targets.textFormat = this.targets.textFormat;
+		if (this.updating || this.targets != null && this.targets.type == Layer.TYPE_TEXT)
+			commands.commit(TEXT_COLOR, [this.targets, this.colorPicker.rgb]);
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+		if (this.updating || this.targets == null || this.targets.type != Layer.TYPE_TEXT)
 			return;
 		if (event.currentTarget == this.alignsButtons) {
-			if (this.alignsButtons.selectedItem == null)
-				return;
-			this.targets.textFormat.align = this.alignsButtons.selectedItem;
-			this.targets.textFormat = this.targets.textFormat;
-		} else if (event.currentTarget == this.sutoSizeButtons) {
-			if (this.sutoSizeButtons.selectedItem == null)
-				return;
-			for (item in this.targets.items) {
-				var textfield = cast(item, CanText);
-				if (this.sutoSizeButtons.selectedIndex == 1) {
-					textfield.autoSize = TextFieldAutoSize.NONE;
-				} else {
-					textfield.autoSize = switch (this.targets.textFormat.align) {
-						case TextFormatAlign.CENTER: TextFieldAutoSize.CENTER;
-						case TextFormatAlign.RIGHT: TextFieldAutoSize.RIGHT;
-						default: TextFieldAutoSize.LEFT;
-					}
-				}
-			}
+			commands.commit(TEXT_ALIGN, [this.targets, this.alignsButtons.selectedItem]);
+			return;
 		}
+
+		commands.commit(TEXT_AUTOSIZE, [this.targets, this.sutoSizeButtons.selectedItem]);
 	}
 
 	function changeFont(font:FontStyle):Void {
 		Font.registerFont(font.font);
-		this.targets.textFormat.font = font.fontName;
-		this.targets.textFormat = this.targets.textFormat;
+		commands.commit(TEXT_FONT, [this.targets, font.fontName]);
 	}
 
 	override public function updateData():Void {
@@ -178,13 +157,14 @@ class TextSection extends CanSection {
 			return;
 		this.updating = true;
 
-		if (this.targets.textFormat.font != null) {
-			var style:FontStyle = FontFamily.findByStyle(this.families, this.targets.textFormat.font);
-			this.familyList.selectedItem = style.family;
-			this.styleList.selectedItem = style;
-		}
-		if (this.targets.textFormat.size != null)
-			this.sizeInput.value = this.targets.textFormat.size;
+		var style:FontStyle = FontFamily.findByStyle(this.families, this.targets.getString(TEXT_FONT));
+		this.familyList.selectedItem = style.family;
+		this.styleList.selectedItem = style;
+
+		this.colorPicker.rgb = this.targets.getUInt(TEXT_COLOR);
+		this.sizeInput.value = this.targets.getInt(TEXT_SIZE);
+		this.spaceLetterInput.value = this.targets.getInt(TEXT_LETTERPACE);
+		this.spaceLineInput.value = this.targets.getInt(TEXT_LINESPACE);
 
 		this.updating = false;
 	}

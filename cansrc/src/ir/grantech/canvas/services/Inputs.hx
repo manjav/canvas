@@ -163,8 +163,11 @@ class Inputs extends BaseService {
 
 	private function stage_doubleClickHandler(event:MouseEvent):Void {
 		var toolType = Layer.TYPES.indexOf(selectedItems.type);
-		if (toolType > -1)
+		if (toolType <= 0 || Tools.instance.toolType != Tool.SELECT)
+			return;
+
 			Tools.instance.toolType = toolType;
+		this.selectedItems.removeAll();
 	}
 
 	private function stage_mouseDownHandler(event:MouseEvent):Void {

@@ -21,7 +21,7 @@ class TransformHint extends Sprite {
 	static final MODE_TRANSLATE:Int = 1;
 	static final MODE_SCALE:Int = 2;
 	static final MODE_ROTATE:Int = 3;
-
+	
 	static final LINE_COLOR:UInt = 0x1692E6;
 
 	public function setVisible(visible:Bool, all:Bool):Void {
@@ -125,8 +125,9 @@ class TransformHint extends Sprite {
 	}
 
 	private function doubleClickHandler(event:MouseEvent):Void {
-		// if (!this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
-		// 	return;
+		if (!this.register.hitTestPoint(stage.mouseX, stage.mouseY, true))
+			return;
+		event.stopImmediatePropagation();
 		this.targets.pivot.setTo(0.5, 0.5);
 		if (this.targets.length == 1)
 			this.targets.get(0).layer.pivot.setTo(0.5, 0.5);
@@ -176,6 +177,7 @@ class TransformHint extends Sprite {
 		if (this.targets == null || this.targets.isEmpty)
 			return;
 		this.setVisible(true, true);
+		this.register.visible = !this.targets.isUI;
 
 		var w = 0.0;
 		var h = 0.0;

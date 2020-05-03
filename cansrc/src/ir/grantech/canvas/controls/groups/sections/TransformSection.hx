@@ -78,6 +78,7 @@ class TransformSection extends CanSection {
 				this.sizeRect.setTo(this.targets.bounds.x, this.targets.bounds.y, this.inputW.value, this.targets.bounds.height);
 			else
 				this.sizeRect.setTo(this.targets.bounds.x, this.targets.bounds.y, this.targets.bounds.width, this.inputH.value);
+			this.commands.commit(Commands.RESIZE, [this.targets, this.sizeRect]);
 		} else if (event.currentTarget == this.inputR) {
 			this.commands.commit(Commands.ROTATE, [this.targets, this.inputR.value / 180 * Math.PI]);
 		}

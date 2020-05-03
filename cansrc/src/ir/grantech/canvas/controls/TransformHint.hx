@@ -3,7 +3,6 @@ package ir.grantech.canvas.controls;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
-import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -23,6 +22,8 @@ class TransformHint extends Sprite {
 	static final MODE_SCALE:Int = 2;
 	static final MODE_ROTATE:Int = 3;
 
+	static final LINE_COLOR:UInt = 0x1692E6;
+
 	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
 			return;
@@ -39,7 +40,6 @@ class TransformHint extends Sprite {
 	private var mode:Int = -1;
 	private var radius:Float;
 	private var lineThickness:Float;
-	private var lineColor:UInt = 0x1692E6;
 
 	private var main:Shape;
 	private var hitAnchor:Int;
@@ -79,17 +79,17 @@ class TransformHint extends Sprite {
 		this.resizeBegin = new Rectangle();
 		this.resizeUpdate = new Rectangle();
 
-		this.register = this.addCircle(0, 0, this.radius + 1);
-		this.register.blendMode = BlendMode.DIFFERENCE;
+		this.register = this.addCircle(0, 0, this.radius + 1, 0x004488);
+		this.register.blendMode = BlendMode.INVERT;
 		this.lines = new Array<Shape>();
 		this.scaleAnchores = new Array<ScaleAnchor>();
 		this.rotateAnchores = new Array<RotateAnchor>();
 		for (i in 0...8) {
-			var sa = new ScaleAnchor(this.radius, this.lineThickness, this.lineColor);
+			var sa = new ScaleAnchor(this.radius, this.lineThickness, LINE_COLOR);
 			this.addChild(sa);
 			this.scaleAnchores.push(sa);
 
-			var ra = new RotateAnchor(this.radius, this.lineThickness, this.lineColor);
+			var ra = new RotateAnchor(this.radius, this.lineThickness, LINE_COLOR);
 			this.addChild(ra);
 			this.rotateAnchores.push(ra);
 
@@ -133,7 +133,7 @@ class TransformHint extends Sprite {
 		this.resetRegister();
 	}
 
-	private function addCircle(fillColor:UInt, fillAlpha:Float, radius:Float):Shape {
+	private function addCircle(fillColor:UInt, fillAlpha:Float, radius:Float, lineColor:UInt):Shape {
 		var c:Shape = new Shape();
 		c.graphics.beginFill(fillColor, fillAlpha);
 		c.graphics.lineStyle(lineThickness, lineColor);
@@ -144,12 +144,12 @@ class TransformHint extends Sprite {
 
 	private function addLine(vertical:Bool, length:Float):Shape {
 		var l:Shape = new Shape();
-		this.drawLine(l, vertical, length);
+		this.drawLine(l, vertical, length, LINE_COLOR);
 		this.addChild(l);
 		return l;
 	}
 
-	private function drawLine(l:Shape, vertical:Bool, length:Float):Void {
+	private function drawLine(l:Shape, vertical:Bool, length:Float, lineColor:UInt):Void {
 		l.graphics.clear();
 		l.graphics.lineStyle(lineThickness, lineColor);
 		l.graphics.moveTo(0, 0);
@@ -202,7 +202,7 @@ class TransformHint extends Sprite {
 		this.scaleAnchores[7].y = this.rotateAnchores[7].y = h * 0.5;
 
 		for (i in 0...8)
-			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2);
+			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2, LINE_COLOR);
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;

@@ -248,6 +248,24 @@ class Inputs extends BaseService {
 		this.shiftKey = event.shiftKey;
 		this.ctrlKey = event.ctrlKey;
 		this.altKey = event.altKey;
+
+		// change mouse cursor
+		if (Tools.instance.toolType != Tool.SELECT) {
+			if (this.inScene(event)) {
+				Cursor.instance.mode = switch (Tools.instance.toolType) {
+					case Tool.RECTANGLE: Cursor.MODE_RECTANGLE;
+					case Tool.ELLIPSE: Cursor.MODE_ELLIPSE;
+					case Tool.TEXT: Cursor.MODE_TEXT;
+					default: Cursor.MODE_NONE;
+				}
+				Cursor.instance.rotation = 0;
+				Cursor.instance.x = event.stageX;
+				Cursor.instance.y = event.stageY;
+			} else {
+				Cursor.instance.mode = Cursor.MODE_NONE;
+			}
+		}
+
 		event.updateAfterEvent();
 		if (this.middleMouseDown || (this.mouseDown && this.lastKeyDown == KeyCode.SPACE)) {
 			this.panPhase = PHASE_UPDATE;

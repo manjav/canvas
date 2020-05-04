@@ -57,8 +57,11 @@
   <assets id="lock" path="assets/img/lock.png"/>
   <assets id="hide" path="assets/img/hide.png"/>
   <assets id="bitmap" path="assets/img/bitmap.png"/>
+
   <assets id="cur-scale" path="assets/img/cur-scale.png"/>
   <assets id="cur-rotate" path="assets/img/cur-rotate.png"/>
+  <assets id="cur-rect" path="assets/img/cur-rect.png"/>
+  <assets id="cur-oval" path="assets/img/cur-oval.png"/>
 
   <assets id="align-t" path="assets/img/align-t.png"/>
   <assets id="align-m" path="assets/img/align-m.png"/>

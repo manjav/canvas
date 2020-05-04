@@ -4,8 +4,7 @@ import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.themes.CanTheme;
-import openfl.Assets;
-import openfl.display.Bitmap;
+import ir.grantech.canvas.utils.Cursor;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
@@ -13,7 +12,6 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import openfl.ui.Mouse;
 
 class TransformHint extends Sprite {
 	static final MODE_NONE:Int = -1;
@@ -404,39 +402,3 @@ class RotateAnchor extends Shape {
 	}
 }
 
-class Cursor extends Sprite {
-	static public final MODE_NONE:Int = -1;
-	static public final MODE_SCALE:Int = 0;
-	static public final MODE_ROTATE:Int = 1;
-
-	private var cursorScale:Bitmap;
-	private var cursorRotate:Bitmap;
-
-	public var mode(default, set):Int;
-
-	private function set_mode(value:Int):Int {
-		if (this.mode == value)
-			return this.mode;
-		this.mode = value;
-		this.removeChildren();
-		if (this.mode > MODE_NONE) {
-			this.addChild(this.mode == MODE_SCALE ? this.cursorScale : this.cursorRotate);
-			Mouse.hide();
-		} else {
-			Mouse.show();
-		}
-		return this.mode;
-	}
-
-	public function new() {
-		super();
-
-		this.cursorScale = new Bitmap(Assets.getBitmapData("cur-scale"));
-		this.cursorScale.x = -this.cursorScale.width * 0.5;
-		this.cursorScale.y = -this.cursorScale.height * 0.5;
-
-		this.cursorRotate = new Bitmap(Assets.getBitmapData("cur-rotate"));
-		this.cursorRotate.x = -this.cursorRotate.width * 0.5;
-		this.cursorRotate.y = -this.cursorRotate.height * 0.5;
-	}
-}

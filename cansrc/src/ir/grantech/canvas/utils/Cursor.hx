@@ -1,9 +1,9 @@
 package ir.grantech.canvas.utils;
 
-import openfl.utils.Assets;
+import flash.display.Sprite;
 import openfl.display.Bitmap;
 import openfl.ui.Mouse;
-import flash.display.Sprite;
+import openfl.utils.Assets;
 
 
 class Cursor extends Sprite {
@@ -13,6 +13,21 @@ class Cursor extends Sprite {
 
 	private var cursorScale:Bitmap;
 	private var cursorRotate:Bitmap;
+
+	/**
+		The singleton method of Cursor.
+		```hx
+		Cursor.instance. ....
+		```
+		@since 1.0.0
+	**/
+	static public var instance(get, null):Cursor;
+
+	static private function get_instance():Cursor {
+		if( instance == null)
+			instance = new Cursor();
+		return instance;
+	}
 
 	public var mode(default, set):Int;
 
@@ -24,6 +39,7 @@ class Cursor extends Sprite {
 		if (this.mode > MODE_NONE) {
 			this.addChild(this.mode == MODE_SCALE ? this.cursorScale : this.cursorRotate);
 			Mouse.hide();
+			// Lib.application.window.stage.addChild(this);
 		} else {
 			Mouse.show();
 		}

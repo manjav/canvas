@@ -53,7 +53,6 @@ class TransformHint extends Sprite {
 	private var angleBegin:Float;
 	private var resizeBegin:Rectangle;
 	private var resizeUpdate:Rectangle;
-	private var cursor:Cursor;
 
 	public var targets:CanItems;
 
@@ -98,9 +97,6 @@ class TransformHint extends Sprite {
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
 
-		this.cursor = new Cursor();
-		this.owner.stage.addChild(this.cursor);
-
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
 	}
 
@@ -108,16 +104,16 @@ class TransformHint extends Sprite {
 		if (this.mode == MODE_NONE) {
 			var anchor = this.getAnchor();
 			if (anchor < 0 || anchor == 8 || anchor == 9) {
-				this.cursor.mode = Cursor.MODE_NONE;
+				Cursor.instance.mode = Cursor.MODE_NONE;
 				return;
 			}
-			this.cursor.mode = anchor > 9 ? Cursor.MODE_ROTATE : Cursor.MODE_SCALE;
+			Cursor.instance.mode = anchor > 9 ? Cursor.MODE_ROTATE : Cursor.MODE_SCALE;
 		}
 
-		if (this.cursor.mode != MODE_NONE) {
-			this.cursor.rotation = this.rotation + Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x) * 180 / Math.PI;
-			this.cursor.x = event.stageX;
-			this.cursor.y = event.stageY;
+		if (Cursor.instance.mode != MODE_NONE) {
+			Cursor.instance.rotation = this.rotation + Math.atan2(this.mouseY - this.register.y, this.mouseX - this.register.x) * 180 / Math.PI;
+			Cursor.instance.x = event.stageX;
+			Cursor.instance.y = event.stageY;
 			event.updateAfterEvent();
 		}
 	}
@@ -171,7 +167,7 @@ class TransformHint extends Sprite {
 
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
-		this.cursor.mode = Cursor.MODE_NONE;
+		Cursor.instance.mode = Cursor.MODE_NONE;
 		if (this.targets == null || this.targets.isEmpty)
 			return;
 		this.setVisible(true, true);

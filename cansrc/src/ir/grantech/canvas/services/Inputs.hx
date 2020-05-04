@@ -8,6 +8,7 @@ import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.services.Tools.Tool;
+import ir.grantech.canvas.utils.Cursor;
 import lime.ui.KeyCode;
 import openfl.display.DisplayObject;
 import openfl.display.Stage;
@@ -93,6 +94,7 @@ class Inputs extends BaseService {
 		this.stage.doubleClickEnabled = true;
 		this.canZoom = canZoom;
 		this.selectedItems = new CanItems();
+		this.stage.addChild(Cursor.instance);
 
 		this.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.stage_keyDownHandler);
 

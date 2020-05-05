@@ -150,7 +150,7 @@ class Inputs extends BaseService {
 				CanEvent.dispatch(this, ZOOM);
 			} else if (this.lastKeyUp == 89) { // ctrl + y
 				this.commands.commit(Commands.REDO);
-			} else if (this.lastKeyUp == 90) { // ctrl + z
+			} else if (this.lastKeyUp == 90 && !event.shiftKey) { // ctrl + z
 				this.commands.commit(Commands.UNDO);
 			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.isFill) { // ctrl + shift + z
 				this.commands.commit(Commands.RESET, [this.selectedItems]);

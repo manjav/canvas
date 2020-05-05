@@ -31,6 +31,7 @@ class CanTheme extends BaseSteelTheme {
 	static public var DPI:Int = 4;
 	static public var DEFAULT_PADDING = 4;
 	static public var CONTROL_SIZE = 32;
+	static public final HINT_COLOR:UInt = 0x1692E6;
 
 	public var headerTextColor:UInt;
 

@@ -20,8 +20,6 @@ class TransformHint extends Sprite {
 	static final MODE_SCALE:Int = 2;
 	static final MODE_ROTATE:Int = 3;
 	
-	static final LINE_COLOR:UInt = 0x1692E6;
-
 	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
 			return;
@@ -82,11 +80,11 @@ class TransformHint extends Sprite {
 		this.scaleAnchores = new Array<ScaleAnchor>();
 		this.rotateAnchores = new Array<RotateAnchor>();
 		for (i in 0...8) {
-			var sa = new ScaleAnchor(this.radius, this.lineThickness, LINE_COLOR);
+			var sa = new ScaleAnchor(this.radius, this.lineThickness, CanTheme.HINT_COLOR);
 			this.addChild(sa);
 			this.scaleAnchores.push(sa);
 
-			var ra = new RotateAnchor(this.radius, this.lineThickness, LINE_COLOR);
+			var ra = new RotateAnchor(this.radius, this.lineThickness, CanTheme.HINT_COLOR);
 			this.addChild(ra);
 			this.rotateAnchores.push(ra);
 
@@ -139,7 +137,7 @@ class TransformHint extends Sprite {
 
 	private function addLine(vertical:Bool, length:Float):Shape {
 		var l:Shape = new Shape();
-		this.drawLine(l, vertical, length, LINE_COLOR);
+		this.drawLine(l, vertical, length, CanTheme.HINT_COLOR);
 		this.addChild(l);
 		return l;
 	}
@@ -198,7 +196,7 @@ class TransformHint extends Sprite {
 		this.scaleAnchores[7].y = this.rotateAnchores[7].y = h * 0.5;
 
 		for (i in 0...8)
-			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2, LINE_COLOR);
+			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2, CanTheme.HINT_COLOR);
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;

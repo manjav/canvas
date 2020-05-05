@@ -11,7 +11,7 @@ class Commands extends BaseService {
 	static public final SELECT:String = "select";
 	static public final ENABLE:String = "enable";
 	static public final ORDER:String = "order";
-	
+
 	// transform commands
 	static public final TRANSLATE:String = "translate";
 	static public final SCALE:String = "scale";
@@ -19,12 +19,12 @@ class Commands extends BaseService {
 	static public final RESIZE:String = "resize";
 	static public final RESET:String = "reset";
 	static public final ALIGN:String = "align";
-	
+
 	// base commands
 	static public final ALPHA:String = "alpha";
 	static public final VISIBLE:String = "visible";
 	static public final BLEND_MODE:String = "blendMode";
-	
+
 	// drawing commands
 	static public final FILL_ENABLED:String = "fillEnabled";
 	static public final FILL_COLOR:String = "fillColor";
@@ -60,10 +60,13 @@ class Commands extends BaseService {
 		return BaseService.get(Commands);
 	}
 
+	private var actionPosition:Int = -1;
+	private var actions:Array<Action>;
 	private var layers:Layers;
 
 	public function new() {
 		super();
+		this.actions = new Array<Action>();
 		this.layers = new Layers();
 	}
 
@@ -81,6 +84,59 @@ class Commands extends BaseService {
 				this.layers.changeOrder(args[0], args[1]);
 				args[2] = this.layers;
 		}
+
+		if (command == UNDO || command == REDO) {
+			this.callAction(command);
+			return;
+		}
+		this.addAction(command, args);
 		CanEvent.dispatch(this, command, args);
+	}
+
+	private function addAction(command:String, args:Array<Dynamic>) {
+		if (this.actionPosition != this.actions.length - 1)
+			this.actions.splice(this.actionPosition, this.actions.length);
+
+		if (this.actions.length > 0 && this.actions[this.actions.length - 1].command == command)
+			this.actions[this.actions.length - 1].args = args;
+		else
+			this.actions.push(new Action(command, args));
+
+		++this.actionPosition;
+		log();
+	}
+
+	private function callAction(command:String) {
+		if (command == UNDO) {
+			if (this.actionPosition <= 1)
+				return;
+
+			--this.actionPosition;
+			CanEvent.dispatch(this, this.actions[this.actionPosition].command, this.actions[this.actionPosition].args);
+		} else {
+			if (this.actionPosition >= this.actions.length - 2)
+				return;
+
+			++this.actionPosition;
+			CanEvent.dispatch(this, this.actions[this.actionPosition].command, this.actions[this.actionPosition].args);
+		}
+		log();
+	}
+
+	function log() {
+		// var log = "p: " + actionPosition;
+		// for (a in actions)
+		// 	log += ", " + a.command;
+		// trace(log);
+	}
+}
+
+class Action {
+	public var command:String;
+	public var args:Array<Dynamic>;
+
+	public function new(command:String, args:Array<Dynamic>) {
+		this.command = command;
+		this.args = args;
 	}
 }

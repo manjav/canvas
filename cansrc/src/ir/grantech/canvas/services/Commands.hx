@@ -44,6 +44,9 @@ class Commands extends BaseService {
 	static public final TEXT_LINESPACE:String = "textLineSpace";
 	static public final TEXT_AUTOSIZE:String = "txtAutosize";
 
+	static public final UNDO:String = "undo";
+	static public final REDO:String = "redo";
+
 	/**
 		The singleton method of Commands.
 		```hx

@@ -135,7 +135,7 @@ class Inputs extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
-		// trace(StringTools.hex(this.lastKeyUp));
+		// trace(this.lastKeyUp, StringTools.hex(this.lastKeyUp));
 		if (event.ctrlKey) {
 			if (this.lastKeyUp == KeyCode.NUMBER_0) {
 				this.zoom = 1;
@@ -148,6 +148,10 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
+			} else if (this.lastKeyUp == 89) { // ctrl + y
+				this.commands.commit(Commands.REDO);
+			} else if (this.lastKeyUp == 90) { // ctrl + z
+				this.commands.commit(Commands.UNDO);
 			} else if (this.lastKeyUp == 90 && event.shiftKey && this.selectedItems.isFill) { // ctrl + shift + z
 				this.commands.commit(Commands.RESET, [this.selectedItems]);
 			} else if (this.lastKeyUp == 219 && this.selectedItems.isFill) { // ctrl + [

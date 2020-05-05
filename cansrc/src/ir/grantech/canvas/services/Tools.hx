@@ -1,5 +1,8 @@
 package ir.grantech.canvas.services;
 
+import openfl.events.Event;
+import ir.grantech.canvas.events.CanEvent;
+
 class Tools extends BaseService {
 	private var tools:Map<Int, Tool>;
 
@@ -33,6 +36,7 @@ class Tools extends BaseService {
 		this.toolType = value;
 		if (!this.tools.exists(this.toolType))
 			this.tools.set(value, new Tool(value));
+		CanEvent.dispatch(this, Event.CHANGE);
 		//  var bmp = new CanBitmap();
 		// 	bmp.bitmapData = Assets.getBitmapData("rotate");
 		// 	item = bmp;

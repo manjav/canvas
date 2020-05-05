@@ -83,6 +83,14 @@ class ToolBar extends LayoutGroup {
 		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
 		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length + 1;
 		this.addChild(this.bottomList);
+
+		Tools.instance.addEventListener(Event.CHANGE, this.tools_changeHandler);
+	}
+
+	private function tools_changeHandler(event:Event):Void {
+		this.topList.removeEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.topList.selectedIndex = Tools.instance.toolType;
+		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 	}
 
 	private function listView_itemSelectHandler(event:CanEvent):Void {

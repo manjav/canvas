@@ -80,8 +80,8 @@ class AppearSection extends CanSection {
 			commands.commit(Commands.FILL_COLOR, [this.targets, this.fillPicker.rgb]);
 		} else if (event.currentTarget == this.borderPicker) {
 			this.borderPicker.selected = true;
-			commands.commit(Commands.BORDER_ALPHA, [this.targets, this.fillPicker.a / 0xFF]);
-			commands.commit(Commands.BORDER_COLOR, [this.targets, this.fillPicker.rgb]);
+			commands.commit(Commands.BORDER_ALPHA, [this.targets, this.borderPicker.a / 0xFF]);
+			commands.commit(Commands.BORDER_COLOR, [this.targets, this.borderPicker.rgb]);
 		}
 	}
 

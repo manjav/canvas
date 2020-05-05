@@ -7,7 +7,6 @@ import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
-import lime.math.RGB;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.geom.Point;

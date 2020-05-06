@@ -7,6 +7,7 @@ import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.utils.CanRect;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.geom.Point;
@@ -94,14 +95,14 @@ class CanItems {
 
 	public var pivot:Point;
 	public var pivotV:Point;
-	public var bounds:Rectangle;
+	public var bounds:CanRect;
 	public var items:Array<ICanItem>;
 	public var props:Map<String, Dynamic>;
 
 	public function new() {
 		this.pivotV = new Point();
 		this.pivot = new Point(0.5, 0.5);
-		this.bounds = new Rectangle();
+		this.bounds = new CanRect();
 		this.items = new Array<ICanItem>();
 		this.props = new Map<String, Dynamic>();
 

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls;
 
+import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
@@ -19,7 +20,7 @@ class TransformHint extends Sprite {
 	static final MODE_TRANSLATE:Int = 1;
 	static final MODE_SCALE:Int = 2;
 	static final MODE_ROTATE:Int = 3;
-	
+
 	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
 			return;
@@ -196,7 +197,8 @@ class TransformHint extends Sprite {
 		this.scaleAnchores[7].y = this.rotateAnchores[7].y = h * 0.5;
 
 		for (i in 0...8)
-			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2, CanTheme.HINT_COLOR);
+			this.drawLine(this.lines[i], i == 2 || i == 3 || i == 6 || i == 7, (i == 2 || i == 3 || i == 6 || i == 7 ? h : w) * 0.5 - this.radius * 2,
+				CanTheme.HINT_COLOR);
 
 		this.lines[1].x = w * 0.5 + this.radius;
 		this.lines[2].x = w;
@@ -374,7 +376,25 @@ class TransformHint extends Sprite {
 		// calculate delta translate
 		var tx = stage.mouseX / Inputs.instance.zoom - this.mouseTranslateBegin.x;
 		var ty = stage.mouseY / Inputs.instance.zoom - this.mouseTranslateBegin.y;
+
+		// horizontal snapping
+		if (Math.round((this.targets.bounds.left + tx) / 32) * 32 == 0)
+			tx = -this.targets.bounds.left;
+		else if (Math.round((this.targets.bounds.center + tx) / 32) * 32 == CanScene.WIDTH * 0.5)
+			tx = CanScene.WIDTH * 0.5 - this.targets.bounds.center;
+		else if (Math.round((this.targets.bounds.right + tx) / 32) * 32 == CanScene.WIDTH)
+			tx = CanScene.WIDTH - this.targets.bounds.right;
+
+		// vertical snapping
+		if (Math.round((this.targets.bounds.top + ty) / 32) * 32 == 0)
+			ty = -this.targets.bounds.top;
+		else if (Math.round((this.targets.bounds.middle + ty) / 32) * 32 == CanScene.HEIGHT * 0.5)
+			ty = CanScene.HEIGHT * 0.5 - this.targets.bounds.middle;
+		else if (Math.round((this.targets.bounds.bottom + ty) / 32) * 32 == CanScene.HEIGHT)
+			ty = CanScene.HEIGHT - this.targets.bounds.bottom;
+
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
+		trace(tx, ty);
 		Commands.instance.commit(Commands.TRANSLATE, [this.targets, tx, ty]);
 	}
 }
@@ -395,4 +415,3 @@ class RotateAnchor extends Shape {
 		this.graphics.drawCircle(0, 0, radius * 4);
 	}
 }
-

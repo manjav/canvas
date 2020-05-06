@@ -271,21 +271,19 @@ class CanItems {
 			return;
 		}
 		if (this.length == 1) {
-			var w = cast(this.items[0].parent.parent, CanScene).canWidth;
-			var h = cast(this.items[0].parent.parent, CanScene).canHeight;
 			switch (mode) {
 				case "align-l":
 					this.stranslate(this.items[0], -this.bounds.x, 0);
 				case "align-c":
-					this.stranslate(this.items[0], (w - this.bounds.width) * 0.5 - this.bounds.x, 0);
+					this.stranslate(this.items[0], (CanScene.WIDTH - this.bounds.width) * 0.5 - this.bounds.x, 0);
 				case "align-r":
-					this.stranslate(this.items[0], w - this.bounds.width - this.bounds.x, 0);
+					this.stranslate(this.items[0], CanScene.WIDTH - this.bounds.width - this.bounds.x, 0);
 				case "align-t":
 					this.stranslate(this.items[0], 0, -this.bounds.y);
 				case "align-m":
-					this.stranslate(this.items[0], 0, (h - this.bounds.height) * 0.5 - this.bounds.y);
+					this.stranslate(this.items[0], 0, (CanScene.HEIGHT - this.bounds.height) * 0.5 - this.bounds.y);
 				case "align-b":
-					this.stranslate(this.items[0], 0, h - this.bounds.height - this.bounds.y);
+					this.stranslate(this.items[0], 0, CanScene.HEIGHT - this.bounds.height - this.bounds.y);
 			}
 			this.calculateBounds();
 			return;

@@ -14,9 +14,10 @@ import openfl.display.Sprite;
 import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
-	public var canWidth = 640;
-	public var canHeight = 960;
-	public var canColor = 0xFFFFFF;
+	static public var WIDTH = 640;
+	static public var HEIGHT = 960;
+	static public var COLOR = 0xFFFFFF;
+
 	public var beginPoint:Point;
 	public var hitHint:Shape;
 	public var selection:Shape;
@@ -33,7 +34,7 @@ class CanScene extends LayoutGroup {
 
 		this.graphics.beginFill(0xFFFFFF);
 		this.graphics.lineStyle(0.2, 0x838383);
-		this.graphics.drawRect(0, 0, canWidth, canHeight);
+		this.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 
 		this.hitHint = new Shape();
 

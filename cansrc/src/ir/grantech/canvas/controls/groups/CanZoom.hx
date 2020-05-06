@@ -162,7 +162,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	@:access(ir.grantech.canvas.services.Inputs)
-	function performSelection(pointPhase:Int, beganFrom:Int, selectedItems:CanItems, fixed:Bool):Void {
+	private function performSelection(pointPhase:Int, beganFrom:Int, selectedItems:CanItems, fixed:Bool):Void {
 		if (beganFrom != Inputs.TARGET_SCENE || beganFrom == Inputs.TARGET_NONE)
 			return;
 
@@ -205,7 +205,7 @@ class CanZoom extends LayoutGroup {
 
 	public function resetZoomAndPan():Void {
 		this.setZoom(1);
-		this.scene.x = this.input.pointX = (this.explicitWidth - this.scene.canWidth) * 0.5;
-		this.scene.y = this.input.pointY = (this.explicitHeight - this.scene.canHeight) * 0.5;
+		this.scene.x = this.input.pointX = (this.explicitWidth - CanScene.WIDTH) * 0.5;
+		this.scene.y = this.input.pointY = (this.explicitHeight - CanScene.HEIGHT) * 0.5;
 	}
 }

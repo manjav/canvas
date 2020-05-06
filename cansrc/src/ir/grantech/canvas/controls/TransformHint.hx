@@ -1,13 +1,13 @@
 package ir.grantech.canvas.controls;
 
 import ir.grantech.canvas.controls.groups.CanScene;
+import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.utils.Cursor;
 import openfl.display.BlendMode;
-import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
@@ -42,7 +42,7 @@ class TransformHint extends Sprite {
 	private var hitAnchor:Int;
 	private var register:Shape;
 	private var lines:Array<Shape>;
-	private var owner:DisplayObjectContainer;
+	private var owner:CanZoom;
 	private var scaleAnchores:Array<ScaleAnchor>;
 	private var rotateAnchores:Array<RotateAnchor>;
 	private var mouseTranslateBegin:Point;
@@ -55,7 +55,7 @@ class TransformHint extends Sprite {
 
 	public var targets:CanItems;
 
-	public function new(owner:DisplayObjectContainer) {
+	public function new(owner:CanZoom) {
 		super();
 
 		this.owner = owner;
@@ -175,8 +175,8 @@ class TransformHint extends Sprite {
 		var w = 0.0;
 		var h = 0.0;
 		this.rotation = 0;
-		this.x = this.targets.bounds.x;
-		this.y = this.targets.bounds.y;
+		this.x = this.owner.scene.x + this.targets.bounds.x;
+		this.y = this.owner.scene.y + this.targets.bounds.y;
 		w = this.targets.bounds.width;
 		h = this.targets.bounds.height;
 
@@ -231,7 +231,7 @@ class TransformHint extends Sprite {
 			return;
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
-			var r:Rectangle = this.register.getBounds(parent);
+			var r:Rectangle = this.register.getBounds(this.owner.scene);
 			this.targets.pivotV.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
 			// detect anchores

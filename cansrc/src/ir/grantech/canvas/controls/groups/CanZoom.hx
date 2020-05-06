@@ -19,10 +19,11 @@ import openfl.ui.MouseCursor;
 
 class CanZoom extends LayoutGroup {
 	public var scene:CanScene;
+	public var transformHint:TransformHint;
 
 	private var input:Inputs;
 
-	override function initialize() {
+	override private function initialize() {
 		super.initialize();
 
 		this.scene = new CanScene();
@@ -33,6 +34,8 @@ class CanZoom extends LayoutGroup {
 		background.graphics.drawRect(0, 0, 100, 100);
 		this.backgroundSkin = background;
 
+		this.transformHint = new TransformHint(this);
+	
 		var commands = cast(BaseService.get(Commands), Commands);
 		commands.addEventListener(Commands.ADDED, this.commands_addedHandler);
 		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
@@ -91,7 +94,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
-		this.scene.transformHint.set(event.data[0]);
+		this.transformHint.set(event.data[0]);
 	}
 
 	private function commands_orderHandler(event:CanEvent):Void {
@@ -153,12 +156,12 @@ class CanZoom extends LayoutGroup {
 			return;
 
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
-			this.scene.transformHint.updateBounds();
+			this.transformHint.updateBounds();
 			return;
 		}
 
 		if (this.input.selectedItems.isFill)
-			this.scene.transformHint.perform(input.pointPhase);
+			this.transformHint.perform(input.pointPhase);
 	}
 
 	@:access(ir.grantech.canvas.services.Inputs)

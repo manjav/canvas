@@ -57,6 +57,7 @@ class TransformHint extends Sprite {
 	private var resizeUpdate:Rectangle;
 	private var horizontalHintPoints:Array<Float>;
 	private var verticalHintPoints:Array<Float>;
+	private var snapMode:Int = -1;
 
 	public var targets:CanItems;
 
@@ -405,9 +406,12 @@ class TransformHint extends Sprite {
 
 		// snapping
 		tx = this.getSnapH(tx);
+		this.owner.horizontalHint.visible = this.snapMode > -1;
 		if (this.snapMode > -1)
 			owner.horizontalHint.x = owner.scene.x + (snapMode == 0 ? targets.bounds.left : (snapMode == 1 ? targets.bounds.center : targets.bounds.right));
+
 		ty = this.getSnapV(ty);
+		this.owner.verticalHint.visible = this.snapMode > -1;
 		if (this.snapMode > -1)
 			owner.verticalHint.y = owner.scene.y + (snapMode == 0 ? targets.bounds.top : (snapMode == 1 ? targets.bounds.middle : targets.bounds.bottom));
 

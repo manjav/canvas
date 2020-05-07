@@ -87,12 +87,14 @@ class CanZoom extends LayoutGroup {
 		Timer.delay(this.resetZoomAndPan, 0);
 
 		this.horizontalHint = new Shape();
+		this.horizontalHint.visible = false;
 		this.horizontalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
 		this.horizontalHint.graphics.moveTo(0, 0);
 		this.horizontalHint.graphics.lineTo(0, _layoutMeasurements.height);
 		this.addChild(this.horizontalHint);
 		
 		this.verticalHint = new Shape();
+		this.verticalHint.visible = false;
 		this.verticalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
 		this.verticalHint.graphics.moveTo(0, 0);
 		this.verticalHint.graphics.lineTo(_layoutMeasurements.width, 0);
@@ -172,6 +174,8 @@ class CanZoom extends LayoutGroup {
 
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
 			this.transformHint.updateBounds();
+			this.horizontalHint.visible = false;
+			this.verticalHint.visible = false;
 			return;
 		}
 

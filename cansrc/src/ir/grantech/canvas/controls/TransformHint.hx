@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls;
 
+import ir.grantech.canvas.utils.Utils;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.CanItems;
@@ -20,6 +21,8 @@ class TransformHint extends Sprite {
 	static final MODE_TRANSLATE:Int = 1;
 	static final MODE_SCALE:Int = 2;
 	static final MODE_ROTATE:Int = 3;
+
+	static final SNAP:Int = 16;
 
 	public function setVisible(visible:Bool, all:Bool):Void {
 		if (this.lines[0].visible == visible)
@@ -52,6 +55,8 @@ class TransformHint extends Sprite {
 	private var angleBegin:Float;
 	private var resizeBegin:Rectangle;
 	private var resizeUpdate:Rectangle;
+	private var horizontalHintPoints:Array<Float>;
+	private var verticalHintPoints:Array<Float>;
 
 	public var targets:CanItems;
 
@@ -74,6 +79,8 @@ class TransformHint extends Sprite {
 		this.scaleBegin = new Point();
 		this.resizeBegin = new Rectangle();
 		this.resizeUpdate = new Rectangle();
+		this.horizontalHintPoints = [0, CanScene.WIDTH * 0.5, CanScene.WIDTH];
+		this.verticalHintPoints = [0, CanScene.HEIGHT * 0.5, CanScene.HEIGHT];
 
 		this.register = this.addCircle(0, 0, this.radius + 1, 0x004488);
 		this.register.blendMode = BlendMode.INVERT;
@@ -150,6 +157,7 @@ class TransformHint extends Sprite {
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
 	}
 
+	@:access(ir.grantech.canvas.services.Commands)
 	public function set(targets:CanItems):Void {
 		this.targets = targets;
 
@@ -159,6 +167,24 @@ class TransformHint extends Sprite {
 		} else if (this.owner == parent) {
 			this.owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 			this.owner.removeChild(this);
+		}
+
+		// insert hint points
+		var i = 3;
+		for (l in Commands.instance.layers) {
+			if (this.targets.indexOf(l.item) > -1)
+				continue;
+
+			var b:Rectangle = l.item.getBounds(l.item.parent);
+			this.horizontalHintPoints[i] = b.left;
+			this.horizontalHintPoints[i + 1] = b.right;
+			this.verticalHintPoints[i] = b.top;
+			this.verticalHintPoints[i + 1] = b.bottom;
+			i += 2;
+		}
+		while (this.horizontalHintPoints.length > i) {
+			this.horizontalHintPoints.pop();
+			this.verticalHintPoints.pop();
 		}
 
 		this.updateBounds();
@@ -377,25 +403,37 @@ class TransformHint extends Sprite {
 		var tx = stage.mouseX / Inputs.instance.zoom - this.mouseTranslateBegin.x;
 		var ty = stage.mouseY / Inputs.instance.zoom - this.mouseTranslateBegin.y;
 
-		// horizontal snapping
-		if (Math.round((this.targets.bounds.left + tx) / 32) * 32 == 0)
-			tx = -this.targets.bounds.left;
-		else if (Math.round((this.targets.bounds.center + tx) / 32) * 32 == CanScene.WIDTH * 0.5)
-			tx = CanScene.WIDTH * 0.5 - this.targets.bounds.center;
-		else if (Math.round((this.targets.bounds.right + tx) / 32) * 32 == CanScene.WIDTH)
-			tx = CanScene.WIDTH - this.targets.bounds.right;
-
-		// vertical snapping
-		if (Math.round((this.targets.bounds.top + ty) / 32) * 32 == 0)
-			ty = -this.targets.bounds.top;
-		else if (Math.round((this.targets.bounds.middle + ty) / 32) * 32 == CanScene.HEIGHT * 0.5)
-			ty = CanScene.HEIGHT * 0.5 - this.targets.bounds.middle;
-		else if (Math.round((this.targets.bounds.bottom + ty) / 32) * 32 == CanScene.HEIGHT)
-			ty = CanScene.HEIGHT - this.targets.bounds.bottom;
+		// snapping
+		tx = this.getSnapH(tx);
+		ty = this.getSnapV(ty);
 
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
 		trace(tx, ty);
 		Commands.instance.commit(Commands.TRANSLATE, [this.targets, tx, ty]);
+	}
+
+	private function getSnapH(value:Float):Float {
+		for (h in this.horizontalHintPoints) {
+			if (this.targets.bounds.left + value - SNAP < h && this.targets.bounds.left + value + SNAP > h)
+				return h - this.targets.bounds.left;
+			if (this.targets.bounds.center + value - SNAP < h && this.targets.bounds.center + value + SNAP > h)
+				return h - this.targets.bounds.center;
+			if (this.targets.bounds.right + value - SNAP < h && this.targets.bounds.right + value + SNAP > h)
+				return h - this.targets.bounds.right;
+		}
+		return value;
+	}
+
+	private function getSnapV(value:Float):Float {
+		for (v in this.verticalHintPoints) {
+			if (this.targets.bounds.top + value - SNAP < v && this.targets.bounds.top + value + SNAP > v)
+				return v - this.targets.bounds.top;
+			if (this.targets.bounds.middle + value - SNAP < v && this.targets.bounds.middle + value + SNAP > v)
+				return v - this.targets.bounds.middle;
+			if (this.targets.bounds.bottom + value - SNAP < v && this.targets.bounds.bottom + value + SNAP > v)
+				return v - this.targets.bounds.bottom;
+		}
+		return value;
 	}
 }
 

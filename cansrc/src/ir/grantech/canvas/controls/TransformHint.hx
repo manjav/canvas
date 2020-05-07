@@ -405,34 +405,45 @@ class TransformHint extends Sprite {
 
 		// snapping
 		tx = this.getSnapH(tx);
+		if (this.snapMode > -1)
+			owner.horizontalHint.x = owner.scene.x + (snapMode == 0 ? targets.bounds.left : (snapMode == 1 ? targets.bounds.center : targets.bounds.right));
 		ty = this.getSnapV(ty);
+		if (this.snapMode > -1)
+			owner.verticalHint.y = owner.scene.y + (snapMode == 0 ? targets.bounds.top : (snapMode == 1 ? targets.bounds.middle : targets.bounds.bottom));
 
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
-		trace(tx, ty);
 		Commands.instance.commit(Commands.TRANSLATE, [this.targets, tx, ty]);
 	}
 
 	private function getSnapH(value:Float):Float {
 		for (h in this.horizontalHintPoints) {
+			this.snapMode = 0;
 			if (this.targets.bounds.left + value - SNAP < h && this.targets.bounds.left + value + SNAP > h)
 				return h - this.targets.bounds.left;
+			this.snapMode = 1;
 			if (this.targets.bounds.center + value - SNAP < h && this.targets.bounds.center + value + SNAP > h)
 				return h - this.targets.bounds.center;
+			this.snapMode = 2;
 			if (this.targets.bounds.right + value - SNAP < h && this.targets.bounds.right + value + SNAP > h)
 				return h - this.targets.bounds.right;
 		}
+		this.snapMode = -1;
 		return value;
 	}
 
 	private function getSnapV(value:Float):Float {
 		for (v in this.verticalHintPoints) {
+			this.snapMode = 0;
 			if (this.targets.bounds.top + value - SNAP < v && this.targets.bounds.top + value + SNAP > v)
 				return v - this.targets.bounds.top;
+			this.snapMode = 1;
 			if (this.targets.bounds.middle + value - SNAP < v && this.targets.bounds.middle + value + SNAP > v)
 				return v - this.targets.bounds.middle;
+			this.snapMode = 2;
 			if (this.targets.bounds.bottom + value - SNAP < v && this.targets.bounds.bottom + value + SNAP > v)
 				return v - this.targets.bounds.bottom;
 		}
+		this.snapMode = -1;
 		return value;
 	}
 }

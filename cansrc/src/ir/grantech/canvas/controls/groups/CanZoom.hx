@@ -20,13 +20,10 @@ import openfl.ui.MouseCursor;
 
 class CanZoom extends LayoutGroup {
 	public var scene:CanScene;
-	public var transformHint:TransformHint;
 
 	private var input:Inputs;
-	public var horizontalHint:Shape;
-	public var verticalHint:Shape;
 
-	override private function initialize() {
+	override function initialize() {
 		super.initialize();
 
 		this.scene = new CanScene();
@@ -37,8 +34,6 @@ class CanZoom extends LayoutGroup {
 		background.graphics.drawRect(0, 0, 100, 100);
 		this.backgroundSkin = background;
 
-		this.transformHint = new TransformHint(this);
-	
 		var commands = cast(BaseService.get(Commands), Commands);
 		commands.addEventListener(Commands.ADDED, this.commands_addedHandler);
 		commands.addEventListener(Commands.REMOVED, this.commands_removedHandler);
@@ -85,20 +80,6 @@ class CanZoom extends LayoutGroup {
 	private function creationCompleteHandler(event:Event):Void {
 		this.removeEventListener(FeathersEvent.CREATION_COMPLETE, this.creationCompleteHandler);
 		Timer.delay(this.resetZoomAndPan, 0);
-
-		this.horizontalHint = new Shape();
-		this.horizontalHint.visible = false;
-		this.horizontalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
-		this.horizontalHint.graphics.moveTo(0, 0);
-		this.horizontalHint.graphics.lineTo(0, _layoutMeasurements.height);
-		this.addChild(this.horizontalHint);
-		
-		this.verticalHint = new Shape();
-		this.verticalHint.visible = false;
-		this.verticalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
-		this.verticalHint.graphics.moveTo(0, 0);
-		this.verticalHint.graphics.lineTo(_layoutMeasurements.width, 0);
-		this.addChild(this.verticalHint);
 	}
 
 	// ------ commands listeners ------
@@ -111,7 +92,7 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
-		this.transformHint.set(event.data[0]);
+		this.scene.transformHint.set(event.data[0]);
 	}
 
 	private function commands_orderHandler(event:CanEvent):Void {
@@ -173,14 +154,12 @@ class CanZoom extends LayoutGroup {
 			return;
 
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
-			this.transformHint.updateBounds();
-			this.horizontalHint.visible = false;
-			this.verticalHint.visible = false;
+			this.scene.transformHint.updateBounds();
 			return;
 		}
 
 		if (this.input.selectedItems.isFill)
-			this.transformHint.perform(input.pointPhase);
+			this.scene.transformHint.perform(input.pointPhase);
 	}
 
 	@:access(ir.grantech.canvas.services.Inputs)

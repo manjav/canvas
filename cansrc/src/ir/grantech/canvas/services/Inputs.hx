@@ -327,8 +327,8 @@ class Inputs extends BaseService {
 		for (i in 0...this.canZoom.scene.container.numChildren)
 			if (this.canZoom.scene.container.getChildAt(i).hitTestPoint(x, y, true))
 				return this.canZoom.scene.container.getChildAt(i);
-		if (this.canZoom.transformHint.hitTestPoint(x, y, true))
-			return this.canZoom.transformHint;
+		if (this.canZoom.scene.transformHint.hitTestPoint(x, y, true))
+			return this.canZoom.scene.transformHint;
 		return null;
 	}
 }

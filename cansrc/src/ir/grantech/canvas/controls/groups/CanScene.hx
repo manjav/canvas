@@ -21,6 +21,7 @@ class CanScene extends LayoutGroup {
 	public var beginPoint:Point;
 	public var hitHint:Shape;
 	public var selection:Shape;
+	public var transformHint:TransformHint;
 	public var container:Sprite;
 
 	override function initialize() {
@@ -36,6 +37,8 @@ class CanScene extends LayoutGroup {
 		this.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 
 		this.hitHint = new Shape();
+
+		this.transformHint = new TransformHint(this);
 
 		this.selection = new Shape();
 

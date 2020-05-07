@@ -54,12 +54,12 @@ class TransformSection extends CanSection {
 	}
 
 	override private function textInputs_focusInHandler(event:FocusEvent):Void {
-		Inputs.instance.canZoom.transformHint.setVisible(false, event.currentTarget != this.inputR);
+		Inputs.instance.canZoom.scene.transformHint.setVisible(false, event.currentTarget != this.inputR);
 		cast(event.currentTarget, CanRangeInput).addEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 
 	override private function textInputs_focusOutHandler(event:FocusEvent):Void {
-		Inputs.instance.canZoom.transformHint.updateBounds();
+		Inputs.instance.canZoom.scene.transformHint.updateBounds();
 		cast(event.currentTarget, CanRangeInput).removeEventListener(Event.CHANGE, this.textInputs_changeHandler);
 	}
 

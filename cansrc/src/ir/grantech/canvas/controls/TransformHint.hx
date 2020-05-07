@@ -2,13 +2,13 @@ package ir.grantech.canvas.controls;
 
 import ir.grantech.canvas.utils.Utils;
 import ir.grantech.canvas.controls.groups.CanScene;
-import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.utils.Cursor;
 import openfl.display.BlendMode;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
@@ -45,7 +45,7 @@ class TransformHint extends Sprite {
 	private var hitAnchor:Int;
 	private var register:Shape;
 	private var lines:Array<Shape>;
-	private var owner:CanZoom;
+	private var owner:DisplayObjectContainer;
 	private var scaleAnchores:Array<ScaleAnchor>;
 	private var rotateAnchores:Array<RotateAnchor>;
 	private var mouseTranslateBegin:Point;
@@ -55,13 +55,15 @@ class TransformHint extends Sprite {
 	private var angleBegin:Float;
 	private var resizeBegin:Rectangle;
 	private var resizeUpdate:Rectangle;
+	private var horizontalHint:Shape;
+	private var verticalHint:Shape;
 	private var horizontalHintPoints:Array<Float>;
 	private var verticalHintPoints:Array<Float>;
 	private var snapMode:Int = -1;
 
 	public var targets:CanItems;
 
-	public function new(owner:CanZoom) {
+	public function new(owner:DisplayObjectContainer) {
 		super();
 
 		this.owner = owner;
@@ -103,6 +105,20 @@ class TransformHint extends Sprite {
 		this.lines[5].x = this.radius;
 		this.lines[2].y = this.radius;
 		this.lines[7].y = this.radius;
+
+		this.horizontalHint = new Shape();
+		this.horizontalHint.visible = false;
+		this.horizontalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
+		this.horizontalHint.graphics.moveTo(0, 0);
+		this.horizontalHint.graphics.lineTo(0, CanScene.HEIGHT);
+		this.owner.addChild(this.horizontalHint);
+		
+		this.verticalHint = new Shape();
+		this.verticalHint.visible = false;
+		this.verticalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
+		this.verticalHint.graphics.moveTo(0, 0);
+		this.verticalHint.graphics.lineTo(CanScene.WIDTH, 0);
+		this.owner.addChild(this.verticalHint);
 
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleClickHandler);
 	}
@@ -158,7 +174,6 @@ class TransformHint extends Sprite {
 		l.graphics.lineTo(vertical ? 0 : length, vertical ? length : 0);
 	}
 
-	@:access(ir.grantech.canvas.services.Commands)
 	public function set(targets:CanItems):Void {
 		this.targets = targets;
 
@@ -170,27 +185,10 @@ class TransformHint extends Sprite {
 			this.owner.removeChild(this);
 		}
 
-		// insert hint points
-		var i = 3;
-		for (l in Commands.instance.layers) {
-			if (this.targets.indexOf(l.item) > -1)
-				continue;
-
-			var b:Rectangle = l.item.getBounds(l.item.parent);
-			this.horizontalHintPoints[i] = b.left;
-			this.horizontalHintPoints[i + 1] = b.right;
-			this.verticalHintPoints[i] = b.top;
-			this.verticalHintPoints[i + 1] = b.bottom;
-			i += 2;
-		}
-		while (this.horizontalHintPoints.length > i) {
-			this.horizontalHintPoints.pop();
-			this.verticalHintPoints.pop();
-		}
-
 		this.updateBounds();
 	}
 
+	@:access(ir.grantech.canvas.services.Commands)
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
 		Cursor.instance.mode = Cursor.MODE_NONE;
@@ -202,8 +200,8 @@ class TransformHint extends Sprite {
 		var w = 0.0;
 		var h = 0.0;
 		this.rotation = 0;
-		this.x = this.owner.scene.x + this.targets.bounds.x;
-		this.y = this.owner.scene.y + this.targets.bounds.y;
+		this.x = this.targets.bounds.x;
+		this.y = this.targets.bounds.y;
 		w = this.targets.bounds.width;
 		h = this.targets.bounds.height;
 
@@ -237,6 +235,27 @@ class TransformHint extends Sprite {
 		this.lines[6].y = h * 0.5 + this.radius;
 
 		this.resetRegister();
+
+		// insert hint points
+		this.horizontalHint.visible = false;
+		this.verticalHint.visible = false;
+
+		var i = 3;
+		for (l in Commands.instance.layers) {
+			if (this.targets.indexOf(l.item) > -1)
+				continue;
+
+			var b:Rectangle = l.item.getBounds(l.item.parent);
+			this.horizontalHintPoints[i] = b.left;
+			this.horizontalHintPoints[i + 1] = b.right;
+			this.verticalHintPoints[i] = b.top;
+			this.verticalHintPoints[i + 1] = b.bottom;
+			i += 2;
+		}
+		while (this.horizontalHintPoints.length > i) {
+			this.horizontalHintPoints.pop();
+			this.verticalHintPoints.pop();
+		}
 	}
 
 	private function getAnchor():Int {
@@ -258,7 +277,7 @@ class TransformHint extends Sprite {
 			return;
 		if (state == Inputs.PHASE_BEGAN) {
 			// set register point
-			var r:Rectangle = this.register.getBounds(this.owner.scene);
+			var r:Rectangle = this.register.getBounds(parent);
 			this.targets.pivotV.setTo(r.left + r.width * 0.5, r.top + r.height * 0.5);
 
 			// detect anchores
@@ -406,14 +425,14 @@ class TransformHint extends Sprite {
 
 		// snapping
 		tx = this.getSnapH(tx);
-		this.owner.horizontalHint.visible = this.snapMode > -1;
+		this.horizontalHint.visible = this.snapMode > -1;
 		if (this.snapMode > -1)
-			owner.horizontalHint.x = owner.scene.x + (snapMode == 0 ? targets.bounds.left : (snapMode == 1 ? targets.bounds.center : targets.bounds.right));
+			horizontalHint.x = snapMode == 0 ? targets.bounds.left : (snapMode == 1 ? targets.bounds.center : targets.bounds.right);
 
 		ty = this.getSnapV(ty);
-		this.owner.verticalHint.visible = this.snapMode > -1;
+		this.verticalHint.visible = this.snapMode > -1;
 		if (this.snapMode > -1)
-			owner.verticalHint.y = owner.scene.y + (snapMode == 0 ? targets.bounds.top : (snapMode == 1 ? targets.bounds.middle : targets.bounds.bottom));
+			verticalHint.y = snapMode == 0 ? targets.bounds.top : (snapMode == 1 ? targets.bounds.middle : targets.bounds.bottom);
 
 		this.mouseTranslateBegin.setTo(tx + this.mouseTranslateBegin.x, ty + this.mouseTranslateBegin.y);
 		Commands.instance.commit(Commands.TRANSLATE, [this.targets, tx, ty]);

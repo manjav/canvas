@@ -40,4 +40,8 @@ class Utils {
 			return path.substr(cp + 1);
 		return null;
 	}
+
+	static 	public function round(value:Float, border:Int = 32):Float {
+		return Math.round(value / border) * border;
+	}
 }

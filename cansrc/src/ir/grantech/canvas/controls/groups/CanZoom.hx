@@ -11,6 +11,7 @@ import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Layers;
 import ir.grantech.canvas.services.Tools;
+import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -22,6 +23,8 @@ class CanZoom extends LayoutGroup {
 	public var transformHint:TransformHint;
 
 	private var input:Inputs;
+	public var horizontalHint:Shape;
+	public var verticalHint:Shape;
 
 	override private function initialize() {
 		super.initialize();
@@ -82,6 +85,18 @@ class CanZoom extends LayoutGroup {
 	private function creationCompleteHandler(event:Event):Void {
 		this.removeEventListener(FeathersEvent.CREATION_COMPLETE, this.creationCompleteHandler);
 		Timer.delay(this.resetZoomAndPan, 0);
+
+		this.horizontalHint = new Shape();
+		this.horizontalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
+		this.horizontalHint.graphics.moveTo(0, 0);
+		this.horizontalHint.graphics.lineTo(0, _layoutMeasurements.height);
+		this.addChild(this.horizontalHint);
+		
+		this.verticalHint = new Shape();
+		this.verticalHint.graphics.lineStyle(CanTheme.DPI * 0.5, CanTheme.HINT_COLOR);
+		this.verticalHint.graphics.moveTo(0, 0);
+		this.verticalHint.graphics.lineTo(_layoutMeasurements.width, 0);
+		this.addChild(this.verticalHint);
 	}
 
 	// ------ commands listeners ------

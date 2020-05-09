@@ -18,7 +18,7 @@ import feathers.skins.CircleSkin;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
-import flash.display.Bitmap;
+import openfl.display.Bitmap;
 import openfl.Assets;
 import openfl.display.Shape;
 import openfl.system.Capabilities;
@@ -300,5 +300,13 @@ class CanTheme extends BaseSteelTheme {
 
 	override private function getActiveThemeFill():FillStyle {
 		return SolidColor(this.textColor, 1);
+	}
+
+	static public function getBitmap(name:String):Bitmap {
+		var bd = Assets.getBitmapData(name);
+		var bmp = new Bitmap(bd);
+		bmp.width = bd.width / 4 * DPI;
+		bmp.height = bd.height / 4 * DPI;
+		return bmp;
 	}
 }

@@ -87,7 +87,7 @@
   <assets id="tspace-letter" path="assets/img/text-space-letter.png"/>
   <assets id="tspace-line" path="assets/img/text-space-line.png"/>
     
-  <assets id="IRANSans" path="assets/IRANSans-Light-web.ttf"/>
+  <assets id="IRANSans" path="assets/fonts/IRANSans-Light-web.ttf"/>
   <!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>
 </project>

@@ -1,4 +1,5 @@
 -cp src
 -D analyzer-optimize
+-lib bitmap
 -main Main
 --interp

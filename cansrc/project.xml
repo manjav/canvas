@@ -9,7 +9,7 @@
 	<window fullscreen="false"/>
 	<window allow-high-dpi="true"/>
 	<window background="#e4e4e4" />
-	<window fps="60" width="1800" height="1200"/>
+	<!-- <window fps="60" width="1200" height="960"/> -->
 	<!-- <window fps="0" if="html5"/> -->
 	
 	<source path="src" />
@@ -21,7 +21,7 @@
 	<haxdef name="openfl_pool_events"/>	
   <haxdef name="advanced-telemetry" if="debug" />
 
-	<!-- sync/embedded -->
+	<!-- sync/embedded  -->
 	<assets id="transparent" path="assets/img/transparent.png"/>
   <assets id="sampler" path="assets/img/sampler.png"/>
 

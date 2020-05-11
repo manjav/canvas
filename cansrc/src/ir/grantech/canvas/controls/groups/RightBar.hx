@@ -55,8 +55,8 @@ class RightBar extends ScrollContainer {
 	}
 
 	private function input_pointHandler(event:Event):Void {
-		if (Tools.instance.toolType != Tool.SELECT)
-			return;
+		// if (Tools.instance.toolType != Tool.SELECT)
+		// 	return;
 		if (Inputs.instance.pointPhase < Inputs.PHASE_ENDED)
 			this.transfromSection.updateData();
 	}

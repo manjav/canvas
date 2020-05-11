@@ -8,7 +8,7 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.utils.ColorUtils;
-import ir.grantech.canvas.utils.Utils;
+import ir.grantech.canvas.utils.StringUtils;
 import lime.math.RGB;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -346,7 +346,7 @@ class ColorCallout extends LayoutGroup {
 
 	private function textInput_KyeboardEventHandler(event:KeyboardEvent):Void {
 		if (event.keyCode == 13 || event.keyCode == 1073741912) { // enter
-			this.rgb = Utils.hexToDecimal(this.colorInput.text);
+			this.rgb = StringUtils.hexToDecimal(this.colorInput.text);
 		}
 	}
 

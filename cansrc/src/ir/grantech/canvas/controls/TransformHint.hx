@@ -1,6 +1,5 @@
 package ir.grantech.canvas.controls;
 
-import ir.grantech.canvas.utils.Utils;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands;

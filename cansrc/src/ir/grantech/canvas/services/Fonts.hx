@@ -1,6 +1,6 @@
 package ir.grantech.canvas.services;
 
-import ir.grantech.canvas.utils.Utils;
+import ir.grantech.canvas.utils.StringUtils;
 import openfl.text.Font;
 
 class Fonts {
@@ -13,7 +13,7 @@ class Fonts {
 			fontsPath = fontsPath.substr(0, index) + "fonts\\";
 		var dir = sys.FileSystem.readDirectory(fontsPath);
 		for (f in dir)
-			if (Utils.getExtension(f) == "ttf")
+			if (StringUtils.getExtension(f) == "ttf")
 				fonts.push(Font.fromFile(fontsPath + f));
 		#end
 
@@ -59,6 +59,7 @@ class FontStyle {
 	public var styleName:String;
 
 	public var fontName(get, never):String;
+
 	private function get_fontName():String {
 		#if flash
 		return font.fontName;

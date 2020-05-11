@@ -18,8 +18,8 @@ import feathers.skins.CircleSkin;
 import feathers.skins.RectangleSkin;
 import feathers.skins.UnderlineSkin;
 import feathers.themes.steel.BaseSteelTheme;
-import openfl.display.Bitmap;
 import openfl.Assets;
+import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.system.Capabilities;
 import openfl.text.TextFormat;
@@ -40,6 +40,7 @@ class CanTheme extends BaseSteelTheme {
 		DPI = Math.round(Capabilities.screenResolutionY / 500);
 		DEFAULT_PADDING = DPI * 8;
 		CONTROL_SIZE = DPI * 18;
+		trace(Capabilities.screenResolutionY, DPI, DEFAULT_PADDING, CONTROL_SIZE);
 		this.fontSize = Math.round(DPI * 5.5);
 		this.headerFontSize = DPI * 5;
 		this.textColor = this.darkMode ? 0x646464 : 0x464646;

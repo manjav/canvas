@@ -53,6 +53,7 @@ class CanScene extends LayoutGroup {
 			Commands.instance.layers.get(i).valiadateAll();
 	}
 
+	
 	public function updateSlection(phase:Int, fixed:Bool):Void {
 		this.selection.visible = phase == Inputs.PHASE_UPDATE;
 		if (phase == Inputs.PHASE_BEGAN) {

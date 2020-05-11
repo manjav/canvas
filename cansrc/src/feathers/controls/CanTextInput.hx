@@ -50,7 +50,7 @@ class CanTextInput extends TextInput {
 			this.iconDisplay.bitmapData = Assets.getBitmapData(icon);
 			return;
 		}
-		this.iconDisplay = new Bitmap(Assets.getBitmapData(icon));
+		this.iconDisplay = new Bitmap(CanTheme.getScaledBitmapData(icon));
 		this.addChild(this.iconDisplay);
 	}
 
@@ -79,7 +79,7 @@ class CanTextInput extends TextInput {
 		if (iconDisplay == null)
 			return;
 
-		this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI * 5;
+		// this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI;
 		this.iconDisplay.x = this.paddingLeft;
 		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;
 	}

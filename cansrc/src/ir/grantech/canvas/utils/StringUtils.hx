@@ -1,7 +1,7 @@
 package ir.grantech.canvas.utils;
 
 
-class Utils {
+class StringUtils {
 	static public function normalizeHEX(text:String):String {
 		var len:Int = 6 - text.length;
 		for (i in 0...len)

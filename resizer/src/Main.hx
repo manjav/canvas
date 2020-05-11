@@ -17,7 +17,10 @@ class Main {
 			try {
 				var bitmap = PNGBitmap.create(IOUtil.readFile(path));
 				for (i in 1...5) {
-					IOUtil.writeBitmap(haxe.io.Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
+					if (i == 4)
+						File.copy(path, haxe.io.Path.join([dstDir + "/4x", f]));
+					else
+						IOUtil.writeBitmap(haxe.io.Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
 				}
 			} catch (e:Dynamic) {
 				trace(path, e);

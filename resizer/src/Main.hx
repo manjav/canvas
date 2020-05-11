@@ -14,9 +14,13 @@ class Main {
 		var dstDir = "C:/_projects/_canvas/cansrc/assets/img/";
 		for (f in FileSystem.readDirectory(srcDir)) {
 			var path = haxe.io.Path.join([srcDir, f]);
-			var bitmap = PNGBitmap.create(IOUtil.readFile(path));
-			for (i in 1...5) {
-				IOUtil.writeBitmap(haxe.io.Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
+			try {
+				var bitmap = PNGBitmap.create(IOUtil.readFile(path));
+				for (i in 1...5) {
+					IOUtil.writeBitmap(haxe.io.Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
+				}
+			} catch (e:Dynamic) {
+				trace(path, e);
 			}
 		}
 		trace(Timer.stamp() - t, "Hello, world!");

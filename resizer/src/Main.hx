@@ -13,7 +13,9 @@ class Main {
 		trace(Timer.stamp() - t, "Hello, world!");
 	}
 	
-	static function scale(bitmap:PNGBitmap, sx:Float, sy:Float):Void {
+	static function scale(bitmap:PNGBitmap, sx:Float, sy:Float):Bitmap {
+		if (sx == 1 && sy == 1)
+			return bitmap;
 		// bitmap.transform.convolve(Convolution.blur(3, 2.7));
 		var r = bitmap.transform.affine({affine: new Affine().scale(sx, sy)});
 		var w = Math.floor(bitmap.width * sx);
@@ -25,6 +27,6 @@ class Main {
 			width: w,
 			height: h
 		});
-		IOUtil.writeBitmap('output.png', b);
+		return b;
 	}
 }

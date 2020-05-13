@@ -1,7 +1,9 @@
 package feathers.controls;
 
+import feathers.events.FeathersEvent;
 import ir.grantech.canvas.themes.ScaledBitmap;
 import openfl.display.DisplayObject;
+import openfl.events.Event;
 
 class CanTextInput extends TextInput {
 	private var iconDisplay:DisplayObject;
@@ -46,7 +48,13 @@ class CanTextInput extends TextInput {
 			return;
 		}
 		this.iconDisplay = new ScaledBitmap(icon);
+		this.iconDisplay.addEventListener(FeathersEvent.LAYOUT_DATA_CHANGE, this.iconDisplay_layoutChangHandler);
 		this.addChild(this.iconDisplay);
+	}
+
+	private function iconDisplay_layoutChangHandler(event:Event):Void {
+		this.iconDisplay.removeEventListener(FeathersEvent.LAYOUT_DATA_CHANGE, this.iconDisplay_layoutChangHandler);
+		this.layoutContent();
 	}
 
 	override private function set_enabled(value:Bool):Bool {

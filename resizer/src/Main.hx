@@ -3,6 +3,7 @@ import bitmap.IOUtil;
 import bitmap.PNGBitmap;
 import bitmap.transformation.Affine;
 import haxe.Timer;
+import haxe.io.Path;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -12,15 +13,25 @@ class Main {
 
 		var srcDir = "origin";
 		var dstDir = "C:/_projects/_canvas/cansrc/assets/img/";
+
+		// clear directories
+		for (i in 1...5) {
+			var f = dstDir + i + "x";
+			if (FileSystem.exists(f))
+				FileSystem.deleteDirectory(f);
+			FileSystem.createDirectory(f);
+		}
+
+		// create images
 		for (f in FileSystem.readDirectory(srcDir)) {
 			var path = haxe.io.Path.join([srcDir, f]);
 			try {
 				var bitmap = PNGBitmap.create(IOUtil.readFile(path));
 				for (i in 1...5) {
 					if (i == 4)
-						File.copy(path, haxe.io.Path.join([dstDir + "/4x", f]));
+						File.copy(path, Path.join([dstDir + "/4x", f]));
 					else
-						IOUtil.writeBitmap(haxe.io.Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
+						IOUtil.writeBitmap(Path.join([dstDir + i + "x", f]), scale(bitmap, i / 4, i / 4));
 				}
 			} catch (e:Dynamic) {
 				trace(path, e);

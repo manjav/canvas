@@ -64,11 +64,11 @@ class TextSection extends CanSection {
 		this.sizeInput.step = 1;
 
 		// letter space
-		this.spaceLetterInput = this.createRangeInput("tspace-letter", AnchorLayoutData.topLeft(padding * 9, padding * 7));
+		this.spaceLetterInput = this.createRangeInput("text-space-letter", AnchorLayoutData.topLeft(padding * 9, padding * 7));
 		this.spaceLetterInput.step = 1;
 
 		// lince space
-		this.spaceLineInput = this.createRangeInput("tspace-line", AnchorLayoutData.topRight(padding * 9, padding));
+		this.spaceLineInput = this.createRangeInput("text-space-line", AnchorLayoutData.topRight(padding * 9, padding));
 		this.spaceLineInput.step = 1;
 
 		// text align

@@ -82,8 +82,8 @@
   <assets id="IRANSans" path="assets/fonts/IRANSans-Light-web.ttf"/>
   <!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>
-  <assets path="assets/img/1x" rename="1x" embed="false"/>
-  <assets path="assets/img/2x" rename="2x" embed="false"/>
-  <assets path="assets/img/3x" rename="3x" embed="false"/>
-  <assets path="assets/img/4x" rename="4x" embed="false"/>
+  <assets path="assets/img/1x" embed="false"/>
+  <assets path="assets/img/2x" embed="false"/>
+  <assets path="assets/img/3x" embed="false"/>
+  <assets path="assets/img/4x" embed="false"/>
 </project>

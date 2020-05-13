@@ -1,11 +1,10 @@
 package feathers.controls;
 
-import ir.grantech.canvas.themes.CanTheme;
-import openfl.Assets;
-import openfl.display.Bitmap;
+import ir.grantech.canvas.themes.ScaledBitmap;
+import openfl.display.DisplayObject;
 
 class CanTextInput extends TextInput {
-	private var iconDisplay:Bitmap;
+	private var iconDisplay:DisplayObject;
 
 	/**
 		The maximum number of characters that the text input can contain, as
@@ -46,11 +45,7 @@ class CanTextInput extends TextInput {
 				this.removeChild(this.iconDisplay);
 			return;
 		}
-		if (this.iconDisplay != null) {
-			this.iconDisplay.bitmapData = Assets.getBitmapData(icon);
-			return;
-		}
-		this.iconDisplay = new Bitmap(CanTheme.getScaledBitmapData(icon));
+		this.iconDisplay = new ScaledBitmap(icon);
 		this.addChild(this.iconDisplay);
 	}
 
@@ -78,7 +73,7 @@ class CanTextInput extends TextInput {
 		super.layoutContent();
 		if (iconDisplay == null)
 			return;
-
+		trace(iconDisplay.loaderInfo.content);
 		// this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI;
 		this.iconDisplay.x = this.paddingLeft;
 		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;

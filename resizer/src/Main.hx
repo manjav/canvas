@@ -16,10 +16,13 @@ class Main {
 
 		// clear directories
 		for (i in 1...5) {
-			var f = dstDir + i + "x";
-			if (FileSystem.exists(f))
-				FileSystem.deleteDirectory(f);
-			FileSystem.createDirectory(f);
+			var d = dstDir + i + "x";
+			if (FileSystem.exists(d)) {
+				for (f in FileSystem.readDirectory(d))
+					FileSystem.deleteFile(haxe.io.Path.join([d, f]));
+			} else {
+				FileSystem.createDirectory(d);
+			}
 		}
 
 		// create images

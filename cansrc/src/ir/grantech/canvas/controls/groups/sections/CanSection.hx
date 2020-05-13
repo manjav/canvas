@@ -1,7 +1,7 @@
 package ir.grantech.canvas.controls.groups.sections;
 
-import feathers.controls.ButtonGroup;
 import feathers.controls.Button;
+import feathers.controls.ButtonGroup;
 import feathers.controls.ButtonState;
 import feathers.controls.CanHSlider;
 import feathers.controls.CanRangeInput;
@@ -21,9 +21,8 @@ import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.popups.DropCenterPopUpAdapter;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.themes.ScaledBitmap;
 import lime.math.RGB;
-import openfl.Assets;
-import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
@@ -149,13 +148,12 @@ class CanSection extends CanView {
 	}
 
 	private function createButton(icon:String, layoutData:AnchorLayoutData):Button {
-		var bd = CanTheme.getScaledBitmapData(icon);
-		var disabledIcon = new Bitmap(bd);
+		var disabledIcon = new ScaledBitmap(icon);
 		disabledIcon.alpha = 0.5;
 		var element = new Button();
 		element.name = icon;
 		element.width = element.height = 16 * CanTheme.DPI;
-		element.icon = new Bitmap(bd);
+		element.icon = new ScaledBitmap(icon);
 		element.setIconForState(ButtonState.DISABLED, disabledIcon);
 		element.layoutData = layoutData;
 		element.addEventListener(MouseEvent.CLICK, this.buttons_clickHandler);

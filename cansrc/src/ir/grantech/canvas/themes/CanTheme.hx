@@ -129,15 +129,9 @@ class CanTheme extends BaseSteelTheme {
 		button.verticalAlign = MIDDLE;
 		button.minGap = 6.0;
 
-		var bd = Assets.getBitmapData("chevron-d");
-		var bmp = new Bitmap(bd);
-		bmp.width = bd.width * 0.25 * DPI;
-		bmp.height = bd.height * 0.25 * DPI;
-		button.icon = bmp;
+		button.icon = new ScaledBitmap("chevron-d");
 
-		bmp = new Bitmap(bd);
-		bmp.width = bd.width * 0.25 * DPI;
-		bmp.height = bd.height * 0.25 * DPI;
+		var bmp = new ScaledBitmap("chevron-d");
 		bmp.alpha = 0.5;
 		button.setIconForState(ButtonState.DISABLED, bmp);
 		button.iconPosition = RIGHT;

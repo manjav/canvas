@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.items;
 
+import ir.grantech.canvas.themes.ScaledBitmap;
 import ir.grantech.canvas.services.Commands.*;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
@@ -33,8 +34,8 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	private var layer:Layer;
-	private var lockDisplay:Bitmap;
-	private var hideDisplay:Bitmap;
+	private var lockDisplay:ScaledBitmap;
+	private var hideDisplay:ScaledBitmap;
 
 	public function new() {
 		super();
@@ -56,12 +57,12 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
-		this.icon = new Bitmap(Assets.getBitmapData("bitmap"));
+		this.icon = new ScaledBitmap("bitmap");
 
-		this.lockDisplay = new Bitmap(Assets.getBitmapData("lock"));
+		this.lockDisplay = new ScaledBitmap("lock");
 		this.addChild(this.lockDisplay);
 
-		this.hideDisplay = new Bitmap(Assets.getBitmapData("hide"));
+		this.hideDisplay = new ScaledBitmap("hide");
 		this.addChild(this.hideDisplay);
 
 		this.iconPosition = MANUAL;

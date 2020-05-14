@@ -22,8 +22,6 @@
   <haxdef name="advanced-telemetry" if="debug" />
 
 	<!-- sync/embedded  -->
-	<assets id="transparent" path="assets/img/4x/transparent.png"/>
-  <assets id="sampler" path="assets/img/4x/sampler.png"/>
 
 	<assets id="toolhead_0" path="assets/img/4x/select.png"/>
 	<assets id="toolhead_0_selected" path="assets/img/4x/select-blue.png"/>

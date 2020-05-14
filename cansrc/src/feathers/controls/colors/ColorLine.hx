@@ -1,12 +1,12 @@
 package feathers.controls.colors;
 
+import lime.math.RGB;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.themes.CanTheme;
-import lime.math.RGB;
-import openfl.Assets;
+import ir.grantech.canvas.themes.ScaledBitmap;
 import openfl.display.Bitmap;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -132,7 +132,7 @@ class ColorLine extends LayoutGroup implements IToggle {
 		this.addChild(this.labelDisplay);
 
 		this.samplerButton = new Button();
-		this.samplerButton.icon = new Bitmap(Assets.getBitmapData("sampler"));
+		samplerButton.icon = new ScaledBitmap("sampler");
 		this.samplerButton.addEventListener(MouseEvent.CLICK, this.samplerButtonClickHandler);
 		this.samplerButton.layoutData = AnchorLayoutData.middleRight(0, -padding);
 		this.addChild(this.samplerButton);

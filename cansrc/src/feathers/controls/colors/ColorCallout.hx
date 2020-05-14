@@ -1,7 +1,5 @@
 package feathers.controls.colors;
 
-import ir.grantech.canvas.themes.ScaledAssets;
-import openfl.display.BitmapData;
 import feathers.controls.CanTextInput;
 import feathers.controls.FixableCallout;
 import feathers.layout.AnchorLayout;
@@ -9,11 +7,12 @@ import feathers.layout.AnchorLayoutData;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.themes.ScaledAssets;
+import ir.grantech.canvas.themes.ScaledBitmap;
 import ir.grantech.canvas.utils.ColorUtils;
 import ir.grantech.canvas.utils.StringUtils;
 import lime.math.RGB;
-import openfl.Assets;
-import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.GradientType;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -261,7 +260,7 @@ class ColorCallout extends LayoutGroup {
 
 		// sampler button
 		var samplerButton = new Button();
-		samplerButton.icon = new Bitmap(Assets.getBitmapData("sampler"));
+		samplerButton.icon = new ScaledBitmap("sampler");
 		samplerButton.layoutData = AnchorLayoutData.bottomRight(this.padding, this.padding * 0.2);
 		samplerButton.addEventListener(MouseEvent.CLICK, this.samplerButtonClickHandler);
 		this.addChild(samplerButton);

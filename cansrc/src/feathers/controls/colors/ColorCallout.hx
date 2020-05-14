@@ -1,5 +1,7 @@
 package feathers.controls.colors;
 
+import ir.grantech.canvas.themes.ScaledAssets;
+import openfl.display.BitmapData;
 import feathers.controls.CanTextInput;
 import feathers.controls.FixableCallout;
 import feathers.layout.AnchorLayout;
@@ -217,8 +219,10 @@ class ColorCallout extends LayoutGroup {
 		#if hl
 		this.alphaContainer.graphics.lineStyle(CanTheme.DPI, theme.disabledTextColor);
 		#end
-		this.alphaContainer.graphics.beginBitmapFill(Assets.getBitmapData("transparent"));
-		this.alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		ScaledAssets.loadBitmapData("transparent").onComplete((bitmapData:BitmapData) -> {
+			this.alphaContainer.graphics.beginBitmapFill(bitmapData);
+			this.alphaContainer.graphics.drawRoundRect(0, 0, this.padding, this.columnSize, roundness, roundness);
+		});
 		this.alphaContainer.x = this.columnSize + this.padding * 4;
 		this.alphaContainer.y = this.padding;
 		this.alphaContainer.filters = [innerGlow];

@@ -1,5 +1,8 @@
 package feathers.controls.colors;
 
+import openfl.display.BitmapData;
+import ir.grantech.canvas.themes.ScaledAssets;
+import ir.grantech.canvas.themes.ScaledBitmap;
 import feathers.core.InvalidationFlag;
 import feathers.core.PopUpManager;
 import feathers.layout.RelativePosition;
@@ -57,14 +60,16 @@ class ColorPicker extends LayoutGroup {
 		var theme = Std.downcast(Theme.getTheme(), CanTheme);
 
 		super.initialize();
-		var icon = new RectangleSkin();
-		icon.cornerRadius = CanTheme.DPI * 2.4;
-		icon.border = SolidColor(CanTheme.DPI * 0.5, theme.textColor);
-		icon.fill = Bitmap(Assets.getBitmapData("transparent"));
+		ScaledAssets.loadBitmapData("transparent").onComplete((bitmapData:BitmapData) -> {
+			var icon = new RectangleSkin();
+			icon.cornerRadius = CanTheme.DPI * 2.4;
+			icon.border = SolidColor(CanTheme.DPI * 0.5, theme.textColor);
+			icon.fill = Bitmap(bitmapData);
+			this.width = Math.round(CanTheme.CONTROL_SIZE * 0.88);
+			this.height = Math.round(CanTheme.CONTROL_SIZE * 0.45);
+			backgroundSkin = icon;
+		});
 
-		this.width = Math.round(CanTheme.CONTROL_SIZE * 0.88);
-		this.height = Math.round(CanTheme.CONTROL_SIZE * 0.45);
-		backgroundSkin = icon;
 		// this.filters = [new GlowFilter(0, 0.5, CanTheme.DPI * 2, CanTheme.DPI * 2, 1, 1, true)];
 
 		this.colorDisplay = new Shape();

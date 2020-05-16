@@ -1,15 +1,14 @@
 package ir.grantech.canvas.controls.items;
 
+import ir.grantech.canvas.themes.ScaledBitmap;
 import feathers.controls.ButtonGroup;
-import openfl.display.Shape;
 import feathers.controls.IToggle;
 import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.layout.RelativePosition;
-import feathers.skins.RectangleSkin;
-import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.Assets;
 import openfl.display.Bitmap;
+import openfl.display.Shape;
 
 class ButtonGroupRenderer extends ItemRenderer implements IToggle {
 	static final SIZE:Int = CanTheme.DPI * 6;
@@ -57,15 +56,13 @@ class ButtonGroupRenderer extends ItemRenderer implements IToggle {
 
 		this.iconPosition = RelativePosition.MANUAL;
 		this.width = this.height = Math.round(CanTheme.DPI * 3.9) * 4;
-		var icon = new Bitmap(Assets.getBitmapData(value));
-		icon.smoothing = true;
+		var icon = new ScaledBitmap(value);
 		icon.width = icon.height = this.width * 0.5;
 		icon.x = (this.width - icon.width) * 0.5;
 		icon.y = (this.height - icon.height) * 0.5;
 		this.icon = icon;
 
-		var selectedIcon = new Bitmap(Assets.getBitmapData(value + "-selected"));
-		selectedIcon.smoothing = true;
+		var selectedIcon = new ScaledBitmap(value + "-blue");
 		selectedIcon.width = selectedIcon.height = icon.width;
 		selectedIcon.x = icon.x;
 		selectedIcon.y = icon.y;

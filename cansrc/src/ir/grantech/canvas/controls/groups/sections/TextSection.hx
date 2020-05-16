@@ -81,10 +81,10 @@ class TextSection extends CanSection {
 		this.alignsButtons = this.createButtonGroup(alignes, AnchorLayoutData.topLeft(padding * 12, padding));
 		this.alignsButtons.itemToText = (align:TextFormatAlign) -> {
 			return switch (align) {
-				case TextFormatAlign.JUSTIFY: "talign-justify";
-				case TextFormatAlign.CENTER: "talign-center";
-				case TextFormatAlign.RIGHT: "talign-right";
-				case TextFormatAlign.LEFT: "talign-left";
+				case TextFormatAlign.JUSTIFY: "text-justify";
+				case TextFormatAlign.CENTER: "text-center";
+				case TextFormatAlign.RIGHT: "text-right";
+				case TextFormatAlign.LEFT: "text-left";
 				default: null;
 			}
 		}
@@ -92,7 +92,7 @@ class TextSection extends CanSection {
 		// text auto size
 		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topLeft(padding * 12, padding * 10));
 		this.sutoSizeButtons.itemToText = (autosize:Int) -> {
-			return autosize == 0 ? "tsize-align" : "tsize-none";
+			return autosize == 0 ? "text-sizealign" : "text-sizenone";
 		}
 
 		this.height = padding * 15;

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.utils;
 
+import ir.grantech.canvas.themes.ScaledBitmap;
 import openfl.ui.MouseCursor;
 import flash.display.Sprite;
 import openfl.display.Bitmap;
@@ -15,10 +16,10 @@ class Cursor extends Sprite {
 	static public final MODE_RECTANGLE:Int = 2;
 	static public final MODE_ELLIPSE:Int = 3;
 
-	private var cursorScale:Bitmap;
-	private var cursorRotate:Bitmap;
-	private var cursorRectangle:Bitmap;
-	private var cursorEllipse:Bitmap;
+	private var cursorScale:ScaledBitmap;
+	private var cursorRotate:ScaledBitmap;
+	private var cursorRectangle:ScaledBitmap;
+	private var cursorEllipse:ScaledBitmap;
 
 	/**
 		The singleton method of Cursor.
@@ -57,24 +58,24 @@ class Cursor extends Sprite {
 		super();
 		mouseEnabled = false;
 
-		this.cursorScale = new Bitmap(Assets.getBitmapData("cur-scale"));
+		this.cursorScale = new ScaledBitmap("cur-scale");
 		this.cursorScale.x = -this.cursorScale.width * 0.5;
 		this.cursorScale.y = -this.cursorScale.height * 0.5;
 
-		this.cursorRotate = new Bitmap(Assets.getBitmapData("cur-rotate"));
+		this.cursorRotate = new ScaledBitmap("cur-rotate");
 		this.cursorRotate.x = -this.cursorRotate.width * 0.5;
 		this.cursorRotate.y = -this.cursorRotate.height * 0.5;
 
-		this.cursorRectangle = new Bitmap(Assets.getBitmapData("cur-rect"));
+		this.cursorRectangle = new ScaledBitmap("cur-rect");
 		this.cursorRectangle.x = -this.cursorRectangle.width * 0.5;
 		this.cursorRectangle.y = -this.cursorRectangle.height * 0.5;
 
-		this.cursorEllipse = new Bitmap(Assets.getBitmapData("cur-oval"));
+		this.cursorEllipse = new ScaledBitmap("cur-oval");
 		this.cursorEllipse.x = -this.cursorEllipse.width * 0.5;
 		this.cursorEllipse.y = -this.cursorEllipse.height * 0.5;
 	}
 
-	private function getIcon():Bitmap {
+	private function getIcon():ScaledBitmap {
 		return switch (this.mode){
 			case MODE_SCALE: this.cursorScale;
 			case MODE_ROTATE: this.cursorRotate;

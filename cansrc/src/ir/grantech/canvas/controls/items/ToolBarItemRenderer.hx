@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.items;
 
+import ir.grantech.canvas.themes.ScaledBitmap;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.events.TriggerEvent;
@@ -41,34 +42,24 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (value == null)
 			return value;
 		this.data = value;
-		return this.data;
-	}
 
-	private function get_data():Dynamic {
-		return this.data;
-	}
-
-	override private function set_text(value:String):String {
-		if (this.text == value)
-			return this.text;
-		this.text = value;
-		if (value == null)
-			return value;
-		var icon = new Bitmap(Assets.getBitmapData(value));
-		icon.smoothing = true;
+		var icon = new ScaledBitmap(value);
 		icon.width = icon.height = SIZE * 0.5;
 		icon.x = (this.width - icon.width) * 0.5;
 		icon.y = (this.height - icon.height) * 0.5;
 		this.icon = icon;
 
-		var selectedIcon = new Bitmap(Assets.getBitmapData(value + "_selected"));
-		selectedIcon.smoothing = true;
+		var selectedIcon = new ScaledBitmap(value + "-blue");
 		selectedIcon.width = selectedIcon.height = icon.width;
 		selectedIcon.x = icon.x;
 		selectedIcon.y = icon.y;
 		this.selectedIcon = selectedIcon;
 
-		return this.text;
+		return value;
+	}
+
+	private function get_data():Dynamic {
+		return this.data;
 	}
 
 	override private function refreshText():Void {}

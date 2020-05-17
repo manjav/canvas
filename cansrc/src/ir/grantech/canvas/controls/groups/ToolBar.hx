@@ -49,18 +49,12 @@ class ToolBar extends LayoutGroup {
 		var icons = Assets.list(AssetType.IMAGE);
 		ArraySort.sort(icons, (l, r) -> return l > r ? 1 : -1);
 		var i = 0;
-		var items = [];
-		for (icon in icons)
-			if (icon.substr(0, 8) == "toolhead" && icon.indexOf("_selected") == -1)
-				items.push({index: i++, text: icon});
+		var items = ["select", "rectangle", "circle", "text", "zoom"];
 
 		this.topList = new ListView();
 		this.topList.variant = ListView.VARIANT_BORDERLESS;
 		this.topList.dataProvider = new ArrayCollection(items);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
-		this.topList.itemToText = (item:Dynamic) -> {
-			return item.text;
-		};
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
 		this.topList.selectedIndex = Tools.instance.toolType;
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
@@ -68,17 +62,11 @@ class ToolBar extends LayoutGroup {
 		this.addChild(this.topList);
 
 		i = 0;
-		items = [];
-		for (icon in icons)
-			if (icon.substr(0, 8) == "toolfoot" && icon.indexOf("_selected") == -1)
-				items.push({index: i++, text: icon});
+		items = ["layers", "assets"];
 		this.bottomList = new ListView();
 		this.bottomList.variant = ListView.VARIANT_BORDERLESS;
 		this.bottomList.dataProvider = new ArrayCollection(items);
 		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
-		this.bottomList.itemToText = (item:Dynamic) -> {
-			return item.text;
-		};
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
 		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
 		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length + 1;

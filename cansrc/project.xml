@@ -22,61 +22,6 @@
   <haxdef name="advanced-telemetry" if="debug" />
 
 	<!-- sync/embedded  -->
-
-	<assets id="toolhead_0" path="assets/img/4x/select.png"/>
-	<assets id="toolhead_0_selected" path="assets/img/4x/select-blue.png"/>
-  <assets id="toolhead_1" path="assets/img/4x/rectangle.png"/>
-  <assets id="toolhead_1_selected" path="assets/img/4x/rectangle-blue.png"/>
-  <assets id="toolhead_2" path="assets/img/4x/circle.png"/>
-  <assets id="toolhead_2_selected" path="assets/img/4x/circle-blue.png"/>
-  <assets id="toolhead_3" path="assets/img/4x/text.png"/>
-  <assets id="toolhead_3_selected" path="assets/img/4x/text-blue.png"/>
-  <!-- <assets id="toolhead_4" path="assets/img/4x/triangle.png"/>
-  <assets id="toolhead_4_selected" path="assets/img/4x/triangle-blue.png"/>
-  <assets id="toolhead_5" path="assets/img/4x/line.png"/>
-  <assets id="toolhead_5_selected" path="assets/img/4x/line-blue.png"/>
-  <assets id="toolhead_6" path="assets/img/4x/pen.png"/>
-  <assets id="toolhead_6_selected" path="assets/img/4x/pen-blue.png"/> -->
-  <assets id="toolhead_7" path="assets/img/4x/zoom.png"/>
-  <assets id="toolhead_7_selected" path="assets/img/4x/zoom-blue.png"/>
-  <assets id="toolfoot_0" path="assets/img/4x/layers.png"/>
-  <assets id="toolfoot_0_selected" path="assets/img/4x/layers-blue.png"/>
-  <assets id="toolfoot_1" path="assets/img/4x/assets.png"/>
-  <assets id="toolfoot_1_selected" path="assets/img/4x/assets-blue.png"/>
-
-  <assets id="x" path="assets/img/4x/x.png"/>
-  <assets id="y" path="assets/img/4x/y.png"/>
-  <assets id="w" path="assets/img/4x/w.png"/>
-  <assets id="h" path="assets/img/4x/h.png"/>
-  <assets id="rotate" path="assets/img/4x/rotate.png"/>
-  <assets id="flip-h" path="assets/img/4x/flip-h.png"/>
-  <assets id="flip-v" path="assets/img/4x/flip-v.png"/>
-  <assets id="chevron-d" path="assets/img/4x/chevron-d.png"/>
-  <assets id="lock" path="assets/img/4x/lock.png"/>
-  <assets id="hide" path="assets/img/4x/hide.png"/>
-  <assets id="bitmap" path="assets/img/4x/bitmap.png"/>
-
-  <assets id="cur-scale" path="assets/img/4x/cur-scale.png"/>
-  <assets id="cur-rotate" path="assets/img/4x/cur-rotate.png"/>
-  <assets id="cur-rect" path="assets/img/4x/cur-rect.png"/>
-  <assets id="cur-oval" path="assets/img/4x/cur-oval.png"/>
-
-
-  <assets id="talign-left" path="assets/img/4x/text-left.png"/>
-  <assets id="talign-left-selected" path="assets/img/4x/text-left-blue.png"/>
-  <assets id="talign-center" path="assets/img/4x/text-center.png"/>
-  <assets id="talign-center-selected" path="assets/img/4x/text-center-blue.png"/>
-  <assets id="talign-right" path="assets/img/4x/text-right.png"/>
-  <assets id="talign-right-selected" path="assets/img/4x/text-right-blue.png"/>
-  <assets id="talign-justify" path="assets/img/4x/text-justify.png"/>
-  <assets id="talign-justify-selected" path="assets/img/4x/text-justify-blue.png"/>
-  <assets id="tsize-align" path="assets/img/4x/text-sizealign.png"/>
-  <assets id="tsize-align-selected" path="assets/img/4x/text-sizealign-blue.png"/>
-  <assets id="tsize-none" path="assets/img/4x/text-sizenone.png"/>
-  <assets id="tsize-none-selected" path="assets/img/4x/text-sizenone-blue.png"/>
-  <assets id="tspace-letter" path="assets/img/4x/text-space-letter.png"/>
-  <assets id="tspace-line" path="assets/img/4x/text-space-line.png"/>
-    
   <assets id="IRANSans" path="assets/fonts/IRANSans-Light-web.ttf"/>
   <!-- async/external -->
 	<icon path="assets/icons/can-icon.svg"/>

@@ -13,7 +13,6 @@ class ListSection extends CanSection {
 
 		this.layout = new AnchorLayout();
 		this.padding = CanTheme.DPI * 7;
-
-		// this.searchInput = createTextInput("toolhead_7", new AnchorLayoutData(this.padding * 3, this.padding, null, this.padding));
+		this.searchInput = createTextInput("zoom", new AnchorLayoutData(this.padding * 3, this.padding, null, this.padding));
 	}
 }

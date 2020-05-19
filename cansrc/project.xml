@@ -6,10 +6,11 @@
 	<app main="Main" path="build" file="Canvas" />
 
 	<!-- needed on Android to avoid hiding the back/home buttons -->
-	<window fullscreen="false"/>
+	<!-- <window borderless="true"/> -->
 	<window allow-high-dpi="true"/>
 	<window background="#e4e4e4" />
-	<!-- <window fps="60" width="1200" height="960"/> -->
+	<window fullscreen="false" />
+	<window fps="60" />
 	<!-- <window fps="0" if="html5"/> -->
 	
 	<source path="src" />

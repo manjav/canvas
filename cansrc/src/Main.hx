@@ -29,15 +29,14 @@ class Main extends Application {
 	private var zoomLayout:AnchorLayoutData;
 
 	public function new() {
-		var paddingX:Int = Math.round(Capabilities.screenResolutionX * 0.010) * 10;
-		var paddingY:Int = Math.round(Capabilities.screenResolutionX * 0.012) * 10;
+		Theme.setTheme(new CanTheme());
+		var h = Math.round(Capabilities.screenResolutionY * 0.08) * 10;
+		var w = Math.round(Capabilities.screenResolutionY * 0.08) * 15;
 		stage.quality = StageQuality.BEST;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
-		stage.window.x = paddingX;
-		stage.window.y = paddingY;
-		stage.window.width = Math.floor(Capabilities.screenResolutionX - paddingX * 2);
-		stage.window.height = Math.floor(Capabilities.screenResolutionY - paddingY * 2);
-		Theme.setTheme(new CanTheme());
+		stage.window.x = stage.window.y = Math.round((Capabilities.screenResolutionY * 0.95 - h) / 2);
+		stage.window.width = w;
+		stage.window.height = h;
 		BaseService.get(Libs, [stage]);
 		super();
 
@@ -71,6 +70,7 @@ class Main extends Application {
 		this.zoomLayout.left = this.left.width + p * 2;
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
 	}
+
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
 
 	private function left_changeHandler(event:CanEvent):Void {

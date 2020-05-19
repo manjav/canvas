@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.services.Commands;
 import openfl.events.Event;
 import feathers.controls.LayoutGroup;
@@ -14,8 +15,8 @@ import openfl.display.Sprite;
 import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
-	static public var WIDTH = 640;
-	static public var HEIGHT = 960;
+	static public var WIDTH = 120 * CanTheme.DPI;
+	static public var HEIGHT = 200 * CanTheme.DPI;
 	static public var COLOR = 0xFFFFFF;
 
 	public var beginPoint:Point;

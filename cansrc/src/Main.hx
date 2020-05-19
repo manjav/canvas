@@ -1,5 +1,6 @@
 package;
 
+import ir.grantech.canvas.controls.groups.Header;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -21,9 +22,9 @@ import openfl.display.StageScaleMode;
 
 class Main extends Application {
 	private var zoom:CanZoom;
-	private var header:CanSection;
-	private var right:RightBar;
+	private var header:Header;
 	private var left:ToolBar;
+	private var right:RightBar;
 	private var leftExtension:CanSection;
 	private var extensions:Map<Int, CanSection>;
 	private var zoomLayout:AnchorLayoutData;
@@ -47,12 +48,7 @@ class Main extends Application {
 		this.zoom.layoutData = this.zoomLayout = new AnchorLayoutData(0, 0, p);
 		this.addChild(this.zoom);
 
-		this.header = new CanSection();
-		this.header.height = CanTheme.DPI * 20;
-		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
-		this.addChild(this.header);
-
-		var h = this.header.height + p * 2;
+		var h = CanTheme.DPI * 20 + p * 2;
 
 		this.left = new ToolBar();
 		this.left.width = CanTheme.DPI * 24;
@@ -69,6 +65,11 @@ class Main extends Application {
 		this.zoomLayout.right = this.right.width + p;
 		this.zoomLayout.left = this.left.width + p * 2;
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
+		
+		this.header = new Header();
+		this.header.height = h - p * 2;
+		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
+		this.addChild(this.header);
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);

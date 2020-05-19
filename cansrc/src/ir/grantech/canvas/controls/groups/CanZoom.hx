@@ -11,7 +11,6 @@ import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
 import ir.grantech.canvas.services.Layers;
 import ir.grantech.canvas.services.Tools;
-import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.events.Event;

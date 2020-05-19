@@ -15,7 +15,7 @@ class Header extends CanSection {
 		layout.verticalAlign = MIDDLE;
 		this.layout = layout;
 
-		menuButton = this.createButton("zoom", null);
+		menuButton = this.createButton("humborger-menu", new AnchorLayoutData(null, null, null, 3 * CanTheme.DPI, null, 0));
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

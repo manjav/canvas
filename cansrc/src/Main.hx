@@ -76,17 +76,14 @@ class Main extends Application {
 		this.addChild(this.header);
 
 		this.menu = new Menu();
-		this.menu.width = 132 * CanTheme.DPI;
-		this.menu.x = -this.menu.width;
-		this.menu.visible = false;
-		this.menu.layoutData = new AnchorLayoutData(h, null, 0);
+		this.menu.layoutData = AnchorLayoutData.fill();
 		this.addChild(this.menu);
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
 
 	private function header_initHandler(event:Event):Void {
-		this.menu.toggle();
+		this.menu.open();
 	}
 
 	private function left_changeHandler(event:CanEvent):Void {

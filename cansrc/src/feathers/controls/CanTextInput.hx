@@ -81,7 +81,6 @@ class CanTextInput extends TextInput {
 		super.layoutContent();
 		if (iconDisplay == null)
 			return;
-		trace(iconDisplay.loaderInfo.content);
 		// this.iconDisplay.width = this.iconDisplay.height = this.actualHeight - this.paddingTop - this.paddingBottom - CanTheme.DPI;
 		this.iconDisplay.x = this.paddingLeft;
 		this.iconDisplay.y = (this.actualHeight - this.iconDisplay.height) * 0.5;

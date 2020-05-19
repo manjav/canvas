@@ -2,21 +2,29 @@ package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayout;
-import feathers.layout.AnchorLayoutData;
-import feathers.utils.DisplayObjectRecycler;
+import feathers.skins.RectangleSkin;
 import ir.grantech.canvas.controls.groups.sections.CanSection;
-import ir.grantech.canvas.controls.items.MenuItemRenderer;
+import motion.Actuate;
 
 class Menu extends CanSection {
 	private var listView:ListView;
-	override private function initialize() {
-        super.initialize();
-        this.layout = new AnchorLayout();
 
-		this.listView = this.createList([{name:"123"}, {name:"wewrwerw"}], DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(this.padding * 6, 0, 0, 0));
-		this.listView.itemToText = (item:Dynamic) -> {
-			return item.name;
-		};
-		// this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
+	override private function initialize() {
+		var skin = new RectangleSkin();
+		skin.fill = SolidColor(0xFFFFFF);
+		this.backgroundSkin = skin;
+
+		this.layout = new AnchorLayout();
+	}
+
+	public function toggle() {
+		if (this.visible) {
+			Actuate.tween(this, 0.4, {x: -this.width}).onComplete((?p:Array<Dynamic>) -> {
+				this.visible = false;
+			});
+			return;
+		}
+		this.visible = true;
+		Actuate.tween(this, 0.4, {x: 0});
 	}
 }

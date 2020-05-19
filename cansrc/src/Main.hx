@@ -1,6 +1,5 @@
 package;
 
-import ir.grantech.canvas.controls.groups.Header;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -8,19 +7,23 @@ import feathers.style.Theme;
 import flash.system.Capabilities;
 import haxe.Timer;
 import ir.grantech.canvas.controls.groups.CanZoom;
+import ir.grantech.canvas.controls.groups.Header;
+import ir.grantech.canvas.controls.groups.Menu;
 import ir.grantech.canvas.controls.groups.RightBar;
 import ir.grantech.canvas.controls.groups.ToolBar;
 import ir.grantech.canvas.controls.groups.sections.AssetsSection;
-import ir.grantech.canvas.controls.groups.sections.LayersSection;
 import ir.grantech.canvas.controls.groups.sections.CanSection;
+import ir.grantech.canvas.controls.groups.sections.LayersSection;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
 import ir.grantech.canvas.services.Libs;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.StageQuality;
 import openfl.display.StageScaleMode;
+import openfl.events.Event;
 
 class Main extends Application {
+	private var menu:Menu;
 	private var zoom:CanZoom;
 	private var header:Header;
 	private var left:ToolBar;
@@ -65,14 +68,26 @@ class Main extends Application {
 		this.zoomLayout.right = this.right.width + p;
 		this.zoomLayout.left = this.left.width + p * 2;
 		// stage.addEventListener(Event.RESIZE, this.stage_resizeHandler);
-		
+
 		this.header = new Header();
 		this.header.height = h - p * 2;
 		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
+		this.header.addEventListener(Event.INIT, this.header_initHandler);
 		this.addChild(this.header);
+
+		this.menu = new Menu();
+		this.menu.width = 132 * CanTheme.DPI;
+		this.menu.x = -this.menu.width;
+		this.menu.visible = false;
+		this.menu.layoutData = new AnchorLayoutData(h, null, 0);
+		this.addChild(this.menu);
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
+
+	private function header_initHandler(event:Event):Void {
+		this.menu.toggle();
+	}
 
 	private function left_changeHandler(event:CanEvent):Void {
 		if (this.leftExtension != null && this.leftExtension.parent == this)

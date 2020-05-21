@@ -1,5 +1,6 @@
 package ir.grantech.canvas.controls.items;
 
+import openfl.text.TextFieldAutoSize;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -8,6 +9,7 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
+import openfl.text.TextField;
 
 class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
@@ -33,9 +35,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	private var menuData:Xml;
 	private var shortKey:String;
-	// private var layer:Layer;
-	private var lockDisplay:ScaledBitmap;
-	private var hideDisplay:ScaledBitmap;
+	private var hintField:TextField;
 
 	public function new() {
 		super();
@@ -65,6 +65,16 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			if (this.shortKey == null) {
 				this.icon = new ScaledBitmap("chevron-r");
+			} else {
+				if (this.hintField == null) {
+					this.hintField = new TextField();
+					this.hintField.embedFonts = true;
+					this.hintField.defaultTextFormat = this.textFormat;
+					this.hintField.autoSize = TextFieldAutoSize.RIGHT;
+					this.hintField.selectable = false;
+					this.addChild(this.hintField);
+				}
+				this.hintField.text = shortKey;
 			}
 		}
 
@@ -81,6 +91,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.icon.x = this.actualWidth - this.paddingRight - this.icon.width;
 			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 		} else {
-	}
+			this.hintField.x = this.actualWidth - this.paddingRight - this.hintField.width;
+			this.hintField.y = (this.actualHeight - this.hintField.height) * 0.5;
+		}
 	}
 }

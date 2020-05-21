@@ -54,35 +54,17 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
 		this.backgroundSkin = skin;
 
-		// this.selectedTextFormat = this.textFormat;
-		// this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
+		this.selectedTextFormat = this.textFormat;
+		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
-		// this.icon = new ScaledBitmap("bitmap");
-
-		// this.lockDisplay = new ScaledBitmap("lock");
-		// this.addChild(this.lockDisplay);
-
-		// this.hideDisplay = new ScaledBitmap("hide");
-		// this.addChild(this.hideDisplay);
-
-		// this.iconPosition = MANUAL;
-		// this.gap = CanTheme.DEFAULT_PADDING;
+		this.iconPosition = MANUAL;
+		this.gap = CanTheme.DEFAULT_PADDING;
 	}
 
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			if (this.shortKey == null) {
 				this.icon = new ScaledBitmap("chevron-r");
-		// if (this.isInvalid(InvalidationFlag.STATE)) {
-		// 	if (this.currentState.equals(ToggleButtonState.HOVER(false))) {
-		// 		this.hideDisplay.alpha = this.layer.getBool(VISIBLE) ? 0.4 : 1.0;
-		// 		this.lockDisplay.alpha = this.layer.getBool(ENABLE) ? 0.4 : 1.0;
-		// 	} else {
-		// 		this.textField.alpha = this.icon.alpha = this.layer.getBool(VISIBLE) ? 1.0 : 0.4;
-		// 		this.hideDisplay.alpha = this.layer.getBool(VISIBLE) ? 0.0 : 1.0;
-		// 		this.lockDisplay.alpha = this.layer.getBool(ENABLE) ? 0.0 : 1.0;
-		// 	}
-		// }
 			}
 		}
 
@@ -100,18 +82,5 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 		} else {
 	}
-
-	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
-		// if (this.mouseX > this.lockDisplay.x) {
-		// 	if (this.mouseX < this.lockDisplay.x + this.lockDisplay.width)
-		// 		this.layer.setProperty(ENABLE, !this.layer.getBool(ENABLE));
-		// 	else
-		// 		this.layer.setProperty(VISIBLE, !this.layer.getBool(VISIBLE));
-		// 	this.setInvalid(InvalidationFlag.STATE);
-		// 	return;
-		// } else {
-		// 	CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.data, true);
-		// }
-		super.basicToggleButton_triggerHandler(event);
 	}
 }

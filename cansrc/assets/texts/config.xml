@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 	<menu>
-		<item name="New" />
-		<item name="Open..." />
+		<item name="New" shortKey="Ctrl + N"/>
+		<item name="Open..." shortKey="Ctrl + O"/>
 		<item name="Open Recents">
 			<item name="aaa..." />
 		</item>
-		<item name="Save" />
-		<item name="Save as..."></item>
+		<item name="Save" shortKey="Ctrl + S"/>
+		<item name="Save as..." shortKey="Ctrl + Shift + S"></item>
 	</menu>
 </config>

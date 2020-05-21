@@ -3,7 +3,7 @@ package ir.grantech.canvas.controls.items;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
-import feathers.events.TriggerEvent;
+import feathers.core.InvalidationFlag;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.themes.CanTheme;
@@ -13,13 +13,17 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
 	public var data(get, set):Dynamic;
 
+	@:access(Xml)
 	private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
 			return this.data;
 		if (value == null)
 			return value;
 		this.data = value;
-		// this.layer = cast(this.data, Layer);
+		this.menuData = cast(this.data, Xml);
+		if (this.menuData.children.length == 0)
+			this.shortKey = this.menuData.attributeMap["shortKey"];
+		this.setInvalid(InvalidationFlag.DATA);
 		return this.data;
 	}
 
@@ -27,6 +31,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
+	private var menuData:Xml;
+	private var shortKey:String;
 	// private var layer:Layer;
 	private var lockDisplay:ScaledBitmap;
 	private var hideDisplay:ScaledBitmap;
@@ -64,6 +70,9 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	override private function update():Void {
+		if (this.isInvalid(InvalidationFlag.DATA)) {
+			if (this.shortKey == null) {
+				this.icon = new ScaledBitmap("chevron-r");
 		// if (this.isInvalid(InvalidationFlag.STATE)) {
 		// 	if (this.currentState.equals(ToggleButtonState.HOVER(false))) {
 		// 		this.hideDisplay.alpha = this.layer.getBool(VISIBLE) ? 0.4 : 1.0;
@@ -74,23 +83,22 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		// 		this.lockDisplay.alpha = this.layer.getBool(ENABLE) ? 0.0 : 1.0;
 		// 	}
 		// }
+			}
+		}
 
 		super.update();
 	}
 
 	override private function layoutContent():Void {
-		super.layoutContent();
-		// this.icon.x = this.paddingLeft;
-		// this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
+		this.refreshTextFieldDimensions(false);
 
-		// this.textField.x = this.paddingLeft + this.icon.width + this.gap;
-		// this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
+		this.textField.x = this.paddingLeft;
+		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
 
-		// this.hideDisplay.x = this.actualWidth - this.paddingRight - this.hideDisplay.width;
-		// this.hideDisplay.y = (this.actualHeight - this.hideDisplay.height) * 0.5;
-
-		// this.lockDisplay.x = this.actualWidth - this.paddingRight - this.hideDisplay.width - this.gap * 2 - this.lockDisplay.width;
-		// this.lockDisplay.y = (this.actualHeight - this.lockDisplay.height) * 0.5;
+		if (this.shortKey == null) {
+			this.icon.x = this.actualWidth - this.paddingRight - this.icon.width;
+			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
+		} else {
 	}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {

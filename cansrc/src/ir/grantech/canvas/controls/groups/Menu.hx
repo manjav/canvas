@@ -12,13 +12,7 @@ import openfl.events.MouseEvent;
 class Menu extends CanSection {
 	public var isOpen:Bool;
 
-	private var owner:DisplayObjectContainer;
 	private var listView:ListView;
-
-	public function new(owner:DisplayObjectContainer) {
-		super();
-		this.owner = owner;
-	}
 
 	override private function initialize() {
 		var skin = new Button();

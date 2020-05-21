@@ -1,5 +1,6 @@
 package;
 
+import ir.grantech.canvas.services.Configs;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -41,6 +42,7 @@ class Main extends Application {
 		stage.window.x = stage.window.y = Math.round((Capabilities.screenResolutionY * 0.95 - h) / 2);
 		stage.window.width = w;
 		stage.window.height = h;
+		BaseService.get(Configs);
 		BaseService.get(Libs, [stage]);
 		super();
 

@@ -30,4 +30,5 @@
   <assets path="assets/img/2x" embed="false"/>
   <assets path="assets/img/3x" embed="false"/>
   <assets path="assets/img/4x" embed="false"/>
+  <assets path="assets/texts" embed="false"/>
 </project>

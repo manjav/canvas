@@ -40,7 +40,7 @@ class Main {
 				trace(path, e);
 			}
 		}
-		trace(Timer.stamp() - t, "Hello, world!");
+		trace(Timer.stamp() - t, "resized.");
 	}
 
 	static function scale(bitmap:PNGBitmap, sx:Float, sy:Float):Bitmap {

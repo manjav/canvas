@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
+	<menu><item name="New" /><item name="Open..." />
+		<item name="Open Recents">
+			<item name="aaa..." />
+		</item>
+		<item name="Save" />
+		<item name="Save as..."></item>
 	</menu>
 </config>

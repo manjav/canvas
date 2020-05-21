@@ -16,12 +16,19 @@ class Configs extends BaseService {
 		return BaseService.get(Configs);
 	}
 
+	public var menuData:Array<Xml>;
+
+	@:access(Xml)
 	public function new() {
 		super();
 
 		Assets.loadText("assets/texts/config.xml").onComplete((text:String) -> {
 			text = text.split("\r").join("").split("\n").join("").split("\t").join("");
 			var configs = Xml.parse(text).firstElement().elements();
+			for (element in configs) {
+				trace(element.nodeName, element.nodeType);
+				if (element.nodeName == "menu")
+					this.menuData = element.children;
 			}
 		});
 	}

@@ -5,17 +5,16 @@ import openfl.events.Event;
 import openfl.events.IEventDispatcher;
 
 class CanEvent extends Event {
+	static public final ITEM_HOVER:String = "itemHover";
 	static public final ITEM_SELECT:String = "itemSelect";
 
 	static private var _pool = new ObjectPool<CanEvent>(() -> return new CanEvent(null, null, false, false));
 
 	/**
 		Dispatches a pooled event with the specified properties.
-
 		```hx
 		CanEvent.dispatch(component, Event.CHANGE);
 		```
-
 		@since 1.0.0
 	**/
 	static public function dispatch(dispatcher:IEventDispatcher, type:String, data:Dynamic = null, bubbles:Bool = false, cancelable:Bool = false):Bool {

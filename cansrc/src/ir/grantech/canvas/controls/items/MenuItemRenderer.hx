@@ -1,15 +1,22 @@
 package ir.grantech.canvas.controls.items;
 
-import openfl.text.TextFieldAutoSize;
+import openfl.events.MouseEvent;
+import feathers.controls.ListView;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.core.InvalidationFlag;
+import feathers.events.FeathersEvent;
+import feathers.skins.BaseGraphicsPathSkin;
+import feathers.skins.DividerSkin;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
+import openfl.events.Event;
 import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
 
 class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
@@ -26,8 +33,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (this.menuData.nodeName == "divider") {
 			isDivider = true;
 		} else {
-		if (this.menuData.children.length == 0)
-			this.shortKey = this.menuData.attributeMap["shortKey"];
+			if (this.menuData.children.length == 0)
+				this.shortKey = this.menuData.attributeMap["shortKey"];
 		}
 		this.setInvalid(InvalidationFlag.DATA);
 		return this.data;
@@ -37,14 +44,13 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
+	public var menuData:Xml;
 	public var isDivider:Bool;
-	private var menuData:Xml;
-	private var shortKey:String;
+	public var shortKey:String;
 	private var hintField:TextField;
 
 	public function new() {
 		super();
-		this.height = Math.round(CanTheme.CONTROL_SIZE * 1.4);
 	}
 
 	override private function initializeItemRendererTheme():Void {}
@@ -57,8 +63,11 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 		this.iconPosition = MANUAL;
 		this.gap = CanTheme.DEFAULT_PADDING;
+
+		this.addEventListener(FeathersEvent.STATE_CHANGE, this.stateChangeHandler);
 	}
 
+	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			var theme = Std.downcast(Theme.getTheme(), CanTheme);
@@ -75,25 +84,27 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.backgroundSkin = skin;
 
 			if (!isDivider) {
-			if (this.shortKey == null) {
-				this.icon = new ScaledBitmap("chevron-r");
-			} else {
-				if (this.hintField == null) {
-					this.hintField = new TextField();
-					this.hintField.embedFonts = true;
-					this.hintField.defaultTextFormat = this.textFormat;
-					this.hintField.autoSize = TextFieldAutoSize.RIGHT;
-					this.hintField.selectable = false;
-					this.addChild(this.hintField);
+				if (this.shortKey == null) {
+					this.icon = new ScaledBitmap("chevron-r");
+				} else {
+					if (this.hintField == null) {
+						this.hintField = new TextField();
+						this.hintField.embedFonts = true;
+						this.hintField.defaultTextFormat = this.textFormat;
+						this.hintField.autoSize = TextFieldAutoSize.RIGHT;
+						this.hintField.selectable = false;
+						this.addChild(this.hintField);
+					}
+					this.hintField.text = shortKey;
 				}
-				this.hintField.text = shortKey;
 			}
-		}
 		}
 		super.update();
 	}
 
-		super.update();
+	private function stateChangeHandler(event:Event):Void {
+		if (!isDivider && Type.enumEq(currentState, ToggleButtonState.HOVER(false)))
+			CanEvent.dispatch(this, CanEvent.ITEM_HOVER, this.shortKey == null, true);
 	}
 
 	override private function layoutContent():Void {

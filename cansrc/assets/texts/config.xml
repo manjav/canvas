@@ -6,6 +6,7 @@
 		<item name="Open Recents">
 			<item name="aaa..." />
 		</item>
+		<divider/>
 		<item name="Save" shortKey="Ctrl + S"/>
 		<item name="Save as..." shortKey="Ctrl + Shift + S"></item>
 	</menu>

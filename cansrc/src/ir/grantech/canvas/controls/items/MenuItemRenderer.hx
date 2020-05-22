@@ -23,8 +23,12 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			return value;
 		this.data = value;
 		this.menuData = cast(this.data, Xml);
+		if (this.menuData.nodeName == "divider") {
+			isDivider = true;
+		} else {
 		if (this.menuData.children.length == 0)
 			this.shortKey = this.menuData.attributeMap["shortKey"];
+		}
 		this.setInvalid(InvalidationFlag.DATA);
 		return this.data;
 	}
@@ -33,6 +37,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
+	public var isDivider:Bool;
 	private var menuData:Xml;
 	private var shortKey:String;
 	private var hintField:TextField;
@@ -44,15 +49,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	override private function initializeItemRendererTheme():Void {}
 
-	@:access(ir.grantech.canvas.themes.CanTheme)
 	override function initialize():Void {
 		super.initialize();
-		var theme = Std.downcast(Theme.getTheme(), CanTheme);
-		var skin = new RectangleSkin();
-		skin.fill = theme.getContainerFill();
-		skin.selectedFill = SolidColor(theme.dividerColor);
-		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
-		this.backgroundSkin = skin;
 
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
@@ -63,6 +61,20 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	override private function update():Void {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
+			var theme = Std.downcast(Theme.getTheme(), CanTheme);
+			var skin:BaseGraphicsPathSkin = null;
+			if (isDivider) {
+				skin = new DividerSkin(CanTheme.DPI * 4);
+				skin.border = LineStyle.SolidColor(CanTheme.DPI * 0.5, theme.dividerColor);
+			} else {
+				skin = new RectangleSkin();
+				skin.selectedFill = SolidColor(theme.dividerColor);
+				skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
+			}
+			skin.fill = theme.getContainerFill();
+			this.backgroundSkin = skin;
+
+			if (!isDivider) {
 			if (this.shortKey == null) {
 				this.icon = new ScaledBitmap("chevron-r");
 			} else {
@@ -77,11 +89,17 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 				this.hintField.text = shortKey;
 			}
 		}
+		}
+		super.update();
+	}
 
 		super.update();
 	}
 
 	override private function layoutContent():Void {
+		if (isDivider)
+			return;
+
 		this.refreshTextFieldDimensions(false);
 
 		this.textField.x = this.paddingLeft;

@@ -25,10 +25,20 @@ class Menu extends CanSection {
 		this.visible = false;
 		this.layout = new AnchorLayout();
 
-		this.listView = this.createList(configs.menuData, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(0, null, 0));
-		this.listView.width = 140 * CanTheme.DPI;
-		this.listView.itemToText = this.menuItemToText;
-		// this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
+		// primary list
+		var border = CanTheme.DPI;
+		this.primaryList = this.createList(configs.menuData, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(0, null, 0));
+		this.primaryList.width = 140 * CanTheme.DPI;
+		this.primaryList.itemToText = this.menuItemToText;
+		var theme = Std.downcast(Theme.getTheme(), CanTheme);
+		var listSkin = new RectangleSkin();
+		listSkin.fill = theme.getContainerFill();
+		listSkin.border = LineStyle.SolidColor(border, theme.dividerColor);
+		this.primaryList.backgroundSkin = listSkin;
+
+		var listLayout = new VerticalListLayout();
+		listLayout.paddingRight = border;
+		this.primaryList.layout = listLayout;
 	}
 
 	@:access(Xml)
@@ -53,7 +63,7 @@ class Menu extends CanSection {
 
 	public function close() {
 		Actuate.stop(this);
-		Actuate.tween(this, 0.4, {x: -this.listView.width}).onComplete((?p:Array<Dynamic>) -> {
+		Actuate.tween(this, 0.4, {x: -this.primaryList.width}).onComplete((?p:Array<Dynamic>) -> {
 			this.isOpen = false;
 			this.visible = false;
 		});

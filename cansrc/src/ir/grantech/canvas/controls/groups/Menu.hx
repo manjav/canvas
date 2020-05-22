@@ -20,6 +20,7 @@ class Menu extends CanSection {
 	public var isOpen:Bool;
 
 	private var primaryList:ListView;
+	private var secondaryList:ListView;
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function initialize() {
@@ -47,6 +48,13 @@ class Menu extends CanSection {
 		var listLayout = new VerticalListLayout();
 		listLayout.paddingRight = border;
 		this.primaryList.layout = listLayout;
+
+		// second list
+		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer),
+			new AnchorLayoutData(0, null, 0, this.primaryList.width));
+		this.secondaryList.width = 140 * CanTheme.DPI;
+		this.secondaryList.itemToText = this.menuItemToText;
+		this.secondaryList.visible = false;
 	}
 
 	@:access(Xml)
@@ -67,6 +75,7 @@ class Menu extends CanSection {
 
 	private function primaryList_HoverHandler(event:Event):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
+		this.secondaryList.visible = itemRenderer.shortKey == null;
 	}
 
 	public function toggle():Void {
@@ -85,6 +94,7 @@ class Menu extends CanSection {
 	}
 
 	public function close() {
+		this.secondaryList.visible = false;
 		Actuate.stop(this);
 		Actuate.tween(this, 0.4, {x: -this.primaryList.width}).onComplete((?p:Array<Dynamic>) -> {
 			this.isOpen = false;

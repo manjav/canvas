@@ -31,6 +31,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (this.menuData.nodeName == "divider") {
 			isDivider = true;
 		} else {
+			this.name = this.menuData.attributeMap["name"];
 			this.children = this.menuData.children;
 			if (this.children.length == 0)
 				this.shortKey = this.menuData.attributeMap["shortKey"];

@@ -50,11 +50,21 @@ class Menu extends CanSection {
 		this.primaryList.layout = listLayout;
 
 		// second list
-		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer),
-			new AnchorLayoutData(0, null, 0, this.primaryList.width));
-		this.secondaryList.width = 140 * CanTheme.DPI;
+		this.secondaryPanel = new LayoutGroup();
+		this.secondaryPanel.layout = new AnchorLayout();
+		this.secondaryPanel.width = 140 * CanTheme.DPI;
+		this.secondaryPanel.layoutData = new AnchorLayoutData(-border, null, -border, this.primaryList.width);
+		this.secondaryPanel.visible = false;
+		this.addChild(this.secondaryPanel);
+
+		var panelSkin = new RectangleSkin();
+		panelSkin.fill = theme.getContainerFill();
+		panelSkin.border = LineStyle.SolidColor(border, theme.dividerColor);
+		this.secondaryPanel.backgroundSkin = panelSkin;
+		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(CanTheme.DPI * 24, border, 0, border));
 		this.secondaryList.itemToText = this.menuItemToText;
-		this.secondaryList.visible = false;
+		this.secondaryList.backgroundSkin = null;
+		this.secondaryPanel.addChild(this.secondaryList);
 	}
 
 	@:access(Xml)

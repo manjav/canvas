@@ -1,6 +1,8 @@
 package ir.grantech.canvas.controls.groups;
 
 import feathers.controls.Button;
+import feathers.controls.Label;
+import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -20,6 +22,8 @@ class Menu extends CanSection {
 	public var isOpen:Bool;
 
 	private var primaryList:ListView;
+	private var secondaryPanel:LayoutGroup;
+	private var secondaryTitle:Label;
 	private var secondaryList:ListView;
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
@@ -61,6 +65,10 @@ class Menu extends CanSection {
 		panelSkin.fill = theme.getContainerFill();
 		panelSkin.border = LineStyle.SolidColor(border, theme.dividerColor);
 		this.secondaryPanel.backgroundSkin = panelSkin;
+
+		this.secondaryTitle = this.createLabel(null, new AnchorLayoutData(padding, padding, null, padding), Label.VARIANT_HEADING);
+		this.secondaryPanel.addChild(this.secondaryTitle);
+
 		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(CanTheme.DPI * 24, border, 0, border));
 		this.secondaryList.itemToText = this.menuItemToText;
 		this.secondaryList.backgroundSkin = null;
@@ -86,6 +94,9 @@ class Menu extends CanSection {
 	private function primaryList_HoverHandler(event:Event):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		this.secondaryPanel.visible = event.data;
+		if (event.data) {
+			this.secondaryTitle.text = itemRenderer.name.toUpperCase();
+		}
 	}
 
 	public function toggle():Void {

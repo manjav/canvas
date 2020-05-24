@@ -40,8 +40,8 @@ class Menu extends CanSection {
 		this.primaryList = this.createList(configs.menuData, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(0, null, 0));
 		this.primaryList.width = 140 * CanTheme.DPI;
 		this.primaryList.itemToText = this.menuItemToText;
-		this.primaryList.addEventListener(Event.CHANGE, this.primaryList_changeHandler);
-		this.primaryList.addEventListener(CanEvent.ITEM_HOVER, this.primaryList_HoverHandler);
+		this.primaryList.addEventListener(CanEvent.ITEM_HOVER, this.primaryList_hoverHandler);
+		this.primaryList.addEventListener(CanEvent.ITEM_SELECT, this.lists_selectHandler);
 
 		var theme = Std.downcast(Theme.getTheme(), CanTheme);
 		var listSkin = new RectangleSkin();
@@ -71,6 +71,7 @@ class Menu extends CanSection {
 
 		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(CanTheme.DPI * 24, border, 0, border));
 		this.secondaryList.itemToText = this.menuItemToText;
+		this.secondaryList.addEventListener(CanEvent.ITEM_SELECT, this.lists_selectHandler);
 		this.secondaryList.backgroundSkin = null;
 		this.secondaryPanel.addChild(this.secondaryList);
 	}
@@ -80,18 +81,11 @@ class Menu extends CanSection {
 		return item.attributeMap["name"];
 	}
 
-	private function primaryList_changeHandler(event:Event):Void {
-		var list = cast(event.target, ListView);
-		if (list.selectedItem == null)
-			return;
-		var item = cast(list.selectedItem, Xml);
-		if (list == primaryList && item.nodeName != "item" || item.elements().hasNext())
-			return;
-		list.selectedItem = null;
+	private function lists_selectHandler(event:CanEvent):Void {
 		this.close();
 	}
 
-	private function primaryList_HoverHandler(event:Event):Void {
+	private function primaryList_hoverHandler(event:CanEvent):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		this.secondaryPanel.visible = event.data;
 		if (event.data) {

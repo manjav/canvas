@@ -85,7 +85,7 @@ class Menu extends CanSection {
 
 	private function primaryList_HoverHandler(event:Event):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
-		this.secondaryList.visible = itemRenderer.shortKey == null;
+		this.secondaryPanel.visible = event.data;
 	}
 
 	public function toggle():Void {
@@ -104,7 +104,9 @@ class Menu extends CanSection {
 	}
 
 	public function close() {
-		this.secondaryList.visible = false;
+		this.primaryList.selectedItem = null;
+		this.secondaryList.selectedItem = null;
+		this.secondaryPanel.visible = false;
 		Actuate.stop(this);
 		Actuate.tween(this, 0.4, {x: -this.primaryList.width}).onComplete((?p:Array<Dynamic>) -> {
 			this.isOpen = false;

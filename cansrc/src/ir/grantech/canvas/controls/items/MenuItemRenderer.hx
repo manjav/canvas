@@ -1,7 +1,5 @@
 package ir.grantech.canvas.controls.items;
 
-import openfl.events.MouseEvent;
-import feathers.controls.ListView;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -33,7 +31,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (this.menuData.nodeName == "divider") {
 			isDivider = true;
 		} else {
-			if (this.menuData.children.length == 0)
+			this.children = this.menuData.children;
+			if (this.children.length == 0)
 				this.shortKey = this.menuData.attributeMap["shortKey"];
 		}
 		this.setInvalid(InvalidationFlag.DATA);
@@ -46,6 +45,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	public var menuData:Xml;
 	public var isDivider:Bool;
+	public var children:Array<Xml>;
 	public var shortKey:String;
 	private var hintField:TextField;
 
@@ -84,7 +84,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.backgroundSkin = skin;
 
 			if (!isDivider) {
-				if (this.shortKey == null) {
+				if (this.children.length > 0) {
 					this.icon = new ScaledBitmap("chevron-r");
 				} else {
 					if (this.hintField == null) {
@@ -104,7 +104,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	private function stateChangeHandler(event:Event):Void {
 		if (!isDivider && Type.enumEq(currentState, ToggleButtonState.HOVER(false)))
-			CanEvent.dispatch(this, CanEvent.ITEM_HOVER, this.shortKey == null, true);
+			CanEvent.dispatch(this, CanEvent.ITEM_HOVER, this.children.length > 0, true);
 	}
 
 	override private function layoutContent():Void {
@@ -116,7 +116,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.textField.x = this.paddingLeft;
 		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
 
-		if (this.shortKey == null) {
+		if (this.children.length > 0) {
 			this.icon.x = this.actualWidth - this.paddingRight - this.icon.width;
 			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 		} else {

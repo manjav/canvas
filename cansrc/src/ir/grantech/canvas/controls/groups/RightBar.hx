@@ -1,5 +1,8 @@
 package ir.grantech.canvas.controls.groups;
 
+import feathers.layout.VerticalLayoutData;
+import feathers.style.Theme;
+import feathers.skins.RectangleSkin;
 import feathers.controls.ScrollContainer;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
@@ -23,10 +26,11 @@ class RightBar extends ScrollContainer {
 	private var filtersSection:FiltersSection;
 	private var transfromSection:TransformSection;
 
-	override private function initialize() {
+	override function initialize():Void {
 		super.initialize();
-
+		this.backgroundSkin = null;
 		this.scroller.mouseWheelDelta = 100;
+		
 		var layout = new VerticalLayout();
 		layout.horizontalAlign = HorizontalAlign.JUSTIFY;
 		layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = 0;
@@ -46,7 +50,7 @@ class RightBar extends ScrollContainer {
 		this.addChild(this.appearSection);
 
 		this.filtersSection = new FiltersSection();
-		// this.filtersSection.layoutData = new VerticalLayoutData(100, 100);
+		this.filtersSection.layoutData = new VerticalLayoutData(100, 100);
 		this.addChild(this.filtersSection);
 
 		Inputs.instance.addEventListener(Inputs.POINT, this.input_pointHandler);

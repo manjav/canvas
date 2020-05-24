@@ -25,7 +25,7 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 
 		var theme = Std.downcast(Theme.getTheme(), CanTheme);
 		var skin = new RectangleSkin();
-		skin.fill = theme.getContainerFill();
+		skin.fill = SolidColor(theme.controlFillColor1);
 		this.backgroundSkin = skin;
 
 		this.iconPosition = MANUAL;

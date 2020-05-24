@@ -24,6 +24,7 @@ class LayersSection extends ListSection {
 			return item.name;
 		};
 		this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
+		this.listView.backgroundSkin = null;
 	}
 
 	override private function layoutGroup_addedToStageHandler(event:Event):Void {

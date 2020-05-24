@@ -39,7 +39,7 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	public function new() {
 		super();
-		this.height = CanTheme.CONTROL_SIZE;
+		this.height = Math.round(CanTheme.CONTROL_SIZE * 1.4);
 	}
 
 	override private function initializeItemRendererTheme():Void {}
@@ -49,7 +49,7 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 		super.initialize();
 		var theme = Std.downcast(Theme.getTheme(), CanTheme);
 		var skin = new RectangleSkin();
-		skin.fill = theme.getContainerFill();
+		skin.fill = SolidColor(theme.controlFillColor1);
 		skin.selectedFill = SolidColor(theme.dividerColor);
 		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
 		this.backgroundSkin = skin;

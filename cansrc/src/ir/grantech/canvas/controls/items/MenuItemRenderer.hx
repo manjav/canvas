@@ -47,8 +47,9 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	public var menuData:Xml;
 	public var isDivider:Bool;
 	public var children:Array<Xml>;
-	public var shortKey:String;
-	private var hintField:TextField;
+
+	private var shortKey:String;
+	private var shortkeyField:TextField;
 
 	public function new() {
 		super();
@@ -88,15 +89,16 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 				if (this.children.length > 0) {
 					this.icon = new ScaledBitmap("chevron-r");
 				} else {
-					if (this.hintField == null) {
-						this.hintField = new TextField();
-						this.hintField.embedFonts = true;
-						this.hintField.defaultTextFormat = this.textFormat;
-						this.hintField.autoSize = TextFieldAutoSize.RIGHT;
-						this.hintField.selectable = false;
-						this.addChild(this.hintField);
+					if (this.shortkeyField == null) {
+						this.shortkeyField = new TextField();
+						this.shortkeyField.embedFonts = true;
+						this.shortkeyField.defaultTextFormat = this.textFormat;
+						this.shortkeyField.autoSize = TextFieldAutoSize.RIGHT;
+						this.shortkeyField.selectable = false;
+						this.addChild(this.shortkeyField);
 					}
-					this.hintField.text = shortKey;
+					if (this.shortKey != null)
+						this.shortkeyField.text = shortKey;
 				}
 			}
 		}
@@ -121,8 +123,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.icon.x = this.actualWidth - this.paddingRight - this.icon.width;
 			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 		} else {
-			this.hintField.x = this.actualWidth - this.paddingRight - this.hintField.width;
-			this.hintField.y = (this.actualHeight - this.hintField.height) * 0.5;
+			this.shortkeyField.x = this.actualWidth - this.paddingRight - this.shortkeyField.width;
+			this.shortkeyField.y = (this.actualHeight - this.shortkeyField.height) * 0.5;
 		}
 	}
 }

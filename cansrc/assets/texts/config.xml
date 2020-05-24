@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 	<menu>
-		<item name="New" shortKey="Ctrl + N"/>
-		<item name="Open..." shortKey="Ctrl + O"/>
+		<item name="New" shortKey="Ctrl + N" />
+		<item name="Open..." shortKey="Ctrl + O" />
 		<item name="Open Recents">
-			<item name="aaa..." />
+			<item name="Last_Try.cvp" />
 		</item>
-		<divider/>
-		<item name="Save" shortKey="Ctrl + S"/>
-		<item name="Save as..." shortKey="Ctrl + Shift + S"></item>
+		<divider />
+		<item name="Save" shortKey="Ctrl + S" />
+		<item name="Save as..." shortKey="Ctrl + Shift + S" />
+		<divider />
+		<item name="Import" shortKey="Ctrl + I" />
+		<item name="Export" shortKey="Ctrl + E">
+			<item name="CVP Project" />
+			<item name="Adobe XD" />
+			<item name="Image File" />
+			<item name="Flash File" />
+		</item>
+		<divider />
+		<item name="Settings" />
+		<item name="Help...">
+			<item name="Whats New..." />
+			<item name="Learn and Support" />
+			<item name="Provide Feedback..." />
+			<divider />
+			<item name="About Canvas" />
+		</item>
 	</menu>
 </config>

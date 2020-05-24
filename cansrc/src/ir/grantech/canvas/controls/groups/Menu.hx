@@ -4,6 +4,7 @@ import feathers.controls.Button;
 import feathers.controls.Label;
 import feathers.controls.LayoutGroup;
 import feathers.controls.ListView;
+import feathers.data.ArrayCollection;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.VerticalListLayout;
@@ -82,6 +83,7 @@ class Menu extends CanSection {
 	}
 
 	private function lists_selectHandler(event:CanEvent):Void {
+		var itemRenderer = cast(event.target, MenuItemRenderer);
 		this.close();
 	}
 
@@ -90,6 +92,7 @@ class Menu extends CanSection {
 		this.secondaryPanel.visible = event.data;
 		if (event.data) {
 			this.secondaryTitle.text = itemRenderer.name.toUpperCase();
+			this.secondaryList.dataProvider = new ArrayCollection(itemRenderer.children);
 		}
 	}
 

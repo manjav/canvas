@@ -44,10 +44,18 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
+
+	override private function set_selected(value:Bool):Bool {
+		if (this.selected == value || isDivider || this.children.length > 0)
+			return this.selected;
+		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this, true);
+		return super.set_selected(value);
+	}
+
 	public var menuData:Xml;
 	public var isDivider:Bool;
 	public var children:Array<Xml>;
-
+	
 	private var shortKey:String;
 	private var shortkeyField:TextField;
 

@@ -76,15 +76,16 @@ class Main extends Application {
 		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
 		this.header.addEventListener(Event.INIT, this.header_initHandler);
 		this.addChild(this.header);
-
-		this.menu = new Menu();
-		this.menu.layoutData = AnchorLayoutData.fill();
-		this.addChild(this.menu);
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
 
 	private function header_initHandler(event:Event):Void {
+		if (this.menu == null) {
+			this.menu = new Menu();
+			this.menu.layoutData = AnchorLayoutData.fill();
+			this.addChild(this.menu);
+		}
 		this.menu.open();
 	}
 

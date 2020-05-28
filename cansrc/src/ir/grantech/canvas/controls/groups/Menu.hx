@@ -67,10 +67,15 @@ class Menu extends CanSection {
 		panelSkin.border = LineStyle.SolidColor(border, theme.dividerColor);
 		this.secondaryPanel.backgroundSkin = panelSkin;
 
-		this.secondaryTitle = this.createLabel(null, new AnchorLayoutData(padding, padding, null, padding), Label.VARIANT_HEADING);
+		this.secondaryTitle = new Label();
+		this.secondaryTitle.embedFonts = true;
+		this.secondaryTitle.variant = Label.VARIANT_HEADING;
+		this.secondaryTitle.layoutData = new AnchorLayoutData(padding, padding, null, padding);
 		this.secondaryPanel.addChild(this.secondaryTitle);
 
-		this.secondaryList = this.createList(null, DisplayObjectRecycler.withClass(MenuItemRenderer), new AnchorLayoutData(CanTheme.DPI * 24, border, 0, border));
+		this.secondaryList = new ListView();
+		this.secondaryList.itemRendererRecycler = DisplayObjectRecycler.withClass(MenuItemRenderer);
+		this.secondaryList.layoutData = new AnchorLayoutData(CanTheme.DPI * 24, border, 0, border);
 		this.secondaryList.itemToText = this.menuItemToText;
 		this.secondaryList.addEventListener(CanEvent.ITEM_SELECT, this.lists_selectHandler);
 		this.secondaryList.backgroundSkin = null;

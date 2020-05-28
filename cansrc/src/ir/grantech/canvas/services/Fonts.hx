@@ -13,10 +13,8 @@ class Fonts {
 		if (fontsPath.substr(index) != "fonts\\")
 			fontsPath = fontsPath.substr(0, index) + "fonts\\";
 		#end
-		var dir = sys.FileSystem.readDirectory(fontsPath);
-		for (f in dir)
-			if (StringUtils.getExtension(f) == "ttf")
-				fonts.push(Font.fromFile(fontsPath + f));
+
+		loadFromDirectory(fonts, fontsPath);
 		#end
 
 		var ret = new Array<FontFamily>();
@@ -31,6 +29,17 @@ class Fonts {
 			ret.push(family);
 		}
 		return ret;
+	}
+
+	static private function loadFromDirectory(fonts:Array<Font>, path:String):Void {
+		if (sys.FileSystem.isDirectory(path)) {
+			var dir = sys.FileSystem.readDirectory(path);
+			for (f in dir)
+				loadFromDirectory(fonts, path + "/" + f);
+		} else {
+			if (StringUtils.getExtension(path) == "ttf")
+				fonts.push(Font.fromFile(path));
+		}
 	}
 }
 

@@ -12,7 +12,7 @@ class Main {
 		var t = Timer.stamp();
 
 		var srcDir = "origin";
-		var dstDir = "C:/_projects/_canvas/cansrc/assets/img/";
+		var dstDir = "../cansrc/assets/img/";
 
 		// clear directories
 		for (i in 1...5) {

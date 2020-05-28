@@ -21,8 +21,9 @@ class Configs extends BaseService {
 	@:access(Xml)
 	public function new() {
 		super();
-
-		Assets.loadText("assets/texts/config.xml").onComplete((text:String) -> {
+		var url = "assets/texts/config.xml";
+		if (!Assets.isLocal(url, AssetType.TEXT))
+			Assets.loadText(url).onComplete((text:String) -> {
 			text = text.split("\r").join("").split("\n").join("").split("\t").join("");
 			var configs = Xml.parse(text).firstElement().elements();
 			for (element in configs) {

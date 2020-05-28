@@ -1,5 +1,9 @@
 package ir.grantech.canvas.services;
 
+import openfl.net.URLRequest;
+import openfl.events.Event;
+import openfl.net.URLLoader;
+import openfl.utils.AssetType;
 import openfl.Assets;
 
 class Configs extends BaseService {
@@ -25,20 +29,28 @@ class Configs extends BaseService {
 			if (Assets.isLocal(url, AssetType.TEXT))
 				this.parse(Assets.getText(url));
 			else
-			Assets.loadText(url).onComplete((text:String) -> {
+				Assets.loadText(url).onComplete((text:String) -> {
 					this.parse(text);
 				});
+		} else {
+			var loader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, loader_completeHandler);
+			loader.load(new URLRequest(url));
+		}
+	}
+
+	private function loader_completeHandler(event:Event):Void {
+		this.parse(cast(event.currentTarget, URLLoader).data);
 	}
 
 	@:access(Xml)
 	private function parse(text:String):Void {
-			text = text.split("\r").join("").split("\n").join("").split("\t").join("");
-			var configs = Xml.parse(text).firstElement().elements();
-			for (element in configs) {
-				trace(element.nodeName, element.nodeType);
-				if (element.nodeName == "menu")
-					this.menuData = element.children;
-			}
-		});
+		text = text.split("\r").join("").split("\n").join("").split("\t").join("");
+		var configs = Xml.parse(text).firstElement().elements();
+		for (element in configs) {
+			trace(element.nodeName, element.nodeType);
+			if (element.nodeName == "menu")
+				this.menuData = element.children;
+		}
 	}
 }

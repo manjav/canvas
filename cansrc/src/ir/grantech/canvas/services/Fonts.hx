@@ -8,9 +8,11 @@ class Fonts {
 		var fonts:Array<Font> = Font.enumerateFonts(true);
 		#if !(flash || html5)
 		var fontsPath = lime.system.System.fontsDirectory.toLowerCase();
+		#if windows
 		var index = fontsPath.lastIndexOf("fonts");
 		if (fontsPath.substr(index) != "fonts\\")
 			fontsPath = fontsPath.substr(0, index) + "fonts\\";
+		#end
 		var dir = sys.FileSystem.readDirectory(fontsPath);
 		for (f in dir)
 			if (StringUtils.getExtension(f) == "ttf")

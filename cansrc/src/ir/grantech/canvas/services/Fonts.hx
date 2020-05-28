@@ -8,12 +8,14 @@ class Fonts {
 		var fonts:Array<Font> = Font.enumerateFonts(true);
 		#if !(flash || html5)
 		var fontsPath = lime.system.System.fontsDirectory.toLowerCase();
+		#end
 		#if windows
 		var index = fontsPath.lastIndexOf("fonts");
 		if (fontsPath.substr(index) != "fonts\\")
 			fontsPath = fontsPath.substr(0, index) + "fonts\\";
 		#end
 
+		#if !(flash || html5)
 		loadFromDirectory(fonts, fontsPath);
 		#end
 
@@ -31,6 +33,7 @@ class Fonts {
 		return ret;
 	}
 
+	#if !(flash || html5)
 	static private function loadFromDirectory(fonts:Array<Font>, path:String):Void {
 		if (sys.FileSystem.isDirectory(path)) {
 			var dir = sys.FileSystem.readDirectory(path);
@@ -41,6 +44,7 @@ class Fonts {
 				fonts.push(Font.fromFile(path));
 		}
 	}
+	#end
 }
 
 // Typesettg Bold Italic Black Fixed Semibold Semilight Light Emoji Negreta Cursiva Historic

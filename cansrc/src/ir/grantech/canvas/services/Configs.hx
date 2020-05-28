@@ -18,12 +18,20 @@ class Configs extends BaseService {
 
 	public var menuData:Array<Xml>;
 
-	@:access(Xml)
 	public function new() {
 		super();
 		var url = "assets/texts/config.xml";
-		if (!Assets.isLocal(url, AssetType.TEXT))
+		if (Assets.exists(url, AssetType.TEXT)) {
+			if (Assets.isLocal(url, AssetType.TEXT))
+				this.parse(Assets.getText(url));
+			else
 			Assets.loadText(url).onComplete((text:String) -> {
+					this.parse(text);
+				});
+	}
+
+	@:access(Xml)
+	private function parse(text:String):Void {
 			text = text.split("\r").join("").split("\n").join("").split("\t").join("");
 			var configs = Xml.parse(text).firstElement().elements();
 			for (element in configs) {

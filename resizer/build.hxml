@@ -3,3 +3,4 @@
 -lib bitmap
 -main Main
 --interp
+# --cpp bin

@@ -48,7 +48,6 @@ class Configs extends BaseService {
 		text = text.split("\r").join("").split("\n").join("").split("\t").join("");
 		var configs = Xml.parse(text).firstElement().elements();
 		for (element in configs) {
-			trace(element.nodeName, element.nodeType);
 			if (element.nodeName == "menu")
 				this.menuData = element.children;
 		}

@@ -159,8 +159,18 @@ class Layer {
 		return cast(this.getProperty(key), UInt);
 	}
 
+	public function getRect(key:String):Rectangle {
+		return cast(this.getProperty(key), Rectangle);
+	}
+
 	public function getProperty(key:String):Dynamic {
 		return this._props[key];
+	}
+
+	public function encode():String {
+		var m = this.item.transform.matrix;
+		this.setProperty("mat", [m.a, m.b, m.c, m.d, m.tx, m.ty]);
+		return Json.stringify(this._props);
 	}
 
 	public function setProperty(key:String, value:Dynamic):Void {

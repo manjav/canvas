@@ -30,7 +30,7 @@ class Layers extends ArrayCollection<Layer> {
 	override public function add(item:Layer):Void {
 		this.addAt(item, 0);
 		for (i in 0...this.length)
-			this.get(i).order = i;
+			this.get(i).setProperty(ORDER, i);
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Layers extends ArrayCollection<Layer> {
 	override public function removeAt(index:Int):Layer {
 		var item = this.removeAt(index);
 		for (i in 0...this.length)
-			this.get(i).order = i;
+			this.get(i).setProperty(ORDER, i);
 		return item;
 	}
 
@@ -53,15 +53,15 @@ class Layers extends ArrayCollection<Layer> {
 		var oldLayer = this.get(index);
 		var newLayer = this.get(index + direction);
 
-		var tmp:Int = oldLayer.order;
-		oldLayer.order = newLayer.order;
-		newLayer.order = tmp;
+		var tmp:Int = oldLayer.getInt(ORDER);
+		oldLayer.setProperty(ORDER, newLayer.getInt(ORDER));
+		newLayer.setProperty(ORDER, tmp);
 
 		this.refresh();
 	}
 
 	private function orderFunction(left:Layer, right:Layer):Int {
-		return left.order - right.order;
+		return left.getInt(ORDER) - right.getInt(ORDER);
 	}
 }
 
@@ -73,17 +73,10 @@ class Layer {
 	static public final TYPE_TEXT:String = "text";
 	static public final TYPE_BITMAP:String = "bitmap";
 
-	public var id(default, default):Int;
-	public var order(default, default):Int;
-	public var type(default, default):String;
-	public var name(default, default):String;
 	public var item(default, default):ICanItem;
 	public var pivot(default, default):Point = new Point(0.5, 0.5);
-	public var initialWidth(default, default):Float;
-	public var initialHeight(default, default):Float;
 
 	private var _props:Map<String, Dynamic>;
-
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
 	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, cornerRadius:Float) {
@@ -91,12 +84,12 @@ class Layer {
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 
 		this._invalidationFlags = new Map<String, Bool>();
-		this.id = Math.floor(Timer.stamp() * 100);
-
-		this.type = Layer.TYPES[type];
-		this.name = type + " " + id;
-
 		this._props = new Map<String, Dynamic>();
+		this.setProperty(ID, Math.floor(Timer.stamp() * 100));
+		this.setProperty(TYPE, Layer.TYPES[type]);
+		this.setProperty(NAME, this.getString(NAME) + " " + this.getInt(ID));
+
+
 		this.setProperty(ENABLE, true);
 		this.setProperty(VISIBLE, true);
 		this.setProperty(ALPHA, 1.0);
@@ -120,14 +113,14 @@ class Layer {
 
 	private function instantiateItem(bounds:Rectangle):ICanItem {
 		var ret:ICanItem = null;
-		if (this.type == TYPE_RECT || this.type == TYPE_ELLIPSE) {
+		if (this.getString(TYPE) == TYPE_RECT || this.getString(TYPE) == TYPE_ELLIPSE) {
 			this.setProperty(FILL_ENABLED, true);
 			this.setProperty(CORNER_RADIUS, 0);
 			var sh = new CanShape(this);
 			sh.x = bounds.x;
 			sh.y = bounds.y;
 			ret = sh;
-		} else if (this.type == TYPE_TEXT) {
+		} else if (this.getString(TYPE) == TYPE_TEXT) {
 			this.setProperty(FILL_ENABLED, false);
 			this.setProperty(TEXT_ALIGN, TextFormatAlign.JUSTIFY);
 			this.setProperty(TEXT_AUTOSIZE, 1);

@@ -21,7 +21,7 @@ class LayersSection extends ListSection {
 		super.initialize();
 		this.listView = this.createList(null, DisplayObjectRecycler.withClass(LayerItemRenderer), new AnchorLayoutData(this.padding * 6, 0, 0, 0));
 		this.listView.itemToText = (item:Layer) -> {
-			return item.name;
+			return item.getString(Commands.NAME);
 		};
 		this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
 		this.listView.backgroundSkin = null;

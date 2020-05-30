@@ -48,9 +48,9 @@ class CanItems {
 		if (this.isEmpty)
 			return Layer.TYPE_NONE;
 
-		var t = this.items[0].layer.type;
+		var t = this.items[0].layer.getString(TYPE);
 		for (i in 1...this.length)
-			if (t != this.items[i].layer.type)
+			if (t != this.items[i].layer.getString(TYPE))
 				return Layer.TYPE_NONE;
 		return t;
 	}

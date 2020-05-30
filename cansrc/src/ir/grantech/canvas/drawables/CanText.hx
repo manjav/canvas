@@ -1,5 +1,6 @@
 package ir.grantech.canvas.drawables;
 
+import openfl.events.Event;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Layers.Layer;
 import openfl.text.TextField;
@@ -12,6 +13,11 @@ class CanText extends TextField implements ICanItem {
 	public function new(layer:Layer) {
 		super();
 		this.layer = layer;
+		this.addEventListener(Event.CHANGE, this.changeHandler);
+	}
+
+	private function changeHandler(event:Event):Void {
+		this.layer.setProperty(TEXT, this.text);
 	}
 
 	private function update():Void {

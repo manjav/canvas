@@ -40,6 +40,7 @@ class Commands extends BaseService {
 	static public final CORNER_RADIUS:String = "cornerRadius";
 
 	// text commands
+	static public final TEXT:String = "text";
 	static public final TEXT_FONT:String = "textFont";
 	static public final TEXT_SIZE:String = "textSIze";
 	static public final TEXT_COLOR:String = "textColor";

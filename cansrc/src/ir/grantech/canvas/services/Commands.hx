@@ -30,10 +30,10 @@ class Commands extends BaseService {
 	static public final BLEND_MODE:String = "blendMode";
 
 	// drawing commands
-	static public final FILL_ENABLED:String = "fillEnabled";
+	static public final FILL_ENABLE:String = "fillEnable";
 	static public final FILL_COLOR:String = "fillColor";
 	static public final FILL_ALPHA:String = "fillAlpha";
-	static public final BORDER_ENABLED:String = "borderEnabled";
+	static public final BORDER_ENABLE:String = "borderEnable";
 	static public final BORDER_COLOR:String = "borderColor";
 	static public final BORDER_ALPHA:String = "borderAlpha";
 	static public final BORDER_SIZE:String = "borderSize";

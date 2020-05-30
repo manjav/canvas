@@ -97,7 +97,7 @@ class Layer {
 
 		this.setProperty(FILL_COLOR, fillColor);
 		this.setProperty(FILL_ALPHA, fillAlpha);
-		this.setProperty(BORDER_ENABLED, true);
+		this.setProperty(BORDER_ENABLE, true);
 		this.setProperty(BORDER_SIZE, borderSize);
 		this.setProperty(BORDER_COLOR, borderColor);
 		this.setProperty(BORDER_ALPHA, borderAlpha);
@@ -112,14 +112,14 @@ class Layer {
 	private function instantiateItem(bounds:Rectangle):ICanItem {
 		var ret:ICanItem = null;
 		if (this.getString(TYPE) == TYPE_RECT || this.getString(TYPE) == TYPE_ELLIPSE) {
-			this.setProperty(FILL_ENABLED, true);
+			this.setProperty(FILL_ENABLE, true);
 			this.setProperty(CORNER_RADIUS, 0);
 			var sh = new CanShape(this);
 			sh.x = bounds.x;
 			sh.y = bounds.y;
 			ret = sh;
 		} else if (this.getString(TYPE) == TYPE_TEXT) {
-			this.setProperty(FILL_ENABLED, false);
+			this.setProperty(FILL_ENABLE, false);
 			this.setProperty(TEXT_ALIGN, TextFormatAlign.JUSTIFY);
 			this.setProperty(TEXT_AUTOSIZE, 1);
 			this.setProperty(TEXT_COLOR, 0xFF);
@@ -231,7 +231,7 @@ class Layer {
 				this.item.visible = this.getBool(flag);
 			if (flag == BLEND_MODE)
 				this.item.blendMode = cast(this.getProperty(flag), BlendMode);
-			if (flag == FILL_ENABLED || flag == FILL_COLOR || flag == FILL_ALPHA || flag == BORDER_ENABLED || flag == BORDER_COLOR || flag == BORDER_ALPHA
+			if (flag == FILL_ENABLE || flag == FILL_COLOR || flag == FILL_ALPHA || flag == BORDER_ENABLE || flag == BORDER_COLOR || flag == BORDER_ALPHA
 				|| flag == BORDER_SIZE || flag == CORNER_RADIUS)
 				needsDraw = true;
 			if (flag == TEXT_ALIGN || flag == TEXT_COLOR || flag == TEXT_FONT || flag == TEXT_LETTERPACE || flag == TEXT_LINESPACE || flag == TEXT_SIZE)

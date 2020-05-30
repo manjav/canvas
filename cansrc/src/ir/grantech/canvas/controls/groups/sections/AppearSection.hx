@@ -66,9 +66,9 @@ class AppearSection extends CanSection {
 		if (this.updating || this.targets == null)
 			return;
 		if (event.currentTarget == this.fillPicker)
-			commands.commit(Commands.FILL_ENABLED, [this.targets, this.fillPicker.selected]);
+			commands.commit(Commands.FILL_ENABLE, [this.targets, this.fillPicker.selected]);
 		else if (event.currentTarget == this.borderPicker)
-			commands.commit(Commands.BORDER_ENABLED, [this.targets, this.borderPicker.selected]);
+			commands.commit(Commands.BORDER_ENABLE, [this.targets, this.borderPicker.selected]);
 	}
 
 	override private function colorLines_changeHandler(event:Event):Void {
@@ -93,14 +93,14 @@ class AppearSection extends CanSection {
 		this.modesList.selectedIndex = this.findBlendMode(this.targets.getProperty(Commands.BLEND_MODE));
 
 		this.fillPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
-		this.fillPicker.selected = this.targets.getBool(Commands.FILL_ENABLED);
+		this.fillPicker.selected = this.targets.getBool(Commands.FILL_ENABLE);
 		if (this.fillPicker.selected) {
 			this.fillPicker.rgb = this.targets.getUInt(Commands.FILL_COLOR);
 			this.fillPicker.a = Math.round(this.targets.getFloat(Commands.FILL_ALPHA) * 0xFF);
 		}
 
 		this.borderPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
-		this.borderPicker.selected = this.targets.getBool(Commands.BORDER_ENABLED);
+		this.borderPicker.selected = this.targets.getBool(Commands.BORDER_ENABLE);
 		if (this.borderPicker.selected) {
 			this.borderPicker.rgb = this.targets.getUInt(Commands.BORDER_COLOR);
 			this.borderPicker.a = Math.round(this.targets.getFloat(Commands.FILL_ALPHA) * 0xFF);

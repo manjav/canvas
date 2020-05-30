@@ -51,10 +51,10 @@ class CanZoom extends LayoutGroup {
 		commands.addEventListener(Commands.VISIBLE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BLEND_MODE, this.commands_itemsEventsHandler);
 
-		commands.addEventListener(Commands.FILL_ENABLED, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.FILL_ENABLE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.FILL_COLOR, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.FILL_ALPHA, this.commands_itemsEventsHandler);
-		commands.addEventListener(Commands.BORDER_ENABLED, this.commands_itemsEventsHandler);
+		commands.addEventListener(Commands.BORDER_ENABLE, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BORDER_COLOR, this.commands_itemsEventsHandler);
 		commands.addEventListener(Commands.BORDER_ALPHA, this.commands_itemsEventsHandler);
 

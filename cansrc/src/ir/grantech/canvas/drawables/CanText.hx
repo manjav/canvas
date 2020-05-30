@@ -46,10 +46,10 @@ class CanText extends TextField implements ICanItem {
 	}
 
 	private function draw():Void {
-		this.background = this.layer.getBool(FILL_ENABLED);
+		this.background = this.layer.getBool(FILL_ENABLE);
 		if (this.background)
 			this.backgroundColor = this.layer.getUInt(FILL_COLOR);
-		this.border = this.layer.getBool(BORDER_ENABLED);
+		this.border = this.layer.getBool(BORDER_ENABLE);
 		if (this.border)
 			this.borderColor = this.layer.getUInt(BORDER_COLOR);
 	}

@@ -111,10 +111,10 @@ class CanItems {
 		this.setProperty(ALPHA, 1.0);
 		this.setProperty(BLEND_MODE, BlendMode.NORMAL);
 
-		this.setProperty(FILL_ENABLED, true);
+		this.setProperty(FILL_ENABLE, true);
 		this.setProperty(FILL_COLOR, 0x6868F8);
 		this.setProperty(FILL_ALPHA, 1.0);
-		this.setProperty(BORDER_ENABLED, true);
+		this.setProperty(BORDER_ENABLE, true);
 		this.setProperty(BORDER_SIZE, 3.0);
 		this.setProperty(BORDER_COLOR, 0xFF00FF);
 		this.setProperty(BORDER_ALPHA, 1.0);

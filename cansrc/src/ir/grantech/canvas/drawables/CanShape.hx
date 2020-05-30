@@ -18,11 +18,11 @@ class CanShape extends Shape implements ICanItem {
 
 	private function draw():Void {
 		this.graphics.clear();
-		if (!this.layer.getBool(FILL_ENABLED) && !this.layer.getBool(BORDER_ENABLED))
+		if (!this.layer.getBool(FILL_ENABLE) && !this.layer.getBool(BORDER_ENABLE))
 			return;
-		if (this.layer.getBool(FILL_ENABLED))
+		if (this.layer.getBool(FILL_ENABLE))
 			this.graphics.beginFill(this.layer.getUInt(FILL_COLOR), this.layer.getFloat(FILL_ALPHA));
-		if (this.layer.getBool(BORDER_ENABLED))
+		if (this.layer.getBool(BORDER_ENABLE))
 			this.graphics.lineStyle(this.layer.getFloat(BORDER_SIZE), this.layer.getUInt(BORDER_COLOR), this.layer.getFloat(BORDER_ALPHA));
 
 		var b = this.layer.getRect(BOUNDS);

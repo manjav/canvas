@@ -82,7 +82,7 @@ class Layer {
 	public var initialWidth(default, default):Float;
 	public var initialHeight(default, default):Float;
 
-	private var props:Map<String, Dynamic>;
+	private var _props:Map<String, Dynamic>;
 
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
@@ -96,7 +96,7 @@ class Layer {
 		this.type = Layer.TYPES[type];
 		this.name = type + " " + id;
 
-		this.props = new Map<String, Dynamic>();
+		this._props = new Map<String, Dynamic>();
 		this.setProperty(ENABLE, true);
 		this.setProperty(VISIBLE, true);
 		this.setProperty(ALPHA, 1.0);
@@ -169,15 +169,13 @@ class Layer {
 	}
 
 	public function getProperty(key:String):Dynamic {
-		return this.props[key];
+		return this._props[key];
 	}
 
 	public function setProperty(key:String, value:Dynamic):Void {
-		if (key == TEXT_COLOR)
-			trace(this.props[key], value);
-		if (this.props.exists(key) && this.props[key] == value)
+		if (this._props.exists(key) && this._props[key] == value)
 			return;
-		this.props[key] = value;
+		this._props[key] = value;
 		this.setInvalid(key);
 	}
 

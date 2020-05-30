@@ -25,11 +25,11 @@ class CanShape extends Shape implements ICanItem {
 		if (this.layer.getBool(BORDER_ENABLED))
 			this.graphics.lineStyle(this.layer.getFloat(BORDER_SIZE), this.layer.getUInt(BORDER_COLOR), this.layer.getFloat(BORDER_ALPHA));
 
-		if (this.layer.type == Layer.TYPE_RECT)
-			this.graphics.drawRoundRect(0, 0, this.layer.initialWidth, this.layer.initialHeight, this.layer.getFloat(CORNER_RADIUS),
-				this.layer.getFloat(CORNER_RADIUS));
+		var b = this.layer.getRect(BOUNDS);
+		if (this.layer.getString(TYPE) == Layer.TYPE_RECT)
+			this.graphics.drawRoundRect(0, 0, b.width, b.height, this.layer.getFloat(CORNER_RADIUS), this.layer.getFloat(CORNER_RADIUS));
 		else
-			this.graphics.drawEllipse(0, 0, this.layer.initialWidth, this.layer.initialHeight);
+			this.graphics.drawEllipse(0, 0, b.width, b.height);
 
 		this.graphics.endFill();
 	}

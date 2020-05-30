@@ -25,6 +25,7 @@ class Commands extends BaseService {
 	static public final TYPE:String = "type";
 	static public final NAME:String = "name";
 	static public final ALPHA:String = "alpha";
+	static public final BOUNDS:String = "bounds";
 	static public final VISIBLE:String = "visible";
 	static public final BLEND_MODE:String = "blendMode";
 

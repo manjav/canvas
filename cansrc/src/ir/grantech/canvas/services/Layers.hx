@@ -88,7 +88,7 @@ class Layer {
 		this.setProperty(ID, Math.floor(Timer.stamp() * 100));
 		this.setProperty(TYPE, Layer.TYPES[type]);
 		this.setProperty(NAME, this.getString(NAME) + " " + this.getInt(ID));
-
+		this.setProperty(BOUNDS, bounds);
 
 		this.setProperty(ENABLE, true);
 		this.setProperty(VISIBLE, true);
@@ -103,8 +103,6 @@ class Layer {
 		this.setProperty(BORDER_ALPHA, borderAlpha);
 		this.setProperty(CORNER_RADIUS, cornerRadius);
 
-		this.initialWidth = bounds.width;
-		this.initialHeight = bounds.height;
 		// sh.scale9Grid = new Rectangle(r, r, r, r);
 
 		this.item = this.instantiateItem(bounds);

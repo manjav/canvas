@@ -24,6 +24,22 @@ class Configs extends BaseService {
 
 	public function new() {
 		super();
+		this.loadPrefs();
+		this.loadConfigs();
+	}
+
+	
+	private function loadPrefs():Void {
+		var so = SharedObject.getLocal("prefs");
+	}
+
+	
+	private function savePrefs():Void {
+		var so = SharedObject.getLocal("prefs");
+		so.flush();
+	}
+
+	private function loadConfigs():Void {
 		var url = "assets/texts/config.xml";
 		if (Assets.exists(url, AssetType.TEXT)) {
 			if (Assets.isLocal(url, AssetType.TEXT))

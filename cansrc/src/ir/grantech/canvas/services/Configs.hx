@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import openfl.net.SharedObject;
 import openfl.net.URLRequest;
 import openfl.events.Event;
 import openfl.net.URLLoader;
@@ -21,6 +22,7 @@ class Configs extends BaseService {
 	}
 
 	public var menuData:Array<Xml>;
+	public var recentFiles:Array<String>;
 
 	public function new() {
 		super();
@@ -31,11 +33,15 @@ class Configs extends BaseService {
 	
 	private function loadPrefs():Void {
 		var so = SharedObject.getLocal("prefs");
+		if(so.data.recentFiles == null)
+			return;
+		this.recentFiles = so.data.recentFiles;
 	}
 
 	
 	private function savePrefs():Void {
 		var so = SharedObject.getLocal("prefs");
+		so.data.recentFiles = this.recentFiles;
 		so.flush();
 	}
 

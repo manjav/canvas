@@ -18,7 +18,7 @@
   <haxelib name="actuate" />
   <haxelib name="feathersui" />
 
-	<haxeflag name="-dce" value="full" />
+	<haxeflag name="-dce" value="full" if="cpp"/>
 
   <haxdef name="openfl_pool_events"/>  
   <haxdef name="advanced-telemetry" if="debug" />

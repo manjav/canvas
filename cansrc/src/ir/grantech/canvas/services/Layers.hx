@@ -2,6 +2,7 @@ package ir.grantech.canvas.services;
 
 import feathers.core.InvalidationFlag;
 import feathers.data.ArrayCollection;
+import haxe.Json;
 import haxe.Timer;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanText;

@@ -22,12 +22,13 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	@:access(Xml)
 	private function set_data(value:Dynamic):Dynamic {
-		if (this.data == value)
-			return this.data;
 		if (value == null)
+			return this.data;
+		var md = cast(value, Xml);
+		if (this.menuData != null && this.menuData == md )
 			return value;
 		this.data = value;
-		this.menuData = cast(this.data, Xml);
+		this.menuData = md;
 		if (this.menuData.nodeName == "divider") {
 			isDivider = true;
 		} else {
@@ -36,8 +37,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			if (this.children.length == 0)
 				this.shortKey = this.menuData.attributeMap["shortKey"];
 		}
-		this.setInvalid(InvalidationFlag.DATA);
-		return this.data;
+		this.setInvalid("aaaa");
+		return value;
 	}
 
 	private function get_data():Dynamic {
@@ -79,7 +80,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	@:access(ir.grantech.canvas.themes.CanTheme)
 	override private function update():Void {
-		if (this.isInvalid(InvalidationFlag.DATA)) {
+		if (this.isInvalid("aaaa")) {
 			var theme = Std.downcast(Theme.getTheme(), CanTheme);
 			var skin:BaseGraphicsPathSkin = null;
 			if (isDivider) {

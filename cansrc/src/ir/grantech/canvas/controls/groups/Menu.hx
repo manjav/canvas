@@ -90,10 +90,13 @@ class Menu extends CanSection {
 	@:access(ir.grantech.canvas.services.Commands)
 	private function lists_selectHandler(event:CanEvent):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
-		switch(itemRenderer.name){
-			case "Open...": 	commands.layers.openAs();
-			case "Save":		commands.layers.save(false);
-			case "Save as...":	commands.layers.save(true);
+		#if desktop
+		if (itemRenderer.menuData.attributeMap.exists("path")) {
+			commands.layers.open(itemRenderer.menuData.attributeMap["path"]);
+			this.close();
+			return;
+		}
+		#end
 		}
 		
 		this.close();

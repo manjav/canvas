@@ -68,6 +68,18 @@ class Layers extends ArrayCollection<Layer> {
 	public function openAs():Void {
 	}
 
+
+	#if desktop
+	public function open(path:String):Void {
+		this.name = path;
+		this.read(sys.io.File.read(path));
+	}
+	#end
+
+	// use a format.zip.Reader to grab the zip entries
+	public function read(bytesInput:Input):Void {
+	}
+
 	public function save(saveAs:Bool):Void {
 		#if !desktop
 	}

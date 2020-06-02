@@ -44,11 +44,13 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		return this.data;
 	}
 
-
 	override private function set_selected(value:Bool):Bool {
-		if (!value || this.selected == value || isDivider || this.children.length > 0)
+		if (isDivider || !value || this.selected == value)
 			return this.selected;
+		if (this.children.length == 0) {
 		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this, true);
+			return false;
+		}
 		return super.set_selected(value);
 	}
 

@@ -64,6 +64,13 @@ class Layers extends ArrayCollection<Layer> {
 	private function orderFunction(left:Layer, right:Layer):Int {
 		return left.getInt(ORDER) - right.getInt(ORDER);
 	}
+
+	public function openAs():Void {
+	}
+
+	public function save(saveAs:Bool):Void {
+		#if !desktop
+	}
 }
 
 class Layer {

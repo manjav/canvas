@@ -17,6 +17,8 @@ import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 
 class Layers extends ArrayCollection<Layer> {
+	var name:String;
+
 	/**
 	 * Constructor.
 	 */
@@ -63,6 +65,11 @@ class Layers extends ArrayCollection<Layer> {
 
 	private function orderFunction(left:Layer, right:Layer):Int {
 		return left.getInt(ORDER) - right.getInt(ORDER);
+	}
+
+	public function clear():Void {
+		this.name = null;
+		this.removeAll();
 	}
 
 	public function openAs():Void {

@@ -87,6 +87,7 @@ class Menu extends CanSection {
 		return item.attributeMap["name"];
 	}
 
+	@:access(Xml)
 	@:access(ir.grantech.canvas.services.Commands)
 	private function lists_selectHandler(event:CanEvent):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
@@ -97,8 +98,17 @@ class Menu extends CanSection {
 			return;
 		}
 		#end
+		switch (itemRenderer.name) {
+			case "New":
+				commands.clear();
+			case "Open...":
+				commands.layers.openAs();
+			case "Save":
+				commands.layers.save(false);
+			case "Save as...":
+				commands.layers.save(true);
 		}
-		
+
 		this.close();
 	}
 

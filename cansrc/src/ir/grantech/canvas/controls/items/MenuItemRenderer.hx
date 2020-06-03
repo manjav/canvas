@@ -90,7 +90,9 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			} else {
 				skin = new RectangleSkin();
 				skin.selectedFill = SolidColor(theme.dividerColor);
+				#if !desktop
 				skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
+				#end
 			}
 			skin.fill = theme.getContainerFill();
 			this.backgroundSkin = skin;

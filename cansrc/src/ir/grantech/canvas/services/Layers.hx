@@ -245,10 +245,10 @@ class Layer {
 		return this._props[key];
 	}
 
-	public function encode():String {
+	public function getProperties():Map<String, Dynamic> {
 		var m = this.item.transform.matrix;
 		this.setProperty("mat", [m.a, m.b, m.c, m.d, m.tx, m.ty]);
-		return Json.stringify(this._props);
+		return this._props;
 	}
 
 	public function setProperty(key:String, value:Dynamic):Void {

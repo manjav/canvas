@@ -11,8 +11,11 @@ import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
 import openfl.display.BlendMode;
+import openfl.events.Event;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.net.FileFilter;
+import openfl.net.FileReference;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 
@@ -73,8 +76,20 @@ class Layers extends ArrayCollection<Layer> {
 	}
 
 	public function openAs():Void {
+		var fr = new FileReference();
+		fr.addEventListener(Event.SELECT, function(event:Event):Void {
+			var fr = cast(event.currentTarget, FileReference);
+			fr.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+			fr.load();
+		});
+		fr.browse([new FileFilter("Canvas project files", "*.cvp")]);
 	}
 
+	private function file_openCompleteHandler(event:Event) {
+		var fr = cast(event.currentTarget, FileReference);
+		var bytesInput = new BytesInput(Bytes.ofData(fr.data));
+		this.read(bytesInput);
+	}
 
 	#if desktop
 	public function open(path:String):Void {

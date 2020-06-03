@@ -155,6 +155,14 @@ class Layers extends ArrayCollection<Layer> {
 		var bytesOutput = new BytesOutput();
 		var writer = new Writer(bytesOutput);
 		writer.write(entries);
+
+		// Save as the zipped file to disc
+		var fr = new FileReference();
+		fr.addEventListener(Event.COMPLETE, this.file_saveCompleteHandler);
+		fr.save(bytesOutput.getBytes().getData(), this.name == null ? "New Project.cvp" : this.name);
+	}
+
+	private function file_saveCompleteHandler(event:Event) {
 	}
 
 	public static function unzip(f:Entry) {

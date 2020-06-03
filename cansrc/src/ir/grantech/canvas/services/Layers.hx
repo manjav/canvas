@@ -115,6 +115,14 @@ class Layers extends ArrayCollection<Layer> {
 
 	public function save(saveAs:Bool):Void {
 		#if !desktop
+		if (!saveAs)
+			saveAs = true;
+		#end
+
+		// First saving recognition
+		if (this.name == null)
+			saveAs = true;
+
 	}
 
 	}

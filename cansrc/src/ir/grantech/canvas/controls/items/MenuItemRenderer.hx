@@ -48,7 +48,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (isDivider || !value || this.selected == value)
 			return this.selected;
 		if (this.children.length == 0) {
-		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this, true);
+			CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this, true);
 			return false;
 		}
 		return super.set_selected(value);
@@ -131,10 +131,11 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.textField.x = this.paddingLeft;
 		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
 
-		if (this.children.length > 0) {
+		if (this.icon != null) {
 			this.icon.x = this.actualWidth - this.paddingRight - this.icon.width;
 			this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
-		} else {
+		}
+		if (this.shortkeyField != null) {
 			this.shortkeyField.x = this.actualWidth - this.paddingRight - this.shortkeyField.width;
 			this.shortkeyField.y = (this.actualHeight - this.shortkeyField.height) * 0.5;
 		}

@@ -165,7 +165,7 @@ class Layer {
 		this._props = new Map<String, Dynamic>();
 		this.setProperty(ID, Math.floor(Timer.stamp() * 100));
 		this.setProperty(TYPE, Layer.TYPES[type]);
-		this.setProperty(NAME, this.getString(NAME) + " " + this.getInt(ID));
+		this.setProperty(NAME, this.getString(TYPE) + " " + this.getInt(ID));
 		this.setProperty(BOUNDS, bounds);
 
 		this.setProperty(ENABLE, true);
@@ -222,7 +222,7 @@ class Layer {
 	}
 
 	public function getInt(key:String):Int {
-		return cast(this.getProperty(key), Int);
+		return this._props.exists(key) ? cast(this.getProperty(key), Int) : 0;
 	}
 
 	public function getFloat(key:String):Float {

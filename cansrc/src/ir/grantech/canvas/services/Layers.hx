@@ -1,12 +1,16 @@
 package ir.grantech.canvas.services;
 
-import feathers.core.InvalidationFlag;
 import feathers.data.ArrayCollection;
 import haxe.Json;
 import haxe.Timer;
+import haxe.crypto.Crc32;
+import haxe.io.Bytes;
+import haxe.io.BytesInput;
+import haxe.io.BytesOutput;
 import haxe.io.Input;
 import haxe.zip.Entry;
 import haxe.zip.Reader;
+import haxe.zip.Writer;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
@@ -123,8 +127,34 @@ class Layers extends ArrayCollection<Layer> {
 		if (this.name == null)
 			saveAs = true;
 
+		var now = Date.now();
+		// Create manifest
+		var ls = new Array<Dynamic>();
+		for (l in array)
+			ls.push(l.getProperties());
+		// Convert the string to bytes
+		var bytes = Bytes.ofString(Json.stringify({layers: ls}));
+		// Create a zip entry for the bytes:
+		var entry:Entry = {
+			fileName: "manifest.json", // <- This is the internal zip file folder structure
+			fileSize: bytes.length,
+			fileTime: now,
+			compressed: false,
+			dataSize: 0,
+			data: bytes,
+			crc32: Crc32.make(bytes)
 	}
 
+		// Create a list of entries
+		var entries:List<Entry> = new List();
+		// Add our text data entry:
+		entries.add(entry);
+		// Add as many entries as you like...
+
+		// Write our entries to a BytesOutput stream using format.zip.Writer
+		var bytesOutput = new BytesOutput();
+		var writer = new Writer(bytesOutput);
+		writer.write(entries);
 	}
 
 	public static function unzip(f:Entry) {

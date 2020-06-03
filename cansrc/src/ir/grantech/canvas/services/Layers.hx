@@ -4,6 +4,9 @@ import feathers.core.InvalidationFlag;
 import feathers.data.ArrayCollection;
 import haxe.Json;
 import haxe.Timer;
+import haxe.io.Input;
+import haxe.zip.Entry;
+import haxe.zip.Reader;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
@@ -103,11 +106,32 @@ class Layers extends ArrayCollection<Layer> {
 	#end
 
 	// use a format.zip.Reader to grab the zip entries
-	public function read(bytesInput:Input):Void {
+	public function read(input:Input):Void {
+		var entries = new Reader(input).read();
+		for (e in entries) {
+			trace(e.fileName, e.compressed, unzip(e).toString());
+	}
 	}
 
 	public function save(saveAs:Bool):Void {
 		#if !desktop
+	}
+
+	}
+
+	public static function unzip(f:Entry) {
+		if (!f.compressed)
+			return f.data;
+		var c = new haxe.zip.Uncompress(-15);
+		var s = haxe.io.Bytes.alloc(f.fileSize);
+		var r = c.execute(f.data, 0, s, 0);
+		c.close();
+		if (!r.done || r.read != f.data.length || r.write != f.fileSize)
+			throw "Invalid compressed data for " + f.fileName;
+		f.compressed = false;
+		f.dataSize = f.fileSize;
+		f.data = s;
+		return f.data;
 	}
 }
 

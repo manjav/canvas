@@ -80,7 +80,11 @@ class Layers extends ArrayCollection<Layer> {
 		fr.addEventListener(Event.SELECT, function(event:Event):Void {
 			var fr = cast(event.currentTarget, FileReference);
 			fr.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+			#if desktop
+			this.open(fr.__path);
+			#else
 			fr.load();
+			#end
 		});
 		fr.browse([new FileFilter("Canvas project files", "*.cvp")]);
 	}

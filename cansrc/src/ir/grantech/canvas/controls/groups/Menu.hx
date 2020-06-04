@@ -100,7 +100,7 @@ class Menu extends CanSection {
 		#end
 		switch (itemRenderer.name) {
 			case "New":
-				commands.clear();
+				commands.layers.close();
 			case "Open...":
 				commands.layers.openAs();
 			case "Save":

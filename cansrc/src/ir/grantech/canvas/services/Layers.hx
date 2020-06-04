@@ -77,7 +77,7 @@ class Layers extends ArrayCollection<Layer> {
 		return left.getInt(ORDER) - right.getInt(ORDER);
 	}
 
-	public function clear():Void {
+	public function close():Void {
 		this.name = null;
 		this.removeAll();
 	}

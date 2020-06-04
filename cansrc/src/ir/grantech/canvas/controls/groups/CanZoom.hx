@@ -87,6 +87,10 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_removedHandler(event:CanEvent):Void {
+		if (event.data == null) {
+			this.scene.container.removeChildren();
+			return;
+		}
 		cast(event.data[0], CanItems).deleteAll();
 	}
 

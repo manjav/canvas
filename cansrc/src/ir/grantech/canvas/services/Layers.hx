@@ -1,5 +1,7 @@
 package ir.grantech.canvas.services;
 
+import lime.tools.Command;
+import ir.grantech.canvas.events.CanEvent;
 import feathers.data.ArrayCollection;
 import haxe.Json;
 import haxe.Timer;
@@ -80,6 +82,7 @@ class Layers extends ArrayCollection<Layer> {
 	public function close():Void {
 		this.name = null;
 		this.removeAll();
+		CanEvent.dispatch(Commands.instance, Commands.REMOVED);
 	}
 
 	public function openAs():Void {

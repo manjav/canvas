@@ -114,7 +114,7 @@ class Layers extends ArrayCollection<Layer> {
 		var entries = new Reader(input).read();
 		for (e in entries) {
 			trace(e.fileName, e.compressed, unzip(e).toString());
-	}
+		}
 	}
 
 	public function save(saveAs:Bool):Void {
@@ -143,7 +143,7 @@ class Layers extends ArrayCollection<Layer> {
 			dataSize: 0,
 			data: bytes,
 			crc32: Crc32.make(bytes)
-	}
+		}
 
 		// Create a list of entries
 		var entries:List<Entry> = new List();
@@ -155,6 +155,14 @@ class Layers extends ArrayCollection<Layer> {
 		var bytesOutput = new BytesOutput();
 		var writer = new Writer(bytesOutput);
 		writer.write(entries);
+
+		// Save
+		#if desktop
+		if (!saveAs) {
+			sys.io.File.saveBytes(this.name, bytesOutput.getBytes());
+			return;
+		}
+		#end
 
 		// Save as the zipped file to disc
 		var fr = new FileReference();

@@ -163,6 +163,12 @@ class Layers extends ArrayCollection<Layer> {
 	}
 
 	private function file_saveCompleteHandler(event:Event) {
+		var fr = cast(event.currentTarget, FileReference);
+		#if desktop
+		this.name = fr.__path;
+		#else
+		this.name = fr.name;
+		#end
 	}
 
 	public static function unzip(f:Entry) {

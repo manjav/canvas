@@ -161,7 +161,7 @@ class Inputs extends BaseService {
 			}
 		}
 
-		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) {
+		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) {// delete
 			this.commands.commit(Commands.REMOVED, [this.selectedItems]);
 			return;
 		}

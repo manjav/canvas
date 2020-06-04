@@ -111,10 +111,10 @@ class Layers extends ArrayCollection<Layer> {
 
 	// use a format.zip.Reader to grab the zip entries
 	public function read(input:Input):Void {
+		this.close();
 		var entries = new Reader(input).read();
-		for (e in entries) {
+		for (e in entries)
 			trace(e.fileName, e.compressed, unzip(e).toString());
-		}
 	}
 
 	public function save(saveAs:Bool):Void {

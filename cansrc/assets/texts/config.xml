@@ -4,7 +4,7 @@
 		<item name="New" shortKey="Ctrl + N" />
 		<item name="Open..." shortKey="Ctrl + O" />
 		<item name="Open Recents">
-			<item name="New Project.cvp" path="C:\Users\ManZen\Desktop\New Project.cvp"/>
+			<item name="New Project" path="C:\Users\ManZen\Desktop\New Project.cvp"/>
 		</item>
 		<divider />
 		<item name="Save" shortKey="Ctrl + S" />

@@ -23,10 +23,13 @@ class Libs extends BaseService {
 	public function new(stage:Stage) {
 		super();
 		this.stage = stage;
+		#if desktop
 		this.stage.window.onDropFile.add(this.stage_onDropFileHandler);
 	}
 
+	@:access(ir.grantech.canvas.services.Commands)
 	private function stage_onDropFileHandler(path:String):Void {
-		trace(path);
+		commands.layers.open(path);
+		#end
 	}
 }

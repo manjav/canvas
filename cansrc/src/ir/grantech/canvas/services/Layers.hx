@@ -1,8 +1,7 @@
 package ir.grantech.canvas.services;
 
-import lime.tools.Command;
-import ir.grantech.canvas.events.CanEvent;
 import feathers.data.ArrayCollection;
+import flash.geom.Matrix;
 import haxe.Json;
 import haxe.Timer;
 import haxe.crypto.Crc32;
@@ -16,6 +15,7 @@ import haxe.zip.Writer;
 import ir.grantech.canvas.drawables.CanShape;
 import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
@@ -127,6 +127,8 @@ class Layers extends ArrayCollection<Layer> {
 		for (l in layers) {
 			var layer = new Layer(l.h.type, l.h.fillColor, l.h.fillAlpha, l.h.borderSize, l.h.borderColor, l.h.borderAlpha, l.h.bounds, l.h.cornerRadius);
 			this.add(layer);
+			layer.item.transform.matrix = new Matrix(l.h.mat[0], l.h.mat[1], l.h.mat[2], l.h.mat[3], l.h.mat[4], l.h.mat[5]);
+			CanEvent.dispatch(Commands.instance, Commands.ADDED, [layer.item]);
 		}
 	}
 

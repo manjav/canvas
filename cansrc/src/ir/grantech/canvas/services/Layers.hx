@@ -211,14 +211,14 @@ class Layer {
 	private var _props:Map<String, Dynamic>;
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
-	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>, cornerRadius:Float) {
+	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>, cornerRadius:Float) {
 		if (Layer.TYPES == null)
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 
 		this._invalidationFlags = new Map<String, Bool>();
 		this._props = new Map<String, Dynamic>();
 		this.setProperty(ID, Math.floor(Timer.stamp() * 100));
-		this.setProperty(TYPE, Layer.TYPES[type]);
+		this.setProperty(TYPE, Std.isOfType(type, Int) ? Layer.TYPES[type] : type);
 		this.setProperty(NAME, this.getString(TYPE) + " " + this.getInt(ID));
 		this.setProperty(BOUNDS, bounds);
 

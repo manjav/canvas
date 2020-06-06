@@ -123,6 +123,11 @@ class Layers extends ArrayCollection<Layer> {
 	}
 
 	private function loadLayers(str:String):Void {
+		var layers:Array<Dynamic> = Json.parse(str).layers;
+		for (l in layers) {
+			var layer = new Layer(l.h.type, l.h.fillColor, l.h.fillAlpha, l.h.borderSize, l.h.borderColor, l.h.borderAlpha, l.h.bounds, l.h.cornerRadius);
+			this.add(layer);
+		}
 	}
 
 	public function save(saveAs:Bool):Void {

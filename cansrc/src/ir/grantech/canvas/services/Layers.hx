@@ -22,7 +22,6 @@ import lime.math.RGB;
 import openfl.display.BlendMode;
 import openfl.events.Event;
 import openfl.geom.Point;
-import openfl.geom.Rectangle;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
 import openfl.text.TextFieldType;
@@ -212,7 +211,7 @@ class Layer {
 	private var _props:Map<String, Dynamic>;
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
-	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Rectangle, cornerRadius:Float) {
+	public function new(type:Int, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>, cornerRadius:Float) {
 		if (Layer.TYPES == null)
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 
@@ -242,14 +241,14 @@ class Layer {
 		this.item.layer = this;
 	}
 
-	private function instantiateItem(bounds:Rectangle):ICanItem {
+	private function instantiateItem(bounds:Array<Float>):ICanItem {
 		var ret:ICanItem = null;
 		if (this.getString(TYPE) == TYPE_RECT || this.getString(TYPE) == TYPE_ELLIPSE) {
 			this.setProperty(FILL_ENABLE, true);
 			this.setProperty(CORNER_RADIUS, 0);
 			var sh = new CanShape(this);
-			sh.x = bounds.x;
-			sh.y = bounds.y;
+			sh.x = bounds[0];
+			sh.y = bounds[1];
 			ret = sh;
 		} else if (this.getString(TYPE) == TYPE_TEXT) {
 			this.setProperty(FILL_ENABLE, false);
@@ -261,10 +260,10 @@ class Layer {
 			this.setProperty(TEXT_LINESPACE, 0);
 			this.setProperty(TEXT_SIZE, 10 * CanTheme.DPI);
 			var txt = new CanText(this);
-			txt.x = bounds.x;
-			txt.y = bounds.y;
-			txt.width = bounds.width;
-			txt.height = bounds.height;
+			txt.x = bounds[0];
+			txt.y = bounds[1];
+			txt.width = bounds[2];
+			txt.height = bounds[3];
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
 			ret = txt;
@@ -290,10 +289,6 @@ class Layer {
 
 	public function getUInt(key:String):UInt {
 		return cast(this.getProperty(key), UInt);
-	}
-
-	public function getRect(key:String):Rectangle {
-		return cast(this.getProperty(key), Rectangle);
 	}
 
 	public function getProperty(key:String):Dynamic {

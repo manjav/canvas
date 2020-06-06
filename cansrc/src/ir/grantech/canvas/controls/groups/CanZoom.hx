@@ -194,7 +194,7 @@ class CanZoom extends LayoutGroup {
 				input.selectedItems.getFloat(Commands.BORDER_SIZE),
 				input.selectedItems.getUInt(Commands.BORDER_COLOR),
 				input.selectedItems.getFloat(Commands.BORDER_ALPHA),
-				selectionBounds,
+				[selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height],
 				0
 			]);
 	}

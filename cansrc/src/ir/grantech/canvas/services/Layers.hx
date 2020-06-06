@@ -115,8 +115,14 @@ class Layers extends ArrayCollection<Layer> {
 	public function read(input:Input):Void {
 		this.close();
 		var entries = new Reader(input).read();
-		for (e in entries)
-			trace(e.fileName, e.compressed, unzip(e).toString());
+		for (e in entries) {
+			if (e.fileName == "manifest.json")
+				this.loadLayers(unzip(e).toString());
+			// trace(e.fileName, e.compressed, unzip(e).toString());
+		}
+	}
+
+	private function loadLayers(str:String):Void {
 	}
 
 	public function save(saveAs:Bool):Void {

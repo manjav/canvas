@@ -172,17 +172,26 @@ class Layers extends ArrayCollection<Layer> {
 		writer.write(entries);
 
 		// Save
+		var byteArray:ByteArray;
+		var data = bytesOutput.getBytes().getData();
 		#if desktop
+		// convert UInt8 to byte
+		byteArray = new ByteArray();
+		for (i in data)
+			byteArray.writeByte(i);
+
 		if (!saveAs) {
-			sys.io.File.saveBytes(this.name, bytesOutput.getBytes());
+			sys.io.File.saveBytes(this.name, byteArray);
 			return;
 		}
+		#else
+		byteArray = data;
 		#end
 
 		// Save as the zipped file to disc
 		var fr = new FileReference();
-		fr.addEventListener(Event.COMPLETE, this.file_saveCompleteHandler);
-		fr.save(bytesOutput.getBytes().getData(), this.name == null ? "New Project.cvp" : this.name);
+		fr.addEventListener(Event.SELECT, this.file_saveCompleteHandler);
+		fr.save(byteArray, this.name == null ? "New Project.cvp" : this.name);
 	}
 
 	private function file_saveCompleteHandler(event:Event) {

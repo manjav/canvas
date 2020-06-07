@@ -135,7 +135,7 @@ class Inputs extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
-		trace(this.lastKeyUp, StringTools.hex(this.lastKeyUp));
+		// trace(this.lastKeyUp, StringTools.hex(this.lastKeyUp));
 		if (event.ctrlKey) {
 			if (this.lastKeyUp == KeyCode.NUMBER_0) {
 				this.zoom = 1;

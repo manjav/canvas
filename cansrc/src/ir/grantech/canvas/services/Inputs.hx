@@ -135,7 +135,7 @@ class Inputs extends BaseService {
 		this.stage.removeEventListener(KeyboardEvent.KEY_UP, this.stage_keyUpHandler);
 		this.lastKeyUp = event.keyCode;
 		this.lastKeyDown = 0;
-		// trace(this.lastKeyUp, StringTools.hex(this.lastKeyUp));
+		trace(this.lastKeyUp, StringTools.hex(this.lastKeyUp));
 		if (event.ctrlKey) {
 			if (this.lastKeyUp == KeyCode.NUMBER_0) {
 				this.zoom = 1;
@@ -148,6 +148,10 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 189) { // ctrl + -
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
+			} else if (this.lastKeyUp == 79) { // ctrl + s
+				commands.layers.openAs();
+			} else if (this.lastKeyUp == 83) { // ctrl + s
+				commands.layers.save(event.shiftKey);
 			} else if (this.lastKeyUp == 89) { // ctrl + y
 				this.commands.commit(Commands.REDO);
 			} else if (this.lastKeyUp == 90 && !event.shiftKey) { // ctrl + z
@@ -159,6 +163,7 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 221 && this.selectedItems.isFill) { // ctrl + ]
 				this.commands.commit(Commands.ORDER, [this.selectedItems.get(0).layer.getInt(Commands.ORDER), -1]);
 			}
+			
 		}
 
 		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) {// delete

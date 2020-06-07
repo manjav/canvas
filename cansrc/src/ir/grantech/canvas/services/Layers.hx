@@ -26,6 +26,7 @@ import openfl.net.FileFilter;
 import openfl.net.FileReference;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
+import openfl.utils.ByteArray;
 
 class Layers extends ArrayCollection<Layer> {
 	var name:String;
@@ -125,9 +126,12 @@ class Layers extends ArrayCollection<Layer> {
 	private function loadLayers(str:String):Void {
 		var layers:Array<Dynamic> = Json.parse(str).layers;
 		for (l in layers) {
-			var layer = new Layer(l.h.type, l.h.fillColor, l.h.fillAlpha, l.h.borderSize, l.h.borderColor, l.h.borderAlpha, l.h.bounds, l.h.cornerRadius);
+			// delete AS3 h field of dictionary
+			if (l.h != null)
+				l = l.h;
+			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius);
 			this.add(layer);
-			layer.item.transform.matrix = new Matrix(l.h.mat[0], l.h.mat[1], l.h.mat[2], l.h.mat[3], l.h.mat[4], l.h.mat[5]);
+			layer.item.transform.matrix = new Matrix(l.mat[0], l.mat[1], l.mat[2], l.mat[3], l.mat[4], l.mat[5]);
 			CanEvent.dispatch(Commands.instance, Commands.ADDED, [layer.item]);
 		}
 	}
@@ -233,7 +237,8 @@ class Layer {
 	private var _props:Map<String, Dynamic>;
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
-	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>, cornerRadius:Float) {
+	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>,
+			cornerRadius:Float) {
 		if (Layer.TYPES == null)
 			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
 

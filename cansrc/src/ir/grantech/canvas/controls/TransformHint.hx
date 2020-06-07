@@ -187,7 +187,7 @@ class TransformHint extends Sprite {
 		this.updateBounds();
 	}
 
-	@:access(ir.grantech.canvas.services.Commands)
+
 	public function updateBounds():Void {
 		this.mode = MODE_NONE;
 		Cursor.instance.mode = Cursor.MODE_NONE;

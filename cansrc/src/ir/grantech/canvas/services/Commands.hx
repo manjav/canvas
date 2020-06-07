@@ -65,9 +65,9 @@ class Commands extends BaseService {
 		return BaseService.get(Commands);
 	}
 
+	public var layers:Layers;
 	private var actionPosition:Int = -1;
 	private var actions:Array<Action>;
-	private var layers:Layers;
 
 	public function new() {
 		super();

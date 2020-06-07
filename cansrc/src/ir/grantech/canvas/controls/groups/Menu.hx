@@ -88,7 +88,6 @@ class Menu extends CanSection {
 	}
 
 	@:access(Xml)
-	@:access(ir.grantech.canvas.services.Commands)
 	private function lists_selectHandler(event:CanEvent):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		#if desktop

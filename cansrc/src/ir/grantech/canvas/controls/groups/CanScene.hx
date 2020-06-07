@@ -48,7 +48,6 @@ class CanScene extends LayoutGroup {
 		this.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 	}
 
-	@:access(ir.grantech.canvas.services.Commands)
 	private function enterFrameHandler(event:Event):Void {
 		for (i in 0...Commands.instance.layers.length)
 			Commands.instance.layers.get(i).valiadateAll();

@@ -27,7 +27,6 @@ class Libs extends BaseService {
 		this.stage.window.onDropFile.add(this.stage_onDropFileHandler);
 	}
 
-	@:access(ir.grantech.canvas.services.Commands)
 	private function stage_onDropFileHandler(path:String):Void {
 		commands.layers.open(path);
 		#end

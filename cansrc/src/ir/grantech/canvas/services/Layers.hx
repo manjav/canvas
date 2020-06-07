@@ -86,6 +86,7 @@ class Layers extends ArrayCollection<Layer> {
 	}
 
 	public function openAs():Void {
+		this.close();
 		var fr = new FileReference();
 		fr.addEventListener(Event.SELECT, function(event:Event):Void {
 			var fr = cast(event.currentTarget, FileReference);
@@ -107,6 +108,7 @@ class Layers extends ArrayCollection<Layer> {
 
 	#if desktop
 	public function open(path:String):Void {
+		this.close();
 		this.name = path;
 		this.read(sys.io.File.read(path));
 	}
@@ -114,7 +116,6 @@ class Layers extends ArrayCollection<Layer> {
 
 	// use a format.zip.Reader to grab the zip entries
 	public function read(input:Input):Void {
-		this.close();
 		var entries = new Reader(input).read();
 		for (e in entries) {
 			if (e.fileName == "manifest.json")

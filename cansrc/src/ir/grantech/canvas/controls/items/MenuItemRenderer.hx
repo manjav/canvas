@@ -10,6 +10,7 @@ import feathers.skins.DividerSkin;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Configs.Config;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
 import openfl.events.Event;
@@ -20,22 +21,13 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
 	public var data(get, set):Dynamic;
 
-	@:access(Xml)
 	private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
 			return this.data;
 		if (value == null)
 			return value;
 		this.data = value;
-		this.menuData = cast(this.data, Xml);
-		if (this.menuData.nodeName == "divider") {
-			isDivider = true;
-		} else {
-			this.name = this.menuData.attributeMap["name"];
-			this.children = this.menuData.children;
-			if (this.children.length == 0)
-				this.shortKey = this.menuData.attributeMap["shortKey"];
-		}
+		this.menuData = cast(this.data, Config);
 		this.setInvalid(InvalidationFlag.DATA);
 		return this.data;
 	}
@@ -45,20 +37,17 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	override private function set_selected(value:Bool):Bool {
-		if (isDivider || !value || this.selected == value)
+		if (this.menuData.isDivider || !value || this.selected == value)
 			return this.selected;
-		if (this.children.length == 0) {
+		if (this.menuData.children.length == 0) {
 			CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this, true);
 			return false;
 		}
 		return super.set_selected(value);
 	}
 
-	public var menuData:Xml;
-	public var isDivider:Bool;
-	public var children:Array<Xml>;
-	
-	private var shortKey:String;
+	public var menuData:Config;
+
 	private var shortkeyField:TextField;
 
 	public function new() {
@@ -84,7 +73,7 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (this.isInvalid(InvalidationFlag.DATA)) {
 			var theme = Std.downcast(Theme.getTheme(), CanTheme);
 			var skin:BaseGraphicsPathSkin = null;
-			if (isDivider) {
+			if (this.menuData.isDivider) {
 				skin = new DividerSkin(CanTheme.DPI * 4);
 				skin.border = LineStyle.SolidColor(CanTheme.DPI * 0.5, theme.dividerColor);
 			} else {
@@ -97,8 +86,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 			skin.fill = theme.getContainerFill();
 			this.backgroundSkin = skin;
 
-			if (!isDivider) {
-				if (this.children.length > 0) {
+			if (!this.menuData.isDivider) {
+				if (this.menuData.children.length > 0) {
 					this.icon = new ScaledBitmap("chevron-r");
 				} else {
 					if (this.shortkeyField == null) {
@@ -109,8 +98,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 						this.shortkeyField.selectable = false;
 						this.addChild(this.shortkeyField);
 					}
-					if (this.shortKey != null)
-						this.shortkeyField.text = shortKey;
+					if (this.menuData.shortKey != null)
+						this.shortkeyField.text = this.menuData.shortKey;
 				}
 			}
 		}
@@ -118,12 +107,12 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	private function stateChangeHandler(event:Event):Void {
-		if (!isDivider && Type.enumEq(currentState, ToggleButtonState.HOVER(false)))
-			CanEvent.dispatch(this, CanEvent.ITEM_HOVER, this.children.length > 0, true);
+		if (!this.menuData.isDivider && Type.enumEq(currentState, ToggleButtonState.HOVER(false)))
+			CanEvent.dispatch(this, CanEvent.ITEM_HOVER, this.menuData.children.length > 0, true);
 	}
 
 	override private function layoutContent():Void {
-		if (isDivider)
+		if (this.menuData.isDivider)
 			return;
 
 		this.refreshTextFieldDimensions(false);

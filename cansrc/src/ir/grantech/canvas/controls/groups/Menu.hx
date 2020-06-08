@@ -14,6 +14,7 @@ import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.groups.sections.CanSection;
 import ir.grantech.canvas.controls.items.MenuItemRenderer;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Configs.Config;
 import ir.grantech.canvas.themes.CanTheme;
 import motion.Actuate;
 import openfl.events.Event;
@@ -82,22 +83,20 @@ class Menu extends CanSection {
 		this.secondaryPanel.addChild(this.secondaryList);
 	}
 
-	@:access(Xml)
-	private function menuItemToText(item:Xml):String {
-		return item.attributeMap["name"];
+	private function menuItemToText(item:Config):String {
+		return item.name;
 	}
 
-	@:access(Xml)
 	private function lists_selectHandler(event:CanEvent):Void {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		#if desktop
-		if (itemRenderer.menuData.attributeMap.exists("path")) {
-			commands.layers.open(itemRenderer.menuData.attributeMap["path"]);
+		if (itemRenderer.menuData.path != null) {
+			commands.layers.open(itemRenderer.menuData.path);
 			this.close();
 			return;
 		}
 		#end
-		switch (itemRenderer.name) {
+		switch (itemRenderer.menuData.name) {
 			case "New":
 				commands.layers.close();
 			case "Open...":
@@ -115,8 +114,8 @@ class Menu extends CanSection {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		this.secondaryPanel.visible = event.data;
 		if (event.data) {
-			this.secondaryTitle.text = itemRenderer.name.toUpperCase();
-			this.secondaryList.dataProvider = new ArrayCollection(itemRenderer.children);
+			this.secondaryTitle.text = itemRenderer.menuData.name.toUpperCase();
+			this.secondaryList.dataProvider = new ArrayCollection(itemRenderer.menuData.children);
 		}
 	}
 

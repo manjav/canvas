@@ -44,19 +44,16 @@ class Configs extends BaseService {
 
 	public function new() {
 		super();
-		this.loadPrefs();
 		this.loadConfigs();
 	}
 
-	
-	private function loadPrefs():Void {
+	public function loadPrefs():Void {
 		var so = SharedObject.getLocal("prefs");
 		if (so.data.recents != null)
 			this.recents = so.data.recents;
 	}
 
-	
-	private function savePrefs():Void {
+	public function savePrefs():Void {
 		var so = SharedObject.getLocal("prefs");
 		so.data.recents = this.recents;
 		so.flush();

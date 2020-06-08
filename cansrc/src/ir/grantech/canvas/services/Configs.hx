@@ -59,6 +59,16 @@ class Configs extends BaseService {
 		so.flush();
 	}
 
+	public function addRecent(path:String):Void {
+		var r = this.recents;
+		if (r == null)
+			r = new Array<String>();
+		if (r.indexOf(path) == -1)
+			r.push(path);
+		this.recents = r;
+		this.savePrefs();
+	}
+
 	private function loadConfigs():Void {
 		var url = "assets/texts/config.xml";
 		if (Assets.exists(url, AssetType.TEXT)) {
@@ -115,7 +125,7 @@ class Config {
 		this.children = new Array<Config>();
 		this.name = name;
 		this.path = path;
-		}
+	}
 
 	@:access(Xml)
 	public function init(xml:Xml):Config {

@@ -104,12 +104,15 @@ class Layers extends ArrayCollection<Layer> {
 		var fr = cast(event.currentTarget, FileReference);
 		var bytesInput = new BytesInput(Bytes.ofData(fr.data));
 		this.read(bytesInput);
+		this.name = fr.name;
+		Configs.instance.addRecent(this.name);
 	}
 
 	#if desktop
 	public function open(path:String):Void {
 		this.close();
 		this.name = path;
+		Configs.instance.addRecent(this.name);
 		this.read(sys.io.File.read(path));
 	}
 	#end
@@ -206,6 +209,7 @@ class Layers extends ArrayCollection<Layer> {
 		#else
 		this.name = fr.name;
 		#end
+		Configs.instance.addRecent(this.name);
 	}
 
 	public static function unzip(f:Entry) {

@@ -1,11 +1,12 @@
 package ir.grantech.canvas.services;
 
-import openfl.net.SharedObject;
-import openfl.net.URLRequest;
-import openfl.events.Event;
-import openfl.net.URLLoader;
-import openfl.utils.AssetType;
+import Xml.XmlType;
 import openfl.Assets;
+import openfl.events.Event;
+import openfl.net.SharedObject;
+import openfl.net.URLLoader;
+import openfl.net.URLRequest;
+import openfl.utils.AssetType;
 
 class Configs extends BaseService {
 	/**
@@ -22,7 +23,24 @@ class Configs extends BaseService {
 	}
 
 	public var menuData:Array<Config>;
-	public var recentFiles:Array<String>;
+
+
+	public var recents(default, set):Array<String>;
+
+	private function set_recents(value:Array<String>):Array<String> {
+		if (value == this.recents)
+			return value;
+		if (this.menuData == null)
+			return value;
+		var recent = this.findItem("Open Recents");
+		recent.children = new Array<Config>();
+		for (r in value) {
+			var s = r.split("\\");
+			recent.children.push(new Config(s[s.length - 1], r));
+		}
+		this.recents = value;
+		return value;
+	}
 
 	public function new() {
 		super();
@@ -33,15 +51,14 @@ class Configs extends BaseService {
 	
 	private function loadPrefs():Void {
 		var so = SharedObject.getLocal("prefs");
-		if(so.data.recentFiles == null)
-			return;
-		this.recentFiles = so.data.recentFiles;
+		if (so.data.recents != null)
+			this.recents = so.data.recents;
 	}
 
 	
 	private function savePrefs():Void {
 		var so = SharedObject.getLocal("prefs");
-		so.data.recentFiles = this.recentFiles;
+		so.data.recents = this.recents;
 		so.flush();
 	}
 
@@ -59,6 +76,17 @@ class Configs extends BaseService {
 			loader.addEventListener(Event.COMPLETE, loader_completeHandler);
 			loader.load(new URLRequest(url));
 		}
+	}
+
+	private function findItem(name:String, parent:Array<Config> = null):Config {
+		if (parent == null)
+			parent = this.menuData;
+		for (m in parent)
+			if (m.name == name)
+				return m;
+			else if (m.children.length > 0)
+				return this.findItem(name, m.children);
+		return null;
 	}
 
 	private function loader_completeHandler(event:Event):Void {

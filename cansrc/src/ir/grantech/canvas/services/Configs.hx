@@ -21,7 +21,7 @@ class Configs extends BaseService {
 		return BaseService.get(Configs);
 	}
 
-	public var menuData:Array<Xml>;
+	public var menuData:Array<Config>;
 	public var recentFiles:Array<String>;
 
 	public function new() {
@@ -68,10 +68,40 @@ class Configs extends BaseService {
 	@:access(Xml)
 	private function parse(text:String):Void {
 		text = text.split("\r").join("").split("\n").join("").split("\t").join("");
+		this.menuData = new Array<Config>();
 		var configs = Xml.parse(text).firstElement().elements();
-		for (element in configs) {
+		for (element in configs)
 			if (element.nodeName == "menu")
-				this.menuData = element.children;
+				for (m in element.children)
+					if (Type.enumEq(m.nodeType, XmlType.Element))
+						this.menuData.push(new Config().init(m));
+		this.loadPrefs();
+	}
+}
+
+class Config {
+	public var isDivider:Bool;
+	public var name:String;
+	public var path:String;
+	public var shortKey:String;
+	public var children:Array<Config>;
+
+	public function new(?name:String, ?path:String) {
+		this.children = new Array<Config>();
+		this.name = name;
+		this.path = path;
 		}
+
+	@:access(Xml)
+	public function init(xml:Xml):Config {
+		if (this.isDivider = xml.nodeName == "divider")
+			return this;
+		this.name = xml.attributeMap["name"];
+		this.path = xml.attributeMap["path"];
+		this.shortKey = xml.attributeMap["shortKey"];
+		this.children = new Array<Config>();
+		for (c in xml.children)
+			this.children.push(new Config().init(c));
+		return this;
 	}
 }

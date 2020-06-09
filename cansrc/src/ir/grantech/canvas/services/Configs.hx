@@ -88,11 +88,13 @@ class Configs extends BaseService {
 	private function findItem(name:String, parent:Array<Config> = null):Config {
 		if (parent == null)
 			parent = this.menuData;
-		for (m in parent)
+		for (m in parent){
+
 			if (m.name == name)
 				return m;
 			else if (m.children.length > 0)
 				return this.findItem(name, m.children);
+		}
 		return null;
 	}
 

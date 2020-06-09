@@ -32,10 +32,24 @@ class Libs extends BaseService {
 	private function stage_onDropFileHandler(path:String):Void {
 		if (StringUtils.getExtension(path) == "cvp")
 		commands.layers.open(path);
+		else
+			this.load(path);
 	}
 	#end
 
 	public function open():Void {
 		#end
+
+	#if desktop
+	public function load(path:String):Void {
+		trace(path);
+		this.read(sys.io.File.getBytes(path));
+	}
+	#end
+
+	public function read(bytes:Bytes):Void {
+		BitmapData.loadFromBytes(bytes).onComplete((bmp:BitmapData) -> {
+			stage.addChild(new Bitmap(bmp));
+		});
 	}
 }

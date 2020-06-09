@@ -1,7 +1,13 @@
 package ir.grantech.canvas.services;
 
+import flash.events.Event;
+import haxe.io.Bytes;
+import ir.grantech.canvas.utils.StringUtils;
+import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Stage;
+import openfl.net.FileFilter;
+import openfl.net.FileReference;
 
 class Libs extends BaseService {
 	private var map:Map<Int, BitmapData>;
@@ -31,14 +37,33 @@ class Libs extends BaseService {
 	#if desktop
 	private function stage_onDropFileHandler(path:String):Void {
 		if (StringUtils.getExtension(path) == "cvp")
-		commands.layers.open(path);
+			commands.layers.open(path);
 		else
 			this.load(path);
 	}
 	#end
 
 	public function open():Void {
-		#end
+		var fr = new FileReference();
+		fr.addEventListener(Event.SELECT, function(event:Event):Void {
+			var fr = cast(event.currentTarget, FileReference);
+			fr.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+			#if desktop
+			this.load(fr.__path);
+			#else
+			fr.load();
+			#end
+		});
+		fr.browse([
+			new FileFilter("Support files", "*.png;*.jpg;*.jpeg;*.gif;*.mp3"),
+			new FileFilter("Sounds files", "*.mp3"),
+			new FileFilter("Images files", "*.png;*.jpg;*.jpeg;*.gif")
+		]);
+	}
+
+	private function file_openCompleteHandler(event:Event):Void {
+		this.read(Bytes.ofData(cast(event.currentTarget, FileReference).data));
+	}
 
 	#if desktop
 	public function load(path:String):Void {

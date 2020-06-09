@@ -100,7 +100,7 @@ class Layers extends ArrayCollection<Layer> {
 		fr.browse([new FileFilter("Canvas project files", "*.cvp")]);
 	}
 
-	private function file_openCompleteHandler(event:Event) {
+	private function file_openCompleteHandler(event:Event):Void {
 		var fr = cast(event.currentTarget, FileReference);
 		var bytesInput = new BytesInput(Bytes.ofData(fr.data));
 		this.read(bytesInput);

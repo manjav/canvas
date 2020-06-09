@@ -105,6 +105,8 @@ class Menu extends CanSection {
 				commands.layers.save(false);
 			case "Save as...":
 				commands.layers.save(true);
+			case "Import":
+				libs.open();
 		}
 
 		this.close();

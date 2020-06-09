@@ -25,10 +25,17 @@ class Libs extends BaseService {
 		this.stage = stage;
 		#if desktop
 		this.stage.window.onDropFile.add(this.stage_onDropFileHandler);
+		#end
 	}
 
+	#if desktop
 	private function stage_onDropFileHandler(path:String):Void {
+		if (StringUtils.getExtension(path) == "cvp")
 		commands.layers.open(path);
+	}
+	#end
+
+	public function open():Void {
 		#end
 	}
 }

@@ -73,6 +73,7 @@ class Libs extends BaseService {
 	}
 	#end
 
+	public function read(bytes:Bytes, name:String):Void {
 			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
 	}
 	private function showBMP(bmp:BitmapData):Void {

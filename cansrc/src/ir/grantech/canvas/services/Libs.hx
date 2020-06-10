@@ -6,6 +6,7 @@ import ir.grantech.canvas.utils.StringUtils;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Stage;
+import openfl.events.Event;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
 
@@ -62,18 +63,19 @@ class Libs extends BaseService {
 	}
 
 	private function file_openCompleteHandler(event:Event):Void {
-		this.read(Bytes.ofData(cast(event.currentTarget, FileReference).data));
+		var fr = cast(event.currentTarget, FileReference);
+		this.read(Bytes.ofData(fr.data), fr.name);
 	}
 
 	#if desktop
 	public function load(path:String):Void {
-		trace(path);
-		this.read(sys.io.File.getBytes(path));
+		this.read(sys.io.File.getBytes(path), path);
 	}
 	#end
 
-	public function read(bytes:Bytes):Void {
-		BitmapData.loadFromBytes(bytes).onComplete((bmp:BitmapData) -> {
+			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
+	}
+	private function showBMP(bmp:BitmapData):Void {
 			stage.addChild(new Bitmap(bmp));
 		});
 	}

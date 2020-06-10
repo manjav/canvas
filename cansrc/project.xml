@@ -18,6 +18,7 @@
   <haxelib name="openfl" />
   <haxelib name="actuate" />
   <haxelib name="feathersui" />
+  <!-- <haxelib name="yagp" /> -->
   <!-- <haxelib name="openfl-webp" /> -->
 
 	<haxeflag name="-dce" value="full" if="cpp"/>

@@ -81,11 +81,15 @@ class Libs extends BaseService {
 		item.type = StringUtils.getExtension(name);
 		item.data = bytes;
 		map.set(name, item);
+		/* if (item.type == "webp")
+					this.addItem(webp.Webp.decodeAsBitmapData(bytes));
+			if (item.type == "gif")
+				var wrapper = new GifPlayerWrapper(new GifPlayer(GifDecoder.parseBytes(bytes))); */
 		if (item.type == "png" || item.type == "jpg" || item.type == "jpeg" || item.type == "gif") {
 			BitmapData.loadFromBytes(bytes).onComplete(item.update);
 		}
-		}
 	}
+}
 
 class LibItem extends EventDispatcher {
 	public var data:Bytes;

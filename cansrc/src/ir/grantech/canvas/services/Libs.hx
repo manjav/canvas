@@ -1,16 +1,17 @@
 package ir.grantech.canvas.services;
 
 import haxe.io.Bytes;
+import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.utils.StringUtils;
-import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Stage;
 import openfl.events.Event;
+import openfl.events.EventDispatcher;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
 
 class Libs extends BaseService {
-	private var map:Map<Int, BitmapData>;
+	private var map:Map<String, LibItem>;
 	private var stage:Stage;
 
 	/**
@@ -28,6 +29,7 @@ class Libs extends BaseService {
 
 	public function new(stage:Stage) {
 		super();
+		this.map = new Map<String, LibItem>();
 		this.stage = stage;
 		#if desktop
 		this.stage.window.onDropFile.add(this.stage_onDropFileHandler);
@@ -63,25 +65,41 @@ class Libs extends BaseService {
 
 	private function file_openCompleteHandler(event:Event):Void {
 		var fr = cast(event.currentTarget, FileReference);
-		this.read(Bytes.ofData(fr.data), fr.name);
+		this.read(fr.name, Bytes.ofData(fr.data));
 	}
 
 	#if desktop
 	public function load(path:String):Void {
-		this.read(sys.io.File.getBytes(path), path);
+		this.read(path, sys.io.File.getBytes(path));
 	}
 	#end
 
-	public function read(bytes:Bytes, name:String):Void {
-		var t = StringUtils.getExtension(name);
-		if (t == "webp") {
-			// showBMP(webp.Webp.decodeAsBitmapData(bytes));
-		} else if (t == "png" || t == "jpg" || t == "jpeg") {
-			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
+	public function read(name:String, bytes:Bytes):Void {
+		var s = name.split("\\");
+		name = s[s.length - 1];
+		var item = map.exists(name) ? map.get(name) : new LibItem(name);
+		item.type = StringUtils.getExtension(name);
+		item.data = bytes;
+		map.set(name, item);
+		if (item.type == "png" || item.type == "jpg" || item.type == "jpeg" || item.type == "gif") {
+			BitmapData.loadFromBytes(bytes).onComplete(item.update);
+		}
 		}
 	}
 
-	private function showBMP(bmp:BitmapData):Void {
-		stage.addChild(new Bitmap(bmp));
+class LibItem extends EventDispatcher {
+	public var data:Bytes;
+	public var name:String;
+	public var type:String;
+	public var source:Dynamic;
+
+	public function new(name:String) {
+		super();
+		this.name = name;
+	}
+
+	public function update(source:Dynamic):Void {
+		this.source = source;
+		CanEvent.dispatch(this, Event.CHANGE);
 	}
 }

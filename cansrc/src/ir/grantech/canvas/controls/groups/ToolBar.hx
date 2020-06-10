@@ -82,7 +82,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function listView_itemSelectHandler(event:CanEvent):Void {
-		this.selectedSection = event.data.index;
+		this.selectedSection = this.bottomList.selectedIndex;
 	}
 
 	private function listView_changeHandler(event:Event):Void {

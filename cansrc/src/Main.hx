@@ -1,6 +1,5 @@
 package;
 
-import ir.grantech.canvas.services.Configs;
 import feathers.controls.Application;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -12,11 +11,12 @@ import ir.grantech.canvas.controls.groups.Header;
 import ir.grantech.canvas.controls.groups.Menu;
 import ir.grantech.canvas.controls.groups.RightBar;
 import ir.grantech.canvas.controls.groups.ToolBar;
-import ir.grantech.canvas.controls.groups.sections.AssetsSection;
 import ir.grantech.canvas.controls.groups.sections.CanSection;
 import ir.grantech.canvas.controls.groups.sections.LayersSection;
+import ir.grantech.canvas.controls.groups.sections.LibsSection;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.BaseService;
+import ir.grantech.canvas.services.Configs;
 import ir.grantech.canvas.services.Libs;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.StageQuality;
@@ -105,7 +105,7 @@ class Main extends Application {
 	private function createSection(index:Int):CanSection {
 		if (!this.extensions.exists(index)) {
 			var p = CanTheme.DPI * 2;
-			var pnl:CanSection = index == 0 ? new LayersSection() : new AssetsSection();
+			var pnl:CanSection = index == 0 ? new LayersSection() : new LibsSection();
 			pnl.layoutData = new AnchorLayoutData(this.header.height + p, null, CanTheme.DPI, this.left.width + p);
 			pnl.width = CanTheme.DPI * 120;
 			this.extensions.set(index, pnl);

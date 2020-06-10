@@ -1,7 +1,5 @@
 package ir.grantech.canvas.controls.groups.sections;
 
-import feathers.controls.ListView;
-import feathers.layout.AnchorLayoutData;
 import feathers.utils.DisplayObjectRecycler;
 import ir.grantech.canvas.controls.items.LayerItemRenderer;
 import ir.grantech.canvas.drawables.CanItems;
@@ -14,29 +12,28 @@ import openfl.events.Event;
 
 @:access(ir.grantech.canvas.services.Commands)
 class LayersSection extends ListSection {
-	private var listView:ListView;
 
 	override private function initialize() {
 		this.title = "LAYERS";
+		this.data = this.commands.layers;
+		this.itemRendererRecycler = DisplayObjectRecycler.withClass(LayerItemRenderer);
+
 		super.initialize();
-		this.listView = this.createList(null, DisplayObjectRecycler.withClass(LayerItemRenderer), new AnchorLayoutData(this.padding * 6, 0, 0, 0));
+		
 		this.listView.itemToText = (item:Layer) -> {
 			return item.getString(Commands.NAME);
 		};
 		this.listView.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
-		this.listView.backgroundSkin = null;
 	}
 
 	override private function layoutGroup_addedToStageHandler(event:Event):Void {
 		super.layoutGroup_addedToStageHandler(event);
 		this.commands.addEventListener(Commands.SELECT, this.commads_selectHandler);
-		this.listView.dataProvider = this.commands.layers;
 	}
 
 	override private function layoutGroup_removedFromStageHandler(event:Event):Void {
-		super.layoutGroup_removedFromStageHandler(event);
 		this.commands.removeEventListener(Commands.SELECT, this.commads_selectHandler);
-		this.listView.dataProvider = null;
+		super.layoutGroup_removedFromStageHandler(event);
 	}
 
 	@:access(ir.grantech.canvas.services.Inputs)

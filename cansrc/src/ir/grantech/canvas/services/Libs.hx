@@ -74,7 +74,11 @@ class Libs extends BaseService {
 	#end
 
 	public function read(bytes:Bytes, name:String):Void {
+		if (t == "webp") {
+			// showBMP(webp.Webp.decodeAsBitmapData(bytes));
+		} else if (t == "png" || t == "jpg" || t == "jpeg") {
 			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
+	}
 	}
 	private function showBMP(bmp:BitmapData):Void {
 			stage.addChild(new Bitmap(bmp));

@@ -1,6 +1,5 @@
 package ir.grantech.canvas.services;
 
-import flash.events.Event;
 import haxe.io.Bytes;
 import ir.grantech.canvas.utils.StringUtils;
 import openfl.display.Bitmap;
@@ -74,14 +73,15 @@ class Libs extends BaseService {
 	#end
 
 	public function read(bytes:Bytes, name:String):Void {
+		var t = StringUtils.getExtension(name);
 		if (t == "webp") {
 			// showBMP(webp.Webp.decodeAsBitmapData(bytes));
 		} else if (t == "png" || t == "jpg" || t == "jpeg") {
 			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
+		}
 	}
-	}
+
 	private function showBMP(bmp:BitmapData):Void {
-			stage.addChild(new Bitmap(bmp));
-		});
+		stage.addChild(new Bitmap(bmp));
 	}
 }

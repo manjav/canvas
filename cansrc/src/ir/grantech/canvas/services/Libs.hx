@@ -1,6 +1,6 @@
 package ir.grantech.canvas.services;
 
-import flash.events.Event;
+import haxe.Timer;
 import haxe.io.Bytes;
 import ir.grantech.canvas.utils.StringUtils;
 import openfl.display.Bitmap;
@@ -11,7 +11,7 @@ import openfl.net.FileFilter;
 import openfl.net.FileReference;
 
 class Libs extends BaseService {
-	private var map:Map<Int, BitmapData>;
+	// private var map:Map<Int, BitmapData>;
 	private var stage:Stage;
 
 	/**
@@ -53,6 +53,7 @@ class Libs extends BaseService {
 			this.load(fr.__path);
 			#else
 			fr.load();
+			stmp = Timer.stamp() * 1000;
 			#end
 		});
 		fr.browse([
@@ -67,21 +68,26 @@ class Libs extends BaseService {
 		this.read(Bytes.ofData(fr.data), fr.name);
 	}
 
+	var stmp = 0.0;
+
 	#if desktop
 	public function load(path:String):Void {
+		stmp = Timer.stamp() * 1000;
 		this.read(sys.io.File.getBytes(path), path);
 	}
 	#end
 
 	public function read(bytes:Bytes, name:String):Void {
+		var t = StringUtils.getExtension(name).toLowerCase();
+		trace(t, Timer.stamp() * 1000 - stmp);
 		if (t == "webp") {
 			// showBMP(webp.Webp.decodeAsBitmapData(bytes));
 		} else if (t == "png" || t == "jpg" || t == "jpeg") {
 			BitmapData.loadFromBytes(bytes).onComplete(showBMP);
-	}
+		}
 	}
 	private function showBMP(bmp:BitmapData):Void {
-			stage.addChild(new Bitmap(bmp));
-		});
+		trace(Timer.stamp() * 1000 - stmp);
+		stage.addChild(new Bitmap(bmp));
 	}
 }

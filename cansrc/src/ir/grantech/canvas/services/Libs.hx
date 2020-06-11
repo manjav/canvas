@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import feathers.data.ArrayCollection;
 import haxe.io.Bytes;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.utils.StringUtils;
@@ -11,7 +12,7 @@ import openfl.net.FileFilter;
 import openfl.net.FileReference;
 
 class Libs extends BaseService {
-	private var map:Map<String, LibItem>;
+	public var items:ArrayCollection<LibItem>;
 	private var stage:Stage;
 
 	/**
@@ -29,8 +30,8 @@ class Libs extends BaseService {
 
 	public function new(stage:Stage) {
 		super();
-		this.map = new Map<String, LibItem>();
 		this.stage = stage;
+		this.items = new ArrayCollection<LibItem>();
 		#if desktop
 		this.stage.window.onDropFile.add(this.stage_onDropFileHandler);
 		#end
@@ -44,6 +45,16 @@ class Libs extends BaseService {
 			this.load(path);
 	}
 	#end
+
+	private function instantiate(name:String):LibItem {
+		for (i in 0...this.items.length)
+			if (this.items.get(i).name == name)
+				return this.items.get(i);
+
+		var item = new LibItem(name);
+		this.items.add(item);
+		return item;
+	}
 
 	public function open():Void {
 		var fr = new FileReference();
@@ -77,17 +88,15 @@ class Libs extends BaseService {
 	public function read(name:String, bytes:Bytes):Void {
 		var s = name.split("\\");
 		name = s[s.length - 1];
-		var item = map.exists(name) ? map.get(name) : new LibItem(name);
+		var item = this.instantiate(name);
 		item.type = StringUtils.getExtension(name);
 		item.data = bytes;
-		map.set(name, item);
 		/* if (item.type == "webp")
-					this.addItem(webp.Webp.decodeAsBitmapData(bytes));
-			if (item.type == "gif")
-				var wrapper = new GifPlayerWrapper(new GifPlayer(GifDecoder.parseBytes(bytes))); */
-		if (item.type == "png" || item.type == "jpg" || item.type == "jpeg" || item.type == "gif") {
+			this.addItem(webp.Webp.decodeAsBitmapData(bytes));
+		if (item.type == "gif")
+			var wrapper = new GifPlayerWrapper(new GifPlayer(GifDecoder.parseBytes(bytes))); */
+		if (item.type == "png" || item.type == "jpg" || item.type == "jpeg" || item.type == "gif")
 			BitmapData.loadFromBytes(bytes).onComplete(item.update);
-		}
 	}
 }
 

@@ -28,6 +28,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	private var item:LibItem;
+	private var typeField:TextField;
 
 	public function new() {
 		super();
@@ -45,6 +46,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 		skin.selectedFill = SolidColor(theme.dividerColor);
 		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
 		this.backgroundSkin = skin;
+		this.paddingLeft = 2 * CanTheme.DPI;
 
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
@@ -52,10 +54,16 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.icon = new ScaledBitmap("bitmap");
 
 		this.typeField = new TextField();
+		this.typeField.autoSize = TextFieldAutoSize.RIGHT;
 		this.addChild(this.typeField);
 
 		this.iconPosition = MANUAL;
 		this.gap = CanTheme.DEFAULT_PADDING;
+	}
+
+	override private function refreshText():Void {
+		super.refreshText();
+		this.typeField.text = this.item.type;
 	}
 
 	override private function layoutContent():Void {

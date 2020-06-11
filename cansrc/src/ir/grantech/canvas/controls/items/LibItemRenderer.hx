@@ -31,7 +31,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	public function new() {
 		super();
-		this.height = Math.round(CanTheme.CONTROL_SIZE);
+		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
 	}
 
 	override private function initializeItemRendererTheme():Void {}

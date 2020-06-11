@@ -1,7 +1,5 @@
 package ir.grantech.canvas.controls.items;
 
-import ir.grantech.canvas.themes.ScaledBitmap;
-import ir.grantech.canvas.services.Commands.*;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -10,10 +8,10 @@ import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
-import openfl.Assets;
-import openfl.display.Bitmap;
+import ir.grantech.canvas.themes.ScaledBitmap;
 
 class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
@@ -39,7 +37,7 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	public function new() {
 		super();
-		this.height = Math.round(CanTheme.CONTROL_SIZE * 1.4);
+		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
 	}
 
 	override private function initializeItemRendererTheme():Void {}

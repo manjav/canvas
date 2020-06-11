@@ -6,7 +6,7 @@
 
   <!-- needed on Android to avoid hiding the back/home buttons -->
   <!-- <window borderless="true"/> -->
-	<window fps="60" width="1200" height="960" if="flash"/>
+	<window width="1200" height="720" if="flash"/>
   <window allow-high-dpi="true"/>
   <window background="#e4e4e4" />
   <window fullscreen="false" />

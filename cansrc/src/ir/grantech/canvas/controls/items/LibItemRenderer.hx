@@ -73,5 +73,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.textField.x = this.paddingLeft + this.icon.width + this.gap;
 		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
 
+		this.typeField.x = this.actualWidth - this.typeField.width - this.paddingRight;
+		this.typeField.y = (this.actualHeight - this.textField.height) * 0.5;
 	}
 }

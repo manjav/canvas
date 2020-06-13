@@ -68,11 +68,11 @@ class Libs extends BaseService {
 			fr.load();
 			#end
 		});
-		fr.browse([
+		fr.browse(#if !desktop [
 			new FileFilter("Support files", "*.png;*.jpg;*.jpeg;*.gif;*.mp3"),
 			new FileFilter("Sounds files", "*.mp3"),
 			new FileFilter("Images files", "*.png;*.jpg;*.jpeg;*.gif")
-		]);
+		] #end);
 	}
 
 	private function file_openCompleteHandler(event:Event):Void {

@@ -1,5 +1,8 @@
 package ir.grantech.canvas.controls.items;
 
+import openfl.display.Bitmap;
+import ir.grantech.canvas.services.Libs.LibType;
+import openfl.text.TextFieldAutoSize;
 import feathers.controls.ToggleButtonState;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -8,6 +11,7 @@ import feathers.style.Theme;
 import ir.grantech.canvas.services.Libs.LibItem;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
+import openfl.text.TextField;
 
 class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar
@@ -51,7 +55,16 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
-		this.icon = new ScaledBitmap("bitmap");
+		this.icon = this.item.type == LibType.Image ? new Bitmap(this.item.source) : new ScaledBitmap("bitmap");
+		var pw = this.icon.width;
+		var ph = this.icon.height;
+		if (pw > ph) {
+			this.icon.width = this.actualHeight - this.paddingLeft * 2;
+			this.icon.height = ph * this.icon.width / pw;
+		} else {
+			this.icon.height = this.actualHeight - this.paddingLeft * 2;
+			this.icon.height = ph * this.icon.width / pw;
+		}
 
 		this.typeField = new TextField();
 		this.typeField.autoSize = TextFieldAutoSize.RIGHT;
@@ -70,7 +83,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.icon.x = this.paddingLeft;
 		this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 
-		this.textField.x = this.paddingLeft + this.icon.width + this.gap;
+		this.textField.x = this.actualHeight;
 		this.textField.y = (this.actualHeight - this.textField.height) * 0.5;
 
 		this.typeField.x = this.actualWidth - this.typeField.width - this.paddingRight;

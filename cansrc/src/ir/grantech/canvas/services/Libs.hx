@@ -101,6 +101,7 @@ class Libs extends BaseService {
 }
 
 enum LibType {
+	Unknown;
 	Image;
 	Sound;
 }
@@ -115,7 +116,11 @@ class LibItem extends EventDispatcher {
 		this.type = switch (value) {
 			case "mp3": LibType.Sound;
 			case "wav": LibType.Sound;
-			default: LibType.Image;
+			case "jpg": LibType.Image;
+			case "jpeg": LibType.Image;
+			case "png": LibType.Image;
+			case "gif": LibType.Image;
+			default: LibType.Unknown;
 		}
 		return value;
 	}
@@ -126,7 +131,7 @@ class LibItem extends EventDispatcher {
 		if (this.name == value)
 			return value;
 		this.name = value;
-		this.extension = StringUtils.getExtension(value);
+		this.extension = StringUtils.getExtension(value).toLowerCase();
 		return value;
 	}
 

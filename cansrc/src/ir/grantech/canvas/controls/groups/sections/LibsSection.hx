@@ -12,7 +12,7 @@ class LibsSection extends ListSection {
 		this.title = "ASSETS";
 		this.data = this.libs.items;
 		this.itemRendererRecycler = DisplayObjectRecycler.withClass(LibItemRenderer);
-
+		
 		super.initialize();
 
 		this.listView.itemToText = (item:LibItem) -> {

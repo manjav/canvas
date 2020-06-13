@@ -13,6 +13,7 @@ import openfl.net.FileReference;
 
 class Libs extends BaseService {
 	public var items:ArrayCollection<LibItem>;
+
 	private var stage:Stage;
 
 	/**
@@ -89,7 +90,6 @@ class Libs extends BaseService {
 		var s = name.split("\\");
 		name = s[s.length - 1];
 		var item = this.instantiate(name);
-		item.type = StringUtils.getExtension(name);
 		item.data = bytes;
 		/* if (item.type == "webp")
 			this.addItem(webp.Webp.decodeAsBitmapData(bytes));
@@ -101,8 +101,18 @@ class Libs extends BaseService {
 }
 
 class LibItem extends EventDispatcher {
+
+	public var name(default, set):String;
+
+	private function set_name(value:String):String {
+		if (this.name == value)
+			return value;
+		this.name = value;
+		this.extension = StringUtils.getExtension(value);
+		return value;
+	}
+
 	public var data:Bytes;
-	public var name:String;
 	public var type:String;
 	public var source:Dynamic;
 

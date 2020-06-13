@@ -92,15 +92,33 @@ class Libs extends BaseService {
 		var item = this.instantiate(name);
 		item.data = bytes;
 		/* if (item.type == "webp")
-			this.addItem(webp.Webp.decodeAsBitmapData(bytes));
-		if (item.type == "gif")
-			var wrapper = new GifPlayerWrapper(new GifPlayer(GifDecoder.parseBytes(bytes))); */
-		if (item.type == "png" || item.type == "jpg" || item.type == "jpeg" || item.type == "gif")
+				this.addItem(webp.Webp.decodeAsBitmapData(bytes));
+			if (item.type == "gif")
+				var wrapper = new GifPlayerWrapper(new GifPlayer(GifDecoder.parseBytes(bytes))); */
+		if (item.type == LibType.Image)
 			BitmapData.loadFromBytes(bytes).onComplete(item.update);
 	}
 }
 
+enum LibType {
+	Image;
+	Sound;
+}
+
 class LibItem extends EventDispatcher {
+	public var extension(default, set):String;
+
+	private function set_extension(value:String):String {
+		if (this.extension == value)
+			return value;
+		this.extension = value;
+		this.type = switch (value) {
+			case "mp3": LibType.Sound;
+			case "wav": LibType.Sound;
+			default: LibType.Image;
+		}
+		return value;
+	}
 
 	public var name(default, set):String;
 
@@ -113,7 +131,7 @@ class LibItem extends EventDispatcher {
 	}
 
 	public var data:Bytes;
-	public var type:String;
+	public var type:LibType;
 	public var source:Dynamic;
 
 	public function new(name:String) {

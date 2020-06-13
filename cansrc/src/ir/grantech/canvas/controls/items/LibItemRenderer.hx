@@ -63,7 +63,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	override private function refreshText():Void {
 		super.refreshText();
-		this.typeField.text = this.item.type;
+		this.typeField.text = Std.string(this.item.type);
 	}
 
 	override private function layoutContent():Void {

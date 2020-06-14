@@ -63,7 +63,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 			this.icon.height = ph * this.icon.width / pw;
 		} else {
 			this.icon.height = this.actualHeight - this.paddingLeft * 2;
-			this.icon.height = ph * this.icon.width / pw;
+			this.icon.width = pw * this.icon.height / ph;
 		}
 
 		this.typeField = new TextField();
@@ -80,7 +80,7 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	override private function layoutContent():Void {
-		this.icon.x = this.paddingLeft;
+		this.icon.x = this.paddingLeft + (this.actualHeight - this.icon.width) * 0.5;
 		this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
 
 		this.textField.x = this.actualHeight;

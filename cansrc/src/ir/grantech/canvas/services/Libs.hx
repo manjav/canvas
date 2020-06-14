@@ -10,6 +10,7 @@ import openfl.events.Event;
 import openfl.events.EventDispatcher;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
+import openfl.net.FileReferenceList;
 
 class Libs extends BaseService {
 	public var items:ArrayCollection<LibItem>;
@@ -57,15 +58,22 @@ class Libs extends BaseService {
 		return item;
 	}
 
+	@:access(openfl.net.FileReferenceList)
 	public function open():Void {
-		var fr = new FileReference();
+		var fr = new FileReferenceList();
 		fr.addEventListener(Event.SELECT, function(event:Event):Void {
-			var fr = cast(event.currentTarget, FileReference);
-			fr.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+			var fr = cast(event.currentTarget, FileReferenceList);
 			#if desktop
-			this.load(fr.__path);
+			for (f in fr.fileList)
+				if (new LibItem(f.name).type != LibType.Unknown)
+					this.load(f.__path);
 			#else
-			fr.load();
+			for (f in fr.fileList) {
+				if (new LibItem(f.name).type == LibType.Unknown)
+					continue;
+				f.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+				f.load();
+			}
 			#end
 		});
 		fr.browse(#if !desktop [

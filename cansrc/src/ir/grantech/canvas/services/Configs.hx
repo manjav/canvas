@@ -110,9 +110,9 @@ class Configs extends BaseService {
 		for (element in configs)
 			if (element.nodeName == "menu")
 				for (m in element.children)
-					if (Type.enumEq(m.nodeType, XmlType.Element))
+					if (m.nodeType == XmlType.Element)
 						this.menuData.push(new Config().init(m));
-		this.loadPrefs();
+		// this.loadPrefs();
 	}
 }
 

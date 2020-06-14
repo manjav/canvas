@@ -182,7 +182,7 @@ class Layers extends ArrayCollection<Layer> {
 		// Save
 		var byteArray:ByteArray;
 		var data = bytesOutput.getBytes().getData();
-		#if desktop
+		#if cpp
 		// convert UInt8 to byte
 		byteArray = new ByteArray();
 		for (i in data)

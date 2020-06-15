@@ -226,14 +226,14 @@ class CanTheme extends BaseSteelTheme {
 		if (itemRenderer.textFormat == null)
 			itemRenderer.textFormat = this.getTextFormat();
 
-		if (itemRenderer.disabledTextFormat == null)
-			itemRenderer.disabledTextFormat = this.getDisabledTextFormat();
+		// if (itemRenderer.disabledTextFormat == null)
+		// 	itemRenderer.disabledTextFormat = this.getDisabledTextFormat();
 
-		if (itemRenderer.selectedTextFormat == null)
-			itemRenderer.selectedTextFormat = this.getActiveTextFormat();
+		// if (itemRenderer.selectedTextFormat == null)
+		// 	itemRenderer.selectedTextFormat = this.getActiveTextFormat();
 
-		if (itemRenderer.getTextFormatForState(ToggleButtonState.DOWN(false)) == null)
-			itemRenderer.setTextFormatForState(ToggleButtonState.DOWN(false), this.getActiveTextFormat());
+		// if (itemRenderer.getTextFormatForState(ToggleButtonState.DOWN(false)) == null)
+		// 	itemRenderer.setTextFormatForState(ToggleButtonState.DOWN(false), this.getActiveTextFormat());
 
 		itemRenderer.paddingTop = DEFAULT_PADDING;
 		itemRenderer.paddingRight = DEFAULT_PADDING;

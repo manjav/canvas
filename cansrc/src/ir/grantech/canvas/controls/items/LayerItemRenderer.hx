@@ -29,8 +29,6 @@ class LayerItemRenderer extends CanItemRenderer {
 		super.initialize();
 
 		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
-		this.selectedTextFormat = this.textFormat;
-		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
 		this.icon = new ScaledBitmap("bitmap");
 

@@ -1,34 +1,20 @@
 package ir.grantech.canvas.controls.items;
 
-import feathers.controls.ToggleButtonState;
-import feathers.controls.dataRenderers.IDataRenderer;
-import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.core.InvalidationFlag;
 import feathers.events.TriggerEvent;
-import feathers.skins.RectangleSkin;
-import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
 
-class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
-	@:isVar
-	public var data(get, set):Dynamic;
-
-	private function set_data(value:Dynamic):Dynamic {
+class LayerItemRenderer extends CanItemRenderer {
+	override private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
-			return this.data;
-		if (value == null)
 			return value;
-		this.data = value;
-		this.layer = cast(this.data, Layer);
-		return this.data;
-	}
-
-	private function get_data():Dynamic {
-		return this.data;
+		super.set_data(value);
+		this.layer = cast(value, Layer);
+		return value;
 	}
 
 	private var layer:Layer;
@@ -37,21 +23,12 @@ class LayerItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	public function new() {
 		super();
-		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
 	}
 
-	override private function initializeItemRendererTheme():Void {}
-
-	@:access(ir.grantech.canvas.themes.CanTheme)
 	override function initialize():Void {
 		super.initialize();
-		var theme = Std.downcast(Theme.getTheme(), CanTheme);
-		var skin = new RectangleSkin();
-		skin.fill = SolidColor(theme.controlFillColor1);
-		skin.selectedFill = SolidColor(theme.dividerColor);
-		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
-		this.backgroundSkin = skin;
 
+		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
 		this.selectedTextFormat = this.textFormat;
 		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 

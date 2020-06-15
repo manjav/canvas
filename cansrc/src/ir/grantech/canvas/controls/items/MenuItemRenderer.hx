@@ -1,8 +1,6 @@
 package ir.grantech.canvas.controls.items;
 
 import feathers.controls.ToggleButtonState;
-import feathers.controls.dataRenderers.IDataRenderer;
-import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.core.InvalidationFlag;
 import feathers.events.FeathersEvent;
 import feathers.skins.BaseGraphicsPathSkin;
@@ -17,23 +15,13 @@ import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 
-class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
-	@:isVar
-	public var data(get, set):Dynamic;
-
-	private function set_data(value:Dynamic):Dynamic {
+class MenuItemRenderer extends CanItemRenderer {
+	override private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
-			return this.data;
-		if (value == null)
 			return value;
-		this.data = value;
-		this.menuData = cast(this.data, Config);
-		this.setInvalid(InvalidationFlag.DATA);
-		return this.data;
-	}
-
-	private function get_data():Dynamic {
-		return this.data;
+		super.set_data(value);
+		this.menuData = cast(value, Config);
+		return value;
 	}
 
 	override private function set_selected(value:Bool):Bool {
@@ -54,13 +42,8 @@ class MenuItemRenderer extends ItemRenderer implements IDataRenderer {
 		super();
 	}
 
-	override private function initializeItemRendererTheme():Void {}
-
 	override function initialize():Void {
 		super.initialize();
-
-		this.selectedTextFormat = this.textFormat;
-		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
 		this.iconPosition = MANUAL;
 		this.gap = CanTheme.DEFAULT_PADDING;

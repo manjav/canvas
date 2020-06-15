@@ -60,32 +60,30 @@ class Libs extends BaseService {
 
 	@:access(openfl.net.FileReferenceList)
 	public function open():Void {
-		var fr = new FileReference();
+		#if desktop
+		var fr = new FileReferenceList();
 		fr.addEventListener(Event.SELECT, function(event:Event):Void {
-			#if desktop
-			var fr = cast(event.currentTarget, FileReferenceList);
 			for (f in fr.fileList)
 				if (new LibItem(f.name).type != LibType.Unknown)
 					this.load(f.__path);
-			#else
-			var fr = cast(event.currentTarget, FileReference);
+		});
+		fr.browse();
+		#else
+		var fr = new FileReference();
+		fr.addEventListener(Event.SELECT, function(event:Event):Void {
 			if (new LibItem(fr.name).type != LibType.Unknown) {
-				fr.addEventListener(Event.COMPLETE, file_openCompleteHandler);
+				fr.addEventListener(Event.COMPLETE, function(event:Event):Void {
+					this.read(fr.name, Bytes.ofData(fr.data));
+				});
 				fr.load();
 			}
-			#end
 		});
-		fr.browse(#if !desktop [
+		fr.browse([
 			new FileFilter("Support files", "*.png;*.jpg;*.jpeg;*.gif;*.mp3"),
 			new FileFilter("Sounds files", "*.mp3"),
 			new FileFilter("Images files", "*.png;*.jpg;*.jpeg;*.gif")
-		] #end);
-	}
-
-	private function file_openCompleteHandler(event:Event):Void {
-		var fr = cast(event.currentTarget, FileReference);
-		fr.removeEventListener(Event.COMPLETE, file_openCompleteHandler);
-		this.read(fr.name, Bytes.ofData(fr.data));
+		]);
+		#end
 	}
 
 	#if desktop

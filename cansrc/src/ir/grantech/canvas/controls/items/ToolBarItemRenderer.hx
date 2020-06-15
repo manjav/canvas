@@ -1,17 +1,13 @@
 package ir.grantech.canvas.controls.items;
 
-import ir.grantech.canvas.themes.ScaledBitmap;
-import feathers.controls.dataRenderers.IDataRenderer;
-import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
-import openfl.Assets;
-import openfl.display.Bitmap;
+import ir.grantech.canvas.themes.ScaledBitmap;
 
-class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
+class ToolBarItemRenderer extends CanItemRenderer {
 	static public var SIZE:Float = 52;
 
 	public function new() {
@@ -31,17 +27,12 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.iconPosition = MANUAL;
 	}
 
-	override private function initializeItemRendererTheme():Void {}
-
-	@:isVar
-	public var data(get, set):Dynamic;
-
-	private function set_data(value:Dynamic):Dynamic {
+	override private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
-			return this.data;
+			return value;
 		if (value == null)
 			return value;
-		this.data = value;
+		super.set_data(value);
 
 		var icon = new ScaledBitmap(value);
 		icon.width = icon.height = SIZE * 0.5;
@@ -56,10 +47,6 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		this.selectedIcon = selectedIcon;
 
 		return value;
-	}
-
-	private function get_data():Dynamic {
-		return this.data;
 	}
 
 	override private function refreshText():Void {}

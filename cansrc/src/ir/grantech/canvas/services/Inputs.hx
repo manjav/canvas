@@ -194,8 +194,7 @@ class Inputs extends BaseService {
 			return;
 		}
 
-		var scenefocused = this.inScene(event);
-		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
+		var scenefocused = this.inScene(event.stageX, event.stageY);
 		if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
 			this.beganFrom = TARGET_ITEM;
 		else if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene))
@@ -260,7 +259,7 @@ class Inputs extends BaseService {
 
 		// change mouse cursor
 		if (Tools.instance.toolType != Tool.SELECT) {
-			if (this.inScene(event)) {
+			if (this.inScene(event.stageX, event.stageY)) {
 				Cursor.instance.mode = switch (Tools.instance.toolType) {
 					case Tool.RECTANGLE: Cursor.MODE_RECTANGLE;
 					case Tool.ELLIPSE: Cursor.MODE_ELLIPSE;
@@ -319,11 +318,11 @@ class Inputs extends BaseService {
 		CanEvent.dispatch(this, PAN);
 	}
 
-	private function inScene(event:MouseEvent):Bool {
-		return event.stageX > this.canZoom.x
-			&& event.stageY > this.canZoom.y
-			&& event.stageX < this.canZoom.x + this.canZoom.width
-			&& event.stageY < this.canZoom.y + this.canZoom.height;
+	public function inScene(x:Float, y:Float):Bool {
+		return x > this.canZoom.x
+			&& y > this.canZoom.y
+			&& x < this.canZoom.x + this.canZoom.width
+			&& y < this.canZoom.y + this.canZoom.height;
 	}
 
 	public function hitTest(x:Float, y:Float):DisplayObject {

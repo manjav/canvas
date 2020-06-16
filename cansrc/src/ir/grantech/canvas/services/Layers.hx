@@ -304,6 +304,16 @@ class Layer {
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
 			ret = txt;
+		} else if (this.getString(TYPE) == TYPE_BITMAP) {
+			this.setProperty(FILL_ENABLE, true);
+			this.setProperty(BORDER_ENABLE, false);
+			this.setProperty(BITMAP_DATA, data);
+			var bmp = new CanSlicedBitmap(this);
+			bmp.x = bounds[0];
+			bmp.y = bounds[1];
+			// bmp.width = bounds[2];
+			// bmp.height = bounds[3];
+			ret = bmp;
 		}
 		return ret;
 	}
@@ -397,7 +407,7 @@ class Layer {
 			if (flag == BLEND_MODE)
 				this.item.blendMode = cast(this.getProperty(flag), BlendMode);
 			if (flag == FILL_ENABLE || flag == FILL_COLOR || flag == FILL_ALPHA || flag == BORDER_ENABLE || flag == BORDER_COLOR || flag == BORDER_ALPHA
-				|| flag == BORDER_SIZE || flag == CORNER_RADIUS)
+				|| flag == BORDER_SIZE || flag == CORNER_RADIUS || flag == BITMAP_DATA)
 				needsDraw = true;
 			if (flag == TEXT_ALIGN || flag == TEXT_COLOR || flag == TEXT_FONT || flag == TEXT_LETTERPACE || flag == TEXT_LINESPACE || flag == TEXT_SIZE)
 				needsFormat = true;

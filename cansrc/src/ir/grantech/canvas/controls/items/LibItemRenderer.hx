@@ -75,23 +75,6 @@ class LibItemRenderer extends ItemRenderer implements IDataRenderer {
 
 		this.iconPosition = MANUAL;
 		this.gap = CanTheme.DEFAULT_PADDING;
-		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-	}
-
-	private function mouseDownHandler(event:Event):Void {
-		this.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-		this.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutHandler);
-		stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-	}
-
-	private function mouseOutHandler(event:Event):Void {
-		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, item, true);
-	}
-
-	private function mouseUpHandler(event:Event):Void {
-		this.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutHandler);
-		stage.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-		this.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 	}
 
 	override private function refreshText():Void {

@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.controls.items.LibItemRenderer;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.groups.CanZoom;
@@ -19,6 +20,7 @@ class Inputs extends BaseService {
 	static public final TARGET_NONE:Int = -1;
 	static public final TARGET_ITEM:Int = 0;
 	static public final TARGET_SCENE:Int = 1;
+	static public final TARGET_LIBS:Int = 2;
 
 	static public final PHASE_BEGAN:Int = 0;
 	static public final PHASE_UPDATE:Int = 1;
@@ -163,10 +165,9 @@ class Inputs extends BaseService {
 			} else if (this.lastKeyUp == 221 && this.selectedItems.isFill) { // ctrl + ]
 				this.commands.commit(Commands.ORDER, [this.selectedItems.get(0).layer.getInt(Commands.ORDER), -1]);
 			}
-			
 		}
 
-		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) {// delete
+		if (this.beganFrom != TARGET_NONE && this.lastKeyUp == 46 && this.selectedItems != null) { // delete
 			this.commands.commit(Commands.REMOVED, [this.selectedItems]);
 			return;
 		}
@@ -195,12 +196,22 @@ class Inputs extends BaseService {
 		}
 
 		var scenefocused = this.inScene(event.stageX, event.stageY);
-		if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
-			this.beganFrom = TARGET_ITEM;
-		else if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene))
-			this.beganFrom = TARGET_SCENE;
-		else
-			this.beganFrom = TARGET_NONE;
+		var item:DisplayObject;
+		if (Std.is(event.target, LibItemRenderer)) {
+			item = cast(event.target, LibItemRenderer);
+			this.beganFrom = TARGET_LIBS;
+			this.pointPhase = PHASE_BEGAN;
+			CanEvent.dispatch(this, POINT, cast(event.target, LibItemRenderer).data);
+			return;
+		} else {
+			item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
+			if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
+				this.beganFrom = TARGET_ITEM;
+			else if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene))
+				this.beganFrom = TARGET_SCENE;
+			else
+				this.beganFrom = TARGET_NONE;
+		}
 
 		if (!Std.is(item, TransformHint)) {
 			if (this.beganFrom == 0) {

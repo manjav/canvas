@@ -1,17 +1,20 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.canvas.services.Commands;
-import openfl.events.Event;
 import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
+import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
+import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.services.Libs.LibItem;
 import ir.grantech.canvas.services.Tools;
+import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.utils.Draggable;
 import openfl.Vector;
 import openfl.display.GraphicsPath;
 import openfl.display.IGraphicsData;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.geom.Point;
 
 class CanScene extends LayoutGroup {
@@ -24,6 +27,8 @@ class CanScene extends LayoutGroup {
 	public var selection:Shape;
 	public var transformHint:TransformHint;
 	public var container:Sprite;
+
+	private var draggable:Draggable;
 
 	override function initialize() {
 		super.initialize();
@@ -53,7 +58,29 @@ class CanScene extends LayoutGroup {
 			Commands.instance.layers.get(i).valiadateAll();
 	}
 
-	
+	@:access(ir.grantech.canvas.services.Inputs)
+	public function performLibInsert(pointPhase:Int, beganFrom:Int, data:Dynamic):Void {
+		var input = Inputs.instance;
+		if (pointPhase == Inputs.PHASE_ENDED) {
+			if (this.draggable != null) {
+				this.removeChild(this.draggable);
+				this.draggable = null;
+			}
+			return;
+		}
+
+		if (pointPhase == Inputs.PHASE_BEGAN) {
+			this.draggable = new Draggable(cast(data, LibItem));
+			this.addChild(this.draggable);
+		}
+
+		if (this.draggable == null)
+			return;
+
+		this.draggable.x = mouseX;
+		this.draggable.y = mouseY;
+	}
+
 	public function updateSlection(phase:Int, fixed:Bool):Void {
 		this.selection.visible = phase == Inputs.PHASE_UPDATE;
 		if (phase == Inputs.PHASE_BEGAN) {

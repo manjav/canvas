@@ -63,6 +63,24 @@ class CanScene extends LayoutGroup {
 		var input = Inputs.instance;
 		if (pointPhase == Inputs.PHASE_ENDED) {
 			if (this.draggable != null) {
+				if (input.inScene(stage.mouseX, stage.mouseY)) {
+					Commands.instance.commit(Commands.ADDED, [
+						Layer.TYPE_BITMAP,
+						input.selectedItems.getUInt(Commands.FILL_COLOR),
+						input.selectedItems.getFloat(Commands.FILL_ALPHA),
+						input.selectedItems.getFloat(Commands.BORDER_SIZE),
+						input.selectedItems.getUInt(Commands.BORDER_COLOR),
+						input.selectedItems.getFloat(Commands.BORDER_ALPHA),
+						[
+							mouseX,
+							mouseY,
+							this.draggable.item.source.width,
+							this.draggable.item.source.height
+						],
+						0,
+						this.draggable.item.source
+					]);
+				}
 				this.removeChild(this.draggable);
 				this.draggable = null;
 			}

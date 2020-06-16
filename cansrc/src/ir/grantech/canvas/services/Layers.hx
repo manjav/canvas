@@ -1,5 +1,6 @@
 package ir.grantech.canvas.services;
 
+import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import feathers.data.ArrayCollection;
 import flash.geom.Matrix;
 import haxe.Json;
@@ -243,9 +244,15 @@ class Layer {
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
 	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>,
-			cornerRadius:Float) {
+			cornerRadius:Float, ?data:Dynamic) {
 		if (Layer.TYPES == null)
-			Layer.TYPES = [Layer.TYPE_NONE, Layer.TYPE_RECT, Layer.TYPE_ELLIPSE, Layer.TYPE_TEXT];
+			Layer.TYPES = [
+				Layer.TYPE_NONE,
+				Layer.TYPE_RECT,
+				Layer.TYPE_ELLIPSE,
+				Layer.TYPE_TEXT,
+				Layer.TYPE_BITMAP
+			];
 
 		this._invalidationFlags = new Map<String, Bool>();
 		this._props = new Map<String, Dynamic>();
@@ -266,14 +273,12 @@ class Layer {
 		this.setProperty(BORDER_COLOR, borderColor);
 		this.setProperty(BORDER_ALPHA, borderAlpha);
 		this.setProperty(CORNER_RADIUS, cornerRadius);
-
-		// sh.scale9Grid = new Rectangle(r, r, r, r);
-
-		this.item = this.instantiateItem(bounds);
+		
+		this.item = this.instantiateItem(bounds, data);
 		this.item.layer = this;
 	}
 
-	private function instantiateItem(bounds:Array<Float>):ICanItem {
+	private function instantiateItem(bounds:Array<Float>, data:Dynamic):ICanItem {
 		var ret:ICanItem = null;
 		if (this.getString(TYPE) == TYPE_RECT || this.getString(TYPE) == TYPE_ELLIPSE) {
 			this.setProperty(FILL_ENABLE, true);

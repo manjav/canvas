@@ -28,6 +28,7 @@ class Commands extends BaseService {
 	static public final BOUNDS:String = "bounds";
 	static public final VISIBLE:String = "visible";
 	static public final BLEND_MODE:String = "blendMode";
+	static public final BITMAP_DATA:String = "bitmapData";
 
 	// drawing commands
 	static public final FILL_ENABLE:String = "fillEnable";
@@ -78,7 +79,7 @@ class Commands extends BaseService {
 	public function commit(command:String, args:Array<Dynamic> = null):Void {
 		switch (command) {
 			case ADDED:
-				var layer = new Layer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+				var layer = new Layer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
 				this.layers.add(layer);
 				args = [layer.item];
 			case REMOVED:

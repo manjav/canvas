@@ -54,6 +54,7 @@ class Libs extends BaseService {
 				return this.items.get(i);
 
 		var item = new LibItem(name);
+		item.id = this.items.length;
 		this.items.add(item);
 		return item;
 	}
@@ -141,6 +142,7 @@ class LibItem extends EventDispatcher {
 		return value;
 	}
 
+	public var id:Int;
 	public var data:Bytes;
 	public var type:LibType;
 	public var source:Dynamic;

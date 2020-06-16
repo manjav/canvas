@@ -1,27 +1,38 @@
 package ir.grantech.canvas.controls.items;
 
-import feathers.controls.dataRenderers.IDataRenderer;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.canvas.services.Libs.LibItem;
-import ir.grantech.canvas.services.Libs.LibType;
-import ir.grantech.canvas.themes.CanTheme;
-import ir.grantech.canvas.themes.ScaledBitmap;
-import openfl.display.Bitmap;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
-import openfl.text.TextField;
+import openfl.display.Bitmap;
+import ir.grantech.canvas.services.Libs.LibType;
 import openfl.text.TextFieldAutoSize;
+import feathers.controls.ToggleButtonState;
+import feathers.controls.dataRenderers.IDataRenderer;
+import feathers.controls.dataRenderers.ItemRenderer;
+import feathers.skins.RectangleSkin;
+import feathers.style.Theme;
+import ir.grantech.canvas.services.Libs.LibItem;
+import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.themes.ScaledBitmap;
+import openfl.text.TextField;
 
-class LibItemRenderer extends CanItemRenderer implements IDataRenderer {
+class LibItemRenderer extends ItemRenderer implements IDataRenderer {
+	@:isVar
+	public var data(get, set):Dynamic;
 
-	override private function set_data(value:Dynamic):Dynamic {
+	private function set_data(value:Dynamic):Dynamic {
 		if (this.data == value)
+			return this.data;
+		if (value == null)
 			return value;
-		super.set_data(value);
+		this.data = value;
 		this.item = cast(this.data, LibItem);
-		return value;
+		return this.data;
 	}
 
+	private function get_data():Dynamic {
+		return this.data;
+	}
 
 	private var item:LibItem;
 	private var typeField:TextField;
@@ -30,8 +41,22 @@ class LibItemRenderer extends CanItemRenderer implements IDataRenderer {
 		super();
 		this.height = CanTheme.CONTROL_SIZE + CanTheme.DPI * 8;
 	}
+
+	override private function initializeItemRendererTheme():Void {}
+
+	@:access(ir.grantech.canvas.themes.CanTheme)
 	override function initialize():Void {
 		super.initialize();
+		var theme = Std.downcast(Theme.getTheme(), CanTheme);
+		var skin = new RectangleSkin();
+		skin.fill = SolidColor(theme.controlFillColor1);
+		skin.selectedFill = SolidColor(theme.dividerColor);
+		skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(theme.dividerColor, 0.2));
+		this.backgroundSkin = skin;
+		this.paddingLeft = 2 * CanTheme.DPI;
+
+		this.selectedTextFormat = this.textFormat;
+		this.setTextFormatForState(ToggleButtonState.DOWN(false), this.textFormat);
 
 		this.icon = this.item.type == LibType.Image ? new Bitmap(this.item.source) : new ScaledBitmap("bitmap");
 		var pw = this.icon.width;

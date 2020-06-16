@@ -1,6 +1,5 @@
 package ir.grantech.canvas.themes;
 
-import ir.grantech.canvas.controls.items.CanItemRenderer;
 import feathers.controls.Application;
 import feathers.controls.BasicButton;
 import feathers.controls.Button;
@@ -59,8 +58,7 @@ class CanTheme extends BaseSteelTheme {
 		this.styleProvider.setStyleFunction(Button, null, setButtonStyles);
 		this.styleProvider.setStyleFunction(HSlider, null, setHSliderStyles);
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
-		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererSolidStyles);
-		this.styleProvider.setStyleFunction(ItemRenderer, CanItemRenderer.VARIANT_UNDERLINE, setItemRendererUnderlineStyles);
+		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
 		this.styleProvider.setStyleFunction(Button, PopUpListView.CHILD_VARIANT_BUTTON, setButtonPopupStyles);
 
 		// this.styleProvider.setStyleFunction(Button, VARIANT_OPERATION_BUTTON, setOperationButtonStyles);
@@ -223,38 +221,6 @@ class CanTheme extends BaseSteelTheme {
 	}
 
 	private function setItemRendererStyles(itemRenderer:ItemRenderer):Void {
-		if (itemRenderer.textFormat == null)
-			itemRenderer.textFormat = this.getTextFormat();
-
-		// if (itemRenderer.disabledTextFormat == null)
-		// 	itemRenderer.disabledTextFormat = this.getDisabledTextFormat();
-
-		// if (itemRenderer.selectedTextFormat == null)
-		// 	itemRenderer.selectedTextFormat = this.getActiveTextFormat();
-
-		// if (itemRenderer.getTextFormatForState(ToggleButtonState.DOWN(false)) == null)
-		// 	itemRenderer.setTextFormatForState(ToggleButtonState.DOWN(false), this.getActiveTextFormat());
-
-		itemRenderer.paddingTop = DEFAULT_PADDING;
-		itemRenderer.paddingRight = DEFAULT_PADDING;
-		itemRenderer.paddingBottom = DEFAULT_PADDING;
-		itemRenderer.paddingLeft = DEFAULT_PADDING;
-		itemRenderer.horizontalAlign = LEFT;
-	}
-
-	private function setItemRendererSolidStyles(itemRenderer:ItemRenderer):Void {
-		this.setItemRendererStyles(itemRenderer);
-		if (itemRenderer.backgroundSkin == null) {
-			var skin = new RectangleSkin();
-			skin.fill = SolidColor(this.controlFillColor1);
-			skin.selectedFill = SolidColor(this.dividerColor);
-			skin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(this.dividerColor, 0.2));
-			itemRenderer.backgroundSkin = skin;
-		}
-	}
-
-	private function setItemRendererUnderlineStyles(itemRenderer:ItemRenderer):Void {
-		this.setItemRendererStyles(itemRenderer);
 		if (itemRenderer.backgroundSkin == null) {
 			var skin = new UnderlineSkin();
 			skin.fill = this.getContainerFill();
@@ -267,6 +233,24 @@ class CanTheme extends BaseSteelTheme {
 			skin.minHeight = CONTROL_SIZE;
 			itemRenderer.backgroundSkin = skin;
 		}
+
+		if (itemRenderer.textFormat == null)
+			itemRenderer.textFormat = this.getTextFormat();
+
+		if (itemRenderer.disabledTextFormat == null)
+			itemRenderer.disabledTextFormat = this.getDisabledTextFormat();
+
+		if (itemRenderer.selectedTextFormat == null)
+			itemRenderer.selectedTextFormat = this.getActiveTextFormat();
+
+		if (itemRenderer.getTextFormatForState(ToggleButtonState.DOWN(false)) == null)
+			itemRenderer.setTextFormatForState(ToggleButtonState.DOWN(false), this.getActiveTextFormat());
+
+		itemRenderer.paddingTop = DEFAULT_PADDING;
+		itemRenderer.paddingRight = DEFAULT_PADDING;
+		itemRenderer.paddingBottom = DEFAULT_PADDING;
+		itemRenderer.paddingLeft = DEFAULT_PADDING;
+		itemRenderer.horizontalAlign = LEFT;
 	}
 
 	private function setCheckStyles(check:Check):Void {

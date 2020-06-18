@@ -113,6 +113,7 @@ class Commands extends BaseService {
 	}
 
 	private function callAction(command:String) {
+		return;
 		if (command == UNDO) {
 			if (this.actionPosition <= 1)
 				return;

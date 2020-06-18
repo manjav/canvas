@@ -49,14 +49,21 @@ class Libs extends BaseService {
 	#end
 
 	private function instantiate(name:String):LibItem {
-		for (i in 0...this.items.length)
-			if (this.items.get(i).name == name)
-				return this.items.get(i);
+		var item = this.find(name);
+		if( item != null)
+			return item;
 
 		var item = new LibItem(name);
 		item.id = this.items.length;
 		this.items.add(item);
 		return item;
+	}
+
+	public function find(name:String):LibItem {
+		for (i in 0...this.items.length)
+			if (this.items.get(i).name == name)
+				return this.items.get(i);
+		return null;
 	}
 
 	@:access(openfl.net.FileReferenceList)

@@ -30,6 +30,7 @@ class Document extends BaseService {
 	static private function get_instance():Document {
 		return BaseService.get(Document);
 	}
+
 	var name:String;
 
 	public function openAs():Void {
@@ -76,7 +77,11 @@ class Document extends BaseService {
 
 	private function loadManifest(str:String):Void {
 		var manifest = Json.parse(str);
+		// load assets
 		var libs:Array<Dynamic> = manifest.libs;
+		for (l in libs) {}
+
+		// load layers
 		var layers:Array<Dynamic> = manifest.layers;
 		for (l in layers) {
 			// delete AS3 h field of dictionary
@@ -99,29 +104,24 @@ class Document extends BaseService {
 		if (this.name == null)
 			saveAs = true;
 
-		var now = Date.now();
 		// Create manifest
-		var ls = new Array<Dynamic>();
-		for (l in commands.layers.array)
-			ls.push(l.getProperties());
-		// Convert the string to bytes
-		var bytes = Bytes.ofString(Json.stringify({layers: ls}));
-		// Create a zip entry for the bytes:
-		var entry:Entry = {
-			fileName: "manifest.json", // <- This is the internal zip file folder structure
-			fileSize: bytes.length,
-			fileTime: now,
-			compressed: false,
-			dataSize: 0,
-			data: bytes,
-			crc32: Crc32.make(bytes)
-		}
-
+		var now = Date.now();
 		// Create a list of entries
 		var entries:List<Entry> = new List();
-		// Add our text data entry:
-		entries.add(entry);
-		// Add as many entries as you like...
+
+		// Save assets
+		var _assets = new Array<String>();
+		for (l in libs.items.array) {
+			_assets.push(l.name);
+			entries.add(createEntry("assets/" + l.name, now, l.data));
+		}
+
+		// Save layers
+		var _layers = new Array<Dynamic>();
+		for (l in commands.layers.array)
+			_layers.push(l.getProperties());
+		// Convert the string to bytes
+		entries.add(createEntry("manifest.json", now, Bytes.ofString(Json.stringify({assets: _assets, layers: _layers}))));
 
 		// Write our entries to a BytesOutput stream using format.zip.Writer
 		var bytesOutput = new BytesOutput();
@@ -160,13 +160,26 @@ class Document extends BaseService {
 		#end
 		Configs.instance.addRecent(this.name);
 	}
-	
+
 	public function close():Void {
 		this.name = null;
 		commands.layers.removeAll();
 		CanEvent.dispatch(commands, Commands.REMOVED);
 	}
 
+	// Create a zip entry for the bytes:
+	public static function createEntry(name:String, time:Date, bytes:Bytes):Entry {
+		var entry:Entry = {
+			fileName: name, // <- This is the internal zip file folder structure
+			fileSize: bytes.length,
+			fileTime: time,
+			compressed: false,
+			dataSize: 0,
+			data: bytes,
+			crc32: Crc32.make(bytes)
+		}
+		return entry;
+	}
 
 	public static function unzip(f:Entry) {
 		if (!f.compressed)

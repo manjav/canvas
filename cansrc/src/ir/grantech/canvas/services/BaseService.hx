@@ -31,4 +31,10 @@ class BaseService extends EventDispatcher {
 	private function get_commands():Commands {
 		return Commands.instance;
 	}
+
+	public var doc(get, null):Document;
+
+	private function get_doc():Document {
+		return Document.instance;
+	}
 }

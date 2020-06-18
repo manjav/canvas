@@ -1,11 +1,12 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.services.Configs;
 import feathers.controls.LayoutGroup;
 import feathers.core.FeathersControl;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalLayout;
 import ir.grantech.canvas.services.Commands;
+import ir.grantech.canvas.services.Configs;
+import ir.grantech.canvas.services.Document;
 import ir.grantech.canvas.services.Libs;
 import ir.grantech.canvas.themes.CanTheme;
 
@@ -74,5 +75,11 @@ class CanView extends LayoutGroup {
 
 	private function get_configs():Configs {
 		return Configs.instance;
+	}
+
+	public var doc(get, null):Document;
+
+	private function get_doc():Document {
+		return Document.instance;
 	}
 }

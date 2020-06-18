@@ -91,20 +91,20 @@ class Menu extends CanSection {
 		var itemRenderer = cast(event.target, MenuItemRenderer);
 		#if desktop
 		if (itemRenderer.menuData.path != null) {
-			commands.layers.open(itemRenderer.menuData.path);
+			doc.open(itemRenderer.menuData.path);
 			this.close();
 			return;
 		}
 		#end
 		switch (itemRenderer.menuData.name) {
 			case "New":
-				commands.layers.close();
+				doc.close();
 			case "Open...":
-				commands.layers.openAs();
+				doc.openAs();
 			case "Save":
-				commands.layers.save(false);
+				doc.save(false);
 			case "Save as...":
-				commands.layers.save(true);
+				doc.save(true);
 			case "Import":
 				libs.open();
 		}

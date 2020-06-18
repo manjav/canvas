@@ -151,9 +151,9 @@ class Inputs extends BaseService {
 				this.zoom -= 0.3;
 				CanEvent.dispatch(this, ZOOM);
 			} else if (this.lastKeyUp == 79) { // ctrl + s
-				commands.layers.openAs();
+				doc.openAs();
 			} else if (this.lastKeyUp == 83) { // ctrl + s
-				commands.layers.save(event.shiftKey);
+				doc.save(event.shiftKey);
 			} else if (this.lastKeyUp == 89) { // ctrl + y
 				this.commands.commit(Commands.REDO);
 			} else if (this.lastKeyUp == 90 && !event.shiftKey) { // ctrl + z

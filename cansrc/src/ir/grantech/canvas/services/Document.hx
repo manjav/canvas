@@ -163,6 +163,7 @@ class Document extends BaseService {
 
 	public function close():Void {
 		this.name = null;
+		libs.items.removeAll();
 		commands.layers.removeAll();
 		CanEvent.dispatch(commands, Commands.REMOVED);
 	}

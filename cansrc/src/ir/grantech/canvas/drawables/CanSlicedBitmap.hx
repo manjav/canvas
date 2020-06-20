@@ -23,6 +23,8 @@ class CanSlicedBitmap extends Shape implements ICanItem {
 		var b:Array<Float> = cast this.layer.getProperty(BOUNDS);
 		var sg = new Rectangle(10, 10, b[2] - 20, b[3] - 20);
 		var bmp:BitmapData = cast this.layer.getProperty(DATA);
+		if( bmp == null)
+			return;
 		var cols:Array<Float> = [sg.left, sg.right, b[2]];
 		var rows:Array<Float> = [sg.top, sg.bottom, b[3]];
 		var left:Float = 0;

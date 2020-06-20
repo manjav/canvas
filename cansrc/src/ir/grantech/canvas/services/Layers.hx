@@ -7,15 +7,16 @@ import ir.grantech.canvas.drawables.CanSlicedBitmap;
 import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Commands.*;
+import ir.grantech.canvas.services.Libs.LibItem;
 import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
 import openfl.display.BlendMode;
+import openfl.events.Event;
 import openfl.geom.Point;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 
 class Layers extends ArrayCollection<Layer> {
-
 	/**
 	 * Constructor.
 	 */
@@ -109,7 +110,7 @@ class Layer {
 		this.setProperty(BORDER_COLOR, borderColor);
 		this.setProperty(BORDER_ALPHA, borderAlpha);
 		this.setProperty(CORNER_RADIUS, cornerRadius);
-		
+
 		this.item = this.instantiateItem(bounds, source);
 		this.item.layer = this;
 	}
@@ -150,9 +151,20 @@ class Layer {
 			bmp.y = bounds[1];
 			// bmp.width = bounds[2];
 			// bmp.height = bounds[3];
+			var libsReference = Libs.instance.find(source);
+			if (libsReference.source == null)
+				libsReference.addEventListener(Event.CHANGE, this.libsReference_changeHandler);
+			else
+				this.setProperty(DATA, libsReference.source);
 			ret = bmp;
 		}
 		return ret;
+	}
+
+	private function libsReference_changeHandler(event:Event):Void {
+		var libsReference = cast(event.currentTarget, LibItem);
+		libsReference.removeEventListener(Event.CHANGE, this.libsReference_changeHandler);
+		this.setProperty(DATA, libsReference.source);
 	}
 
 	public function getString(key:String):String {

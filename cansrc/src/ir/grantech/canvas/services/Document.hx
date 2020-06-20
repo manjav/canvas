@@ -68,18 +68,22 @@ class Document extends BaseService {
 	// Use a format.zip.Reader to grab the zip entries
 	public function read(input:Input):Void {
 		var entries = new Reader(input).read();
-		for (e in entries) {
-			if (e.fileName == "manifest.json")
-				this.loadManifest(unzip(e).toString());
-			// trace(e.fileName, e.compressed, unzip(e).toString());
-		}
+		var e = findEntry("manifest.json", entries);
+		if (e != null)
+			this.loadManifest(unzip(e).toString(), entries);
+		// trace(e.fileName, e.compressed, unzip(e).toString());
+	}
 
 	private function loadManifest(jsonStr:String, entries:List<Entry>):Void {
 		var manifest = Json.parse(jsonStr);
 		
 		// load assets
-		var libs:Array<Dynamic> = manifest.libs;
-		for (l in libs) {}
+		var _assets:Array<String> = manifest.assets;
+		for (a in _assets) {
+			var e = findEntry("assets/" + a, entries);
+			if (e != null)
+				libs.read(a, unzip(e));
+		}
 
 		// Load layers
 		var _layers:Array<Dynamic> = manifest.layers;
@@ -87,7 +91,7 @@ class Document extends BaseService {
 			// Delete AS3 h field of dictionary
 			if (l.h != null)
 				l = l.h;
-			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius);
+			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius, l.source);
 			commands.layers.add(layer);
 			layer.item.transform.matrix = new Matrix(l.mat[0], l.mat[1], l.mat[2], l.mat[3], l.mat[4], l.mat[5]);
 			CanEvent.dispatch(commands, Commands.ADDED, [layer.item]);

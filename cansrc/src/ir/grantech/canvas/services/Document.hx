@@ -65,7 +65,7 @@ class Document extends BaseService {
 	}
 	#end
 
-	// use a format.zip.Reader to grab the zip entries
+	// Use a format.zip.Reader to grab the zip entries
 	public function read(input:Input):Void {
 		var entries = new Reader(input).read();
 		for (e in entries) {
@@ -81,10 +81,7 @@ class Document extends BaseService {
 		var libs:Array<Dynamic> = manifest.libs;
 		for (l in libs) {}
 
-		// load layers
-		var layers:Array<Dynamic> = manifest.layers;
-		for (l in layers) {
-			// delete AS3 h field of dictionary
+		// Load layers
 			if (l.h != null)
 				l = l.h;
 			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius);

@@ -78,7 +78,7 @@ class CanScene extends LayoutGroup {
 							this.draggable.item.source.height
 						],
 						0,
-						this.draggable.item.source
+						this.draggable.item.name
 					]);
 				}
 				this.removeChild(this.draggable);

@@ -27,9 +27,9 @@ class Commands extends BaseService {
 	static public final DATA:String = "data";
 	static public final ALPHA:String = "alpha";
 	static public final BOUNDS:String = "bounds";
+	static public final SOURCE:String = "source";
 	static public final VISIBLE:String = "visible";
 	static public final BLEND_MODE:String = "blendMode";
-	static public final BITMAP_DATA:String = "bitmapData";
 
 	// drawing commands
 	static public final FILL_ENABLE:String = "fillEnable";

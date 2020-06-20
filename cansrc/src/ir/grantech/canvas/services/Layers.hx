@@ -80,7 +80,7 @@ class Layer {
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
 	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>,
-			cornerRadius:Float, ?data:Dynamic) {
+			cornerRadius:Float, ?source:Dynamic) {
 		if (Layer.TYPES == null)
 			Layer.TYPES = [
 				Layer.TYPE_NONE,
@@ -110,11 +110,11 @@ class Layer {
 		this.setProperty(BORDER_ALPHA, borderAlpha);
 		this.setProperty(CORNER_RADIUS, cornerRadius);
 		
-		this.item = this.instantiateItem(bounds, data);
+		this.item = this.instantiateItem(bounds, source);
 		this.item.layer = this;
 	}
 
-	private function instantiateItem(bounds:Array<Float>, data:Dynamic):ICanItem {
+	private function instantiateItem(bounds:Array<Float>, source:Dynamic):ICanItem {
 		var ret:ICanItem = null;
 		if (this.getString(TYPE) == TYPE_RECT || this.getString(TYPE) == TYPE_ELLIPSE) {
 			this.setProperty(FILL_ENABLE, true);
@@ -143,6 +143,7 @@ class Layer {
 		} else if (this.getString(TYPE) == TYPE_BITMAP) {
 			this.setProperty(FILL_ENABLE, true);
 			this.setProperty(BORDER_ENABLE, false);
+			this.setProperty(SOURCE, source);
 
 			var bmp = new CanSlicedBitmap(this);
 			bmp.x = bounds[0];

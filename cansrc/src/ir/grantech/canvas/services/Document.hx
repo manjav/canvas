@@ -73,15 +73,18 @@ class Document extends BaseService {
 				this.loadManifest(unzip(e).toString());
 			// trace(e.fileName, e.compressed, unzip(e).toString());
 		}
-	}
 
-	private function loadManifest(str:String):Void {
-		var manifest = Json.parse(str);
+	private function loadManifest(jsonStr:String, entries:List<Entry>):Void {
+		var manifest = Json.parse(jsonStr);
+		
 		// load assets
 		var libs:Array<Dynamic> = manifest.libs;
 		for (l in libs) {}
 
 		// Load layers
+		var _layers:Array<Dynamic> = manifest.layers;
+		for (l in _layers) {
+			// Delete AS3 h field of dictionary
 			if (l.h != null)
 				l = l.h;
 			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius);

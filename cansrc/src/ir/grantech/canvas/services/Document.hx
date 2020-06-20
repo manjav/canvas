@@ -132,7 +132,7 @@ class Document extends BaseService {
 		var byteArray:ByteArray;
 		var data = bytesOutput.getBytes().getData();
 		#if cpp
-		// convert UInt8 to byte
+		// Convert UInt8 to byte
 		byteArray = new ByteArray();
 		for (i in data)
 			byteArray.writeByte(i);
@@ -165,6 +165,14 @@ class Document extends BaseService {
 		this.name = null;
 		commands.layers.removeAll();
 		CanEvent.dispatch(commands, Commands.REMOVED);
+	}
+
+	// Create a zip entry for the bytes:
+	public static function findEntry(name:String, entries:List<Entry>):Entry {
+		for (e in entries)
+			if (e.fileName == name)
+				return e;
+		return null;
 	}
 
 	// Create a zip entry for the bytes:

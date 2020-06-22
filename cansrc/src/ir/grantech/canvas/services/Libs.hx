@@ -42,7 +42,7 @@ class Libs extends BaseService {
 	#if desktop
 	private function stage_onDropFileHandler(path:String):Void {
 		if (StringUtils.getExtension(path) == "cvp")
-			commands.layers.open(path);
+			doc.open(path);
 		else
 			this.load(path);
 	}

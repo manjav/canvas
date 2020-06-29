@@ -94,6 +94,8 @@ class Document extends BaseService {
 			var layer = new Layer(l.type, l.fillColor, l.fillAlpha, l.borderSize, l.borderColor, l.borderAlpha, l.bounds, l.cornerRadius, l.source);
 			commands.layers.add(layer);
 			layer.item.transform.matrix = new Matrix(l.mat[0], l.mat[1], l.mat[2], l.mat[3], l.mat[4], l.mat[5]);
+			layer.item.alpha = l.alpha;
+			layer.item.blendMode = l.blendMode;
 			CanEvent.dispatch(commands, Commands.ADDED, [layer.item]);
 		}
 	}

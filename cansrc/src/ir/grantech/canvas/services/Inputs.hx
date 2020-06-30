@@ -1,9 +1,10 @@
 package ir.grantech.canvas.services;
 
-import ir.grantech.canvas.controls.items.LibItemRenderer;
 import ir.grantech.canvas.controls.TransformHint;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.controls.groups.CanZoom;
+import ir.grantech.canvas.controls.groups.ContextMenu;
+import ir.grantech.canvas.controls.items.LibItemRenderer;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
@@ -331,6 +332,7 @@ class Inputs extends BaseService {
 	}
 
 	private function stage_rightClickHandler(event:MouseEvent):Void {
+		ContextMenu.show(event.stageX, event.stageY, stage);
 		if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene)){
 			trace("scene.");
 			return;

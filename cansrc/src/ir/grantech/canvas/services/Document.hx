@@ -199,6 +199,7 @@ class Document extends BaseService {
 	public static function unzip(f:Entry) {
 		if (!f.compressed)
 			return f.data;
+		#if !hl
 		var c = new haxe.zip.Uncompress(-15);
 		var s = haxe.io.Bytes.alloc(f.fileSize);
 		var r = c.execute(f.data, 0, s, 0);
@@ -208,6 +209,7 @@ class Document extends BaseService {
 		f.compressed = false;
 		f.dataSize = f.fileSize;
 		f.data = s;
+		#end
 		return f.data;
 	}
 }

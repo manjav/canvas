@@ -107,6 +107,7 @@ class Inputs extends BaseService {
 		this.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, this.stage_middleMouseUpHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.stage_mouseMoveHandler);
 		this.canZoom.addEventListener(MouseEvent.MOUSE_WHEEL, this.stage_mouseWheelHandler);
+		this.stage.addEventListener(MouseEvent.RIGHT_CLICK, this.stage_rightClickHandler);
 	}
 
 	private function stage_keyDownHandler(event:KeyboardEvent):Void {
@@ -327,6 +328,17 @@ class Inputs extends BaseService {
 			this.pointY += event.delta * 10;
 
 		CanEvent.dispatch(this, PAN);
+	}
+
+	private function stage_rightClickHandler(event:MouseEvent):Void {
+		if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene)){
+			trace("scene.");
+			return;
+		}
+		var item = this.hitTest(this.stage.mouseX, this.stage.mouseY);
+		// if (Std.is(item, ICanItem) || Std.is(item, TransformHint))
+		// 	this.beganFrom = TARGET_ITEM;
+		trace(item);
 	}
 
 	public function inScene(x:Float, y:Float):Bool {

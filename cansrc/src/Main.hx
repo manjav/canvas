@@ -34,6 +34,11 @@ class Main extends Application {
 	private var zoomLayout:AnchorLayoutData;
 
 	public function new() {
+		#if debug
+		var fps = new openfl.display.FPS(50, 10, 0x434343);
+		stage.addChild(fps);
+		#end
+
 		Theme.setTheme(new CanTheme());
 		var h = Math.round(Capabilities.screenResolutionY * 0.08) * 10;
 		var w = Math.round(Capabilities.screenResolutionY * 0.08) * 15;

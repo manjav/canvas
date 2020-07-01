@@ -1,5 +1,7 @@
 package ir.grantech.canvas.controls.groups;
 
+import openfl.filters.GlowFilter;
+import openfl.filters.BitmapFilter;
 import feathers.controls.Callout;
 import feathers.controls.ListView;
 import feathers.core.PopUpManager;
@@ -21,16 +23,15 @@ class ContextMenu extends ListView {
 	override private function initialize():Void {
 		super.initialize();
 
-		this.variant = ListView.VARIANT_BORDERLESS;
+		// this.variant = ListView.VARIANT_BORDERLESS;
 		this.itemRendererRecycler = DisplayObjectRecycler.withClass(ContextMenuItemRenderer);
 		this.itemToText = this.menuItemToText;
 		this.addEventListener(CanEvent.ITEM_SELECT, this.lists_selectHandler);
 		// this.backgroundSkin = null;
-		// this.addChild(this.secondaryList);
 		this.dataProvider = new ArrayCollection([new Config("test"), new Config("tests"), new Config("tesst")]);
 		this.width = CanTheme.DPI * 86;
 		this.height = ContextMenuItemRenderer.HEIGHT * this.dataProvider.length;
-		this.filters = [new DropShadowFilter(1, 90, 0, 1, 5, 5, 1, 2)];
+		this.filters = [new GlowFilter(0, 1, 5, 5, 1, 2)];
 	}
 
 	private function menuItemToText(item:Config):String {

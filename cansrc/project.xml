@@ -5,7 +5,7 @@
   <app main="Main" path="build" file="Canvas" />
 
   <!-- needed on Android to avoid hiding the back/home buttons -->
-  <!-- <window borderless="true"/> -->
+  <window borderless="true"/>
 	<window width="1200" height="720" if="flash"/>
   <window allow-high-dpi="true"/>
   <window background="#e4e4e4" />

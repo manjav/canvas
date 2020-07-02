@@ -12,6 +12,7 @@ import openfl.events.MouseEvent;
 class Header extends CanSection {
 	private var menuButton:Button;
 	private var closeButton:Button;
+	private var minimizeButton:Button;
 
 	override private function initialize() {
 		super.initialize();
@@ -21,6 +22,7 @@ class Header extends CanSection {
 		menuButton = this.createButton("humborger-menu", AnchorLayoutData.middleLeft(0, 3 * CanTheme.DPI));
 
 		closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
+		minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI));
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {
@@ -28,5 +30,11 @@ class Header extends CanSection {
 			CanEvent.dispatch(this, Event.INIT);
 		else if (event.currentTarget == closeButton)
 			CanEvent.dispatch(this, Event.CLOSE);
+		else if (event.currentTarget == minimizeButton)
+			this.minimize();
+	}
+
+	private function minimize():Void {
+		this.stage.window.minimized = true;
 	}
 }

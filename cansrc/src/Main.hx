@@ -58,7 +58,7 @@ class Main extends Application {
 		this.zoom.layoutData = this.zoomLayout = new AnchorLayoutData(0, 0, p);
 		this.addChild(this.zoom);
 
-		var h = CanTheme.DPI * 20 + p * 2;
+		var h = CanTheme.DPI * 16 + p * 2;
 
 		this.left = new ToolBar();
 		this.left.width = CanTheme.DPI * 24;
@@ -79,11 +79,16 @@ class Main extends Application {
 		this.header = new Header();
 		this.header.height = h - p * 2;
 		this.header.layoutData = new AnchorLayoutData(p, p, null, p);
-		this.header.addEventListener(Event.INIT, this.header_initHandler);
+		this.header.addEventListener(Event.INIT, this.header_initHandler); // #e81123//#cccccc
+		this.header.addEventListener(Event.CLOSE, this.header_closeHandler); // #e81123//#cccccc
 		this.addChild(this.header);
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);
+
+	private function header_closeHandler(event:Event):Void {
+		stage.window.close();
+	}
 
 	private function header_initHandler(event:Event):Void {
 		if (this.menu == null) {

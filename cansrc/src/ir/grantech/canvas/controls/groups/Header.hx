@@ -10,6 +10,8 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 
 class Header extends CanSection {
+	private var startX:Int;
+	private var startY:Int;
 	private var menuButton:Button;
 	private var closeButton:Button;
 	private var maximizeButton:Button;
@@ -47,6 +49,9 @@ class Header extends CanSection {
 	}
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
+		if (this.stage.window.maximized)
+			this.restore();
+
 		this.stage.window.move(this.stage.window.x + Std.int(event.localX) - this.startX, this.stage.window.y + Std.int(event.stageY) - startY);
 	}
 

@@ -6,6 +6,7 @@ import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.controls.groups.sections.CanSection;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
+import openfl.display.InteractiveObject;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 
@@ -35,9 +36,19 @@ class Header extends CanSection {
 		this.restoreButton.width = w;
 		this.restoreButton.visible = false;
 
+		cast(this.backgroundSkin, InteractiveObject).doubleClickEnabled = true;
+		this.backgroundSkin.addEventListener(MouseEvent.DOUBLE_CLICK, this.mouseDoubleClickHandler);
 		this.backgroundSkin.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.stage.window.resizable = true;
 		this.stage.window.borderless = true;
+	}
+
+	private function mouseDoubleClickHandler(event:MouseEvent):Void {
+		event.stopImmediatePropagation();
+		if (this.stage.window.maximized)
+			this.restore();
+		else
+			this.maximize();
 	}
 
 	private function mouseDownHandler(event:MouseEvent):Void {

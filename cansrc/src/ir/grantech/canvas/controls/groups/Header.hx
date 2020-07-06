@@ -26,24 +26,23 @@ class Header extends CanSection {
 
 		this.menuButton = this.createButton("humborger-menu", AnchorLayoutData.middleLeft(0, 3 * CanTheme.DPI));
 
-		var w = 22 * CanTheme.DPI;
-		this.closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
-		this.maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
-		this.maximizeButton.width = w;
-		this.minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI));
-		this.minimizeButton.width = w;
-		this.restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
-		this.restoreButton.width = w;
-		this.restoreButton.visible = false;
+	#if desktop
+	var w = 22 * CanTheme.DPI;
+	this.closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
+	this.maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
+	this.maximizeButton.width = w;
+	this.minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI));
+	this.minimizeButton.width = w;
+	this.restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
+	this.restoreButton.width = w;
+	this.restoreButton.visible = false;
 
-		cast(this.backgroundSkin, InteractiveObject).doubleClickEnabled = true;
-		this.backgroundSkin.addEventListener(MouseEvent.DOUBLE_CLICK, this.mouseDoubleClickHandler);
-		this.backgroundSkin.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-		this.stage.window.resizable = true;
-		this.stage.window.borderless = true;
-	}
-
-	private function mouseDoubleClickHandler(event:MouseEvent):Void {
+	cast(this.backgroundSkin, InteractiveObject).doubleClickEnabled = true;
+	this.backgroundSkin.addEventListener(MouseEvent.DOUBLE_CLICK, this.mouseDoubleClickHandler);
+	this.backgroundSkin.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+	this.stage.window.resizable = true;
+	this.stage.window.borderless = true;
+	} private function mouseDoubleClickHandler(event:MouseEvent):Void {
 		event.stopImmediatePropagation();
 		if (this.stage.window.maximized)
 			this.restore();
@@ -72,19 +71,6 @@ class Header extends CanSection {
 		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
 	}
 
-	override private function buttons_clickHandler(event:MouseEvent):Void {
-		if (event.currentTarget == this.menuButton)
-			CanEvent.dispatch(this, Event.INIT);
-		else if (event.currentTarget == this.closeButton)
-			CanEvent.dispatch(this, Event.CLOSE);
-		else if (event.currentTarget == this.maximizeButton)
-			this.maximize();
-		else if (event.currentTarget == this.minimizeButton)
-			this.minimize();
-		else if (event.currentTarget == this.restoreButton)
-			this.restore();
-	}
-
 	private function maximize():Void {
 		this.maximizeButton.visible = false;
 		this.restoreButton.visible = true;
@@ -99,5 +85,21 @@ class Header extends CanSection {
 
 	private function minimize():Void {
 		this.stage.window.minimized = true;
+	#end
+	}
+
+	override private function buttons_clickHandler(event:MouseEvent):Void {
+		if (event.currentTarget == this.menuButton)
+			CanEvent.dispatch(this, Event.INIT);
+		#if desktop
+		else if (event.currentTarget == this.closeButton)
+			CanEvent.dispatch(this, Event.CLOSE);
+		else if (event.currentTarget == this.maximizeButton)
+			this.maximize();
+		else if (event.currentTarget == this.minimizeButton)
+			this.minimize();
+		else if (event.currentTarget == this.restoreButton)
+			this.restore();
+		#end
 	}
 }

@@ -22,12 +22,16 @@ class Header extends CanSection {
 		this.layout = new AnchorLayout();
 
 		menuButton = this.createButton("humborger-menu", AnchorLayoutData.middleLeft(0, 3 * CanTheme.DPI));
+		var w = 22 * CanTheme.DPI;
 
 		closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
-		maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
-		minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI));
-		restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
+		maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI)); maximizeButton.width = w;
+		minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI)); minimizeButton.width = w;
+		restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI)); restoreButton.width = w;
 		restoreButton.visible = false;
+
+		this.stage.window.resizable = true;
+		this.stage.window.borderless = true;
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

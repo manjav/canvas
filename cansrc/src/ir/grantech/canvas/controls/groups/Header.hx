@@ -33,14 +33,21 @@ class Header extends CanSection {
 		this.restoreButton.width = w;
 		this.restoreButton.visible = false;
 
-		closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
-		maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI)); maximizeButton.width = w;
-		minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI)); minimizeButton.width = w;
-		restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI)); restoreButton.width = w;
-		restoreButton.visible = false;
-
+		this.backgroundSkin.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.stage.window.resizable = true;
 		this.stage.window.borderless = true;
+	}
+
+	private function mouseDownHandler(event:MouseEvent):Void {
+		this.backgroundSkin.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
+	}
+
+	private function mouseMoveHandler(event:MouseEvent):Void {
+	}
+
+	private function mouseUpHandler(event:MouseEvent):Void {
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

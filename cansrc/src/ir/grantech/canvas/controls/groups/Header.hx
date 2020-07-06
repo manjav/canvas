@@ -21,8 +21,17 @@ class Header extends CanSection {
 
 		this.layout = new AnchorLayout();
 
-		menuButton = this.createButton("humborger-menu", AnchorLayoutData.middleLeft(0, 3 * CanTheme.DPI));
+		this.menuButton = this.createButton("humborger-menu", AnchorLayoutData.middleLeft(0, 3 * CanTheme.DPI));
+
 		var w = 22 * CanTheme.DPI;
+		this.closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
+		this.maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
+		this.maximizeButton.width = w;
+		this.minimizeButton = this.createButton("header-minimize", AnchorLayoutData.middleRight(0, 48 * CanTheme.DPI));
+		this.minimizeButton.width = w;
+		this.restoreButton = this.createButton("header-restore", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI));
+		this.restoreButton.width = w;
+		this.restoreButton.visible = false;
 
 		closeButton = this.createButton("header-close", AnchorLayoutData.middleRight(0, 3 * CanTheme.DPI));
 		maximizeButton = this.createButton("header-maximize", AnchorLayoutData.middleRight(0, 24 * CanTheme.DPI)); maximizeButton.width = w;
@@ -35,15 +44,15 @@ class Header extends CanSection {
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {
-		if (event.currentTarget == menuButton)
+		if (event.currentTarget == this.menuButton)
 			CanEvent.dispatch(this, Event.INIT);
-		else if (event.currentTarget == closeButton)
+		else if (event.currentTarget == this.closeButton)
 			CanEvent.dispatch(this, Event.CLOSE);
-		else if (event.currentTarget == maximizeButton)
+		else if (event.currentTarget == this.maximizeButton)
 			this.maximize();
-		else if (event.currentTarget == minimizeButton)
+		else if (event.currentTarget == this.minimizeButton)
 			this.minimize();
-		else if (event.currentTarget == restoreButton)
+		else if (event.currentTarget == this.restoreButton)
 			this.restore();
 	}
 

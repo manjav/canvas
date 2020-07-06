@@ -39,15 +39,21 @@ class Header extends CanSection {
 	}
 
 	private function mouseDownHandler(event:MouseEvent):Void {
+		this.startX = Std.int(event.stageX);
+		this.startY = Std.int(event.stageY);
 		this.backgroundSkin.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
 	}
 
 	private function mouseMoveHandler(event:MouseEvent):Void {
+		this.stage.window.move(this.stage.window.x + Std.int(event.localX) - this.startX, this.stage.window.y + Std.int(event.stageY) - startY);
 	}
 
 	private function mouseUpHandler(event:MouseEvent):Void {
+		this.backgroundSkin.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
 	}
 
 	override private function buttons_clickHandler(event:MouseEvent):Void {

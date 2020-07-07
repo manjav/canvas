@@ -11,23 +11,20 @@ import openfl.display.Bitmap;
 import openfl.display.Shape;
 
 class ButtonGroupRenderer extends ItemRenderer implements IToggle {
-	static final SIZE:Int = CanTheme.DPI * 6;
+	static public final SIZE:Int = CanTheme.DPI * 9;
+
 	public var index:Int;
 	public var skin:Shape;
 	public var owner:ButtonGroup;
 
 	public function new() {
 		super();
+		this.width = this.height = SIZE;
 	}
 
 	override private function initializeItemRendererTheme():Void {}
 
-	override function initialize():Void {
-		super.initialize();
-	}
-
 	public function draw():Void {
-
 		if (this.skin == null) {
 			backgroundSkin = new Shape();
 			this.skin = new Shape();

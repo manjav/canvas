@@ -14,6 +14,12 @@ class ButtonGroup extends ListView {
 		this.itemRendererRecycler = DisplayObjectRecycler.withClass(ButtonGroupRenderer);
 	}
 
+	override private function initialize() {
+		super.initialize();
+
+		this.width = ButtonGroupRenderer.SIZE * this.dataProvider.length;
+	}
+
 	override private function refreshScrollRect():Void {}
 
 	override private function refreshBackgroundSkin():Void {}

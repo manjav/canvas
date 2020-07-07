@@ -55,19 +55,18 @@ class ButtonGroupRenderer extends ItemRenderer implements IToggle {
 			return value;
 
 		this.iconPosition = RelativePosition.MANUAL;
-		this.width = this.height = Math.round(CanTheme.DPI * 3.9) * 4;
-		var icon = new ScaledBitmap(value);
-		icon.width = icon.height = this.width * 0.5;
-		icon.x = (this.width - icon.width) * 0.5;
-		icon.y = (this.height - icon.height) * 0.5;
-		this.icon = icon;
-
-		var selectedIcon = new ScaledBitmap(value + "-blue");
-		selectedIcon.width = selectedIcon.height = icon.width;
-		selectedIcon.x = icon.x;
-		selectedIcon.y = icon.y;
-		this.selectedIcon = selectedIcon;
+		this.icon = new ScaledBitmap(value);
+		this.selectedIcon = new ScaledBitmap(value + "-blue");
 
 		return value;
+	}
+
+	override private function layoutContent():Void {
+		this.icon.x = (this.actualWidth - this.icon.width) * 0.5;
+		this.icon.y = (this.actualHeight - this.icon.height) * 0.5;
+
+		this.selectedIcon.width = this.selectedIcon.height = this.icon.width;
+		this.selectedIcon.x = icon.x;
+		this.selectedIcon.y = icon.y;
 	}
 }

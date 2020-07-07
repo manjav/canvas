@@ -97,7 +97,10 @@ class CanZoom extends LayoutGroup {
 	}
 
 	private function commands_selectHandler(event:CanEvent):Void {
-		this.scene.transformHint.set(event.data[0]);
+		var items = cast(event.data[0], CanItems);
+		if(items.length == 1)
+			stage.focus = cast items.get(0);
+		this.scene.transformHint.set(items);
 	}
 
 	private function commands_orderHandler(event:CanEvent):Void {

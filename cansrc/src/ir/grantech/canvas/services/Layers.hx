@@ -138,6 +138,8 @@ class Layer {
 			txt.y = bounds[1];
 			txt.width = bounds[2];
 			txt.height = bounds[3];
+			txt.text = "Lorem Ipsum ...";
+			txt.embedFonts = true;
 			txt.wordWrap = txt.multiline = true;
 			txt.type = TextFieldType.INPUT;
 			ret = txt;

@@ -90,7 +90,7 @@ class TextSection extends CanSection {
 		}
 
 		// text auto size
-		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topLeft(padding * 12, padding * 10));
+		this.sutoSizeButtons = this.createButtonGroup([0, 1], AnchorLayoutData.topRight(padding * 12, padding));
 		this.sutoSizeButtons.itemToText = (autosize:Int) -> {
 			return autosize == 0 ? "text-sizealign" : "text-sizenone";
 		}

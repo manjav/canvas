@@ -15,6 +15,18 @@ import openfl.ui.MouseCursor;
 
 class Border extends LayoutGroup {
 	static final B:Int = Math.floor(CanTheme.DPI * 1.6);
+	static final CURSORS:Array<String> = [
+		"resize_nwse",
+		"resize_ns",
+		"resize_nesw",
+		"resize_we",
+		"auto",
+		"resize_we",
+		"resize_nesw",
+		"resize_ns",
+		"resize_nwse"
+	];
+	private var side:Int;
 
 	override private function initialize():Void {
 		super.initialize();
@@ -60,9 +72,13 @@ class Border extends LayoutGroup {
 			else
 				this.side = 4;
 		}
+		#if desktop
+		Mouse.cursor = CURSORS[side];
+		#end
 	}
 
 	private function borders_mouseOutHandler(event:MouseEvent):Void {
+		Mouse.cursor = MouseCursor.AUTO;
 	}
 
 	private function borders_mouseDownHandler(event:MouseEvent):Void {
@@ -78,5 +94,6 @@ class Border extends LayoutGroup {
 		this.addEventListener(MouseEvent.MOUSE_MOVE, this.borders_mouseMoveHandler);
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.borders_mouseDownHandler);
 		stage.removeEventListener(MouseEvent.MOUSE_UP, this.borders_mouseUpHandler);
+		Mouse.cursor = MouseCursor.AUTO;
 	}
 }

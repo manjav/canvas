@@ -14,19 +14,20 @@ import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 
 class Border extends LayoutGroup {
+	static final B:Int = Math.floor(CanTheme.DPI * 1.6);
+
 	override private function initialize():Void {
 		super.initialize();
 
 		this.layoutData = AnchorLayoutData.fill();
 		this.layout = new AnchorLayout();
 
-		var b = CanTheme.DPI * 2;
 		var skin = new Shape();
-		skin.graphics.beginFill(0xFF, 0.5);
-		skin.graphics.drawRect(0, 0, stage.stageWidth, b);
-		skin.graphics.drawRect(stage.stageWidth - b, 0, b, stage.stageHeight);
-		skin.graphics.drawRect(0, stage.stageHeight - b, stage.stageWidth, b);
-		skin.graphics.drawRect(0, 0, b, stage.stageHeight);
+		skin.graphics.beginFill(0xFF, 0);
+		skin.graphics.drawRect(0, 0, stage.stageWidth, B);
+		skin.graphics.drawRect(stage.stageWidth - B, B, B, stage.stageHeight - B * 2);
+		skin.graphics.drawRect(0, stage.stageHeight - B, stage.stageWidth, B);
+		skin.graphics.drawRect(0, B, B, stage.stageHeight - B * 2);
 		skin.graphics.endFill();
 		this.backgroundSkin = skin;
 	}

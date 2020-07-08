@@ -94,6 +94,21 @@ class Border extends LayoutGroup {
 		this.addEventListener(MouseEvent.MOUSE_MOVE, this.borders_mouseMoveHandler);
 		this.addEventListener(MouseEvent.MOUSE_DOWN, this.borders_mouseDownHandler);
 		stage.removeEventListener(MouseEvent.MOUSE_UP, this.borders_mouseUpHandler);
+		stage.window.onMouseMoveRelative.remove(windowMouseMove);
 		Mouse.cursor = MouseCursor.AUTO;
+	}
+
+	private function windowMouseMove(x:Float, y:Float):Void {
+		var mx = 0, my = 0, sx = 0, sy = 0;
+		if (this.side < 2)
+			my = Std.int(y);
+		else if (this.side > 2)
+			sy = Std.int(y);
+		if (this.side == 0 || this.side == 3 || this.side == 6)
+			mx = Std.int(x);
+		else if (this.side == 2 || this.side == 5 || this.side == 8)
+			sx = Std.int(x);
+		stage.window.resize(this.stage.window.width + sx - mx, this.stage.window.height + sy - my);
+		stage.window.move(this.stage.window.x + mx, this.stage.window.y + my);
 	}
 }

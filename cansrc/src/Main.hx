@@ -6,6 +6,7 @@ import feathers.layout.AnchorLayoutData;
 import feathers.style.Theme;
 import flash.system.Capabilities;
 import haxe.Timer;
+import ir.grantech.canvas.controls.groups.Border;
 import ir.grantech.canvas.controls.groups.CanZoom;
 import ir.grantech.canvas.controls.groups.Header;
 import ir.grantech.canvas.controls.groups.Menu;
@@ -82,6 +83,8 @@ class Main extends Application {
 		this.header.addEventListener(Event.INIT, this.header_initHandler); // #e81123//#cccccc
 		this.header.addEventListener(Event.CLOSE, this.header_closeHandler); // #e81123//#cccccc
 		this.addChild(this.header);
+
+		this.addChild(new Border());
 	}
 
 	// private static var getDesktopResolution = System.load("SomeHeaderFile.h", "GetDesktopResolution", 2);

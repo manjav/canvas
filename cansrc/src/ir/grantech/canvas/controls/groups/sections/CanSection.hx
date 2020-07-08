@@ -148,13 +148,15 @@ class CanSection extends CanView {
 	}
 
 	private function createButton(icon:String, layoutData:AnchorLayoutData):Button {
-		var disabledIcon = new ScaledBitmap(icon);
-		disabledIcon.alpha = 0.5;
 		var element = new Button();
-		element.name = icon;
 		element.width = element.height = 16 * CanTheme.DPI;
-		element.icon = new ScaledBitmap(icon);
-		element.setIconForState(ButtonState.DISABLED, disabledIcon);
+		if (icon != null) {
+			var disabledIcon = new ScaledBitmap(icon);
+			disabledIcon.alpha = 0.5;
+			element.name = icon;
+			element.icon = new ScaledBitmap(icon);
+			element.setIconForState(ButtonState.DISABLED, disabledIcon);
+		}
 		element.layoutData = layoutData;
 		element.addEventListener(MouseEvent.CLICK, this.buttons_clickHandler);
 		this.addChild(element);

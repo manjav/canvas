@@ -102,7 +102,7 @@ class Border extends LayoutGroup {
 		var mx = 0, my = 0, sx = 0, sy = 0;
 		if (this.side < 2)
 			my = Std.int(y);
-		else if (this.side > 2)
+		else if (this.side > 5)
 			sy = Std.int(y);
 		if (this.side == 0 || this.side == 3 || this.side == 6)
 			mx = Std.int(x);

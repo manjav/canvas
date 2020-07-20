@@ -42,30 +42,22 @@ class ToolBar extends LayoutGroup {
 		var skin = new RectangleSkin();
 		skin.fill = SolidColor(theme.controlFillColor1);
 		this.backgroundSkin = skin;
-
-		ToolBarItemRenderer.SIZE = this.width;
-
 		this.layout = new AnchorLayout();
-		var icons = Assets.list(AssetType.IMAGE);
-		ArraySort.sort(icons, (l, r) -> return l > r ? 1 : -1);
-		var i = 0;
-		var items = ["select", "rectangle", "circle", "text", "zoom"];
-
+		
+		ToolBarItemRenderer.SIZE = this.width;
 		this.topList = new ListView();
 		this.topList.variant = ListView.VARIANT_BORDERLESS;
-		this.topList.dataProvider = new ArrayCollection(items);
+		this.topList.dataProvider = new ArrayCollection(["select", "rectangle", "circle", "text", "zoom"]);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
-		this.topList.selectedIndex = Tools.instance.toolType;
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
 		this.addChild(this.topList);
-
-		i = 0;
-		items = ["layers", "assets"];
+		this.topList.selectedIndex = Tools.instance.toolType;
+		
 		this.bottomList = new ListView();
 		this.bottomList.variant = ListView.VARIANT_BORDERLESS;
-		this.bottomList.dataProvider = new ArrayCollection(items);
+		this.bottomList.dataProvider = new ArrayCollection(["layers", "assets"]);
 		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
 		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);

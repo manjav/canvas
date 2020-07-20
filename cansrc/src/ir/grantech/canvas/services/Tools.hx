@@ -47,17 +47,24 @@ class Tools extends BaseService {
 	}
 
 	/**
-		get selected tool.
-		The following example is get current tool:
+		set and reterive current tool type.
+		The following example is set selection tool:
 		```hx
-		var tool = Tools.instance.tool;
+		Tools.instance.type = Tool.TYPE_SELECT;
 		```
 		@since 1.0.0
 	**/
-	public var tool(get, null):Tool;
+	public var type(default, set):String = null;
 
+	private function set_type(value:String):String {
+		if (this.type == value)
+			return this.type;
+
+		this.type = value;
 	private function get_tool():Tool {
 		return this.tools.get(this.toolType);
+		CanEvent.dispatch(this, Event.CHANGE);
+		return value;
 	}
 
 	public function new() {
@@ -81,9 +88,11 @@ class Tool {
 	static public final TYPE_BITMAP:String = "bitmap";
 	static public final TYPE_LAYOUT:String = "layout";
 
-	public var type:Int;
+	public var type:String;
+	public var children:Array<Tool>;
 
-	public function new(type:Int) {
+	public function new(type:String, children:Array<Tool> = null) {
 		this.type = type;
+		this.children = children == null ? [] : children;
 	}
 }

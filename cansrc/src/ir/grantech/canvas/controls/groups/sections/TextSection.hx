@@ -10,7 +10,7 @@ import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Fonts;
-import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.services.Tools.Tool;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.text.Font;
@@ -18,7 +18,7 @@ import openfl.text.TextFormatAlign;
 
 class TextSection extends CanSection {
 	override private function set_targets(value:CanItems):CanItems {
-		this.visible = this.includeInLayout = value.type == Layer.TYPE_TEXT;
+		this.visible = this.includeInLayout = value.type == Tool.TYPE_TEXT;
 		super.set_targets(value);
 		return value;
 	}
@@ -121,7 +121,7 @@ class TextSection extends CanSection {
 	}
 
 	private function textInputs_changeHandler(event:Event):Void {
-		if (this.updating || this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+		if (this.updating || this.targets == null || this.targets.type != Tool.TYPE_TEXT)
 			return;
 		if (event.currentTarget == this.sizeInput)
 			commands.commit(TEXT_SIZE, [this.targets, Math.round(this.sizeInput.value)]);
@@ -132,12 +132,12 @@ class TextSection extends CanSection {
 	}
 
 	private function colorPicker_changeHandler(event:Event):Void {
-		if (this.updating || this.targets != null && this.targets.type == Layer.TYPE_TEXT)
+		if (this.updating || this.targets != null && this.targets.type == Tool.TYPE_TEXT)
 			commands.commit(TEXT_COLOR, [this.targets, this.colorPicker.rgb]);
 	}
 
 	override private function buttonGroup_changeHandler(event:Event):Void {
-		if (this.updating || this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+		if (this.updating || this.targets == null || this.targets.type != Tool.TYPE_TEXT)
 			return;
 		if (event.currentTarget == this.alignsButtons) {
 			commands.commit(TEXT_ALIGN, [this.targets, this.alignsButtons.selectedItem]);
@@ -153,7 +153,7 @@ class TextSection extends CanSection {
 	}
 
 	override public function updateData():Void {
-		if (this.targets == null || this.targets.type != Layer.TYPE_TEXT)
+		if (this.targets == null || this.targets.type != Tool.TYPE_TEXT)
 			return;
 		this.updating = true;
 

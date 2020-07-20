@@ -6,7 +6,7 @@ import feathers.controls.colors.ColorLine;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import ir.grantech.canvas.services.Commands;
-import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.services.Tools.Tool;
 import openfl.display.BlendMode;
 import openfl.events.Event;
 
@@ -92,14 +92,14 @@ class AppearSection extends CanSection {
 		this.alphaSlider.value = this.targets.getFloat(Commands.ALPHA) * 100;
 		this.modesList.selectedIndex = this.findBlendMode(this.targets.getProperty(Commands.BLEND_MODE));
 
-		this.fillPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
+		this.fillPicker.hasAlpha = this.targets.type != Tool.TYPE_TEXT;
 		this.fillPicker.selected = this.targets.getBool(Commands.FILL_ENABLE);
 		if (this.fillPicker.selected) {
 			this.fillPicker.rgb = this.targets.getUInt(Commands.FILL_COLOR);
 			this.fillPicker.a = Math.round(this.targets.getFloat(Commands.FILL_ALPHA) * 0xFF);
 		}
 
-		this.borderPicker.hasAlpha = this.targets.type != Layer.TYPE_TEXT;
+		this.borderPicker.hasAlpha = this.targets.type != Tool.TYPE_TEXT;
 		this.borderPicker.selected = this.targets.getBool(Commands.BORDER_ENABLE);
 		if (this.borderPicker.selected) {
 			this.borderPicker.rgb = this.targets.getUInt(Commands.BORDER_COLOR);

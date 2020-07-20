@@ -180,7 +180,7 @@ class Inputs extends BaseService {
 		if (toolType <= 0 || Tools.instance.toolType != Tool.SELECT)
 			return;
 
-		Tools.instance.toolType = toolType;
+		Tools.instance.type = selectedItems.type;
 		this.selectedItems.removeAll();
 	}
 
@@ -271,12 +271,12 @@ class Inputs extends BaseService {
 		this.altKey = event.altKey;
 
 		// change mouse cursor
-		if (Tools.instance.toolType != Tool.SELECT) {
+		if (Tools.instance.category.type != Tool.DIR_SELECT) {
 			if (this.inScene(event.stageX, event.stageY)) {
-				Cursor.instance.mode = switch (Tools.instance.toolType) {
-					case Tool.RECTANGLE: Cursor.MODE_RECTANGLE;
-					case Tool.ELLIPSE: Cursor.MODE_ELLIPSE;
-					case Tool.TEXT: Cursor.MODE_TEXT;
+				Cursor.instance.mode = switch (Tools.instance.type) {
+					case Tool.TYPE_RECT: Cursor.MODE_RECTANGLE;
+					case Tool.TYPE_ELLIPSE: Cursor.MODE_ELLIPSE;
+					case Tool.TYPE_TEXT: Cursor.MODE_TEXT;
 					default: Cursor.MODE_NONE;
 				}
 				Cursor.instance.rotation = 0;

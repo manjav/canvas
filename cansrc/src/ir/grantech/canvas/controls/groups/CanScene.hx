@@ -4,7 +4,6 @@ import feathers.controls.LayoutGroup;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Commands;
 import ir.grantech.canvas.services.Inputs;
-import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.services.Libs.LibItem;
 import ir.grantech.canvas.services.Tools;
 import ir.grantech.canvas.themes.CanTheme;
@@ -65,7 +64,7 @@ class CanScene extends LayoutGroup {
 			if (this.draggable != null) {
 				if (input.inScene(stage.mouseX, stage.mouseY)) {
 					Commands.instance.commit(Commands.ADDED, [
-						Layer.TYPE_BITMAP,
+						Tool.TYPE_BITMAP,
 						input.selectedItems.getUInt(Commands.FILL_COLOR),
 						input.selectedItems.getFloat(Commands.FILL_ALPHA),
 						input.selectedItems.getFloat(Commands.BORDER_SIZE),
@@ -105,7 +104,7 @@ class CanScene extends LayoutGroup {
 			this.selection.graphics.clear();
 			this.selection.graphics.beginFill(0x0066FF, 0.1);
 			this.selection.graphics.lineStyle(0.1, 0xFFFFFF);
-			if (Tools.instance.toolType == Tool.ELLIPSE)
+			if (Tools.instance.type == Tool.TYPE_ELLIPSE)
 				this.selection.graphics.drawEllipse(0, 0, 100, 100);
 			else
 				this.selection.graphics.drawRect(0, 0, 100, 100);

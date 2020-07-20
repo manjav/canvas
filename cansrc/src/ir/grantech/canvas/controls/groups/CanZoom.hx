@@ -162,7 +162,7 @@ class CanZoom extends LayoutGroup {
 
 		this.performSelection(input.pointPhase, input.beganFrom, input.selectedItems, input.shiftKey || input.ctrlKey);
 
-		if (Tools.instance.toolType != Tool.SELECT)
+		if (Tools.instance.type != Tool.TYPE_SELECT)
 			return;
 
 		if (input.pointPhase == Inputs.PHASE_ENDED) {
@@ -184,7 +184,7 @@ class CanZoom extends LayoutGroup {
 			return;
 
 		var selectionBounds = this.scene.selection.getBounds(this.scene);
-		if (Tools.instance.toolType == Tool.SELECT) {
+		if (Tools.instance.type == Tool.TYPE_SELECT) {
 			if (!Inputs.instance.shiftKey && !Inputs.instance.ctrlKey)
 				selectedItems.removeAll(false);
 			for (i in 0...this.scene.container.numChildren)

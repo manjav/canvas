@@ -5,7 +5,7 @@ import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.groups.CanScene;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Commands;
-import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.services.Tools.Tool;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.utils.CanRect;
 import openfl.display.BlendMode;
@@ -46,12 +46,12 @@ class CanItems {
 
 	public function get_type():String {
 		if (this.isEmpty)
-			return Layer.TYPE_NONE;
+			return Tool.TYPE_NONE;
 
 		var t = this.items[0].layer.getString(TYPE);
 		for (i in 1...this.length)
 			if (t != this.items[i].layer.getString(TYPE))
-				return Layer.TYPE_NONE;
+				return Tool.TYPE_NONE;
 		return t;
 	}
 

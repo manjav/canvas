@@ -2,6 +2,7 @@ package ir.grantech.canvas.drawables;
 
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Layers.Layer;
+import ir.grantech.canvas.services.Tools.Tool;
 import openfl.display.Shape;
 
 class CanShape extends Shape implements ICanItem {
@@ -26,7 +27,7 @@ class CanShape extends Shape implements ICanItem {
 			this.graphics.lineStyle(this.layer.getFloat(BORDER_SIZE), this.layer.getUInt(BORDER_COLOR), this.layer.getFloat(BORDER_ALPHA));
 
 		var b:Array<Float> = cast this.layer.getProperty(BOUNDS);
-		if (this.layer.getString(TYPE) == Layer.TYPE_RECT)
+		if (this.layer.getString(TYPE) == Tool.TYPE_RECT)
 			this.graphics.drawRoundRect(0, 0, b[2], b[3], this.layer.getFloat(CORNER_RADIUS), this.layer.getFloat(CORNER_RADIUS));
 		else
 			this.graphics.drawEllipse(0, 0, b[2], b[3]);

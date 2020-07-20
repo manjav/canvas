@@ -1,0 +1,30 @@
+package ir.grantech.canvas.controls.groups.sections;
+
+import feathers.controls.PopUpListView;
+import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
+
+class LayoutSection extends CanSection {
+
+	private var layoutsList:PopUpListView;
+
+	override private function initialize() {
+		super.initialize();
+		this.layout = new AnchorLayout();
+		this.title = "LAYOUT";
+
+		var layouts = ["None", "Anchor Layout", "Vertical Layout", "Horizontal Layout"];
+		this.layoutsList = this.createPopupList(layouts, new AnchorLayoutData(padding * 2.7, padding, null, padding));
+
+		this.height = padding * 7.5;
+	}
+
+
+	override public function updateData():Void {
+		if (this.targets == null || this.targets.isEmpty)
+			return;
+		this.updating = true;
+
+		this.updating = false;
+	}
+}

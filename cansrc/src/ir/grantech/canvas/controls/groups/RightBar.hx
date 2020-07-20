@@ -1,5 +1,8 @@
 package ir.grantech.canvas.controls.groups;
 
+import ir.grantech.canvas.controls.groups.sections.LayoutSection;
+import ir.grantech.canvas.controls.groups.sections.LayersSection;
+import feathers.controls.LayoutGroup;
 import feathers.controls.ScrollContainer;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
@@ -19,6 +22,7 @@ import openfl.events.Event;
 class RightBar extends ScrollContainer {
 	private var textSection:TextSection;
 	private var alignSection:AlignSection;
+	private var layoutSection:LayoutSection;
 	private var appearSection:AppearSection;
 	private var filtersSection:FiltersSection;
 	private var transfromSection:TransformSection;
@@ -36,6 +40,9 @@ class RightBar extends ScrollContainer {
 
 		this.alignSection = new AlignSection();
 		this.addChild(this.alignSection);
+
+		this.layoutSection = new LayoutSection();
+		this.addChild(this.layoutSection);
 
 		this.transfromSection = new TransformSection();
 		this.addChild(this.transfromSection);
@@ -65,6 +72,7 @@ class RightBar extends ScrollContainer {
 		this.enabled = items.isFill;
 		this.textSection.targets = items;
 		this.alignSection.targets = items;
+		this.layoutSection.targets = items;
 		this.appearSection.targets = items;
 		this.transfromSection.targets = items;
 	}

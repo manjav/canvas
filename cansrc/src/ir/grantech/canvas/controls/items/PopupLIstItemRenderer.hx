@@ -6,7 +6,7 @@ import feathers.core.InvalidationFlag;
 import ir.grantech.canvas.themes.CanTheme;
 
 class PopupListItemRenderer extends ItemRenderer implements IDataRenderer {
-	public static final HEIGHT:Int = Math.floor(CanTheme.CONTROL_SIZE * 1.5); 
+	public static final HEIGHT:Int = Math.floor(CanTheme.CONTROL_SIZE * 1.4); 
 	@:isVar
 	public var data(get, set):Dynamic;
 

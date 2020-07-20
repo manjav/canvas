@@ -18,6 +18,7 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import feathers.themes.steel.BaseSteelTheme;
 import feathers.utils.DisplayObjectRecycler;
+import ir.grantech.canvas.controls.items.PopupLIstItemRenderer.PopupListItemRenderer;
 import ir.grantech.canvas.controls.popups.DropCenterPopUpAdapter;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.themes.CanTheme;
@@ -104,10 +105,11 @@ class CanSection extends CanView {
 
 	private function createPopupList(items:Array<Dynamic>, layoutData:AnchorLayoutData):PopUpListView {
 		var element = new PopUpListView();
+		element.itemRendererRecycler = DisplayObjectRecycler.withClass(PopupListItemRenderer);
 		element.dataProvider = new ArrayCollection(items);
 		element.layoutData = layoutData;
-		element.height = CanTheme.CONTROL_SIZE;
-		element.popUpAdapter = new DropCenterPopUpAdapter(12 * CanTheme.CONTROL_SIZE);
+		element.height = PopupListItemRenderer.HEIGHT;
+		element.popUpAdapter = new DropCenterPopUpAdapter(Math.min(12, items.length) * PopupListItemRenderer.HEIGHT);
 		element.addEventListener(Event.CHANGE, this.popupListView_changeHandler);
 		this.addChild(element);
 		return element;

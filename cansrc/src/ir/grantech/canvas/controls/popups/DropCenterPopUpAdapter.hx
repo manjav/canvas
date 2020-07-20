@@ -35,6 +35,6 @@ class DropCenterPopUpAdapter extends DropDownPopUpAdapter {
 		this.content.x = originTopLeft.x;
 		this.content.y = originTopLeft.y - this.height * 0.5;
 		this.content.width = originBottomRight.x - originTopLeft.x;
-		this.content.height = originBottomRight.y - originTopLeft.y + this.height;
+		this.content.height = this.height;
 	}
 }

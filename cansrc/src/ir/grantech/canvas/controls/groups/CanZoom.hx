@@ -197,13 +197,18 @@ class CanZoom extends LayoutGroup {
 
 		if (Tools.instance.toolType == Tool.RECTANGLE || Tools.instance.toolType == Tool.ELLIPSE || Tools.instance.toolType == Tool.TEXT)
 			Commands.instance.commit(Commands.ADDED, [
-				Tools.instance.toolType,
+				Tools.instance.type,
 				input.selectedItems.getUInt(Commands.FILL_COLOR),
 				input.selectedItems.getFloat(Commands.FILL_ALPHA),
 				input.selectedItems.getFloat(Commands.BORDER_SIZE),
 				input.selectedItems.getUInt(Commands.BORDER_COLOR),
 				input.selectedItems.getFloat(Commands.BORDER_ALPHA),
-				[selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height],
+				[
+					selectionBounds.x,
+					selectionBounds.y,
+					selectionBounds.width,
+					selectionBounds.height
+				],
 				0
 			]);
 	}

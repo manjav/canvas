@@ -8,6 +8,7 @@ import ir.grantech.canvas.drawables.CanText;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.services.Commands.*;
 import ir.grantech.canvas.services.Libs.LibItem;
+import ir.grantech.canvas.services.Tools.Tool.*;
 import ir.grantech.canvas.themes.CanTheme;
 import lime.math.RGB;
 import openfl.display.BlendMode;
@@ -73,21 +74,12 @@ class Layer {
 	private var _props:Map<String, Dynamic>;
 	private var _invalidationFlags:Map<String, Bool> = new Map();
 
-	public function new(type:Dynamic, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>,
+	public function new(type:String, fillColor:RGB, fillAlpha:Float, borderSize:Float, borderColor:RGB, borderAlpha:RGB, bounds:Array<Float>,
 			cornerRadius:Float, ?source:Dynamic) {
-		if (Layer.TYPES == null)
-			Layer.TYPES = [
-				Layer.TYPE_NONE,
-				Layer.TYPE_RECT,
-				Layer.TYPE_ELLIPSE,
-				Layer.TYPE_TEXT,
-				Layer.TYPE_BITMAP
-			];
-
 		this._invalidationFlags = new Map<String, Bool>();
 		this._props = new Map<String, Dynamic>();
 		this.setProperty(ID, Math.floor(Timer.stamp() * 100));
-		this.setProperty(TYPE, Std.isOfType(type, Int) ? Layer.TYPES[type] : type);
+		this.setProperty(TYPE, type);
 		this.setProperty(NAME, this.getString(TYPE) + " " + this.getInt(ID));
 		this.setProperty(BOUNDS, bounds);
 

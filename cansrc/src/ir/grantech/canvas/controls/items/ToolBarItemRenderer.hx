@@ -8,10 +8,26 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
-import openfl.Assets;
-import openfl.display.Bitmap;
 
 class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
+	@:isVar
+	public var data(get, set):Dynamic;
+
+	private function set_data(value:Dynamic):Dynamic {
+		if (this.data == value)
+			return this.data;
+		if (value == null)
+			return value;
+		this.data = value;
+		this.icon = new ScaledBitmap(value);
+		this.selectedIcon = new ScaledBitmap(value + "-blue");
+		return value;
+	}
+
+	private function get_data():Dynamic {
+		return this.data;
+	}
+
 	static public var SIZE:Float = 52;
 
 	public function new() {
@@ -33,39 +49,17 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 
 	override private function initializeItemRendererTheme():Void {}
 
-	@:isVar
-	public var data(get, set):Dynamic;
-
-	private function set_data(value:Dynamic):Dynamic {
-		if (this.data == value)
-			return this.data;
-		if (value == null)
-			return value;
-		this.data = value;
-
-		var icon = new ScaledBitmap(value);
-		icon.width = icon.height = SIZE * 0.5;
-		icon.x = (this.width - icon.width) * 0.5;
-		icon.y = (this.height - icon.height) * 0.5;
-		this.icon = icon;
-
-		var selectedIcon = new ScaledBitmap(value + "-blue");
-		selectedIcon.width = selectedIcon.height = icon.width;
-		selectedIcon.x = icon.x;
-		selectedIcon.y = icon.y;
-		this.selectedIcon = selectedIcon;
-
-		return value;
-	}
-
-	private function get_data():Dynamic {
-		return this.data;
-	}
-
 	override private function refreshText():Void {}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
 		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.data, true);
 		super.basicToggleButton_triggerHandler(event);
+	}
+
+	override private function layoutContent():Void {
+		icon.x = (SIZE - icon.width) * 0.5;
+		icon.y = (SIZE - icon.height) * 0.5;
+		selectedIcon.x = (SIZE - selectedIcon.width) * 0.5;
+		selectedIcon.y = (SIZE - selectedIcon.height) * 0.5;
 	}
 }

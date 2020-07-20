@@ -1,6 +1,5 @@
 package ir.grantech.canvas.controls.items;
 
-import ir.grantech.canvas.themes.ScaledBitmap;
 import feathers.controls.dataRenderers.IDataRenderer;
 import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.events.TriggerEvent;
@@ -8,6 +7,7 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.themes.CanTheme;
+import ir.grantech.canvas.themes.ScaledBitmap;
 
 class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	@:isVar

@@ -9,13 +9,10 @@ import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import feathers.themes.steel.BaseSteelTheme;
 import feathers.utils.DisplayObjectRecycler;
-import haxe.ds.ArraySort;
 import ir.grantech.canvas.controls.items.ToolBarItemRenderer;
 import ir.grantech.canvas.events.CanEvent;
 import ir.grantech.canvas.services.Tools;
-import openfl.Assets;
 import openfl.events.Event;
-import openfl.utils.AssetType;
 
 class ToolBar extends LayoutGroup {
 	private var selectedSection(default, set):Int = -1;
@@ -45,6 +42,7 @@ class ToolBar extends LayoutGroup {
 		this.layout = new AnchorLayout();
 		
 		ToolBarItemRenderer.SIZE = this.width;
+
 		this.topList = new ListView();
 		this.topList.variant = ListView.VARIANT_BORDERLESS;
 		this.topList.dataProvider = new ArrayCollection(["select", "rectangle", "circle", "text", "zoom"]);

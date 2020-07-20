@@ -333,7 +333,7 @@ class Inputs extends BaseService {
 
 	private function stage_rightClickHandler(event:MouseEvent):Void {
 		ContextMenu.show(event.stageX, event.stageY, stage);
-		if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene)){
+		if (Std.is(event.target, CanZoom) || Std.is(event.target, CanScene)) {
 			trace("scene.");
 			return;
 		}

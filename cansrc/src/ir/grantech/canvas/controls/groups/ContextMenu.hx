@@ -1,7 +1,5 @@
 package ir.grantech.canvas.controls.groups;
 
-import openfl.filters.GlowFilter;
-import openfl.filters.BitmapFilter;
 import feathers.controls.Callout;
 import feathers.controls.ListView;
 import feathers.core.PopUpManager;
@@ -13,7 +11,7 @@ import ir.grantech.canvas.services.Configs.Config;
 import ir.grantech.canvas.themes.CanTheme;
 import openfl.display.Shape;
 import openfl.display.Stage;
-import openfl.filters.DropShadowFilter;
+import openfl.filters.GlowFilter;
 
 class ContextMenu extends ListView {
 	static private var menu:ContextMenu;

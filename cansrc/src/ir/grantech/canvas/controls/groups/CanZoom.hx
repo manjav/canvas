@@ -1,7 +1,5 @@
 package ir.grantech.canvas.controls.groups;
 
-import ir.grantech.canvas.services.Libs.LibItem;
-import ir.grantech.canvas.controls.items.LibItemRenderer;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEvent;
 import haxe.Timer;
@@ -157,7 +155,7 @@ class CanZoom extends LayoutGroup {
 		if (input.beganFrom == Inputs.TARGET_NONE)
 			return;
 
-		if (input.beganFrom == Inputs.TARGET_LIBS){
+		if (input.beganFrom == Inputs.TARGET_LIBS) {
 			this.scene.performLibInsert(input.pointPhase, input.beganFrom, event.data);
 			return;
 		}

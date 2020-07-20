@@ -67,13 +67,6 @@ class Layers extends ArrayCollection<Layer> {
 }
 
 class Layer {
-	static public var TYPES:Array<String>;
-	static public final TYPE_NONE:String = "none";
-	static public final TYPE_RECT:String = "rect";
-	static public final TYPE_ELLIPSE:String = "ellipse";
-	static public final TYPE_TEXT:String = "text";
-	static public final TYPE_BITMAP:String = "bitmap";
-
 	public var item(default, default):ICanItem;
 	public var pivot(default, default):Point = new Point(0.5, 0.5);
 

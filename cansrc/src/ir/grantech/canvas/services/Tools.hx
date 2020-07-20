@@ -68,10 +68,18 @@ class Tools extends BaseService {
 }
 
 class Tool {
-	static public final SELECT:Int = 0;
-	static public final RECTANGLE:Int = 1;
-	static public final ELLIPSE:Int = 2;
-	static public final TEXT:Int = 3;
+	static public final DIR_SELECT:String = "select";
+	static public final DIR_SHAPE:String = "shape";
+	static public final DIR_TEXT:String = "text";
+	static public final DIR_LAYOUT:String = "layout";
+
+	static public final TYPE_NONE:String = "none";
+	static public final TYPE_SELECT:String = "select";
+	static public final TYPE_RECT:String = "rect";
+	static public final TYPE_ELLIPSE:String = "ellipse";
+	static public final TYPE_TEXT:String = "text";
+	static public final TYPE_BITMAP:String = "bitmap";
+	static public final TYPE_LAYOUT:String = "layout";
 
 	public var type:Int;
 

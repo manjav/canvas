@@ -59,24 +59,38 @@ class ToolBar extends LayoutGroup {
 		this.bottomList.dataProvider = new ArrayCollection([new Tool("layers"), new Tool("assets")]);
 		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
-		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);
+		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.bottomList_itemSelectHandler);
 		this.bottomList.height = ToolBarItemRenderer.SIZE * this.bottomList.dataProvider.length + 1;
 		this.addChild(this.bottomList);
+
+		this.rightList = new ListView();
+		this.rightList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
+		this.rightList.addEventListener(CanEvent.ITEM_SELECT, this.topList_itemSelectHandler);
 
 		Tools.instance.addEventListener(Event.CHANGE, this.tools_changeHandler);
 	}
 
 	private function tools_changeHandler(event:Event):Void {
-		this.topList.removeEventListener(Event.CHANGE, this.listView_changeHandler);
-		this.topList.selectedIndex = Tools.instance.toolType;
-		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 	}
 
-	private function listView_itemSelectHandler(event:CanEvent):Void {
+	private function topList_itemSelectHandler(event:CanEvent):Void {
+		var tool = cast(event.data, Tool);
+		if (this.rightList.parent != null)
+			this.removeChild(this.rightList);
+		if (tool.children.length == 0)
+			Tools.instance.type = tool.type;
+		else
+			showRightList(tool);
+	}
+
+	private function bottomList_itemSelectHandler(event:CanEvent):Void {
 		this.selectedSection = this.bottomList.selectedIndex;
 	}
 
-	private function listView_changeHandler(event:Event):Void {
-		Tools.instance.toolType = cast(event.currentTarget, ListView).selectedIndex;
+	private function showRightList(tool:Tool):Void {
+		this.rightList.dataProvider = new ArrayCollection(tool.children);
+		this.rightList.layoutData = new AnchorLayoutData(null, -width, null, width);
+		this.rightList.height = ToolBarItemRenderer.SIZE * tool.children.length + 1;
+		this.addChild(this.rightList);
 	}
 }

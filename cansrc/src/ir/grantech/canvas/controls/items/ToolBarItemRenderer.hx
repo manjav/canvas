@@ -55,7 +55,7 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	override private function refreshText():Void {}
 
 	override private function basicToggleButton_triggerHandler(event:TriggerEvent):Void {
-		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.data, true);
+		CanEvent.dispatch(this, CanEvent.ITEM_SELECT, this.tool, true);
 		super.basicToggleButton_triggerHandler(event);
 	}
 

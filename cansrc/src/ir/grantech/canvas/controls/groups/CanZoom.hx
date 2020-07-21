@@ -195,7 +195,7 @@ class CanZoom extends LayoutGroup {
 			return;
 		}
 
-		if (Tools.instance.category.type == Tool.DIR_SHAPE || Tools.instance.category.type == Tool.DIR_TEXT)
+		if (Tools.instance.category.type == Tool.CATE_SHAPE || Tools.instance.category.type == Tool.CATE_TEXT)
 			Commands.instance.commit(Commands.ADDED, [
 				Tools.instance.type,
 				input.selectedItems.getUInt(Commands.FILL_COLOR),

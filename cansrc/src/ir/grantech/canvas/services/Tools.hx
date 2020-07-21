@@ -55,10 +55,10 @@ class Tools extends BaseService {
 	public function new() {
 		super();
 		this.items = [
-			new Tool(DIR_SELECT),
-			new Tool(DIR_SHAPE, [new Tool(TYPE_RECT), new Tool(TYPE_ELLIPSE)]),
-			new Tool(DIR_TEXT),
-			new Tool(DIR_LAYOUT, [new Tool(TYPE_BITMAP)])
+			new Tool(CATE_SELECT),
+			new Tool(CATE_SHAPE, [new Tool(TYPE_RECT), new Tool(TYPE_ELLIPSE)]),
+			new Tool(CATE_TEXT),
+			new Tool(CATE_LAYOUT, [new Tool(TYPE_BITMAP)])
 		];
 		this.type = TYPE_SELECT;
 	}
@@ -79,10 +79,10 @@ class Tools extends BaseService {
 }
 
 class Tool {
-	static public final DIR_SELECT:String = "select";
-	static public final DIR_SHAPE:String = "shape";
-	static public final DIR_TEXT:String = "text";
-	static public final DIR_LAYOUT:String = "layout";
+	static public final CATE_SELECT:String = "select";
+	static public final CATE_SHAPE:String = "shape";
+	static public final CATE_TEXT:String = "text";
+	static public final CATE_LAYOUT:String = "layout";
 
 	static public final TYPE_NONE:String = "none";
 	static public final TYPE_SELECT:String = "select";

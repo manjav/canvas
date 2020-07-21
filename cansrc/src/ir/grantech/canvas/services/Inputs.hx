@@ -175,7 +175,7 @@ class Inputs extends BaseService {
 	}
 
 	private function stage_doubleClickHandler(event:MouseEvent):Void {
-		if (Tools.instance.category.type != Tool.DIR_SELECT)
+		if (Tools.instance.category.type != Tool.CATE_SELECT)
 			return;
 
 		Tools.instance.type = selectedItems.type;
@@ -269,7 +269,7 @@ class Inputs extends BaseService {
 		this.altKey = event.altKey;
 
 		// change mouse cursor
-		if (Tools.instance.category.type != Tool.DIR_SELECT) {
+		if (Tools.instance.category.type != Tool.CATE_SELECT) {
 			if (this.inScene(event.stageX, event.stageY)) {
 				Cursor.instance.mode = switch (Tools.instance.type) {
 					case Tool.TYPE_RECT: Cursor.MODE_RECTANGLE;
@@ -349,7 +349,7 @@ class Inputs extends BaseService {
 	}
 
 	public function hitTest(x:Float, y:Float):DisplayObject {
-		if (Tools.instance.category.type != Tool.DIR_SELECT)
+		if (Tools.instance.category.type != Tool.CATE_SELECT)
 			return null;
 		for (i in 0...this.canZoom.scene.container.numChildren)
 			if (this.canZoom.scene.container.getChildAt(i).hitTestPoint(x, y, true))

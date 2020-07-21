@@ -45,17 +45,18 @@ class ToolBar extends LayoutGroup {
 
 		this.topList = new ListView();
 		this.topList.variant = ListView.VARIANT_BORDERLESS;
-		this.topList.dataProvider = new ArrayCollection(["select", "rectangle", "circle", "text", "zoom"]);
+		this.topList.dataProvider = new ArrayCollection(Tools.instance.items);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
 		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
 		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
+		this.topList.selectedIndex = 0;
 		this.addChild(this.topList);
 		this.topList.selectedIndex = Tools.instance.toolType;
 		
 		this.bottomList = new ListView();
 		this.bottomList.variant = ListView.VARIANT_BORDERLESS;
-		this.bottomList.dataProvider = new ArrayCollection(["layers", "assets"]);
+		this.bottomList.dataProvider = new ArrayCollection([new Tool("layers"), new Tool("assets")]);
 		this.bottomList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.bottomList.layoutData = new AnchorLayoutData(null, 0, 0, 0);
 		this.bottomList.addEventListener(CanEvent.ITEM_SELECT, this.listView_itemSelectHandler);

@@ -6,6 +6,7 @@ import feathers.events.TriggerEvent;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Tools.Tool;
 import ir.grantech.canvas.themes.CanTheme;
 import ir.grantech.canvas.themes.ScaledBitmap;
 
@@ -19,8 +20,9 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 		if (value == null)
 			return value;
 		this.data = value;
-		this.icon = new ScaledBitmap(value);
-		this.selectedIcon = new ScaledBitmap(value + "-blue");
+		this.tool = cast(value, Tool);
+		this.icon = new ScaledBitmap(tool.type);
+		this.selectedIcon = new ScaledBitmap(tool.type + "-blue");
 		return value;
 	}
 
@@ -29,6 +31,7 @@ class ToolBarItemRenderer extends ItemRenderer implements IDataRenderer {
 	}
 
 	static public var SIZE:Float = 52;
+	public var tool:Tool;
 
 	public function new() {
 		super();

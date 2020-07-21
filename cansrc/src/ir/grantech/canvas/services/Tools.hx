@@ -27,24 +27,7 @@ class Tools extends BaseService {
 		```
 		@since 1.0.0
 	**/
-	public var toolType(default, set):Int = -1;
-
-	private function set_toolType(value:Int):Int {
-		if (this.toolType == value)
-			return this.toolType;
-
-		this.toolType = value;
-		if (!this.tools.exists(this.toolType))
-			this.tools.set(value, new Tool(value));
-		CanEvent.dispatch(this, Event.CHANGE);
-		//  var bmp = new CanBitmap();
-		// 	bmp.bitmapData = Assets.getBitmapData("rotate");
-		// 	item = bmp;
-		// } else if (this.toolType == 4) {
-		// 	item = new CanSlicedBitmap(Assets.getBitmapData("toolfoot_1_selected"), new Rectangle(22, 24, 4, 4));
-
-		return value;
-	}
+	public var category(default, default):Tool = null;
 
 	/**
 		set and reterive current tool type.
@@ -61,16 +44,37 @@ class Tools extends BaseService {
 			return this.type;
 
 		this.type = value;
-	private function get_tool():Tool {
-		return this.tools.get(this.toolType);
+		this.index = this.findToolIndex(value);
+		this.category = this.index > -1 ? this.items[this.index] : null;
 		CanEvent.dispatch(this, Event.CHANGE);
 		return value;
 	}
 
+	public var items:Array<Tool>;
+
 	public function new() {
 		super();
-		this.tools = new Map();
-		this.toolType = 0;
+		this.items = [
+			new Tool(DIR_SELECT),
+			new Tool(DIR_SHAPE, [new Tool(TYPE_RECT), new Tool(TYPE_ELLIPSE)]),
+			new Tool(DIR_TEXT),
+			new Tool(DIR_LAYOUT, [new Tool(TYPE_BITMAP)])
+		];
+		this.type = TYPE_SELECT;
+	}
+
+	private function findToolIndex(type:String):Int {
+		for (i in 0...items.length) {
+			if (items[i].children.length == 0) {
+				if (items[i].type == type)
+					return i;
+				continue;
+			}
+			for (t in items[i].children)
+				if (t.type == type)
+					return i;
+		}
+		return -1;
 	}
 }
 

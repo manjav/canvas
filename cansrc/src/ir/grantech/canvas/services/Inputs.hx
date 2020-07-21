@@ -8,7 +8,6 @@ import ir.grantech.canvas.controls.items.LibItemRenderer;
 import ir.grantech.canvas.drawables.CanItems;
 import ir.grantech.canvas.drawables.ICanItem;
 import ir.grantech.canvas.events.CanEvent;
-import ir.grantech.canvas.services.Layers.Layer;
 import ir.grantech.canvas.services.Tools.Tool;
 import ir.grantech.canvas.utils.Cursor;
 import lime.ui.KeyCode;
@@ -176,8 +175,7 @@ class Inputs extends BaseService {
 	}
 
 	private function stage_doubleClickHandler(event:MouseEvent):Void {
-		var toolType = Layer.TYPES.indexOf(selectedItems.type);
-		if (toolType <= 0 || Tools.instance.toolType != Tool.SELECT)
+		if (Tools.instance.category.type != Tool.DIR_SELECT)
 			return;
 
 		Tools.instance.type = selectedItems.type;
@@ -351,7 +349,7 @@ class Inputs extends BaseService {
 	}
 
 	public function hitTest(x:Float, y:Float):DisplayObject {
-		if (Tools.instance.toolType != Tool.SELECT)
+		if (Tools.instance.category.type != Tool.DIR_SELECT)
 			return null;
 		for (i in 0...this.canZoom.scene.container.numChildren)
 			if (this.canZoom.scene.container.getChildAt(i).hitTestPoint(x, y, true))

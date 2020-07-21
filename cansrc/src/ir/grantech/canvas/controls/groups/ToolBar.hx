@@ -30,6 +30,7 @@ class ToolBar extends LayoutGroup {
 
 	private var topList:ListView;
 	private var bottomList:ListView;
+	private var rightList:ListView;
 
 	@:access(feathers.themes.steel.BaseSteelTheme)
 	override private function initialize() {
@@ -40,7 +41,7 @@ class ToolBar extends LayoutGroup {
 		skin.fill = SolidColor(theme.controlFillColor1);
 		this.backgroundSkin = skin;
 		this.layout = new AnchorLayout();
-		
+
 		ToolBarItemRenderer.SIZE = this.width;
 
 		this.topList = new ListView();
@@ -48,12 +49,11 @@ class ToolBar extends LayoutGroup {
 		this.topList.dataProvider = new ArrayCollection(Tools.instance.items);
 		this.topList.itemRendererRecycler = DisplayObjectRecycler.withClass(ToolBarItemRenderer);
 		this.topList.layoutData = new AnchorLayoutData(0, 0, null, 0);
-		this.topList.addEventListener(Event.CHANGE, this.listView_changeHandler);
+		this.topList.addEventListener(CanEvent.ITEM_SELECT, this.topList_itemSelectHandler);
 		this.topList.height = ToolBarItemRenderer.SIZE * this.topList.dataProvider.length + 1;
 		this.topList.selectedIndex = 0;
 		this.addChild(this.topList);
-		this.topList.selectedIndex = Tools.instance.toolType;
-		
+
 		this.bottomList = new ListView();
 		this.bottomList.variant = ListView.VARIANT_BORDERLESS;
 		this.bottomList.dataProvider = new ArrayCollection([new Tool("layers"), new Tool("assets")]);
@@ -71,6 +71,7 @@ class ToolBar extends LayoutGroup {
 	}
 
 	private function tools_changeHandler(event:Event):Void {
+		this.topList.selectedIndex = Tools.instance.index;
 	}
 
 	private function topList_itemSelectHandler(event:CanEvent):Void {

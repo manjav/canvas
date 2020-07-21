@@ -1,11 +1,10 @@
 package ir.grantech.canvas.services;
 
-import openfl.events.Event;
 import ir.grantech.canvas.events.CanEvent;
+import ir.grantech.canvas.services.Tools.Tool.*;
+import openfl.events.Event;
 
 class Tools extends BaseService {
-	private var tools:Map<Int, Tool>;
-
 	/**
 		The singleton method of Tools.
 		```hx
@@ -19,11 +18,13 @@ class Tools extends BaseService {
 		return BaseService.get(Tools);
 	}
 
+	public var index(default, default):Int = 0;
+
 	/**
-		set and reterive current tool type.
+		set and reterive current category.
 		The following example is set selection tool:
 		```hx
-		Tools.instance.toolType = Tool.SELECT;
+		Tools.instance.category = Tool.CATE_SELECT;
 		```
 		@since 1.0.0
 	**/

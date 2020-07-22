@@ -36,7 +36,7 @@ class CanItems {
 	public var isUI(get, never):Bool;
 
 	public function get_isUI():Bool {
-		return this.type == Layer.TYPE_TEXT;
+		return this.type == Tool.TYPE_TEXT || this.type == Tool.TYPE_LAYOUT;
 	}
 
 	/**
